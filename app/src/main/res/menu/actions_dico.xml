@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item
-		android:id="@+id/action_favorite"
-		android:icon="@android:drawable/btn_star_big_off"
-		android:showAsAction="ifRoom"
-		android:title="Favorite"/>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
 
-	<item
-		android:id="@+id/action_update"
-		android:icon="@android:drawable/ic_menu_edit"
-		android:showAsAction="ifRoom"
-		android:title="@string/action_dico_update"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@android:drawable/btn_star_big_off"
+        android:showAsAction="ifRoom"
+        android:title="Favorite"/>
 
-	<item
-		android:id="@+id/action_delete"
-		android:icon="@android:drawable/ic_menu_delete"
-		android:showAsAction="ifRoom"
-		android:title="@string/action_dico_delete"/>
+    <item
+        android:id="@+id/action_update"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_dico_update"/>
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_dico_delete"/>
 
 </menu>

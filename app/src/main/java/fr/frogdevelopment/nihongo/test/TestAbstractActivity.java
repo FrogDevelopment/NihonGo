@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.test;
 
 import android.app.Activity;
@@ -20,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
+import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
 public abstract class TestAbstractActivity extends Activity implements LoaderCallbacks<Cursor> {
 
@@ -195,9 +199,10 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
                 .show();
     }
 
-    private int successCounter=0;
+    private int successCounter = 0;
+
     protected void validate(CharSequence testAnswer) {
-        if (results.get(quantity).setAnswerGiven(testAnswer)){
+        if (results.get(quantity).setAnswerGiven(testAnswer)) {
             successCounter++;
         }
         quantity++;
@@ -217,8 +222,8 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 
         Intent intent = new Intent(this, TestResultActivity.class);
         intent.putParcelableArrayListExtra("results", results);
-        intent.putExtra("successCounter",successCounter);
-        intent.putExtra("quantity",quantity);
+        intent.putExtra("successCounter", successCounter);
+        intent.putExtra("quantity", quantity);
 
         startActivity(intent);
     }

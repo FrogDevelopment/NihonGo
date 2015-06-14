@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 apply plugin: 'com.android.application'
 
 android {

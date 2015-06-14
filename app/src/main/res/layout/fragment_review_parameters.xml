@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="top"
-    android:orientation="vertical"
-    android:padding="2dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="top"
+              android:orientation="vertical"
+              android:padding="2dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +25,7 @@
                 android:layout_height="2dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="15dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray"/>
 
             <Switch
                 android:id="@+id/review_switch_language"
@@ -33,7 +37,7 @@
                 android:textOn="@string/yes"
                 android:textOff="@string/no"
                 android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <View
                 android:id="@+id/review_hrule_details"
@@ -42,7 +46,7 @@
                 android:layout_below="@id/review_switch_language"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray"/>
 
             <Switch
                 android:id="@+id/review_switch_sort"
@@ -54,7 +58,7 @@
                 android:textOn="@string/yes"
                 android:textOff="@string/no"
                 android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <View
                 android:id="@+id/review_hrule_quantity"
@@ -63,7 +67,7 @@
                 android:layout_below="@id/review_switch_sort"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray"/>
 
             <LinearLayout
                 android:id="@+id/review_param_quantity"
@@ -78,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/param_quantity" />
+                    android:text="@string/param_quantity"/>
 
                 <TextView
                     android:id="@+id/review_param_quantity_selection"
@@ -86,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
                     android:textSize="12sp"
-                    android:text="@string/param_quantity_selection" />
+                    android:text="@string/param_quantity_selection"/>
             </LinearLayout>
 
             <LinearLayout
@@ -102,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/param_tag_title" />
+                    android:text="@string/param_tag_title"/>
 
                 <TextView
                     android:id="@+id/review_param_tag_selection"
@@ -110,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
                     android:textSize="12sp"
-                    android:text="@string/param_tag_selection" />
+                    android:text="@string/param_tag_selection"/>
             </LinearLayout>
 
         </RelativeLayout>
@@ -122,6 +126,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:enabled="false"
-        android:text="@string/param_button_start" />
+        android:text="@string/param_button_start"/>
 
 </LinearLayout>

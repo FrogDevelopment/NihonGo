@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.options;
 
 import android.app.AlertDialog;
@@ -41,8 +45,8 @@ public class ParametersFragment extends Fragment {
     void onClickErase() {
 
         new AlertDialog.Builder(getActivity())
-        .setMessage(R.string.options_erase_confirmation)
-         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setMessage(R.string.options_erase_confirmation)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
 
@@ -52,8 +56,8 @@ public class ParametersFragment extends Fragment {
                         editor.apply();
                     }
                 })
-         .setNegativeButton(android.R.string.cancel, null)
-        .create()
-        .show();
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
+                .show();
     }
 }

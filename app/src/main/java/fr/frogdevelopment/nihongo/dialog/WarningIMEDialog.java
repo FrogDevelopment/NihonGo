@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.dialog;
 
 import android.app.AlertDialog;
@@ -24,7 +28,7 @@ public class WarningIMEDialog extends DialogFragment {
     // new WarningIMEDialog().show(getFragmentManager(), "warningIME");
 
     @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_warning_ime, null);
 

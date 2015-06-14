@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
@@ -9,12 +13,12 @@
         android:layout_above="@+id/test_input_separator"
         android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/test_input_to_find"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="60sp"/>
+        <TextView
+            android:id="@+id/test_input_to_find"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="60sp"/>
     </ScrollView>
 
     <Button

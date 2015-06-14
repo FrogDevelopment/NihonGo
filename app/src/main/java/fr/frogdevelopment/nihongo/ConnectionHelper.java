@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo;
 
 import android.content.Context;
@@ -13,7 +17,7 @@ public class ConnectionHelper {
 
     private static final String LOG_TAG = "NIHON_GO";
 
-    private static final String	DEFAULT_TEST_URL	= "http://www.google.com";
+    private static final String DEFAULT_TEST_URL = "http://www.google.com";
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

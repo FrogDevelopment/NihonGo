@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.lessons;
 
 import android.app.Activity;

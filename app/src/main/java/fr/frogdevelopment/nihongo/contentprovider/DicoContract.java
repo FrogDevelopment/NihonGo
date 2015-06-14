@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.contentprovider;
 
 import android.database.sqlite.SQLiteDatabase;

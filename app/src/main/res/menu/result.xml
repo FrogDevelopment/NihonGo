@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_result"
         android:showAsAction="always"
         android:enabled="false"
-        android:title="" />
+        android:title=""/>
 </menu>

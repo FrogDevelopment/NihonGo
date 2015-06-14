@@ -1,48 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:gravity="center_horizontal|top"
-	android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal|top"
+              android:orientation="vertical">
 
-	<TextView
-		android:id="@+id/details_word_input"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="40sp"
+    <TextView
+        android:id="@+id/details_word_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
         android:gravity="center"
-		android:textStyle="italic" />
+        android:textStyle="italic"/>
 
-	<TextView
-		android:id="@+id/details_word_kanji"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="30sp"
+    <TextView
+        android:id="@+id/details_word_kanji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
         android:gravity="center"
-		android:visibility="gone" />
+        android:visibility="gone"/>
 
-	<TextView
-		android:id="@+id/details_word_kana"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="30sp"
+    <TextView
+        android:id="@+id/details_word_kana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
         android:gravity="center"
-		android:visibility="gone" />
+        android:visibility="gone"/>
 
-	<TextView
-		android:id="@+id/details_word_details"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="30sp"
+    <TextView
+        android:id="@+id/details_word_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
         android:gravity="center"
-		android:visibility="gone" />
+        android:visibility="gone"/>
 
-	<TextView
-		android:id="@+id/details_word_tags"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="20sp"
+    <TextView
+        android:id="@+id/details_word_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
         android:gravity="center"
-		android:visibility="gone" />
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -1,10 +1,14 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.data;
 
 import android.net.Uri;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
+import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
 public enum Type {
 

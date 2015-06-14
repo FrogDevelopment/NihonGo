@@ -1,23 +1,11 @@
-/* Copyright (c) 2012 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright (c) Frog Development 2015.
  */
 
 package fr.frogdevelopment.nihongo.lessons.billing;
 
 import android.text.TextUtils;
 import android.util.Log;
-
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -48,9 +36,10 @@ public class Security {
      * the verified purchase. The data is in JSON format and signed
      * with a private key. The data also contains the {@link PurchaseState}
      * and product ID of the purchase.
+     *
      * @param base64PublicKey the base64-encoded public key to use for verifying.
-     * @param signedData the signed JSON string (signed, not encrypted)
-     * @param signature the signature for the data, signed with the private key
+     * @param signedData      the signed JSON string (signed, not encrypted)
+     * @param signature       the signature for the data, signed with the private key
      */
     public static boolean verifyPurchase(String base64PublicKey, String signedData, String signature) {
         if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) ||
@@ -90,9 +79,9 @@ public class Security {
      * Verifies that the signature from the server matches the computed
      * signature on the data.  Returns true if the data is correctly signed.
      *
-     * @param publicKey public key associated with the developer account
+     * @param publicKey  public key associated with the developer account
      * @param signedData signed data from server
-     * @param signature server signature
+     * @param signature  server signature
      * @return true if the data and signature match
      */
     public static boolean verify(PublicKey publicKey, String signedData, String signature) {

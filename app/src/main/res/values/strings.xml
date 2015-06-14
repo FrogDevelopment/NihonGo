@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <resources>
 
     <string name="app_name" translatable="false">Nihon Go !</string>
@@ -102,7 +106,7 @@
     <string name="param.tags.dialog.title">Select one or more tags</string>
     <string name="param_button_start">Start</string>
 
-    <string-array name="param_types" >
+    <string-array name="param_types">
         <item>Kanji -> Hiragana</item>
         <item>Hiragana -> Kanji</item>
         <item>Japanese -> English</item>

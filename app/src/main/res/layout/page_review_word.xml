@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -16,7 +20,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="60sp" />
+            android:textSize="60sp"/>
 
         <TextSwitcher
             android:id="@+id/review_textSwitcher_kana"
@@ -30,7 +34,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center"
-                android:textSize="60sp" />
+                android:textSize="60sp"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -40,7 +44,7 @@
                 android:textSize="30sp"
                 android:textColor="@android:color/darker_gray"
                 android:drawableLeft="@android:drawable/ic_menu_view"
-                android:drawableStart="@android:drawable/ic_menu_view" />
+                android:drawableStart="@android:drawable/ic_menu_view"/>
 
         </TextSwitcher>
 
@@ -56,7 +60,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center"
-                android:textSize="60sp" />
+                android:textSize="60sp"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -66,7 +70,7 @@
                 android:textSize="30sp"
                 android:textColor="@android:color/darker_gray"
                 android:drawableLeft="@android:drawable/ic_menu_view"
-                android:drawableStart="@android:drawable/ic_menu_view" />
+                android:drawableStart="@android:drawable/ic_menu_view"/>
 
         </TextSwitcher>
 
@@ -79,7 +83,7 @@
             android:gravity="center"
             android:textSize="30sp"
             android:textColor="@android:color/darker_gray"
-            android:textStyle="italic" />
+            android:textStyle="italic"/>
 
     </RelativeLayout>
 

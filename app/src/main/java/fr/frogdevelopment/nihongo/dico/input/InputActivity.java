@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.dico.input;
 
 import android.app.Activity;
@@ -14,8 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
+import fr.frogdevelopment.nihongo.data.Type;
 
 public class InputActivity extends Activity {
 

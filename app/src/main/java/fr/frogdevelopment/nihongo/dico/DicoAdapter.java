@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
 package fr.frogdevelopment.nihongo.dico;
 
 import android.app.Activity;
@@ -22,10 +26,10 @@ import java.util.regex.Pattern;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Letter;
 import fr.frogdevelopment.nihongo.data.Row;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 
 /**
  * @author PxL

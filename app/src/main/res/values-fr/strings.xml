@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+
 <resources>
 
     <!-- WARNING IME -->
@@ -93,7 +97,7 @@
     <string name="param.tags.dialog.title">Sélectionner un ou plusieurs tags</string>
     <string name="param_button_start">Démarrer</string>
 
-    <string-array name="param_types" >
+    <string-array name="param_types">
         <item>Kanji -> Hiragana</item>
         <item>Hiragana -> Kanji</item>
         <item>japonais -> français</item>
