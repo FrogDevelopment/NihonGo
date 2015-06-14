@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- WARNING IME -->
+    <string name="warning_ime_text">Un clavier japonais est requis pour utiliser cette application.</string>
+    <string name="warning_ime_remember">Ne plus afficher</string>
+
+    <!-- DRAWER -->
+    <string name="menu_icon">icône</string>
+    <string name="menu_subitem_review">Révisions</string>
+    <string name="menu_subitem_word">Mots</string>
+    <string name="menu_subitem_expression">Expressions</string>
+    <string name="menu_subitem_import_export">Importer/Exporter</string>
+    <string name="menu_subitem_parameters">Paramètres</string>
+    <string name="menu_subitem_lessons">Leçons</string>
+    <string name="drawer_open">Ouvrir le navigateur</string>
+    <string name="drawer_close">Fermer le navigateur</string>
+
+    <!-- ***** -->
+    <!-- DICO  -->
+    <!-- ***** -->
+
+    <string name="title_activity_details">Détails</string>
+
+    <!-- CONTEXT MENU -->
+    <string name="action_dico_update">Mettre à jour</string>
+    <string name="action_dico_delete">Supprimer</string>
+    <string name="action_dico_new">Nouveau</string>
+    <string name="action_dico_sort_letter">Trier par lettre</string>
+    <string name="action_dico_sort_tag">Trier par tag</string>
+
+    <plurals name="action_selection">
+        <item quantity="one">%1$d ligne sélectionnée.</item>
+        <item quantity="other">%1$d lignes sélectionnées.</item>
+    </plurals>
+
+    <!-- DELETE -->
+    <string name="delete_title">Suppression</string>
+
+    <string name="delete_detail">Vous êtes sur le point d\'effacer l\'entrée</string>
+    <plurals name="delete_confirmation">
+        <item quantity="one">Vous êtes sur le point d\'effacer %1$d ligne</item>
+        <item quantity="other">Vous êtes sur le point d\'effacer %1$d lignes</item>
+    </plurals>
+
+    <string name="positive_button_continue">Continuer ?</string>
+    <string name="delete_done">Suppression effectuée</string>
+
+    <!-- UPDATE -->
+    <string name="update_title">Mise à jour</string>
+    <string name="update_confirmation">Voulez-vous mettre à jour cette saisie ?</string>
+    <string name="update_alerte">La saisie \'%s\' existe déjà, voulez-vous la mettre à jour ?</string>
+
+    <!-- ***** -->
+    <!-- INPUT -->
+    <!-- ***** -->
+    <string name="input_textView_input">Mot</string>
+    <string name="input_textView_details">Détails </string>
+    <string name="input_button_validate">Valider</string>
+    <string name="input_button_cancel">Annuler</string>
+    <string name="input_error_empty">Saisie obligatoire !</string>
+    <string name="input_error_fields">Vérifier les champs</string>
+    <string name="input_error_all_empty">Au moins une saisie est obligatoire !</string>
+    <string name="input_error_input">Pas de japonais</string>
+    <string name="input_error_japanese">Uniquement des Hiragana, Katakana et Kanji !</string>
+    <string name="input_error_kana">Uniquement des Kana (Hiragana ou Katakana) !</string>
+    <string name="input_error_kanji">Pas de Kanji!</string>
+    <string name="input_save_OK">Données enregistrées</string>
+    <string name="input_update_OK">Données mise à jour</string>
+    <string name="action_validate">Valider</string>
+    <string name="action_cancel">Annuler</string>
+
+    <!-- EXPRESSION -->
+    <string name="expression_input">Expression</string>
+
+    <!-- ******* -->
+    <!-- PARAM -->
+    <!-- ******* -->
+    <string name="param_test">Paramétrage du test</string>
+    <string name="param_review">Paramétrage de la révision</string>
+    <string name="param_reviewed">Révision en japonais ?</string>
+    <string name="param_sort_random">Aléatoire ?</string>
+    <string name="param_type">Type</string>
+    <string name="param_type_selection">Sélectionner le code du test</string>
+    <string name="param_method">Méthode</string>
+    <string name="param_method_selection">Sélectionner la méthode du test</string>
+    <string name="param_quantity">Quantité</string>
+    <string name="param_quantity_selection">Sélectionner la quantité pour le test</string>
+    <string name="param_kanji_display">Afficher en Kanji</string>
+    <string name="param_kanji_write">Saisir en Kanji</string>
+    <string name="param_tag_title">Tag (Optionnel)</string>
+    <string name="param_tag_selection">Sélectionner un tag</string>
+    <string name="param.tags.dialog.title">Sélectionner un ou plusieurs tags</string>
+    <string name="param_button_start">Démarrer</string>
+
+    <string-array name="param_types" >
+        <item>Kanji -> Hiragana</item>
+        <item>Hiragana -> Kanji</item>
+        <item>japonais -> français</item>
+        <item>français -> japonais</item>
+    </string-array>
+
+    <string-array name="param_methods">
+        <item>QCM</item>
+        <item>Saisie</item>
+    </string-array>
+
+    <!-- ******* -->
+    <!-- REVIEW  -->
+    <!-- ******* -->
+    <string name="title_activity_review">Révision</string>
+    <string name="review_switch_kanji">Taper pour afficher les Kanji</string>
+    <string name="review_switch_kana">Taper pour afficher les Kana</string>
+    <string name="review_switch_input">Taper pour afficher en français</string>
+
+
+    <!-- ******* -->
+    <!-- TEST    -->
+    <!-- ******* -->
+    <string name="test_tab_selection">SELECTION</string>
+    <string name="test_tab_input">SAISIE</string>
+    <string name="test_back_message">Vous êtes sur le point de quitter le test</string>
+    <string name="test_next">Suivant</string>
+
+
+    <string name="test_results_title">Résultats</string>
+    <string name="test_results_details">Test : %1$s\nRéponse attendue : %2$s\nRéponse donnée : %3$s</string>
+
+    <!-- ****** -->
+    <!-- SEARCH -->
+    <!-- ****** -->
+    <string name="menu_search">chercher</string>
+    <string name="search_label">Recherche</string>
+    <string name="search_hint">Rechercher un mot</string>
+    <string name="no_results">Pas de résultats</string>
+
+    <plurals name="search_results">
+        <item quantity="one">%1$d résultat</item>
+        <item quantity="other">%1$d résultats</item>
+    </plurals>
+
+    <!-- ****** -->
+    <!-- HELP -->
+    <!-- ****** -->
+    <string name="help_chart_description">Tableau des Hiragana et Katakana</string>
+
+    <!-- ******* -->
+    <!-- LESSONS -->
+    <!-- ******* -->
+    <string name="lesson_already_present">Pack déjà récupéré</string>
+    <string name="lesson_continue">Continuer ?</string>
+    <string name="lesson_donwload_sucess">\'%s\' téléchargé avec succès</string>
+
+    <string name="param_quantity_all">Tout</string>
+
+    <!-- ******* -->
+    <!-- OPTIONS -->
+    <!-- ******* -->
+    <string name="options_export">Exporter</string>
+    <string name="options_export_success">Fichier \'%s\' créé dans répertoire Download.</string>
+    <string name="options_export_error">Export échoué</string>
+    <string name="options_import">Importer les données</string>
+    <string name="options_import_success">Import réussi</string>
+    <string name="options_import_failed">Import échoué</string>
+    <string name="options_erase">Suppression des données</string>
+    <string name="options_erase_btn">Effacer les données</string>
+    <string name="options_erase_confirmation">Êtes vous sûre ?</string>
+    <string name="options_erase_success">Suppression réussie</string>
+    <string name="options_file_chooser_get_file_manager">Veuillez installer un gestionnaire de fichier.</string>
+    <string name="options_file_chooser_prompt">Choississez un fichier</string>
+    <string name="options_error_fetch_data">Une erreur est survenue pendant la récupération des données.</string>
+
+    <string name="closing_activity_title">Sortie</string>
+    <string name="closing_activity_message">Êtes vous sûr de vouloir quitter ?</string>
+
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="input_textView_tags">Tags (séparés par des virgules)</string>
+
+
+</resources>

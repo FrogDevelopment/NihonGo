@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="?android:attr/activatedBackgroundIndicator"
+              android:gravity="start"
+              android:orientation="horizontal"
+              android:paddingBottom="20dp"
+              android:paddingTop="20dp">
+
+    <TextView
+        android:id="@+id/dico_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="start"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="italic"/>
+
+    <TextSwitcher
+        android:id="@+id/dico_switcher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:clickable="false">
+
+        <TextView
+            android:id="@+id/dico_switcher_kanji"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <TextView
+            android:id="@+id/dico_switcher_kana"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    </TextSwitcher>
+
+</LinearLayout>

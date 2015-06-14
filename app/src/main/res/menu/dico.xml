@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_search"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_new"
+        android:icon="@android:drawable/ic_menu_add"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_dico_new" />
+
+    <item
+        android:id="@+id/action_sort"
+        android:showAsAction="never"
+        android:title="@string/action_dico_sort_tag" />
+
+    <item
+        android:id="@+id/action_filter_by_favorite"
+        android:showAsAction="never"
+        android:checkable="true"
+        android:title="Favoris uniquement" />
+
+</menu>

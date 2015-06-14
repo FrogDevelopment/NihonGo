@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|top">
+
+        <TextView
+            android:id="@+id/review_reviewed"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="60sp" />
+
+        <TextSwitcher
+            android:id="@+id/review_textSwitcher_kana"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/review_reviewed"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textSize="60sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textStyle="italic"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textColor="@android:color/darker_gray"
+                android:drawableLeft="@android:drawable/ic_menu_view"
+                android:drawableStart="@android:drawable/ic_menu_view" />
+
+        </TextSwitcher>
+
+        <TextSwitcher
+            android:id="@+id/review_textSwitcher_test"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/review_textSwitcher_kana"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textSize="60sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textStyle="italic"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textColor="@android:color/darker_gray"
+                android:drawableLeft="@android:drawable/ic_menu_view"
+                android:drawableStart="@android:drawable/ic_menu_view" />
+
+        </TextSwitcher>
+
+        <TextView
+            android:id="@+id/review_details"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/review_textSwitcher_test"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
+
+</ScrollView>

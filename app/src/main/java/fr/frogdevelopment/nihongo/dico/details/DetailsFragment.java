@@ -1,0 +1,141 @@
+package fr.frogdevelopment.nihongo.dico.details;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.ref.WeakReference;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.data.Item;
+
+
+public class DetailsFragment extends Fragment {
+
+    interface OnFragmentInteractionListener {
+        void update(Item item);
+
+        void delete(Item item);
+
+        void favorite(Item item);
+    }
+
+    private WeakReference<OnFragmentInteractionListener> mListener;
+
+    @InjectView(R.id.details_word_input)
+    TextView mInputView;
+    @InjectView(R.id.details_word_kanji)
+    TextView mKanjiView;
+    @InjectView(R.id.details_word_kana)
+    TextView mKanaView;
+    @InjectView(R.id.details_word_details)
+    TextView mDetailsView;
+    @InjectView(R.id.details_word_tags)
+    TextView mTagsView;
+
+    private Item mItem;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // The last two arguments ensure LayoutParams are inflated properly.
+        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+
+        ButterKnife.inject(this, rootView);
+
+        setHasOptionsMenu(true);
+
+        populateView(rootView);
+
+        return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.actions_dico, menu);
+
+        MenuItem favoriteMenuItem = menu.findItem(R.id.action_favorite);
+        favoriteMenuItem.setIcon("1".equals(mItem.favorite) ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                mListener.get().delete(mItem);
+                break;
+
+            case R.id.action_update:
+                mListener.get().update(mItem);
+                break;
+
+            case R.id.action_favorite:
+                mItem.favorite = "1".equals(mItem.favorite) ? "0" : "1";
+                mListener.get().favorite(mItem);
+                break;
+
+            default:
+                return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = new WeakReference<>((OnFragmentInteractionListener) activity);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    private void populateView(View rootView) {
+        Bundle args = getArguments();
+
+        mItem = args.getParcelable("item");
+        mInputView.setText(mItem.input);
+
+        if (StringUtils.isNoneEmpty(mItem.kanji)) {
+            mKanjiView.setText(mItem.kanji);
+            mKanjiView.setVisibility(View.VISIBLE);
+        }
+
+        if (StringUtils.isNoneEmpty(mItem.kana)) {
+            mKanaView.setText(mItem.kana);
+            mKanaView.setVisibility(View.VISIBLE);
+        }
+
+        mDetailsView.setText(mItem.details);
+        if (StringUtils.isNoneEmpty(mItem.details)) {
+            mDetailsView.setText(mItem.details);
+            mDetailsView.setVisibility(View.VISIBLE);
+        }
+
+        if (StringUtils.isNoneEmpty(mItem.tags)) {
+            mTagsView.setText(mItem.tags);
+            mTagsView.setVisibility(View.VISIBLE);
+        }
+
+//        Type mType = (Type) args.getSerializable("type");
+//        rootView.setBackground(getActivity().getResources().getDrawable(mType.background));
+    }
+
+}

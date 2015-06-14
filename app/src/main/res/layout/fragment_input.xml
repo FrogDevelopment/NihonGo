@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/word_textView_kanji"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/input_textView_kanji"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <View
+            android:id="@+id/word_separator_kanji"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/input_kanji"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text">
+
+            <requestFocus/>
+        </EditText>
+
+        <TextView
+            android:id="@+id/word_textView_kana"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/input_textView_kana"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <View
+            android:id="@+id/word_separator_kana"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/input_kana"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/word_textView_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/input_textView_input"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <View
+            android:id="@+id/word_separator_input"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/input_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"/>
+
+        <TextView
+            android:id="@+id/word_textView_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/input_textView_tags"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <View
+            android:id="@+id/word_separator_tags"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/input_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"/>
+
+        <TextView
+            android:id="@+id/word_textView_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="@string/input_textView_details"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <View
+            android:id="@+id/word_separator_details"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/input_details"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences"/>
+
+    </LinearLayout>
+</ScrollView>

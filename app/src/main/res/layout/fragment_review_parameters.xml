@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:padding="2dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/review_hrule_type"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <Switch
+                android:id="@+id/review_switch_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_hrule_type"
+                android:text="@string/param_reviewed"
+                android:checked="true"
+                android:textOn="@string/yes"
+                android:textOff="@string/no"
+                android:padding="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <View
+                android:id="@+id/review_hrule_details"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/review_switch_language"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <Switch
+                android:id="@+id/review_switch_sort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_hrule_details"
+                android:text="@string/param_sort_random"
+                android:checked="true"
+                android:textOn="@string/yes"
+                android:textOff="@string/no"
+                android:padding="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <View
+                android:id="@+id/review_hrule_quantity"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/review_switch_sort"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:id="@+id/review_param_quantity"
+                android:layout_below="@id/review_hrule_quantity"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/review_param_quantity_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/param_quantity" />
+
+                <TextView
+                    android:id="@+id/review_param_quantity_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:textSize="12sp"
+                    android:text="@string/param_quantity_selection" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/review_param_tag"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_param_quantity"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/review_param_tag_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/param_tag_title" />
+
+                <TextView
+                    android:id="@+id/review_param_tag_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:textSize="12sp"
+                    android:text="@string/param_tag_selection" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/review_button_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:enabled="false"
+        android:text="@string/param_button_start" />
+
+</LinearLayout>

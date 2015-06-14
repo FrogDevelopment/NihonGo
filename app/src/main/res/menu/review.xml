@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_review_favorite"
+        android:showAsAction="ifRoom"
+        android:title="Favoris" />
+    <item
+        android:id="@+id/menu_review_index"
+        android:showAsAction="always"
+        android:enabled="false"
+        android:title="" />
+</menu>
