@@ -6,16 +6,14 @@ package fr.frogdevelopment.nihongo.contentprovider;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.text.TextUtils;
-
-import java.util.List;
 
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
 
@@ -23,7 +21,7 @@ public class NihonGoContentProvider extends ContentProvider {
 
     private DictionaryOpenHelper database;
 
-    private static final String AUTHORITY = ".NihonGoContentProvider";
+    public static final String AUTHORITY = ".NihonGoContentProvider";
 
     // used for the UriMachter
     private static final int WORDS = 10;
@@ -70,19 +68,6 @@ public class NihonGoContentProvider extends ContentProvider {
     public boolean onCreate() {
         database = new DictionaryOpenHelper(getContext());
         return false;
-    }
-
-    public void insertDataCompileStatement(List<String[]> datas) {
-        SQLiteDatabase sqlDB = database.getWritableDatabase();
-        SQLiteStatement statement = sqlDB.compileStatement(DicoContract.SQL_INSERT);
-        sqlDB.beginTransaction();
-        for (String[] data : datas) {
-            statement.clearBindings();
-            statement.bindAllArgsAsStrings(data);
-            statement.executeInsert();
-        }
-        sqlDB.setTransactionSuccessful();
-        sqlDB.endTransaction();
     }
 
     @Override
@@ -180,9 +165,11 @@ public class NihonGoContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        Uri newUri = ContentUris.withAppendedId(uri, id);
+        getContext().getContentResolver().notifyChange(newUri, null);
 
-        return Uri.parse(BASE_PATH_WORD + "/" + id);
+//        return Uri.parse(BASE_PATH_WORD + "/" + id);
+        return  newUri;
     }
 
     @Override

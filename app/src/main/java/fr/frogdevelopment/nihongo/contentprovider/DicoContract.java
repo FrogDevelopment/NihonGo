@@ -35,8 +35,6 @@ public class DicoContract implements BaseColumns {
     private static final String SQL_CREATE = String.format(
             "CREATE TABLE %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s TEXT NOT NULL, %s TEXT, %s INTEGER);",
             TABLE_NAME, _ID, INPUT, SORT_LETTER, KANJI, KANA, DETAILS, TYPE, TAGS, FAVORITE);
-    public static final String SQL_INSERT = String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            TABLE_NAME, INPUT, SORT_LETTER, KANJI, KANA, DETAILS, TYPE, TAGS);
 
     private static final String SQL_DELETE = String.format("DROP TABLE IF EXISTS %s;", TABLE_NAME);
 
@@ -57,21 +55,11 @@ public class DicoContract implements BaseColumns {
         WORD("w"),
         EXPRESSION("e");
 
-        private Type(String code) {
+        Type(String code) {
             this.code = code;
         }
 
         public String code;
-
-        public static Type fromCode(String code) {
-            if (WORD.code.equals(code)) {
-                return WORD;
-            } else if (EXPRESSION.code.equals(code)) {
-                return EXPRESSION;
-            } else {
-                throw new IllegalArgumentException("Unknow code :" + code);
-            }
-        }
     }
 
 }
