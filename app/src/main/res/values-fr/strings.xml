@@ -85,7 +85,7 @@
     <string name="param_reviewed">Révision en japonais ?</string>
     <string name="param_sort_random">Aléatoire ?</string>
     <string name="param_type">Type</string>
-    <string name="param_type_selection">Sélectionner le code du test</string>
+    <string name="param_type_selection">Sélectionner le type du test</string>
     <string name="param_method">Méthode</string>
     <string name="param_method_selection">Sélectionner la méthode du test</string>
     <string name="param_quantity">Quantité</string>
