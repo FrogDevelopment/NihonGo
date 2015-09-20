@@ -40,12 +40,17 @@ public class NihonGoContentProvider extends ContentProvider {
 	private static final String CONTENT_EXPRESSION_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_EXPRESSION;
 	public static final  Uri    URI_EXPRESSION               = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_EXPRESSION);
 
-	private static final int    SEARCH              = 30;
-	private static final String BASE_PATH_SEARCH    = "search";
-	private static final String CONTENT_SEARCH_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH;
-	public static final  Uri    URI_SEARCH          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH);
+	private static final int    SEARCH_WORD              = 30;
+	private static final String BASE_PATH_SEARCH_WORD    = "search_word";
+	private static final String CONTENT_SEARCH_WORD_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_WORD;
+	public static final  Uri    URI_SEARCH_WORD          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_WORD);
 
-	private static final int    ERASE              = 40;
+	private static final int    SEARCH_EXPRESSION              = 40;
+	private static final String BASE_PATH_SEARCH_EXPRESSION    = "search_expression";
+	private static final String CONTENT_SEARCH_EXPRESSION_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_SEARCH_EXPRESSION;
+	public static final  Uri    URI_SEARCH_EXPRESSION          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_SEARCH_EXPRESSION);
+
+	private static final int    ERASE              = 50;
 	private static final String BASE_PATH_ERASE    = "erase";
 	private static final String CONTENT_ERASE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_ERASE;
 	public static final  Uri    URI_ERASE          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_ERASE);
@@ -60,7 +65,8 @@ public class NihonGoContentProvider extends ContentProvider {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_EXPRESSION, EXPRESSIONS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_EXPRESSION + "/#", EXPRESSION_ID);
 
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH, SEARCH);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_WORD, SEARCH_WORD);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_EXPRESSION, SEARCH_EXPRESSION);
 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_ERASE, ERASE);
 	}
@@ -86,8 +92,11 @@ public class NihonGoContentProvider extends ContentProvider {
 			case EXPRESSION_ID:
 				return CONTENT_EXPRESSION_ITEM_TYPE;
 
-			case SEARCH:
-				return CONTENT_SEARCH_TYPE;
+			case SEARCH_WORD:
+				return CONTENT_SEARCH_WORD_TYPE;
+
+			case SEARCH_EXPRESSION:
+				return CONTENT_SEARCH_EXPRESSION_TYPE;
 
 			case ERASE:
 				return CONTENT_ERASE_TYPE;
@@ -130,9 +139,10 @@ public class NihonGoContentProvider extends ContentProvider {
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
 				break;
 
-			case SEARCH:
+			case SEARCH_WORD:
+			case SEARCH_EXPRESSION:
 				final String search = selectionArgs[0];
-				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
+				queryBuilder.appendWhere(DicoContract.TYPE + "='" + (uriType == SEARCH_WORD ? Type.WORD.code : Type.EXPRESSION.code) + "'");
 				if (InputUtils.containsNoJapanese(search)) {
 					queryBuilder.appendWhere(" AND (" + DicoContract.INPUT + " LIKE '%" + search + "%' OR " + DicoContract.TAGS + " LIKE '%" + search + "%')");
 				} else if (InputUtils.containsKanji(search)) {
