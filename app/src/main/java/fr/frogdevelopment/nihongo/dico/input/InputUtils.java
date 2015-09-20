@@ -114,6 +114,10 @@ public class InputUtils {
         return containsJapanase;
     }
 
+    public static boolean containsNoJapanese(String input) {
+        return !containsJapanese(input);
+    }
+
     public static boolean containsKanji(String input) {
         boolean containsKanji = false;
         for (char ch : input.toCharArray()) {
