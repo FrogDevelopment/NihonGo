@@ -58,7 +58,6 @@ import fr.frogdevelopment.nihongo.lessons.billing.Inventory;
 import fr.frogdevelopment.nihongo.lessons.billing.Purchase;
 import fr.frogdevelopment.nihongo.lessons.billing.SkuDetails;
 
-// fixme : tester connection internet avant appel
 // todo : proposer rafraîchissement de la vue
 public class LessonsFragment extends ListFragment {
 
@@ -75,22 +74,8 @@ public class LessonsFragment extends ListFragment {
 	private static final String   PACK_1                = "pack_01";
 	private static final String   DEVELOPER_PAYLOAD     = "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ";
 
-	//    private boolean checkFirst() {
-//        SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME, 0);
-//        return settings.getBoolean(Preferences.FIRST_LOAD, true);
-//    }
-//
-//    private void setIsNotFirst() {
-//        SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME, 0);
-//        final SharedPreferences.Editor editor = settings.edit();
-//        editor.putBoolean(Preferences.FIRST_LOAD, false);
-//        // Commit the edits!
-//        editor.apply();
-//    }
-
 	private LessonAdapter adapter;
 	private String        myLocale;
-
 
 	public LessonsFragment() {
 	}
@@ -467,7 +452,6 @@ public class LessonsFragment extends ListFragment {
 
 		public Lesson(SkuDetails skuDetails, boolean isBought, boolean isPresent) {
 			this.sku = skuDetails.getSku();
-			// todo : à améliorer : suppression du nom de l'application (Nihon Go!) du titre
 			this.title = skuDetails.getTitle().substring(0, skuDetails.getTitle().length() - 12);
 			this.description = skuDetails.getDescription();
 			this.price = skuDetails.getPrice();
