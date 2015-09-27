@@ -6,10 +6,13 @@ package fr.frogdevelopment.nihongo.dico.input;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.conjugation.ConjugationActivity;
+import fr.frogdevelopment.nihongo.contentprovider.ConjugationContract;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Type;
 
@@ -34,14 +39,16 @@ public class InputActivity extends Activity {
     EditText mTagsView;
     @InjectView(R.id.input_details)
     EditText mDetailsView;
+    @InjectView(R.id.input_conjugation)
+    Button   mConjugationButton;
 
     // Initial Data
     protected String idUpdate;
-    private String kanjiSave;
-    private String kanaSave;
+    private   String kanjiSave;
+    private   String kanaSave;
     protected String inputSave;
-    private String tagsSave;
-    private String detailsSave;
+    private   String tagsSave;
+    private   String detailsSave;
 
     protected boolean isUpdate;
 
@@ -54,21 +61,39 @@ public class InputActivity extends Activity {
         mType = (Type) getIntent().getSerializableExtra("type");
         setContentView(R.layout.fragment_input);
 
+        ButterKnife.inject(this);
+
         switch (mType) {
             case WORD:
                 setTitle(R.string.menu_subitem_word);
+                mConjugationButton.setVisibility(View.VISIBLE);
+
+                // fixme gérer création/maj du mot (si création id = null !!!)
+                mConjugationButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle args = new Bundle();
+                        args.putString(ConjugationContract.WORD_ID, idUpdate);
+                        args.putString(DicoContract.INPUT, inputSave);
+
+                        Intent intent = new Intent(getApplicationContext(), ConjugationActivity.class);
+                        intent.putExtras(args);
+
+                        startActivity(intent);
+//                        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                });
                 break;
 
             case EXPRESSION:
                 setTitle(R.string.menu_subitem_expression);
+                mConjugationButton.setVisibility(View.GONE);
                 break;
 
             default:
                 setTitle("");
                 break;
         }
-
-        ButterKnife.inject(this);
 
         chekUpdate();
     }
