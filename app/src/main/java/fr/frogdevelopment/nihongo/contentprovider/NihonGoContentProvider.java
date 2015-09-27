@@ -27,7 +27,7 @@ public class NihonGoContentProvider extends ContentProvider {
 	// used for the UriMachter
 	private static final int    WORDS                  = 10;
 	private static final int    WORD_ID                = 11;
-	private static final int    WORD_GROUP_BY_TAG      = 12;
+	private static final int    WORDS_GROUP_BY_TAG     = 12;
 	private static final String BASE_PATH_WORD         = "word";
 	private static final String CONTENT_WORD_TYPE      = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + BASE_PATH_WORD + "s";
 	private static final String CONTENT_WORD_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_WORD;
@@ -55,12 +55,19 @@ public class NihonGoContentProvider extends ContentProvider {
 	private static final String CONTENT_ERASE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_ERASE;
 	public static final  Uri    URI_ERASE          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_ERASE);
 
+	private static final int    CONJUGATIONS                  = 60;
+	private static final int    CONJUGATION_ID                = 61;
+	private static final String BASE_PATH_CONJUGATION         = "conjugation";
+	private static final String CONTENT_CONJUGATION_TYPE      = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + BASE_PATH_CONJUGATION + "s";
+	private static final String CONTENT_CONJUGATION_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_CONJUGATION;
+	public static final  Uri    URI_CONJUGATION               = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_CONJUGATION);
+
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD, WORDS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD + "/#", WORD_ID);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD + "/TAGS", WORD_GROUP_BY_TAG);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_WORD + "/TAGS", WORDS_GROUP_BY_TAG);
 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_EXPRESSION, EXPRESSIONS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_EXPRESSION + "/#", EXPRESSION_ID);
@@ -69,6 +76,9 @@ public class NihonGoContentProvider extends ContentProvider {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_EXPRESSION, SEARCH_EXPRESSION);
 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_ERASE, ERASE);
+
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_CONJUGATION, CONJUGATIONS);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_CONJUGATION + "/#", CONJUGATION_ID);
 	}
 
 	@Override
@@ -101,6 +111,11 @@ public class NihonGoContentProvider extends ContentProvider {
 			case ERASE:
 				return CONTENT_ERASE_TYPE;
 
+			case CONJUGATIONS:
+				return CONTENT_CONJUGATION_TYPE;
+			case CONJUGATION_ID:
+				return CONTENT_CONJUGATION_ITEM_TYPE;
+
 			default:
 				return null;
 		}
@@ -111,36 +126,38 @@ public class NihonGoContentProvider extends ContentProvider {
 
 		// Using SQLiteQueryBuilder instead of query() method
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		// Set the table
-		queryBuilder.setTables(DicoContract.TABLE_NAME);
 		String groupBy = null;
 		int uriType = sURIMatcher.match(uri);
 		switch (uriType) {
 
-			case WORD_GROUP_BY_TAG:
-				groupBy = DicoContract.TAGS;
-				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
-				break;
 			case WORD_ID:
-				// adding the ID to the original query
+				queryBuilder.setTables(DicoContract.TABLE_NAME);
+				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
 				queryBuilder.appendWhere(DicoContract._ID + "=" + uri.getLastPathSegment());
+				break;
 			case WORDS:
+				queryBuilder.setTables(DicoContract.TABLE_NAME);
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
 				break;
-
+			case WORDS_GROUP_BY_TAG:
+				queryBuilder.setTables(DicoContract.TABLE_NAME);
+				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
+				groupBy = DicoContract.TAGS;
+				break;
 
 			case EXPRESSIONS:
+				queryBuilder.setTables(DicoContract.TABLE_NAME);
+				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
+				queryBuilder.appendWhere(DicoContract._ID + "=" + uri.getLastPathSegment());
+				break;
 			case EXPRESSION_ID:
-
-				if (EXPRESSION_ID == uriType) {
-					// adding the ID to the original query
-					queryBuilder.appendWhere(DicoContract._ID + "=" + uri.getLastPathSegment());
-				}
+				queryBuilder.setTables(DicoContract.TABLE_NAME);
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
 				break;
 
 			case SEARCH_WORD:
 			case SEARCH_EXPRESSION:
+				queryBuilder.setTables(DicoContract.TABLE_NAME);
 				final String search = selectionArgs[0];
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + (uriType == SEARCH_WORD ? Type.WORD.code : Type.EXPRESSION.code) + "'");
 				if (InputUtils.containsNoJapanese(search)) {
@@ -152,6 +169,14 @@ public class NihonGoContentProvider extends ContentProvider {
 				}
 				selectionArgs = null;
 
+				break;
+
+			case CONJUGATION_ID:
+				queryBuilder.setTables(ConjugationContract.TABLE_NAME);
+				queryBuilder.appendWhere(ConjugationContract._ID + "=" + uri.getLastPathSegment());
+				break;
+			case CONJUGATIONS:
+				queryBuilder.setTables(ConjugationContract.TABLE_NAME);
 				break;
 
 			default:
@@ -176,6 +201,10 @@ public class NihonGoContentProvider extends ContentProvider {
 			case WORDS:
 			case EXPRESSIONS:
 				id = sqlDB.insert(DicoContract.TABLE_NAME, null, values);
+				break;
+
+			case CONJUGATIONS:
+				id = sqlDB.insert(ConjugationContract.TABLE_NAME, null, values);
 				break;
 
 			default:
@@ -211,6 +240,13 @@ public class NihonGoContentProvider extends ContentProvider {
 				}
 				break;
 
+			case CONJUGATIONS:
+				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, selection, selectionArgs);
+				break;
+			case CONJUGATION_ID:
+				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, ConjugationContract._ID + "=" + id, null);
+				break;
+
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -227,10 +263,11 @@ public class NihonGoContentProvider extends ContentProvider {
 		int rowsDeleted;
 
 		String id = uri.getLastPathSegment();
+		String selectionDico;
 		switch (uriType) {
 			case WORDS:
 			case EXPRESSIONS:
-				final String selectionDico = String.format(selection, DicoContract._ID);
+				selectionDico = String.format(selection, DicoContract._ID);
 				rowsDeleted = sqlDB.delete(DicoContract.TABLE_NAME, selectionDico, selectionArgs);
 				break;
 
@@ -242,6 +279,14 @@ public class NihonGoContentProvider extends ContentProvider {
 			case ERASE:
 				rowsDeleted = sqlDB.delete(DicoContract.TABLE_NAME, null, null);
 				sqlDB.delete("sqlite_sequence", "name='" + DicoContract.TABLE_NAME + "'", null); // reset du compteur
+				break;
+
+			case CONJUGATIONS:
+				selectionDico = String.format(selection, ConjugationContract._ID);
+				rowsDeleted = sqlDB.delete(ConjugationContract.TABLE_NAME, selectionDico, selectionArgs);
+				break;
+			case CONJUGATION_ID:
+				rowsDeleted = sqlDB.delete(ConjugationContract.TABLE_NAME, ConjugationContract._ID + "=" + id, null);
 				break;
 
 			default:
