@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import fr.frogdevelopment.nihongo.BuildConfig;
 import fr.frogdevelopment.nihongo.ConnectionHelper;
 import fr.frogdevelopment.nihongo.Preferences;
 import fr.frogdevelopment.nihongo.R;
@@ -266,9 +267,11 @@ public class LessonsFragment extends ListFragment {
 							if (PACK_1.equals(skuDetails.getSku())) { // pack gratuit
 								lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
 							} else {
-								// FIXME lorsque deployé dans Google Play
-//                                lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
-								lessons.add(new Lesson(skuDetails, inventory.hasPurchase(skuDetails.getSku()), checkPackPresent(skuDetails.getSku())));
+								if (BuildConfig.DEBUG) {
+									lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
+								} else {
+									lessons.add(new Lesson(skuDetails, inventory.hasPurchase(skuDetails.getSku()), checkPackPresent(skuDetails.getSku())));
+								}
 							}
 						}
 
