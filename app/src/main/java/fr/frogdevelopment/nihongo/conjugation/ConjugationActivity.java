@@ -11,6 +11,8 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,29 +29,35 @@ public class ConjugationActivity extends Activity {
 
 	// Components
 	@InjectView(R.id.conjugation_word)
-	TextView mWord;
+	TextView    mWord;
 	@InjectView(R.id.conjugation_group)
-	EditText mGroup;
+	RadioGroup  mGroup;
+	@InjectView(R.id.conjugation_group_1)
+	RadioButton mGroup1;
+	@InjectView(R.id.conjugation_group_2)
+	RadioButton mGroup2;
+	@InjectView(R.id.conjugation_group_3)
+	RadioButton mGroup3;
 	@InjectView(R.id.conjugation_dico)
-	EditText mDico;
+	EditText    mDico;
 	@InjectView(R.id.conjugation_masu)
-	EditText mMasu;
+	EditText    mMasu;
 	@InjectView(R.id.conjugation_te)
-	EditText mTe;
+	EditText    mTe;
 	@InjectView(R.id.conjugation_nai)
-	EditText mNai;
+	EditText    mNai;
 	@InjectView(R.id.conjugation_ta)
-	EditText mTa;
+	EditText    mTa;
 
 	// Initial Data
-	protected String idUpdate;
-	private   String groupSave;
-	private   String dicoSave;
-	protected String masuSave;
-	private   String teSave;
-	private   String naiSave;
-	private   String taSave;
-	protected String wordId;
+	protected String                    idUpdate;
+	private   ConjugationContract.Group groupSave;
+	private   String                    dicoSave;
+	protected String                    masuSave;
+	private   String                    teSave;
+	private   String                    naiSave;
+	private   String                    taSave;
+	protected String                    wordId;
 
 	protected boolean isUpdate;
 
@@ -112,7 +120,7 @@ public class ConjugationActivity extends Activity {
 
 	private void chekUpdate() {
 		Bundle bundle = getIntent().getExtras();
-		if(bundle == null) {
+		if (bundle == null) {
 			return;// fixme
 		}
 
@@ -133,8 +141,21 @@ public class ConjugationActivity extends Activity {
 		isUpdate = true;
 		idUpdate = bundle.getString(ConjugationContract._ID);
 
-		groupSave = bundle.getString(ConjugationContract.GROUP);
-		mGroup.setText(groupSave);
+		String tmp = bundle.getString(ConjugationContract.GROUP);
+		groupSave = ConjugationContract.Group.valueOf(tmp);
+		switch (groupSave) {
+			case I:
+				mGroup1.setSelected(true);
+				break;
+			case II:
+				mGroup2.setSelected(true);
+				break;
+			case III:
+				mGroup3.setSelected(true);
+				break;
+			default:
+				mGroup.clearCheck();
+		}
 
 		dicoSave = bundle.getString(ConjugationContract.DICO);
 		mDico.setText(dicoSave);
@@ -155,7 +176,7 @@ public class ConjugationActivity extends Activity {
 	private void emptyData() {
 		isUpdate = false;
 		idUpdate = "";
-		groupSave = "";
+		groupSave = null;
 		dicoSave = "";
 		masuSave = "";
 		teSave = "";
@@ -164,8 +185,7 @@ public class ConjugationActivity extends Activity {
 	}
 
 	private void reset() {
-		mGroup.setText(groupSave);
-		mGroup.setError(null);
+		mGroup.clearCheck();
 
 		mDico.setText(dicoSave);
 		mDico.setError(null);
@@ -186,13 +206,16 @@ public class ConjugationActivity extends Activity {
 	private void validate() {
 		boolean isNoError = true;
 
-		// fixme combobox
-		String groupeText = mGroup.getText().toString();
-		if (groupeText.isEmpty()) {
-			isNoError = false;
-			mGroup.setError(getResources().getString(R.string.input_error_empty));
-		} else {
-			mGroup.setError(null);
+		mGroup3.setError(null);
+		switch (mGroup.getCheckedRadioButtonId()) {
+			case R.id.conjugation_group_1:
+				break;
+			case R.id.conjugation_group_2:
+				break;
+			case R.id.conjugation_group_3:
+				break;
+			default:
+				mGroup3.setError(getResources().getString(R.string.input_error_empty));
 		}
 
 		String dicoText = mDico.getText().toString();
@@ -261,12 +284,25 @@ public class ConjugationActivity extends Activity {
 		back();
 	}
 
+	private String getGroup() {
+		switch (mGroup.getCheckedRadioButtonId()) {
+			case R.id.conjugation_group_1:
+				return ConjugationContract.Group.I.code;
+			case R.id.conjugation_group_2:
+				return ConjugationContract.Group.II.code;
+			case R.id.conjugation_group_3:
+				return ConjugationContract.Group.III.code;
+			default:
+				throw  new IllegalStateException("Unknow group :(");
+		}
+	}
+
 	private void updateById() {
 		final String where = ConjugationContract._ID + "=?";
 		final String[] selectionArgs = {idUpdate};
 
 		final ContentValues values = new ContentValues();
-		values.put(ConjugationContract.GROUP, mGroup.getText().toString());
+		values.put(ConjugationContract.GROUP, getGroup());
 		values.put(ConjugationContract.DICO, mDico.getText().toString());
 		values.put(ConjugationContract.MASU, mMasu.getText().toString());
 		values.put(ConjugationContract.TE, mTe.getText().toString());
@@ -282,7 +318,7 @@ public class ConjugationActivity extends Activity {
 
 	private void insert() {
 		final ContentValues values = new ContentValues();
-		values.put(ConjugationContract.GROUP, mGroup.getText().toString());
+		values.put(ConjugationContract.GROUP, getGroup());
 		values.put(ConjugationContract.DICO, mDico.getText().toString());
 		values.put(ConjugationContract.MASU, mMasu.getText().toString());
 		values.put(ConjugationContract.TE, mTe.getText().toString());
