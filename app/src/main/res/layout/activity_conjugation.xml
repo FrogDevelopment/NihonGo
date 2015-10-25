@@ -34,14 +34,30 @@
             android:layout_height="2dp"
             android:background="@android:color/darker_gray"/>
 
-        <EditText
+        <RadioGroup
             android:id="@+id/conjugation_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text">
+            android:orientation="horizontal">
 
-            <requestFocus/>
-        </EditText>
+            <RadioButton
+                android:id="@+id/conjugation_group_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I"/>
+
+            <RadioButton
+                android:id="@+id/conjugation_group_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="II"/>
+
+            <RadioButton
+                android:id="@+id/conjugation_group_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="III"/>
+        </RadioGroup>
 
         <TextView
             android:layout_width="match_parent"
