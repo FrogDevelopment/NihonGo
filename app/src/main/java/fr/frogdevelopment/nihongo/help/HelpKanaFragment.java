@@ -7,12 +7,16 @@ package fr.frogdevelopment.nihongo.help;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnPageChange;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.kana.KanaActivity;
 
 public class HelpKanaFragment extends Fragment implements ActionBar.TabListener {
 
@@ -70,6 +75,8 @@ public class HelpKanaFragment extends Fragment implements ActionBar.TabListener 
                     .setIcon(icon)
                     .setTabListener(this));
         }
+
+	    setHasOptionsMenu(true);
 
         return rootView;
     }
@@ -155,6 +162,33 @@ public class HelpKanaFragment extends Fragment implements ActionBar.TabListener 
         public CharSequence getPageTitle(int position) {
             return "OBJECT " + (position + 1);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the options menu from XML
+        inflater.inflate(R.menu.kana, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_draw:
+                Intent intent;
+                intent = new Intent(getActivity(), KanaActivity.class);
+
+	            int currentItem = mViewPager.getCurrentItem();
+                intent.putExtra("kana", currentItem);
+
+                startActivity(intent);
+                getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+
+            default:
+                return false;
+        }
+
+        return true;
     }
 
 }
