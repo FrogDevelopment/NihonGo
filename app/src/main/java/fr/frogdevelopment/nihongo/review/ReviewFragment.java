@@ -4,7 +4,7 @@
 
 package fr.frogdevelopment.nihongo.review;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -84,15 +84,15 @@ public class ReviewFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
         try {
-            mListener = new WeakReference<>((OnFragmentInteractionListener) activity);
+            mListener = new WeakReference<>((OnFragmentInteractionListener) context);
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(context.toString() + " must implement OnFragmentInteractionListener");
         }
-    }
+	}
 
     @Override
     public void onDetach() {
@@ -154,6 +154,9 @@ public class ReviewFragment extends Fragment {
     void onClickTest() {
         testTS.setText(test);
         testTS.setClickable(false);
+        if (detailsView.getVisibility() == View.INVISIBLE) {
+            detailsView.setVisibility(View.VISIBLE);
+        }
     }
 
 }
