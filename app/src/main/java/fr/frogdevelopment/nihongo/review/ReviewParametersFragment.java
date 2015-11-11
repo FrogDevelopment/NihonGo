@@ -46,13 +46,12 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     Switch mSwitchLanguageView;
     @Bind(R.id.review_switch_sort)
     Switch mSwitchSortView;
-
+    @Bind(R.id.review_switch_learned)
+    Switch mSwitchLearned;
     @Bind(R.id.review_param_quantity_selection)
     TextView mQuantitySelected;
-
     @Bind(R.id.review_param_tag_selection)
     TextView mTagSelected;
-
     @Bind(R.id.review_button_start)
     Button startButton;
 
@@ -111,10 +110,10 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.param_quantity_selection)
                 .setItems(quantities, (dialog, which) -> {
-                    selectedQuantity = quantities[which];
-                    mQuantitySelected.setText(selectedQuantity);
+	                selectedQuantity = quantities[which];
+	                mQuantitySelected.setText(selectedQuantity);
 
-                    startButton.setEnabled(selectedQuantity != null);
+	                startButton.setEnabled(selectedQuantity != null);
                 })
                 .create()
                 .show();
@@ -145,6 +144,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         options.putBoolean("isRandom", mSwitchSortView.isChecked());
         options.putString("count", selectedQuantity);
         options.putStringArray("tags", mSelectedTags);
+        options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
 
         Intent intent = new Intent(getActivity(), ReviewActivity.class);
         intent.putExtras(options);
