@@ -17,47 +17,48 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 class ReviewAdapter extends FragmentStatePagerAdapter {
 
-    private int mCount = 0;
-    private List<Item> items;
-    private final boolean isJapaneseReviewed;
+	private int mCount = 0;
+	private       List<Item> items;
+	private final boolean    isJapaneseReviewed;
 
-    public ReviewAdapter(FragmentManager fm, boolean isJapaneseType) {
-        super(fm);
-        this.isJapaneseReviewed = isJapaneseType;
-    }
+	public ReviewAdapter(FragmentManager fm, boolean isJapaneseType) {
+		super(fm);
+		this.isJapaneseReviewed = isJapaneseType;
+	}
 
-    @Override
-    public Fragment getItem(int position) {
-        ReviewFragment fragment = new ReviewFragment();
-        Item item = items.get(position);
+	@Override
+	public Fragment getItem(int position) {
+		ReviewFragment fragment = new ReviewFragment();
+		Item item = items.get(position);
 
-        Bundle args = new Bundle();
-        args.putParcelable("item", item);
-        args.putBoolean("isJapaneseReviewed", isJapaneseReviewed);
+		Bundle args = new Bundle();
+		args.putParcelable("item", item);
+		args.putBoolean("isJapaneseReviewed", isJapaneseReviewed);
+		args.putString("count", position + "/" + mCount);
 
-        fragment.setArguments(args);
+		fragment.setArguments(args);
 
-        return fragment;
-    }
+		return fragment;
+	}
 
-    @Override
-    public int getCount() {
-        return mCount;
-    }
+	@Override
+	public int getCount() {
+		return mCount;
+	}
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return "ITEM" + (position + 1);
-    }
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return "ITEM" + (position + 1);
+	}
 
-    public void setData(Cursor cursor) {
-        mCount = cursor.getCount();
-        items = new ArrayList<>(mCount);
+	public void setData(Cursor cursor) {
+		mCount = cursor.getCount();
+		items = new ArrayList<>(mCount);
 
-        while (cursor.moveToNext()) {
-            items.add(new Item(cursor));
-        }
+		while (cursor.moveToNext()) {
+			items.add(new Item(cursor));
+		}
 
-        notifyDataSetChanged();
-    }
+		notifyDataSetChanged();
+	}
 }

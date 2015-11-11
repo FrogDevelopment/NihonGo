@@ -11,7 +11,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".dico.details.DetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
