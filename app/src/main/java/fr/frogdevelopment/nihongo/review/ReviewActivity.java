@@ -10,10 +10,11 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -22,22 +23,21 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnPageChange;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 
-public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<Cursor>, ReviewFragment.OnFragmentInteractionListener {
+public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ReviewFragment.OnFragmentInteractionListener {
 
 	private static final int LOADER_ID = 710;
 	private ReviewAdapter adapter;
 
+	@Bind(R.id.toolbar)
+	Toolbar toolbar;
+
 	@Bind(R.id.review_viewpager)
 	ViewPager viewPager;
-
-	private int currentPage = 0;
-	private int count;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -49,21 +49,6 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 			default:
 				return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (currentPage > 0) {
-			getMenuInflater().inflate(R.menu.review, menu);
-
-			MenuItem indexMenuItem = menu.findItem(R.id.menu_review_index);
-			String title = currentPage + "/" + count;
-			indexMenuItem.setTitle(title);
-
-			return true;
-		}
-
-		return false;
 	}
 
 	@Override
@@ -84,9 +69,7 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 
 		ButterKnife.bind(this);
 
-		// Show the Up button in the action bar.
-		if (getActionBar() != null)
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		initToolbar();
 
 		final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean("isJapaneseReviewed");
 
@@ -94,6 +77,17 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 		viewPager.setAdapter(adapter);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
+	}
+
+	private void initToolbar() {
+		setSupportActionBar(toolbar);
+		final ActionBar actionBar = getSupportActionBar();
+
+		if (actionBar != null) {
+//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeButtonEnabled(true);
+		}
 	}
 
 	@Override
@@ -129,10 +123,7 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		adapter.setData(data);
-		count = data.getCount();
 		data.close();
-		currentPage = 1;
-		supportInvalidateOptionsMenu();
 	}
 
 	@Override
@@ -161,14 +152,6 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 		final String[] selectionArgs = {item.id};
 
 		getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
-
-		invalidateOptionsMenu();
-	}
-
-	@OnPageChange(R.id.review_viewpager)
-	void onPageSelected(int pageNum) {
-		currentPage = pageNum + 1;
-		supportInvalidateOptionsMenu();
 	}
 
 }
