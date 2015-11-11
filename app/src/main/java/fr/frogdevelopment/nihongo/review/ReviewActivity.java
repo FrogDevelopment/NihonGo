@@ -95,7 +95,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		final Bundle options = getIntent().getExtras();
 
 
-		final boolean isRandom = options.getBoolean("isRandom");
 		final String count = options.getString("count");
 		String limit = "";
 		if (NumberUtils.isNumber(count)) {
@@ -111,7 +110,17 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		}
 		String selection = StringUtils.join(likes, " OR ");
 
+		final boolean excludeLearned = options.getBoolean("excludeLearned");
+		if (excludeLearned) {
+			if (selection == null) {
+				selection = "LEARNED = '0'";
+			} else {
+				selection += " AND LEARNED = '0'";
+			}
+		}
+
 		String sortOrder;
+		final boolean isRandom = options.getBoolean("isRandom");
 		if (isRandom) {
 			sortOrder = "RANDOM()" + limit;
 		} else {
