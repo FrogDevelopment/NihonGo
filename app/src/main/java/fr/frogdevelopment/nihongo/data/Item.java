@@ -24,6 +24,15 @@ public class Item implements Row, Parcelable {
     public final String tags;
     public final String details;
     public String favorite;
+    public String learned;
+
+    public boolean isFavorite() {
+        return "1".equals(favorite);
+    }
+
+    public boolean isLearned() {
+        return "1".equals(learned);
+    }
 
     public Item(Cursor cursor) {
         id = cursor.getString(DicoContract.INDEX_ID);
@@ -34,6 +43,7 @@ public class Item implements Row, Parcelable {
         tags = cursor.getString(DicoContract.INDEX_TAGS);
         details = cursor.getString(DicoContract.INDEX_DETAILS);
         favorite = cursor.getString(DicoContract.INDEX_FAVORITE);
+        learned = cursor.getString(DicoContract.INDEX_LEARNED);
     }
 
     public int describeContents() {
@@ -49,6 +59,7 @@ public class Item implements Row, Parcelable {
         out.writeString(details);
         out.writeString(tags);
         out.writeString(favorite);
+        out.writeString(learned);
     }
 
     public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -70,6 +81,7 @@ public class Item implements Row, Parcelable {
         details = in.readString();
         tags = in.readString();
         favorite = in.readString();
+        learned = in.readString();
     }
 
     @Override
@@ -97,6 +109,7 @@ public class Item implements Row, Parcelable {
         args.putString(DicoContract.TAGS, tags);
         args.putString(DicoContract.DETAILS, details);
         args.putString(DicoContract.FAVORITE, favorite);
+        args.putString(DicoContract.LEARNED, learned);
 
         Intent intent = new Intent(packageContext, InputActivity.class);
         intent.putExtras(args);

@@ -29,7 +29,8 @@ import fr.frogdevelopment.nihongo.data.Item;
 public class ReviewFragment extends Fragment {
 
     interface OnFragmentInteractionListener {
-        void favorite(Item item);
+        void setFavorite(Item item);
+        void setLearned(Item item);
     }
 
     private WeakReference<OnFragmentInteractionListener> mListener;
@@ -66,7 +67,10 @@ public class ReviewFragment extends Fragment {
 //        inflater.inflate(R.menu.review, menu);
 
         MenuItem favoriteMenuItem = menu.findItem(R.id.menu_review_favorite);
-        favoriteMenuItem.setIcon("1".equals(mItem.favorite) ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+        favoriteMenuItem.setIcon(mItem.isFavorite() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+
+        MenuItem learnedMenuItem = menu.findItem(R.id.menu_review_learned);
+        learnedMenuItem.setIcon(mItem.isLearned()? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
     }
 
     @Override
@@ -74,8 +78,14 @@ public class ReviewFragment extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.menu_review_favorite:
-                mItem.favorite = "1".equals(mItem.favorite) ? "0" : "1";
-                mListener.get().favorite(mItem);
+                mItem.favorite = mItem.isFavorite() ? "0" : "1";
+                mListener.get().setFavorite(mItem);
+
+                return true;
+
+            case R.id.menu_review_learned:
+                mItem.learned = mItem.isLearned() ? "0" : "1";
+                mListener.get().setLearned(mItem);
 
                 return true;
 
