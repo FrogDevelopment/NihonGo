@@ -45,11 +45,6 @@ public class ConjugationContract implements BaseColumns {
 		db.execSQL(SQL_DELETE);
 	}
 
-	static void update(SQLiteDatabase db) {
-		delete(db);
-		create(db);
-	}
-
 	public enum Group {
 		I("I"),
 		II("II"),

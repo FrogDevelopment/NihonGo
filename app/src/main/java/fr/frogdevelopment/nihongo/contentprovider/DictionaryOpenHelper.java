@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DictionaryOpenHelper extends SQLiteOpenHelper {
 
     // When changing the database schema, increment the database version.
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String DATABASE_NAME = "NIHON_GO";
 
     public DictionaryOpenHelper(Context context) {
@@ -28,8 +28,11 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion == 9 && newVersion == 10) {
+        if (newVersion <= 10) {
             ConjugationContract.create(db);
+        }
+        if (newVersion <= 11) {
+            db.execSQL(DicoContract.UPDATE_11);
         }
     }
 
