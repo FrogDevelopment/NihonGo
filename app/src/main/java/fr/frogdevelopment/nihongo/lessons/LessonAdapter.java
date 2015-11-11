@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
 
@@ -75,11 +75,11 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
 
     class ViewHolder {
 
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text;
 
         private ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

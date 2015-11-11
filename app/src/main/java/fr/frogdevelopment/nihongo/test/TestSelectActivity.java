@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -26,7 +26,7 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 public class TestSelectActivity extends TestAbstractActivity {
 
-    @InjectView(R.id.test_select_to_find)
+    @Bind(R.id.test_select_to_find)
     TextView mToFindView;
 
     private static final List<Integer> ANSWERS = new ArrayList<>(6);
@@ -51,7 +51,7 @@ public class TestSelectActivity extends TestAbstractActivity {
 
         setContentView(R.layout.activity_test_select);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     @OnClick({R.id.test_select_answer_1, R.id.test_select_answer_2, R.id.test_select_answer_3, R.id.test_select_answer_4, R.id.test_select_answer_5, R.id.test_select_answer_6})

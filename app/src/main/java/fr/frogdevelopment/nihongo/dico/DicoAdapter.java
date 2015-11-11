@@ -23,17 +23,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Letter;
 import fr.frogdevelopment.nihongo.data.Row;
 
-/**
- * @author PxL
- */
 public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
 
     private final LayoutInflater mInflater;
@@ -108,109 +105,109 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
     }
 
     static class LetterViewHolder {
-        @InjectView(R.id.row_header)
-        TextView textView;
+	    @Bind(R.id.row_header)
+	    TextView textView;
 
-        public LetterViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
+	    public LetterViewHolder(View view) {
+		    ButterKnife.bind(this, view);
+	    }
     }
 
-    private View getDataView(int position, View convertView, ViewGroup parent) {
-        View view;
-        ViewHolder holder;
-        if (convertView == null) {
-            view = mInflater.inflate(mResource, parent, false);
-            holder = new ViewHolder(view);
-            view.setTag(holder);
-        } else {
-            view = convertView;
-            holder = (ViewHolder) view.getTag();
-        }
+	private View getDataView(int position, View convertView, ViewGroup parent) {
+		View view;
+		ViewHolder holder;
+		if (convertView == null) {
+			view = mInflater.inflate(mResource, parent, false);
+			holder = new ViewHolder(view);
+			view.setTag(holder);
+		} else {
+			view = convertView;
+			holder = (ViewHolder) view.getTag();
+		}
 
-        Item item = (Item) getItem(position);
-        holder.mInputView.setText(item.input);
-        holder.switcher.setDisplayedChild(0);
-        if (StringUtils.isNoneBlank(item.kanji)) {
-            holder.switchable = true;
-            holder.switcherKanji.setText(item.kanji);
-            holder.switcherKana.setText(item.kana);
-        } else {
-            holder.switchable = false;
-            holder.switcherKanji.setText(item.kana);
-        }
+		Item item = (Item) getItem(position);
+		holder.mInputView.setText(item.input);
+		holder.switcher.setDisplayedChild(0);
+		if (StringUtils.isNoneBlank(item.kanji)) {
+			holder.switchable = true;
+			holder.switcherKanji.setText(item.kanji);
+			holder.switcherKana.setText(item.kana);
+		} else {
+			holder.switchable = false;
+			holder.switcherKanji.setText(item.kana);
+		}
 
-        return view;
-    }
+		return view;
+	}
 
-    static class ViewHolder {
-        @InjectView(R.id.dico_input)
-        TextView mInputView;
+	static class ViewHolder {
+		@Bind(R.id.dico_input)
+		TextView mInputView;
 
-        @InjectView(R.id.dico_switcher)
-        TextSwitcher switcher;
-        @InjectView(R.id.dico_switcher_kanji)
-        TextView switcherKanji;
-        @InjectView(R.id.dico_switcher_kana)
-        TextView switcherKana;
+		@Bind(R.id.dico_switcher)
+		TextSwitcher switcher;
+		@Bind(R.id.dico_switcher_kanji)
+		TextView     switcherKanji;
+		@Bind(R.id.dico_switcher_kana)
+		TextView     switcherKana;
 
-        private boolean switchable;
-        private boolean tmp;
+		private boolean switchable;
+		private boolean tmp;
 
-        public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
+		public ViewHolder(View view) {
+			ButterKnife.bind(this, view);
+		}
 
-        void switchKanjiKana() {
-            if (!switchable) {
-                return;
-            }
+		void switchKanjiKana() {
+			if (!switchable) {
+				return;
+			}
 
-            if (tmp)
-                switcher.showNext();
-            else
-                switcher.showPrevious();
+			if (tmp)
+				switcher.showNext();
+			else
+				switcher.showPrevious();
 
-            tmp = !tmp;
-        }
-    }
+			tmp = !tmp;
+		}
+	}
 
-    private static final Pattern PATTERN_NUMBER = Pattern.compile("[0-9]");
+	private static final Pattern PATTERN_NUMBER = Pattern.compile("[0-9]");
 
-    private String[] sections;
-    private final List<Row> rows;
-    private final HashMap<String, Integer> mapPositionByLetter = new LinkedHashMap<>();
-    private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
+	private       String[]  sections;
+	private final List<Row> rows;
+	private final HashMap<String, Integer>  mapPositionByLetter  = new LinkedHashMap<>();
+	private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
 
-    public Cursor swapCursor(Cursor cursor, boolean isSortByLetter) {
-        super.swapCursor(cursor);
+	public Cursor swapCursor(Cursor cursor, boolean isSortByLetter) {
+		super.swapCursor(cursor);
 
-        rows.clear();
-        mapPositionByLetter.clear();
-        mapSectionByPosition.clear();
+		rows.clear();
+		mapPositionByLetter.clear();
+		mapSectionByPosition.clear();
 
-        if (cursor == null) {
-            return null;
-        }
+		if (cursor == null) {
+			return null;
+		}
 
-        Item item;
-        String header;
-        int position = 0;
-        int section = -1;
-        while (cursor.moveToNext()) {
-            item = new Item(cursor);
+		Item item;
+		String header;
+		int position = 0;
+		int section = -1;
+		while (cursor.moveToNext()) {
+			item = new Item(cursor);
 
-            header = isSortByLetter ? item.sort_letter : item.tags;
+			header = isSortByLetter ? item.sort_letter : item.tags;
 
-            // Group numbers together in the scroller
-            if (PATTERN_NUMBER.matcher(header).matches()) {
-                header = "#";
-            }
+			// Group numbers together in the scroller
+			if (PATTERN_NUMBER.matcher(header).matches()) {
+				header = "#";
+			}
 
-            // Check if we need to add a header row
-            if (!mapPositionByLetter.containsKey(header)) {
-                rows.add(new Letter(header));
-                mapPositionByLetter.put(header, position);
+			// Check if we need to add a header row
+			if (!mapPositionByLetter.containsKey(header)) {
+				rows.add(new Letter(header));
+				mapPositionByLetter.put(header, position);
                 section++;
                 mapSectionByPosition.put(position, section);
                 position++;

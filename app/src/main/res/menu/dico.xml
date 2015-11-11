@@ -3,31 +3,26 @@
   ~ Copyright (c) Frog Development 2015.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_search"
-        android:actionViewClass="android.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
-        android:showAsAction="ifRoom|collapseActionView"
         android:title="@string/menu_search"
-        android:visible="false"/>
-
-    <item
-        android:id="@+id/action_new"
-        android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_dico_new"/>
+        android:visible="false"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
         android:id="@+id/action_sort"
-        android:showAsAction="never"
-        android:title="@string/action_dico_sort_tag"/>
+        android:title="@string/action_dico_sort_tag"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_filter_by_favorite"
-        android:showAsAction="never"
         android:checkable="true"
-        android:title="Favoris uniquement"/>
+        android:title="@string/action_dico_favorite"
+        app:showAsAction="never"/>
 
 </menu>

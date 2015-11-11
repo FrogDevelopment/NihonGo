@@ -19,8 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 
@@ -37,15 +37,15 @@ public class DetailsFragment extends Fragment {
 
     private WeakReference<OnFragmentInteractionListener> mListener;
 
-    @InjectView(R.id.details_word_input)
+    @Bind(R.id.details_word_input)
     TextView mInputView;
-    @InjectView(R.id.details_word_kanji)
+    @Bind(R.id.details_word_kanji)
     TextView mKanjiView;
-    @InjectView(R.id.details_word_kana)
+    @Bind(R.id.details_word_kana)
     TextView mKanaView;
-    @InjectView(R.id.details_word_details)
+    @Bind(R.id.details_word_details)
     TextView mDetailsView;
-    @InjectView(R.id.details_word_tags)
+    @Bind(R.id.details_word_tags)
     TextView mTagsView;
 
     private Item mItem;
@@ -55,7 +55,7 @@ public class DetailsFragment extends Fragment {
         // The last two arguments ensure LayoutParams are inflated properly.
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
 

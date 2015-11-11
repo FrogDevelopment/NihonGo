@@ -7,15 +7,17 @@ package fr.frogdevelopment.nihongo.dico;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -28,17 +30,15 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -62,9 +62,8 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	protected DicoAdapter dicoAdapter;
 
-	public DicoFragment() {
-		// Empty constructor required for fragment subclasses
-	}
+	@Bind(R.id.fab_add)
+	FloatingActionButton mFabAdd;
 
 	private Type mType;
 
@@ -75,9 +74,8 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		mType = (Type) getArguments().getSerializable("type");
 
 		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_dico, container, false);
-//        rootView.setBackgroundResource(mType.background);
 
-		ButterKnife.inject(this, rootView);
+		ButterKnife.bind(this, rootView);
 		mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
 
 		getLoaderManager().initLoader(LOADER_ID, getArguments(), this);
@@ -97,8 +95,20 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		setListAdapter(dicoAdapter);
 
 		setHasOptionsMenu(true);
+		initFabAdd();
 
 		return rootView;
+	}
+
+	private void initFabAdd() {
+		mFabAdd.setOnClickListener(view -> {
+			Intent intent;
+			intent = new Intent(getActivity(), InputActivity.class);
+			intent.putExtra("type", mType);
+
+			startActivity(intent);
+			getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+		});
 	}
 
 	@Override
@@ -136,17 +146,13 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		getListView().setOnTouchListener(this);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				if (dicoAdapter.isLetterHeader(position)) {
-					return true;
-				}
-
-				((ListView) parent).setItemChecked(position, ((ListView) parent).isItemChecked(position));
-				return false;
+		getListView().setOnItemLongClickListener((parent, view1, position, id) -> {
+			if (dicoAdapter.isLetterHeader(position)) {
+				return true;
 			}
+
+			((ListView) parent).setItemChecked(position, ((ListView) parent).isItemChecked(position));
+			return false;
 		});
 
 		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
@@ -225,7 +231,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
 
 		searchMenuItem.setVisible(true);
-		searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+		MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
 
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
@@ -238,7 +244,8 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				return true;
 			}
 		});
-		SearchView searchView = (SearchView) searchMenuItem.getActionView();
+		// fixme
+		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 		// Assumes current activity is the searchable activity
@@ -258,15 +265,6 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				isSortByLetter = !isSortByLetter;
 				getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);
 				item.setTitle(isSortByLetter ? R.string.action_dico_sort_tag : R.string.action_dico_sort_letter);
-				break;
-
-			case R.id.action_new:
-				Intent intent;
-				intent = new Intent(getActivity(), InputActivity.class);
-				intent.putExtra("type", mType);
-
-				startActivity(intent);
-				getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 				break;
 
 			case R.id.action_filter_by_favorite:
@@ -297,39 +295,33 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.delete_title)
 				.setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))
-				.setPositiveButton(R.string.positive_button_continue,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								if (nbSelectedRows == 1) {
-									final Item item = (Item) dicoAdapter.getItem(selectedRows.iterator().next());
-									Uri uri = Uri.parse(mType.uri + "/" + item.id);
-									getActivity().getContentResolver().delete(uri, null, null);
-								} else {
-									StringBuilder inList = new StringBuilder(nbSelectedRows * 2);
-									final String[] selectionArgs = new String[nbSelectedRows];
-									int i = 0;
-									Item item;
-									for (Integer position : selectedRows) {
-										if (i > 0) {
-											inList.append(",");
-										}
-										inList.append("?");
-
-										item = (Item) dicoAdapter.getItem(position);
-										selectionArgs[i] = item.id;
-										i++;
-									}
-
-									final String selection = "_ID IN (" + inList.toString() + ")";
-									getActivity().getContentResolver().delete(mType.uri, selection, selectionArgs);
-								}
-								Toast.makeText(getActivity(), R.string.delete_done, Toast.LENGTH_LONG).show();
-								actionMode.finish();
+				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {
+					if (nbSelectedRows == 1) {
+						final Item item = (Item) dicoAdapter.getItem(selectedRows.iterator().next());
+						Uri uri = Uri.parse(mType.uri + "/" + item.id);
+						getActivity().getContentResolver().delete(uri, null, null);
+					} else {
+						StringBuilder inList = new StringBuilder(nbSelectedRows * 2);
+						final String[] selectionArgs = new String[nbSelectedRows];
+						int i = 0;
+						Item item;
+						for (Integer position : selectedRows) {
+							if (i > 0) {
+								inList.append(",");
 							}
+							inList.append("?");
 
-						})
+							item = (Item) dicoAdapter.getItem(position);
+							selectionArgs[i] = item.id;
+							i++;
+						}
+
+						final String selection = "_ID IN (" + inList.toString() + ")";
+						getActivity().getContentResolver().delete(mType.uri, selection, selectionArgs);
+					}
+					Toast.makeText(getActivity(), R.string.delete_done, Toast.LENGTH_LONG).show();
+					actionMode.finish();
+				})
 				.setNegativeButton(android.R.string.no, null)
 				.show();
 	}

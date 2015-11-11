@@ -12,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 
 public class HelpFragment extends Fragment {
 
-    @InjectView(R.id.help_imageView)
+    @Bind(R.id.help_imageView)
     ImageView imageView;
 
     @Override
@@ -26,7 +26,7 @@ public class HelpFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         View rootView = inflater.inflate(R.layout.fragment_help, container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         final Bundle arguments = getArguments();
         imageView.setImageResource(arguments.getInt("imageSource"));

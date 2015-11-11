@@ -29,7 +29,7 @@
     <!-- CONTEXT MENU -->
     <string name="action_dico_update">Mettre à jour</string>
     <string name="action_dico_delete">Supprimer</string>
-    <string name="action_dico_new">Nouveau</string>
+    <string name="action_dico_favorite">Favoris uniquement</string>
     <string name="action_dico_sort_letter">Trier par lettre</string>
     <string name="action_dico_sort_tag">Trier par tag</string>
     <string name="action_dico_gesture">Draw</string>

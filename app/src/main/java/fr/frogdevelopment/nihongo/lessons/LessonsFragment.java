@@ -28,7 +28,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import cz.msebera.android.httpclient.Header;
 import fr.frogdevelopment.nihongo.BuildConfig;
 import fr.frogdevelopment.nihongo.ConnectionHelper;
 import fr.frogdevelopment.nihongo.Preferences;

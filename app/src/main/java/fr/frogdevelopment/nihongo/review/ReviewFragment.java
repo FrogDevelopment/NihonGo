@@ -20,8 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -33,44 +33,44 @@ public class ReviewFragment extends Fragment {
         void setLearned(Item item);
     }
 
-    private WeakReference<OnFragmentInteractionListener> mListener;
+	private WeakReference<OnFragmentInteractionListener> mListener;
 
 
-    @InjectView(R.id.review_reviewed)
-    TextView reviewedTV;
-    @InjectView(R.id.review_textSwitcher_kana)
-    TextSwitcher kanaTS;
-    @InjectView(R.id.review_textSwitcher_test)
-    TextSwitcher testTS;
-    @InjectView(R.id.review_details)
-    TextView detailsView;
+	@Bind(R.id.review_reviewed)
+	TextView     reviewedTV;
+	@Bind(R.id.review_textSwitcher_kana)
+	TextSwitcher kanaTS;
+	@Bind(R.id.review_textSwitcher_test)
+	TextSwitcher testTS;
+	@Bind(R.id.review_details)
+	TextView     detailsView;
 
-    private Item mItem;
-    private String test;
+	private Item   mItem;
+	private String test;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated properly.
-        View rootView = inflater.inflate(R.layout.page_review_word, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// The last two arguments ensure LayoutParams are inflated properly.
+		View rootView = inflater.inflate(R.layout.page_review_word, container, false);
 
-        ButterKnife.inject(this, rootView);
+		ButterKnife.bind(this, rootView);
 
-        setHasOptionsMenu(true);
+		setHasOptionsMenu(true);
 
-        populateView();
+		populateView();
 
-        return rootView;
-    }
+		return rootView;
+	}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        inflater.inflate(R.menu.review, menu);
 
-        MenuItem favoriteMenuItem = menu.findItem(R.id.menu_review_favorite);
-        favoriteMenuItem.setIcon(mItem.isFavorite() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+		MenuItem favoriteMenuItem = menu.findItem(R.id.menu_review_favorite);
+		favoriteMenuItem.setIcon(mItem.isFavorite() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
 
-        MenuItem learnedMenuItem = menu.findItem(R.id.menu_review_learned);
-        learnedMenuItem.setIcon(mItem.isLearned()? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
+		MenuItem learnedMenuItem = menu.findItem(R.id.menu_review_learned);
+		learnedMenuItem.setIcon(mItem.isLearned()? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
     }
 
     @Override

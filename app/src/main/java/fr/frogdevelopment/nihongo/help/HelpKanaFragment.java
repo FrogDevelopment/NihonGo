@@ -20,8 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnPageChange;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.kana.KanaActivity;
@@ -35,14 +35,14 @@ public class HelpKanaFragment extends Fragment implements ActionBar.TabListener 
     // representing an object in the collection.
     PagerAdapter mDemoCollectionPagerAdapter;
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mViewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_help_pager, container, false);
 
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         mDemoCollectionPagerAdapter = new PagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);

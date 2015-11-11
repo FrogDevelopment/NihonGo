@@ -145,12 +145,12 @@ public class NihonGoContentProvider extends ContentProvider {
 				groupBy = DicoContract.TAGS;
 				break;
 
-			case EXPRESSIONS:
+			case EXPRESSION_ID:
 				queryBuilder.setTables(DicoContract.TABLE_NAME);
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
 				queryBuilder.appendWhere(DicoContract._ID + "=" + uri.getLastPathSegment());
 				break;
-			case EXPRESSION_ID:
+			case EXPRESSIONS:
 				queryBuilder.setTables(DicoContract.TABLE_NAME);
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
 				break;

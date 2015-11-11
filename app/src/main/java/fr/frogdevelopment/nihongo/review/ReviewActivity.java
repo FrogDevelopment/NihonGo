@@ -20,8 +20,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnPageChange;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -33,7 +33,7 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 	private static final int LOADER_ID = 710;
 	private ReviewAdapter adapter;
 
-	@InjectView(R.id.review_viewpager)
+	@Bind(R.id.review_viewpager)
 	ViewPager viewPager;
 
 	private int currentPage = 0;
@@ -82,7 +82,7 @@ public class ReviewActivity extends FragmentActivity implements LoaderCallbacks<
 
 		setContentView(R.layout.activity_review);
 
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 
 		// Show the Up button in the action bar.
 		if (getActionBar() != null)
