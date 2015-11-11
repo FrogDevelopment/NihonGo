@@ -6,164 +6,173 @@ package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
 
-public class DetailsActivity extends FragmentActivity implements DetailsFragment.OnFragmentInteractionListener {
+public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
-    @InjectView(R.id.details_viewpager)
-    ViewPager mViewPager;
+	@Bind(R.id.toolbar)
+	Toolbar toolbar;
 
-    private Type mType;
+	@Bind(R.id.details_viewpager)
+	ViewPager mViewPager;
 
-    @Override
-    public void onBackPressed() {
-        back();
-    }
+	private Type mType;
 
-    private void back() {
-        NavUtils.navigateUpFromSameTask(this);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+	@Override
+	public void onBackPressed() {
+		back();
+	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	private void back() {
+		NavUtils.navigateUpFromSameTask(this);
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+	}
 
-        setContentView(R.layout.activity_details);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        ButterKnife.inject(this);
+		setContentView(R.layout.activity_details);
 
-        // Show the Up button in the action bar.
-        if (getActionBar() != null)
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+		ButterKnife.bind(this);
 
-        Bundle args = getIntent().getExtras();
+		// Show the Up button in the action bar.
+		if (getActionBar() != null)
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mType = (Type) args.getSerializable("type");
+		Bundle args = getIntent().getExtras();
 
-        List<Item> items = args.getParcelableArrayList("items");
+		mType = (Type) args.getSerializable("type");
 
-        DetailsAdapter mAdapter = new DetailsAdapter(getSupportFragmentManager(), items, mType);
-        mViewPager.setAdapter(mAdapter);
-        int position = args.getInt("position");
-        mViewPager.setCurrentItem(position);
-    }
+		List<Item> items = args.getParcelableArrayList("items");
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                back();
-                return true;
+		DetailsAdapter mAdapter = new DetailsAdapter(getSupportFragmentManager(), items, mType);
+		mViewPager.setAdapter(mAdapter);
+		int position = args.getInt("position");
+		mViewPager.setCurrentItem(position);
 
-            default:
-                return false;
-        }
-    }
+		initToolbar();
+	}
 
-    // ************************************************************* \\
-    @Override
-    public void delete(final Item item) {
-        // Ask the user if they want to delete
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.delete_title)
-                .setMessage(R.string.delete_detail)
-                .setPositiveButton(R.string.positive_button_continue,
-                        new DialogInterface.OnClickListener() {
+	private void initToolbar() {
+		setSupportActionBar(toolbar);
+		final ActionBar actionBar = getSupportActionBar();
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                onDelete(item);
-                            }
+		if (actionBar != null) {
+//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeButtonEnabled(true);
+		}
+	}
 
-                        })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				back();
+				return true;
 
-    private void onDelete(Item item) {
-        Uri uri = Uri.parse(mType.uri + "/" + item.id);
-        getContentResolver().delete(uri, null, null);
-        Toast.makeText(this, R.string.delete_done, Toast.LENGTH_LONG).show();
-        back();
-    }
+			default:
+				return false;
+		}
+	}
 
-    @Override
-    public void update(Item item) {
-        startActivity(item.getUpdateIntent(this, mType));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+	// ************************************************************* \\
+	@Override
+	public void delete(final Item item) {
+		// Ask the user if they want to delete
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.delete_title)
+				.setMessage(R.string.delete_detail)
+				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> onDelete(item))
+				.setNegativeButton(android.R.string.no, null)
+				.show();
+	}
 
-    @Override
-    public void favorite(Item item) {
-        final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {item.id};
+	private void onDelete(Item item) {
+		Uri uri = Uri.parse(mType.uri + "/" + item.id);
+		getContentResolver().delete(uri, null, null);
+		Toast.makeText(this, R.string.delete_done, Toast.LENGTH_LONG).show();
+		back();
+	}
 
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.FAVORITE, item.favorite);
+	@Override
+	public void update(Item item) {
+		startActivity(item.getUpdateIntent(this, mType));
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+	}
 
-        getContentResolver().update(mType.uri, values, where, selectionArgs);
+	@Override
+	public void favorite(Item item) {
+		final String where = DicoContract._ID + "=?";
+		final String[] selectionArgs = {item.id};
 
-        invalidateOptionsMenu();
-    }
+		final ContentValues values = new ContentValues();
+		values.put(DicoContract.FAVORITE, item.favorite);
 
-    // ************************************************************* \\
-    private class DetailsAdapter extends FragmentStatePagerAdapter {
+		getContentResolver().update(mType.uri, values, where, selectionArgs);
 
-        private final int mCount;
-        private final List<Item> mItems;
-        private final Type mType;
+		invalidateOptionsMenu();
+	}
 
-        private DetailsAdapter(FragmentManager fm, List<Item> items, Type type) {
-            super(fm);
-            mItems = items;
-            mCount = items.size();
-            mType = type;
-        }
+	// ************************************************************* \\
+	private class DetailsAdapter extends FragmentStatePagerAdapter {
 
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = new DetailsFragment();
+		private final int        mCount;
+		private final List<Item> mItems;
+		private final Type       mType;
 
-            Bundle args = new Bundle();
-            args.putSerializable("type", mType);
-            args.putParcelable("item", mItems.get(position));
+		private DetailsAdapter(FragmentManager fm, List<Item> items, Type type) {
+			super(fm);
+			mItems = items;
+			mCount = items.size();
+			mType = type;
+		}
 
-            fragment.setArguments(args);
+		@Override
+		public Fragment getItem(int position) {
+			Fragment fragment = new DetailsFragment();
 
-            return fragment;
-        }
+			Bundle args = new Bundle();
+			args.putSerializable("type", mType);
+			args.putParcelable("item", mItems.get(position));
 
-        @Override
-        public int getCount() {
-            return mCount;
-        }
+			fragment.setArguments(args);
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "ITEM" + (position + 1);
-        }
+			return fragment;
+		}
 
-    }
+		@Override
+		public int getCount() {
+			return mCount;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return "ITEM" + (position + 1);
+		}
+
+	}
 
 }

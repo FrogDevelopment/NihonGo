@@ -20,20 +20,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import fr.frogdevelopment.nihongo.R;
 
 public class TestResultActivity extends Activity {
 
-    @InjectView(R.id.test_result_list)
+    @Bind(R.id.test_result_list)
     ListView mListView;
 
     private ResultAdapter adapter;
-    private int successCounter;
-    private int quantity;
+    private int           successCounter;
+    private int           quantity;
 
     @OnClick(R.id.test_result_ok)
     void back() {
@@ -59,7 +59,7 @@ public class TestResultActivity extends Activity {
             getActionBar().setTitle(R.string.test_results_title);
         }
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         List<Result> results = getIntent().getParcelableArrayListExtra("results");
         adapter = new ResultAdapter(this, results);
@@ -139,13 +139,13 @@ public class TestResultActivity extends Activity {
         }
 
         class ResultHolder {
-            @InjectView(R.id.dico_test_test)
+            @Bind(R.id.dico_test_test)
             TextView test;
-            @InjectView(R.id.dico_test_answer)
+            @Bind(R.id.dico_test_answer)
             TextView answer;
 
             public ResultHolder(View view) {
-                ButterKnife.inject(this, view);
+                ButterKnife.bind(this, view);
             }
         }
 

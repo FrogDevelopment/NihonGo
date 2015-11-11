@@ -35,7 +35,7 @@
     <!-- CONTEXT MENU -->
     <string name="action_dico_update">Update</string>
     <string name="action_dico_delete">Delete</string>
-    <string name="action_dico_new">New</string>
+    <string name="action_dico_favorite">Favorites only</string>
     <string name="action_dico_sort_letter">Sort by letter</string>
     <string name="action_dico_sort_tag">Sort by tag</string>
     <string name="action_dico_gesture">Draw</string>

@@ -27,12 +27,12 @@ android {
             keyPassword 'bReiZhZiOn21'
         }
     }
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo"
         minSdkVersion 19
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
     buildTypes {
         release {
@@ -54,9 +54,11 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.jakewharton:butterknife:6.0.0'
-    compile 'com.loopj.android:android-async-http:1.4.5'
+    compile 'com.android.support:support-v4:23.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.apache.commons:commons-csv:1.1'
     compile 'commons-io:commons-io:2.4'

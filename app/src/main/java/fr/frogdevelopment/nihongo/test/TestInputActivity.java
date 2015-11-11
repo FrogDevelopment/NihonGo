@@ -15,8 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Random;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -24,9 +24,9 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 public class TestInputActivity extends TestAbstractActivity {
 
-    @InjectView(R.id.test_input_to_find)
+    @Bind(R.id.test_input_to_find)
     TextView toFindView;
-    @InjectView(R.id.test_input_answer)
+    @Bind(R.id.test_input_answer)
     EditText answerView;
 
 
@@ -41,7 +41,7 @@ public class TestInputActivity extends TestAbstractActivity {
 
         setContentView(R.layout.activity_test_input);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     @OnClick(R.id.test_input_validate_button)

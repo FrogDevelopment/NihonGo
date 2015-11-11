@@ -75,7 +75,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:logo="@drawable/ic_launcher"
-        android:theme="@android:style/Theme.Holo.Light">
+        android:theme="@style/AppTheme">
 
         <!-- Points to searchable activity so the whole app can invoke search. -->
         <meta-data

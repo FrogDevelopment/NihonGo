@@ -16,8 +16,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.ConjugationContract;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -28,25 +28,25 @@ import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.
 public class ConjugationActivity extends Activity {
 
 	// Components
-	@InjectView(R.id.conjugation_word)
+	@Bind(R.id.conjugation_word)
 	TextView    mWord;
-	@InjectView(R.id.conjugation_group)
+	@Bind(R.id.conjugation_group)
 	RadioGroup  mGroup;
-	@InjectView(R.id.conjugation_group_1)
+	@Bind(R.id.conjugation_group_1)
 	RadioButton mGroup1;
-	@InjectView(R.id.conjugation_group_2)
+	@Bind(R.id.conjugation_group_2)
 	RadioButton mGroup2;
-	@InjectView(R.id.conjugation_group_3)
+	@Bind(R.id.conjugation_group_3)
 	RadioButton mGroup3;
-	@InjectView(R.id.conjugation_dico)
+	@Bind(R.id.conjugation_dico)
 	EditText    mDico;
-	@InjectView(R.id.conjugation_masu)
+	@Bind(R.id.conjugation_masu)
 	EditText    mMasu;
-	@InjectView(R.id.conjugation_te)
+	@Bind(R.id.conjugation_te)
 	EditText    mTe;
-	@InjectView(R.id.conjugation_nai)
+	@Bind(R.id.conjugation_nai)
 	EditText    mNai;
-	@InjectView(R.id.conjugation_ta)
+	@Bind(R.id.conjugation_ta)
 	EditText    mTa;
 
 	// Initial Data
@@ -68,7 +68,7 @@ public class ConjugationActivity extends Activity {
 		setContentView(R.layout.activity_conjugation);
 //        setTitle(R.string.menu_subitem_word); FIXME
 
-		ButterKnife.inject(this);
+		ButterKnife.bind(this);
 
 		chekUpdate();
 	}
@@ -76,7 +76,7 @@ public class ConjugationActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		ButterKnife.reset(this);
+		ButterKnife.unbind(this);
 	}
 
 	@Override

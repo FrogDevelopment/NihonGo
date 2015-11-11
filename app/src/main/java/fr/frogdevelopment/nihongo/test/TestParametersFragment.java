@@ -31,8 +31,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -43,40 +43,40 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
     private static final int LOADER_ID = 700;
 
-    static final String TYPE_TEST = "isTestJapanese";
-    static final String QUANTITY = "count";
+    static final String TYPE_TEST     = "isTestJapanese";
+    static final String QUANTITY      = "count";
     static final String DISPLAY_KANJI = "isDisplayKanji";
 
-    @InjectView(R.id.test_param_type_selection)
+    @Bind(R.id.test_param_type_selection)
     TextView mTypeSelected;
 
-    @InjectView(R.id.test_param_method_selection)
+    @Bind(R.id.test_param_method_selection)
     TextView mMethodSelected;
 
-    @InjectView(R.id.test_param_quantity_selection)
+    @Bind(R.id.test_param_quantity_selection)
     TextView mQuantitySelected;
 
-    @InjectView(R.id.test_param_kanji)
+    @Bind(R.id.test_param_kanji)
     Switch mKanjiSwitch;
 
-    @InjectView(R.id.test_param_tag_selection)
+    @Bind(R.id.test_param_tag_selection)
     TextView mTagSelected;
 
-    @InjectView(R.id.test_button_start)
+    @Bind(R.id.test_button_start)
     Button startButton;
 
-    private int selectedType = -1;
-    private int selectedMethod = -1;
-    private String selectedQuantity = null;
-    private List<String> items = new ArrayList<>();
+    private int          selectedType     = -1;
+    private int          selectedMethod   = -1;
+    private String       selectedQuantity = null;
+    private List<String> items            = new ArrayList<>();
     private ArrayList<Integer> mSelectedItems;
-    private String[] mSelectedTags;
+    private String[]           mSelectedTags;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_test_parameters, container, false);
 
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 

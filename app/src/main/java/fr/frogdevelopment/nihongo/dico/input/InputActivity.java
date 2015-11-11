@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.conjugation.ConjugationActivity;
 import fr.frogdevelopment.nihongo.contentprovider.ConjugationContract;
@@ -29,17 +29,17 @@ import fr.frogdevelopment.nihongo.data.Type;
 public class InputActivity extends Activity {
 
     // Components
-    @InjectView(R.id.input_kanji)
+    @Bind(R.id.input_kanji)
     EditText mKanjiView;
-    @InjectView(R.id.input_kana)
+    @Bind(R.id.input_kana)
     EditText mKanaView;
-    @InjectView(R.id.input_input)
+    @Bind(R.id.input_input)
     EditText mInputView;
-    @InjectView(R.id.input_tags)
+    @Bind(R.id.input_tags)
     EditText mTagsView;
-    @InjectView(R.id.input_details)
+    @Bind(R.id.input_details)
     EditText mDetailsView;
-    @InjectView(R.id.input_conjugation)
+    @Bind(R.id.input_conjugation)
     Button   mConjugationButton;
 
     // Initial Data
@@ -61,7 +61,7 @@ public class InputActivity extends Activity {
         mType = (Type) getIntent().getSerializableExtra("type");
         setContentView(R.layout.fragment_input);
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         switch (mType) {
             case WORD:
@@ -101,7 +101,7 @@ public class InputActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

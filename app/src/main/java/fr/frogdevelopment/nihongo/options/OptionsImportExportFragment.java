@@ -23,8 +23,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import fr.frogdevelopment.nihongo.R;
@@ -37,12 +37,12 @@ public class OptionsImportExportFragment extends Fragment {
     private static final int FLAG_EXPORT = 0;
     private static final int FLAG_IMPORT = 1;
 
-    @InjectView(R.id.options_export_name)
+    @Bind(R.id.options_export_name)
     EditText mNameExportView;
-    @InjectView(R.id.options_export_select)
-    Button mButtonExport;
-    @InjectView(R.id.options_erase)
-    Button mButtonErase;
+    @Bind(R.id.options_export_select)
+    Button   mButtonExport;
+    @Bind(R.id.options_erase)
+    Button   mButtonErase;
 
     public OptionsImportExportFragment() {
         // Required empty public constructor
@@ -53,7 +53,7 @@ public class OptionsImportExportFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_options_import_export, container, false);
 
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         // First of all we check if the external storage of the device is available for writing.
         // Remember that the external storage is not necessarily the sd card. Very often it is the device storage.

@@ -31,8 +31,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -43,25 +43,25 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 
     private static final int LOADER_ID = 700;
 
-    @InjectView(R.id.review_switch_language)
+    @Bind(R.id.review_switch_language)
     Switch mSwitchLanguageView;
-    @InjectView(R.id.review_switch_sort)
+    @Bind(R.id.review_switch_sort)
     Switch mSwitchSortView;
 
-    @InjectView(R.id.review_param_quantity_selection)
+    @Bind(R.id.review_param_quantity_selection)
     TextView mQuantitySelected;
 
-    @InjectView(R.id.review_param_tag_selection)
+    @Bind(R.id.review_param_tag_selection)
     TextView mTagSelected;
 
-    @InjectView(R.id.review_button_start)
+    @Bind(R.id.review_button_start)
     Button startButton;
 
     private String[] quantities;
     private String selectedQuantity = null;
     private ArrayList<Integer> mSelectedItems;
-    private String[] mSelectedTags;
-    private List<String> items;
+    private String[]           mSelectedTags;
+    private List<String>       items;
 
     public ReviewParametersFragment() {
         // Empty constructor required for fragment subclasses
@@ -71,7 +71,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
 
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 

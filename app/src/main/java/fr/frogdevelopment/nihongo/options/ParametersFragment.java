@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.Preferences;
 import fr.frogdevelopment.nihongo.R;
@@ -25,7 +25,7 @@ public class ParametersFragment extends Fragment {
 
     private static final String LOG_TAG = "NIHON_GO";
 
-    @InjectView(R.id.options_erase)
+    @Bind(R.id.options_erase)
     Button mButtonErase;
 
     public ParametersFragment() {
@@ -37,7 +37,7 @@ public class ParametersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_options_parameters, container, false);
 
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         return view;
     }
 

@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import fr.frogdevelopment.nihongo.R;
 
 public class DrawerItemAdapter extends ArrayAdapter<DrawerItemAdapter.MenuItem> {
@@ -75,7 +75,7 @@ public class DrawerItemAdapter extends ArrayAdapter<DrawerItemAdapter.MenuItem> 
         }
 
         if (convertView.isSelected()) {
-            convertView.setBackgroundResource(R.drawable.background_drawer);
+            convertView.setBackgroundResource(R.drawable.selectable_item_background);
         } else {
             convertView.setBackgroundResource(android.R.color.transparent);
 
@@ -86,11 +86,11 @@ public class DrawerItemAdapter extends ArrayAdapter<DrawerItemAdapter.MenuItem> 
 
     static class ItemViewHolder {
 
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView title;
 
         public ItemViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -100,9 +100,9 @@ public class DrawerItemAdapter extends ArrayAdapter<DrawerItemAdapter.MenuItem> 
 
     static class MenuItem {
 
-        final int title;
+        final int     title;
         final boolean isSeparator;
-        final int index;
+        final int     index;
 
         private MenuItem() {
             super();
