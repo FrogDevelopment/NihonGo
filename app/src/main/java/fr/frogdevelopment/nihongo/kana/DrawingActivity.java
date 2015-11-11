@@ -68,11 +68,7 @@ public class DrawingActivity extends Activity {
 		mGesture = savedInstanceState.getParcelable("gesture");
 		if (mGesture != null) {
 			final GestureOverlayView overlay = (GestureOverlayView) findViewById(R.id.drawing);
-			overlay.post(new Runnable() {
-				public void run() {
-					overlay.setGesture(mGesture);
-				}
-			});
+			overlay.post(() -> overlay.setGesture(mGesture));
 		}
 	}
 

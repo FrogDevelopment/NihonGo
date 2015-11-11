@@ -4,7 +4,7 @@
 
 package fr.frogdevelopment.nihongo.dico.details;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -59,7 +59,7 @@ public class DetailsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        populateView(rootView);
+        populateView();
 
         return rootView;
     }
@@ -96,12 +96,12 @@ public class DetailsFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = new WeakReference<>((OnFragmentInteractionListener) activity);
+            mListener = new WeakReference<>((OnFragmentInteractionListener) context);
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -111,10 +111,15 @@ public class DetailsFragment extends Fragment {
         mListener = null;
     }
 
-    private void populateView(View rootView) {
+    private void populateView() {
         Bundle args = getArguments();
 
         mItem = args.getParcelable("item");
+
+        if (mItem == null) {
+            return;
+        }
+
         mInputView.setText(mItem.input);
 
         if (StringUtils.isNoneEmpty(mItem.kanji)) {
@@ -137,9 +142,6 @@ public class DetailsFragment extends Fragment {
             mTagsView.setText(mItem.tags);
             mTagsView.setVisibility(View.VISIBLE);
         }
-
-//        Type mType = (Type) args.getSerializable("type");
-//        rootView.setBackground(getActivity().getResources().getDrawable(mType.background));
     }
 
 }

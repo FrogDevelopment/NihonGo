@@ -26,10 +26,6 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
         this.isJapaneseReviewed = isJapaneseType;
     }
 
-    public Item getData(int position) {
-        return items.get(position);
-    }
-
     @Override
     public Fragment getItem(int position) {
         ReviewFragment fragment = new ReviewFragment();

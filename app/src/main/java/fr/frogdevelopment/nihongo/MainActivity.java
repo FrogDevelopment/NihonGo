@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
-import fr.frogdevelopment.nihongo.help.HelpKanaFragment;
+import fr.frogdevelopment.nihongo.kana.BlankFragment;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
 import fr.frogdevelopment.nihongo.options.ParametersFragment;
 import fr.frogdevelopment.nihongo.review.ReviewParametersFragment;
@@ -193,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
 
 			case R.id.navigation_kana:
 				mFragmentTitle = R.string.menu_subitem_kana;
-				fragment = new HelpKanaFragment();
-//				fragment = new BlankFragment();
+//				fragment = new HelpKanaFragment();
+				fragment = new BlankFragment();
 				break;
 
 			case R.id.navigation_parameters:

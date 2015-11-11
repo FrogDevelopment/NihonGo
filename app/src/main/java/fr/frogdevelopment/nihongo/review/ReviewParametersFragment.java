@@ -5,7 +5,6 @@
 package fr.frogdevelopment.nihongo.review;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -111,14 +110,11 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     void onClickQuantity(View v) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.param_quantity_selection)
-                .setItems(quantities, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedQuantity = quantities[which];
-                        mQuantitySelected.setText(selectedQuantity);
+                .setItems(quantities, (dialog, which) -> {
+                    selectedQuantity = quantities[which];
+                    mQuantitySelected.setText(selectedQuantity);
 
-                        startButton.setEnabled(selectedQuantity != null);
-                    }
+                    startButton.setEnabled(selectedQuantity != null);
                 })
                 .create()
                 .show();
