@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import fr.frogdevelopment.nihongo.R;
 
-/**
- * Created by PxL on 15/01/2015.
- */
 public class ParameterView extends LinearLayout {
 
     private TextView mTitle;

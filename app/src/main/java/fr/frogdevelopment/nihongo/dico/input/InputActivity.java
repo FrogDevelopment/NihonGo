@@ -69,19 +69,16 @@ public class InputActivity extends Activity {
                 mConjugationButton.setVisibility(View.VISIBLE);
 
                 // fixme gérer création/maj du mot (si création id = null !!!)
-                mConjugationButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Bundle args = new Bundle();
-                        args.putString(ConjugationContract.WORD_ID, idUpdate);
-                        args.putString(DicoContract.INPUT, inputSave);
+                mConjugationButton.setOnClickListener(v -> {
+                    Bundle args = new Bundle();
+                    args.putString(ConjugationContract.WORD_ID, idUpdate);
+                    args.putString(DicoContract.INPUT, inputSave);
 
-                        Intent intent = new Intent(getApplicationContext(), ConjugationActivity.class);
-                        intent.putExtras(args);
+                    Intent intent = new Intent(getApplicationContext(), ConjugationActivity.class);
+                    intent.putExtras(args);
 
-                        startActivity(intent);
+                    startActivity(intent);
 //                        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    }
                 });
                 break;
 

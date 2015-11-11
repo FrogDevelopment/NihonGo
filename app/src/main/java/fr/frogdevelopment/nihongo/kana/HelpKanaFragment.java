@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.help;
+package fr.frogdevelopment.nihongo.kana;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -24,7 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnPageChange;
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.kana.KanaActivity;
+import fr.frogdevelopment.nihongo.help.HelpFragment;
 
 public class HelpKanaFragment extends Fragment implements ActionBar.TabListener {
 
@@ -50,7 +50,7 @@ public class HelpKanaFragment extends Fragment implements ActionBar.TabListener 
         final ActionBar actionBar = getActivity().getActionBar();
 
         // Specify that tabs should be displayed in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Add 2 tabs, specifying the tab's text and TabListener
         int title = -1;
@@ -177,7 +177,7 @@ public class HelpKanaFragment extends Fragment implements ActionBar.TabListener 
                 Intent intent;
                 intent = new Intent(getActivity(), KanaActivity.class);
 
-	            int currentItem = mViewPager.getCurrentItem();
+                int currentItem = mViewPager.getCurrentItem();
                 intent.putExtra("kana", currentItem);
 
                 startActivity(intent);

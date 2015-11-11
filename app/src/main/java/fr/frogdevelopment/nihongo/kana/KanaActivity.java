@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -31,13 +30,11 @@ public class KanaActivity extends Activity {
 		GridView gridview = (GridView) findViewById(R.id.kana_gridview);
 		gridview.setAdapter(mAdapter);
 
-		gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Kana kana = mAdapter.getItem(position);
-				Intent intent = new Intent(KanaActivity.this, DrawingActivity.class);
-				intent.putExtra("kana", kana);
-				startActivity(intent);
-			}
+		gridview.setOnItemClickListener((parent, v, position, id) -> {
+			Kana kana = mAdapter.getItem(position);
+			Intent intent = new Intent(KanaActivity.this, DrawingActivity.class);
+			intent.putExtra("kana", kana);
+			startActivity(intent);
 		});
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

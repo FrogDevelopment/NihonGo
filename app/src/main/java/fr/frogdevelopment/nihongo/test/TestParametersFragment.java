@@ -5,7 +5,6 @@
 package fr.frogdevelopment.nihongo.test;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -113,21 +112,18 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     public void onClickType(View v) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.param_type_selection)
-                .setItems(R.array.param_types, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedType = which;
-                        mTypeSelected.setText(getResources().getStringArray(R.array.param_types)[which]);
+                .setItems(R.array.param_types, (dialog, which) -> {
+                    selectedType = which;
+                    mTypeSelected.setText(getResources().getStringArray(R.array.param_types)[which]);
 
-                        boolean displayKanji = selectedType > 1;
-                        if (displayKanji) {
-                            mKanjiSwitch.setVisibility(View.VISIBLE);
-                            mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);
-                        } else {
-                            mKanjiSwitch.setVisibility(View.INVISIBLE);
-                        }
-                        startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+                    boolean displayKanji = selectedType > 1;
+                    if (displayKanji) {
+                        mKanjiSwitch.setVisibility(View.VISIBLE);
+                        mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);
+                    } else {
+                        mKanjiSwitch.setVisibility(View.INVISIBLE);
                     }
+                    startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
                 })
                 .create()
                 .show();
@@ -137,16 +133,13 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     public void onClickMethod(View v) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.param_method_selection)
-                .setItems(R.array.param_methods, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedMethod = which;
-                        mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[which]);
+                .setItems(R.array.param_methods, (dialog, which) -> {
+                    selectedMethod = which;
+                    mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[which]);
 
-                        mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);
+                    mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);
 
-                        startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
-                    }
+                    startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
                 })
                 .create()
                 .show();
@@ -156,14 +149,11 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     void onClickQuantity(View v) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.param_quantity_selection)
-                .setItems(R.array.param_quantities, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedQuantity = getResources().getStringArray(R.array.param_quantities)[which];
-                        mQuantitySelected.setText(selectedQuantity);
+                .setItems(R.array.param_quantities, (dialog, which) -> {
+                    selectedQuantity = getResources().getStringArray(R.array.param_quantities)[which];
+                    mQuantitySelected.setText(selectedQuantity);
 
-                        startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
-                    }
+                    startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
                 })
                 .create()
                 .show();

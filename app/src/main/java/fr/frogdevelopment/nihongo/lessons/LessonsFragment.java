@@ -6,7 +6,6 @@ package fr.frogdevelopment.nihongo.lessons;
 
 import android.app.AlertDialog;
 import android.content.ContentProviderOperation;
-import android.content.DialogInterface;
 import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -55,7 +54,6 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.lessons.billing.IabHelper;
 import fr.frogdevelopment.nihongo.lessons.billing.IabResult;
-import fr.frogdevelopment.nihongo.lessons.billing.Inventory;
 import fr.frogdevelopment.nihongo.lessons.billing.Purchase;
 import fr.frogdevelopment.nihongo.lessons.billing.SkuDetails;
 
@@ -236,53 +234,48 @@ public class LessonsFragment extends ListFragment {
 
 		// Start setup. This is asynchronous and the specified listener will be called once setup completes.
 		Log.d(LOG_TAG, "Starting setup.");
-		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-			public void onIabSetupFinished(IabResult result) {
-				Log.d(LOG_TAG, "Setup finished.");
+		mHelper.startSetup(result -> {
+			Log.d(LOG_TAG, "Setup finished.");
 
-				if (!result.isSuccess()) {
-					// Oh noes, there was a problem.
-					Log.e(LOG_TAG, "**** TrivialDrive Error: Problem setting up in-app billing: " + result);
+			if (!result.isSuccess()) {
+				// Oh noes, there was a problem.
+				Log.e(LOG_TAG, "**** TrivialDrive Error: Problem setting up in-app billing: " + result);
+				return;
+			}
+
+			// Have we been disposed of in the meantime? If so, quit.
+			if (mHelper == null) return;
+
+			// IAB is fully set up. Now, let's get an inventory of stuff we own.
+			Log.d(LOG_TAG, "Setup successful. Querying inventory.");
+
+			mHelper.queryInventoryAsync(true, availableProducts, (result1, inventory) -> {
+				if (result1.isFailure()) {
+					// fixme handle error
 					return;
 				}
 
-				// Have we been disposed of in the meantime? If so, quit.
-				if (mHelper == null) return;
+				// update the UI
+				lessons = new ArrayList<>();
 
-				// IAB is fully set up. Now, let's get an inventory of stuff we own.
-				Log.d(LOG_TAG, "Setup successful. Querying inventory.");
-
-				mHelper.queryInventoryAsync(true, availableProducts, new IabHelper.QueryInventoryFinishedListener() {
-					//                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
-					public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-						if (result.isFailure()) {
-							// fixme handle error
-							return;
+				for (SkuDetails skuDetails : inventory.getAllSkuDetails()) {
+					if (PACK_1.equals(skuDetails.getSku())) { // pack gratuit
+						lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
+					} else {
+						if (BuildConfig.DEBUG) {
+							lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
+						} else {
+							lessons.add(new Lesson(skuDetails, inventory.hasPurchase(skuDetails.getSku()), checkPackPresent(skuDetails.getSku())));
 						}
-
-						// update the UI
-						lessons = new ArrayList<>();
-
-						for (SkuDetails skuDetails : inventory.getAllSkuDetails()) {
-							if (PACK_1.equals(skuDetails.getSku())) { // pack gratuit
-								lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
-							} else {
-								if (BuildConfig.DEBUG) {
-									lessons.add(new Lesson(skuDetails, true, checkPackPresent(skuDetails.getSku())));
-								} else {
-									lessons.add(new Lesson(skuDetails, inventory.hasPurchase(skuDetails.getSku()), checkPackPresent(skuDetails.getSku())));
-								}
-							}
-						}
-
-						Collections.sort(lessons);
-
-						adapter = new LessonAdapter(getActivity(), lessons);
-						setListAdapter(adapter);
-						inProgress(false);
 					}
-				});
-			}
+				}
+
+				Collections.sort(lessons);
+
+				adapter = new LessonAdapter(getActivity(), lessons);
+				setListAdapter(adapter);
+				inProgress(false);
+			});
 		});
 	}
 
@@ -304,12 +297,7 @@ public class LessonsFragment extends ListFragment {
 						.setIcon(android.R.drawable.ic_dialog_alert)
 						.setTitle(R.string.lesson_already_present)
 						.setMessage(R.string.lesson_continue)
-						.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								fetchData(lesson);
-							}
-						})
+						.setPositiveButton(getString(R.string.yes), (dialog, which) -> fetchData(lesson))
 						.setNegativeButton(getString(R.string.no), null)
 						.show();
 			else
