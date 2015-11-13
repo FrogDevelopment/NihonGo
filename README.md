@@ -2,4 +2,4 @@
 Learning Tool for Japanese vocabulary
 
 
-It wil come... one day
+It will come... one day
