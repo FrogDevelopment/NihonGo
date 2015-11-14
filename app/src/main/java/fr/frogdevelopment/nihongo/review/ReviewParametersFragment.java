@@ -40,116 +40,116 @@ import fr.frogdevelopment.nihongo.dialog.TagsDialog;
 
 public class ReviewParametersFragment extends Fragment implements LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
-    private static final int LOADER_ID = 700;
+	private static final int LOADER_ID = 700;
 
-    @Bind(R.id.review_switch_language)
-    Switch mSwitchLanguageView;
-    @Bind(R.id.review_switch_sort)
-    Switch mSwitchSortView;
-    @Bind(R.id.review_switch_learned)
-    Switch mSwitchLearned;
-    @Bind(R.id.review_switch_favorite)
-    Switch mSwitchFavorite;
-    @Bind(R.id.review_param_quantity_selection)
-    TextView mQuantitySelected;
-    @Bind(R.id.review_param_tag_selection)
-    TextView mTagSelected;
-    @Bind(R.id.review_button_start)
-    Button startButton;
+	@Bind(R.id.review_switch_language)
+	Switch    mSwitchLanguageView;
+	@Bind(R.id.review_switch_sort)
+	Switch    mSwitchSortView;
+	@Bind(R.id.review_switch_learned)
+	Switch    mSwitchLearned;
+	@Bind(R.id.review_switch_favorite)
+	Switch    mSwitchFavorite;
+	@Bind(R.id.review_param_quantity_selection)
+	TextView  mQuantitySelected;
+	@Bind(R.id.review_param_tag_selection)
+	TextView  mTagSelected;
+	@Bind(R.id.review_button_start)
+	Button    startButton;
 
-    private String[] quantities;
-    private String selectedQuantity = null;
-    private ArrayList<Integer> mSelectedItems;
-    private String[]           mSelectedTags;
-    private List<String>       items;
+	private String[] quantities;
+	private String selectedQuantity = null;
+	private ArrayList<Integer> mSelectedItems;
+	private String[]           mSelectedTags;
+	private List<String>       items;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
 
-        ButterKnife.bind(this, rootView);
+		ButterKnife.bind(this, rootView);
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+		getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        quantities = getResources().getStringArray(R.array.param_quantities);
-        quantities = ArrayUtils.add(quantities, getResources().getString(R.string.param_quantity_all));
+		quantities = getResources().getStringArray(R.array.param_quantities);
+		quantities = ArrayUtils.add(quantities, getResources().getString(R.string.param_quantity_all));
 
-        return rootView;
-    }
+		return rootView;
+	}
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
-        return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
-    }
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
+		return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
+	}
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Set<String> uniqueItems = new HashSet<>();
-        while (data.moveToNext()) {
-            String row = data.getString(0);
-            String[] tags = row.split(",");
-            uniqueItems.addAll(Arrays.asList(tags));
-        }
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		Set<String> uniqueItems = new HashSet<>();
+		while (data.moveToNext()) {
+			String row = data.getString(0);
+			String[] tags = row.split(",");
+			uniqueItems.addAll(Arrays.asList(tags));
+		}
 
-        items = new ArrayList<>(uniqueItems);
+		items = new ArrayList<>(uniqueItems);
 
-        Collections.sort(items);
+		Collections.sort(items);
 
-        data.close();
-    }
+		data.close();
+	}
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+	}
 
-    @OnClick(R.id.review_param_quantity)
-    void onClickQuantity(View v) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.param_quantity_selection)
-                .setItems(quantities, (dialog, which) -> {
-	                selectedQuantity = quantities[which];
-	                mQuantitySelected.setText(selectedQuantity);
+	@OnClick(R.id.review_param_quantity)
+	void onClickQuantity(View v) {
+		new AlertDialog.Builder(getActivity())
+				.setTitle(R.string.param_quantity_selection)
+				.setItems(quantities, (dialog, which) -> {
+					selectedQuantity = quantities[which];
+					mQuantitySelected.setText(selectedQuantity);
 
-	                startButton.setEnabled(selectedQuantity != null);
-                })
-                .create()
-                .show();
-    }
+					startButton.setEnabled(selectedQuantity != null);
+				})
+				.create()
+				.show();
+	}
 
-    @OnClick(R.id.review_param_tag)
-    void onClickTag() {
-        TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
-    }
+	@OnClick(R.id.review_param_tag)
+	void onClickTag() {
+		TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
+	}
 
-    @Override
-    public void onReturnValue(ArrayList<Integer> selectedItems) {
-        mSelectedItems = selectedItems;
-        mSelectedTags = null;
+	@Override
+	public void onReturnValue(ArrayList<Integer> selectedItems) {
+		mSelectedItems = selectedItems;
+		mSelectedTags = null;
 
-        for (Integer selectedIndex : mSelectedItems) {
-            String selectedTag = items.get(selectedIndex);
-            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag);
-        }
+		for (Integer selectedIndex : mSelectedItems) {
+			String selectedTag = items.get(selectedIndex);
+			mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag);
+		}
 
-        mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
-    }
+		mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
+	}
 
-    @OnClick(R.id.review_button_start)
-    void onClickButtonStart() {
-        Bundle options = new Bundle();
-        options.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
-        options.putBoolean("isRandom", mSwitchSortView.isChecked());
-        options.putString("count", selectedQuantity);
-        options.putStringArray("tags", mSelectedTags);
-        options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
-        options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
+	@OnClick(R.id.review_button_start)
+	void onClickButtonStart() {
+		Bundle options = new Bundle();
+		options.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
+		options.putBoolean("isRandom", mSwitchSortView.isChecked());
+		options.putString("count", selectedQuantity);
+		options.putStringArray("tags", mSelectedTags);
+		options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
+		options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
 
-        Intent intent = new Intent(getActivity(), ReviewActivity.class);
-        intent.putExtras(options);
+		Intent intent = new Intent(getActivity(), ReviewActivity.class);
+		intent.putExtras(options);
 
-        startActivity(intent);
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+		startActivity(intent);
+		getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+	}
 
 }

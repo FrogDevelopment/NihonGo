@@ -93,6 +93,8 @@
     <string name="param_review">Paramétrage de la révision</string>
     <string name="param_reviewed">Révision en japonais ?</string>
     <string name="param_sort_random">Aléatoire ?</string>
+    <string name="param_exclude_learned">Exclure les appris</string>
+    <string name="param_only_favorite">Seulement les favoris ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Sélectionner le type du test</string>
     <string name="param_method">Méthode</string>
@@ -134,6 +136,7 @@
     <string name="test_tab_input">SAISIE</string>
     <string name="test_back_message">Vous êtes sur le point de quitter le test</string>
     <string name="test_next">Suivant</string>
+    <string name="test_details">Détails</string>
 
 
     <string name="test_results_title">Résultats</string>
