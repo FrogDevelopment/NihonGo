@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
 	private ActionBarDrawerToggle mDrawerToggle;
 
-	private CharSequence mDrawerTitle;
-	private int          mFragmentTitle;
-
 	private InputMethodManager imm;
 
 	@Override
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		ButterKnife.bind(this);
-		mDrawerTitle = getTitle();
 
 		initIME();
 		initToolbar();
@@ -95,17 +91,11 @@ public class MainActivity extends AppCompatActivity {
 		});
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
-			@Override
-			public void onDrawerClosed(View view) {
-				setTitle(mFragmentTitle);
-			}
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				// Close the soft-keyboard
 				imm.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
-
-				setTitle(mDrawerTitle);
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -134,10 +124,6 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
-			case R.id.menu_search:
-				// onSearchRequested();
-				return true;
-
 			case android.R.id.home:
 				mDrawerLayout.openDrawer(GravityCompat.START);
 				return true;
@@ -153,16 +139,17 @@ public class MainActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static int CURRENT_INDEX = -1;
+	private static int CURRENT_VIEW = -1;
 
 	private void selectItemAtIndex(int id, boolean invalideOptionsMenu) {
-		if (CURRENT_INDEX == id) {
+		if (!onSearch && CURRENT_VIEW == id) {
 			return;
 		}
 
 		// Create a new fragment and specify the view to show based on index
 		Bundle args;
 		Fragment fragment;
+		int mFragmentTitle;
 		switch (id) {
 
 			case R.id.navigation_word:
@@ -214,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
 		// Insert the fragment by replacing any existing fragment
 		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		fragmentTransaction.replace(R.id.content_frame, fragment);
-//		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		fragmentTransaction.commit();
 
 		mDrawerLayout.closeDrawers();
@@ -222,28 +208,13 @@ public class MainActivity extends AppCompatActivity {
 			invalidateOptionsMenu();
 		}
 
-		CURRENT_INDEX = id;
+		CURRENT_VIEW = id;
 		setTitle(mFragmentTitle);
-	}
-
-	@Override
-	public void setTitle(int title) {
-		if (toolbar != null) {
-			toolbar.setTitle(title);
-		}
-	}
-
-	@Override
-	public void setTitle(CharSequence title) {
-		if (toolbar != null) {
-			toolbar.setTitle(title);
-		}
 	}
 
 	/**
 	 * When using the ActionBarDrawerToggle, you must call it during onPostCreate() and onConfigurationChanged()...
 	 */
-
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -262,45 +233,36 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// Because this activity has set launchMode="singleTop", the system calls this method
-		// to deliver the intent if this activity is currently the foreground activity when
-		// invoked again (when the user executes a search from this activity, we don't create
-		// a new instance of this activity, so the system delivers the search intent here)
 		setIntent(intent);
 		handleIntent(intent);
 	}
 
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			// Searches the dictionary and displays results for the given query.
 			final String query = intent.getStringExtra(SearchManager.QUERY);
-			showResults(query);
+			Bundle args = new Bundle();
+			args.putString("query", query);
+			args.putSerializable("type", CURRENT_VIEW == R.id.navigation_word ? Type.WORD : Type.EXPRESSION);
+
+			final DicoFragment fragment = new DicoFragment();
+			fragment.setArguments(args);
+
+			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+			setTitle(CURRENT_VIEW == R.id.navigation_word ? R.string.search_word : R.string.search_expression);
+
+			onSearch = true;
 		}
 	}
 
-	/**
-	 * Searches the dictionary and displays results for the given query.
-	 *
-	 * @param query The search query
-	 */
-	private void showResults(String query) {
-		Bundle args = new Bundle();
-		args.putString("query", query);
-		args.putSerializable("type", CURRENT_INDEX == R.id.navigation_word ? Type.WORD : Type.EXPRESSION);
-
-		final DicoFragment fragment = new DicoFragment();
-		fragment.setArguments(args);
-
-		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-		setTitle(R.string.menu_subitem_word);
-
-		mDrawerLayout.closeDrawers();
-	}
+	private boolean onSearch = false;
 
 	@Override
 	public void onBackPressed() {
-		if (CURRENT_INDEX != R.id.navigation_word) {
+		if (onSearch || CURRENT_VIEW != R.id.navigation_word) {
 			selectItemAtIndex(R.id.navigation_word, true);
+			onSearch = false;
 		} else {
 			// todo : un toast demandant un back une seconde fois pour sortir
 			new AlertDialog.Builder(this)
@@ -315,7 +277,8 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onDestroy() {
-		CURRENT_INDEX = -1;
+		CURRENT_VIEW = -1;
+		onSearch = false;
 		super.onDestroy();
 	}
 }

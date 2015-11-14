@@ -56,31 +56,31 @@ public class ReviewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// The last two arguments ensure LayoutParams are inflated properly.
-		View rootView = inflater.inflate(R.layout.page_review_word, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_review, container, false);
 
 		ButterKnife.bind(this, rootView);
 
 		populateView();
 
-		initFabAdd();
+		initFabs();
 
 		return rootView;
 	}
 
-	private void initFabAdd() {
+	private void initFabs() {
 		mFabFavorite.setOnClickListener(view -> {
 			mItem.switchFavorite();
 			mListener.get().setFavorite(mItem);
-			mFabFavorite.setImageResource(mItem.isFavorite() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+			mFabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
 		});
-		mFabFavorite.setImageResource(mItem.isFavorite() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+		mFabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
 
 		mFabLearned.setOnClickListener(view -> {
 			mItem.switchLearned();
 			mListener.get().setLearned(mItem);
-			mFabLearned.setImageResource(mItem.isLearned() ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
+			mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_learned_on : R.drawable.fab_learned_off);
 		});
-		mFabLearned.setImageResource(mItem.isLearned() ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
+		mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_learned_on : R.drawable.fab_learned_off);
 	}
 
 	@Override

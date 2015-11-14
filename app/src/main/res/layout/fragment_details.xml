@@ -49,4 +49,27 @@
         android:gravity="center"
         android:visibility="gone"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_learned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            style="@style/FabStyle"
+            android:src="@drawable/fab_learned_off"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            style="@style/FabStyle"
+            android:src="@drawable/fab_favorite_off"/>
+    </LinearLayout>
+
 </LinearLayout>

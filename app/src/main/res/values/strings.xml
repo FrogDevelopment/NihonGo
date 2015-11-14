@@ -27,15 +27,23 @@
     <string name="dialog_tags_title" translatable="false">Tags</string>
 
     <!-- ***** -->
+    <!-- SEARCH -->
+    <!-- ***** -->
+
+    <string name="search_word">Search for words</string>
+    <string name="search_expression">Search for expressions</string>
+
+    <!-- ***** -->
     <!-- DICO -->
     <!-- ***** -->
 
     <string name="title_activity_details">Details</string>
 
     <!-- CONTEXT MENU -->
+    <string name="action_dico_favorite">Favorite</string>
     <string name="action_dico_update">Update</string>
     <string name="action_dico_delete">Delete</string>
-    <string name="action_dico_favorite">Favorites only</string>
+    <string name="action_dico_favorite_only">Favorites only</string>
     <string name="action_dico_sort_letter">Sort by letter</string>
     <string name="action_dico_sort_tag">Sort by tag</string>
     <string name="action_dico_gesture">Draw</string>

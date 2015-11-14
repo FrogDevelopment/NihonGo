@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             style="@style/FabStyle"
-            android:src="@android:drawable/checkbox_off_background"/>
+            android:src="@drawable/fab_learned_off"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_favorite"
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             style="@style/FabStyle"
-            android:src="@android:drawable/star_big_off"/>
+            android:src="@drawable/fab_favorite_off"/>
     </LinearLayout>
 
 </LinearLayout>
