@@ -53,6 +53,17 @@
                 android:padding="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
+             <Switch
+                android:id="@+id/review_switch_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Seulement les favoris"
+                android:checked="true"
+                android:textOn="@string/yes"
+                android:textOff="@string/no"
+                android:padding="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
             <LinearLayout
                 android:id="@+id/review_param_quantity"
                 android:layout_width="fill_parent"

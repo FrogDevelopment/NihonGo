@@ -62,6 +62,16 @@ public class NihonGoContentProvider extends ContentProvider {
 	private static final String CONTENT_CONJUGATION_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_CONJUGATION;
 	public static final  Uri    URI_CONJUGATION               = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_CONJUGATION);
 
+	private static final int    RESET_FAVORITE              = 70;
+	private static final String BASE_PATH_RESET_FAVORITE    = "reset_favorite";
+	private static final String CONTENT_RESET_FAVORITE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_RESET_FAVORITE;
+	public static final  Uri    URI_RESET_FAVORITE          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_RESET_FAVORITE);
+
+	private static final int    RESET_LEARNED              = 80;
+	private static final String BASE_PATH_RESET_LEARNED    = "reset_learned";
+	private static final String CONTENT_RESET_LEARNED_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_RESET_LEARNED;
+	public static final  Uri    URI_RESET_LEARNED          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_RESET_LEARNED);
+
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
@@ -76,6 +86,8 @@ public class NihonGoContentProvider extends ContentProvider {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_SEARCH_EXPRESSION, SEARCH_EXPRESSION);
 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_ERASE, ERASE);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_RESET_FAVORITE, RESET_FAVORITE);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH_RESET_LEARNED, RESET_LEARNED);
 
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_CONJUGATION, CONJUGATIONS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_CONJUGATION + "/#", CONJUGATION_ID);
@@ -110,6 +122,12 @@ public class NihonGoContentProvider extends ContentProvider {
 
 			case ERASE:
 				return CONTENT_ERASE_TYPE;
+
+			case RESET_FAVORITE:
+				return CONTENT_RESET_FAVORITE_TYPE;
+
+			case RESET_LEARNED:
+				return CONTENT_RESET_LEARNED_TYPE;
 
 			case CONJUGATIONS:
 				return CONTENT_CONJUGATION_TYPE;
@@ -246,6 +264,10 @@ public class NihonGoContentProvider extends ContentProvider {
 			case CONJUGATION_ID:
 				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, ConjugationContract._ID + "=" + id, null);
 				break;
+
+//			case RESET_LEARNED:
+//				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, ConjugationContract._ID + "=" + id, null);
+//				break;
 
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);

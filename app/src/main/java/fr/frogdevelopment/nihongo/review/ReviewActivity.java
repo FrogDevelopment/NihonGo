@@ -94,7 +94,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		final Bundle options = getIntent().getExtras();
 
-
 		final String count = options.getString("count");
 		String limit = "";
 		if (NumberUtils.isNumber(count)) {
@@ -102,21 +101,23 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		}
 		final String[] tags = options.getStringArray("tags");
 
+		String selection = "1 = 1";
 		String[] likes = null;
 		if (ArrayUtils.isNotEmpty(tags)) {
 			for (String tag : tags) {
 				likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
 			}
+			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
 		}
-		String selection = StringUtils.join(likes, " OR ");
 
 		final boolean excludeLearned = options.getBoolean("excludeLearned");
 		if (excludeLearned) {
-			if (selection == null) {
-				selection = "LEARNED = '0'";
-			} else {
-				selection += " AND LEARNED = '0'";
-			}
+			selection += " AND LEARNED = '0'";
+		}
+
+		final boolean onlyFavorite = options.getBoolean("onlyFavorite");
+		if (onlyFavorite) {
+			selection += " AND FAVORITE = '1'";
 		}
 
 		String sortOrder;
