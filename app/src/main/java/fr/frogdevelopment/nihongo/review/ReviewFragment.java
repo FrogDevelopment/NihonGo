@@ -78,9 +78,9 @@ public class ReviewFragment extends Fragment {
 		mFabLearned.setOnClickListener(view -> {
 			mItem.switchLearned();
 			mListener.get().setLearned(mItem);
-			mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_learned_on : R.drawable.fab_learned_off);
+			mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
 		});
-		mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_learned_on : R.drawable.fab_learned_off);
+		mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
 	}
 
 	@Override
