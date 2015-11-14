@@ -2,74 +2,82 @@
 <!--
   ~ Copyright (c) Frog Development 2015.
   -->
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center_horizontal|top"
-              android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/details_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|top"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/details_word_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp"
-        android:gravity="center"
-        android:textStyle="italic"/>
+        <TextView
+            android:id="@+id/details_word_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="40sp"
+            android:textStyle="italic"/>
 
-    <TextView
-        android:id="@+id/details_word_kanji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/details_word_kanji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/details_word_kana"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/details_word_kana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/details_word_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/details_word_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/details_word_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/details_word_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_anchor="@id/details_content"
+        app:layout_anchorGravity="bottom|right|end">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_learned"
+            style="@style/FabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            style="@style/FabStyle"
-            android:src="@drawable/fab_learned_off"/>
+            android:src="@drawable/fab_bookmark_off"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_favorite"
+            style="@style/FabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            style="@style/FabStyle"
             android:src="@drawable/fab_favorite_off"/>
     </LinearLayout>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
