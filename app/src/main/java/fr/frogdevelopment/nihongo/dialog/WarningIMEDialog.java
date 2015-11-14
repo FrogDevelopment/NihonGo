@@ -22,8 +22,6 @@ public class WarningIMEDialog extends DialogFragment {
 		return new WarningIMEDialog();
 	}
 
-	// new WarningIMEDialog().show(getFragmentManager(), "warningIME");
-
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 

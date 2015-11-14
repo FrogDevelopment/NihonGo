@@ -23,6 +23,6 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         style="@style/FabStyle"
-        android:src="@android:drawable/ic_menu_add"/>
+        android:src="@drawable/fab_add"/>
 
 </RelativeLayout>

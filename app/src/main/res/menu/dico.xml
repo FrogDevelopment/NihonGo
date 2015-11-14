@@ -22,7 +22,7 @@
     <item
         android:id="@+id/action_filter_by_favorite"
         android:checkable="true"
-        android:title="@string/action_dico_favorite"
+        android:title="@string/action_dico_favorite_only"
         app:showAsAction="never"/>
 
 </menu>

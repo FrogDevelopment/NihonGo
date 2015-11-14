@@ -21,15 +21,23 @@
     <string name="drawer_close">Fermer le navigateur</string>
 
     <!-- ***** -->
+    <!-- SEARCH -->
+    <!-- ***** -->
+
+    <string name="search_word">Recherche de mots</string>
+    <string name="search_expression">Recherche d\'expressions</string>
+
+    <!-- ***** -->
     <!-- DICO  -->
     <!-- ***** -->
 
     <string name="title_activity_details">Détails</string>
 
     <!-- CONTEXT MENU -->
+    <string name="action_dico_favorite">Favori</string>
     <string name="action_dico_update">Mettre à jour</string>
     <string name="action_dico_delete">Supprimer</string>
-    <string name="action_dico_favorite">Favoris uniquement</string>
+    <string name="action_dico_favorite_only">Favoris uniquement</string>
     <string name="action_dico_sort_letter">Trier par lettre</string>
     <string name="action_dico_sort_tag">Trier par tag</string>
     <string name="action_dico_gesture">Draw</string>

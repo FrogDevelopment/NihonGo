@@ -25,6 +25,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
+import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
 
@@ -56,14 +57,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
 		ButterKnife.bind(this);
 
-		// Show the Up button in the action bar.
-		if (getActionBar() != null)
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-
 		Bundle args = getIntent().getExtras();
-
 		mType = (Type) args.getSerializable("type");
-
 		List<Item> items = args.getParcelableArrayList("items");
 
 		DetailsAdapter mAdapter = new DetailsAdapter(getSupportFragmentManager(), items, mType);
@@ -124,16 +119,26 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 	}
 
 	@Override
-	public void favorite(Item item) {
-		final String where = DicoContract._ID + "=?";
-		final String[] selectionArgs = {item.id};
-
+	public void setFavorite(Item item) {
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.FAVORITE, item.favorite);
 
-		getContentResolver().update(mType.uri, values, where, selectionArgs);
+		udpateItem(item, values);
+	}
 
-		invalidateOptionsMenu();
+	@Override
+	public void setLearned(Item item) {
+		final ContentValues values = new ContentValues();
+		values.put(DicoContract.LEARNED, item.learned);
+
+		udpateItem(item, values);
+	}
+
+	private void udpateItem(Item item, ContentValues values) {
+		final String where = DicoContract._ID + "=?";
+		final String[] selectionArgs = {item.id};
+
+		getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
 	}
 
 	// ************************************************************* \\
