@@ -71,7 +71,6 @@ public class TestResultActivity extends Activity {
         setProgressBarIndeterminateVisibility(false);
 
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mListView.setSelector(R.drawable.dico_selector);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class TestResultActivity extends Activity {
         mListView.setItemChecked(position, true);
         Result item = adapter.getItem(position);
         new AlertDialog.Builder(this)
-                .setTitle("Détails résultat")
+                .setTitle(getString(R.string.test_results_title))
                 .setMessage(String.format(getString(R.string.test_results_details), item.test, item.answerExpected, item.answerGiven))
                 .create()
                 .show();

@@ -218,12 +218,6 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		getListView().setSelector(R.drawable.dico_selector);
-	}
-
-	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate the options menu from XML
 		inflater.inflate(R.menu.dico, menu);
