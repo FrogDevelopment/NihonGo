@@ -193,7 +193,7 @@
     <string name="options_erase_success">Erase success</string>
     <string name="options_file_chooser_get_file_manager">Please install a File Manager.</string>
     <string name="options_file_chooser_prompt">Select a File to Upload</string>
-    <string name="options_error_fetch_data">An error occured while fetching data.</string>
+    <string name="options_error_fetch_data">An error occurred while fetching data.</string>
 
 
     <string name="closing_activity_title">Exit</string>

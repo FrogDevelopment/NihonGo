@@ -5,6 +5,7 @@
 package fr.frogdevelopment.nihongo.options;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.Preferences;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
 public class ParametersFragment extends Fragment {
@@ -51,12 +53,9 @@ public class ParametersFragment extends Fragment {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_erase_confirmation)
 				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-					getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
-
-					SharedPreferences settings = getActivity().getSharedPreferences(Preferences.PREFS_NAME.value, 0);
-					final SharedPreferences.Editor editor = settings.edit();
-					editor.putString(Preferences.PACKS.value, "");
-					editor.apply();
+					final ContentValues values = new ContentValues();
+					values.put(DicoContract.FAVORITE, "0");
+					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
@@ -68,12 +67,9 @@ public class ParametersFragment extends Fragment {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_erase_confirmation)
 				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-					getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
-
-					SharedPreferences settings = getActivity().getSharedPreferences(Preferences.PREFS_NAME.value, 0);
-					final SharedPreferences.Editor editor = settings.edit();
-					editor.putString(Preferences.PACKS.value, "");
-					editor.apply();
+					final ContentValues values = new ContentValues();
+					values.put(DicoContract.LEARNED, "0");
+					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
