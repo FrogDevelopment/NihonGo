@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -45,21 +44,19 @@ public class TagsDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_tags, null);
-
 		CharSequence[] items = getArguments().getCharSequenceArray("items");
 		mSelectedItems = new ArrayList<>();
 		int nbItems = items.length;
 		List<Integer> ll = getArguments().getIntegerArrayList("selectedItems");
-		boolean[] toto = null;
+		boolean[] checkedItems = null;
 		if (ll != null) {
-			toto = new boolean[nbItems];
+			checkedItems = new boolean[nbItems];
 			for (Integer i = 0; i < nbItems; i++) {
 				if (ll.contains(i)) {
-					toto[i] = true;
+					checkedItems[i] = true;
 					mSelectedItems.add(i);
 				} else {
-					toto[i] = false;
+					checkedItems[i] = false;
 				}
 			}
 		}
@@ -67,9 +64,7 @@ public class TagsDialog extends DialogFragment {
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.param_tags_dialog_title);
-		builder.setView(dialogView);
-
-		builder.setMultiChoiceItems(items, toto, (dialog, which, isChecked) -> {
+		builder.setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> {
 			if (isChecked) {
 				// If the user checked the item, add it to the selected items
 				mSelectedItems.add(which);

@@ -91,7 +91,7 @@ public class DetailsFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.actions_dico, menu);
+		inflater.inflate(R.menu.dico_context, menu);
 	}
 
 	@Override

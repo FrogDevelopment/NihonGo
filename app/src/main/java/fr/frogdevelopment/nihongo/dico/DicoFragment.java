@@ -162,7 +162,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				getActivity().getMenuInflater().inflate(R.menu.actions_dico, menu);
+				getActivity().getMenuInflater().inflate(R.menu.dico_context, menu);
 				isContextActionBar = true;
 				return true;
 			}
