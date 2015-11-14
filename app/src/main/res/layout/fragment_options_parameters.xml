@@ -30,5 +30,45 @@
         android:layout_height="wrap_content"
         android:text="@string/options_erase_btn"/>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Reset Favorite"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Button
+        android:id="@+id/options_reset_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Favorite"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Reset Learned"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Button
+        android:id="@+id/options_reset_learned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Learned"/>
+
+
+
 
 </LinearLayout>

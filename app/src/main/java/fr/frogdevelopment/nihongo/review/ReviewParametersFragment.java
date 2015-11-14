@@ -48,6 +48,8 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     Switch mSwitchSortView;
     @Bind(R.id.review_switch_learned)
     Switch mSwitchLearned;
+    @Bind(R.id.review_switch_favorite)
+    Switch mSwitchFavorite;
     @Bind(R.id.review_param_quantity_selection)
     TextView mQuantitySelected;
     @Bind(R.id.review_param_tag_selection)
@@ -60,10 +62,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     private ArrayList<Integer> mSelectedItems;
     private String[]           mSelectedTags;
     private List<String>       items;
-
-    public ReviewParametersFragment() {
-        // Empty constructor required for fragment subclasses
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,6 +143,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         options.putString("count", selectedQuantity);
         options.putStringArray("tags", mSelectedTags);
         options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
+        options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
 
         Intent intent = new Intent(getActivity(), ReviewActivity.class);
         intent.putExtras(options);
