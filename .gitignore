@@ -1,5 +1,4 @@
 /.gradle
-/app/app.iml
 # Maven
 # =========================
 target/
@@ -11,6 +10,7 @@ release.properties
 
 # IntelliJ
 # =========================
+*.iml
 .idea
 .gitattributes
 build
