@@ -246,6 +246,8 @@ public class NihonGoContentProvider extends ContentProvider {
 		switch (uriType) {
 			case WORDS:
 			case EXPRESSIONS:
+			case RESET_FAVORITE:
+			case RESET_LEARNED:
 				rowsUpdated = sqlDB.update(DicoContract.TABLE_NAME, values, selection, selectionArgs);
 				break;
 
@@ -264,10 +266,6 @@ public class NihonGoContentProvider extends ContentProvider {
 			case CONJUGATION_ID:
 				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, ConjugationContract._ID + "=" + id, null);
 				break;
-
-//			case RESET_LEARNED:
-//				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, ConjugationContract._ID + "=" + id, null);
-//				break;
 
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
