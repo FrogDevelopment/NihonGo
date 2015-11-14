@@ -4,15 +4,15 @@
 
 package fr.frogdevelopment.nihongo.dico.input;
 
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,70 +21,80 @@ import org.apache.commons.lang3.StringUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.conjugation.ConjugationActivity;
-import fr.frogdevelopment.nihongo.contentprovider.ConjugationContract;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Type;
 
-public class InputActivity extends Activity {
+public class InputActivity extends AppCompatActivity {
 
-    // Components
-    @Bind(R.id.input_kanji)
-    EditText mKanjiView;
-    @Bind(R.id.input_kana)
-    EditText mKanaView;
-    @Bind(R.id.input_input)
-    EditText mInputView;
-    @Bind(R.id.input_tags)
-    EditText mTagsView;
-    @Bind(R.id.input_details)
-    EditText mDetailsView;
-    @Bind(R.id.input_conjugation)
-    Button   mConjugationButton;
 
-    // Initial Data
-    protected String idUpdate;
-    private   String kanjiSave;
-    private   String kanaSave;
-    protected String inputSave;
-    private   String tagsSave;
-    private   String detailsSave;
+	@Bind(R.id.toolbar)
+	Toolbar         toolbar;
+	@Bind(R.id.wrapper_kanji)
+	TextInputLayout mKanjiWrapper;
+	@Bind(R.id.input_kanji)
+	EditText        mKanjiText;
+	@Bind(R.id.wrapper_kana)
+	TextInputLayout mKanaWrapper;
+	@Bind(R.id.input_kana)
+	EditText        mKanaText;
+	@Bind(R.id.wrapper_input)
+	TextInputLayout mInputWrapper;
+	@Bind(R.id.input_input)
+	EditText        mInputText;
+	@Bind(R.id.wrapper_tags)
+	TextInputLayout mTagsWrapper;
+	@Bind(R.id.input_tags)
+	EditText        mTagsText;
+	@Bind(R.id.wrapper_details)
+	TextInputLayout mDetailsWrapper;
+	@Bind(R.id.input_details)
+	EditText        mDetailsText;
+//    @Bind(R.id.input_conjugation)
+//    Button   mConjugationButton;
 
-    protected boolean isUpdate;
+	// Initial Data
+	protected String idUpdate;
+	private   String kanjiSave;
+	private   String kanaSave;
+	protected String inputSave;
+	private   String tagsSave;
+	private   String detailsSave;
 
-    private Type mType;
+	protected boolean isUpdate;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	private Type mType;
 
-        mType = (Type) getIntent().getSerializableExtra("type");
-        setContentView(R.layout.fragment_input);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        ButterKnife.bind(this);
+		mType = (Type) getIntent().getSerializableExtra("type");
+		setContentView(R.layout.activity_input);
 
-        switch (mType) {
-            case WORD:
-                setTitle(R.string.menu_subitem_word);
-                mConjugationButton.setVisibility(View.VISIBLE);
+		ButterKnife.bind(this);
 
-                // fixme gérer création/maj du mot (si création id = null !!!)
-                mConjugationButton.setOnClickListener(v -> {
-                    Bundle args = new Bundle();
-                    args.putString(ConjugationContract.WORD_ID, idUpdate);
-                    args.putString(DicoContract.INPUT, inputSave);
-
-                    Intent intent = new Intent(getApplicationContext(), ConjugationActivity.class);
-                    intent.putExtras(args);
-
-                    startActivity(intent);
+		switch (mType) {
+			case WORD:
+				setTitle(R.string.menu_subitem_word);
+//                mConjugationButton.setVisibility(View.VISIBLE);
+//
+//                // fixme gérer création/maj du mot (si création id = null !!!)
+//                mConjugationButton.setOnClickListener(v -> {
+//                    Bundle args = new Bundle();
+//                    args.putString(ConjugationContract.WORD_ID, idUpdate);
+//                    args.putString(DicoContract.INPUT, inputSave);
+//
+//                    Intent intent = new Intent(getApplicationContext(), ConjugationActivity.class);
+//                    intent.putExtras(args);
+//
+//                    startActivity(intent);
 //                        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                });
+//                });
                 break;
 
             case EXPRESSION:
                 setTitle(R.string.menu_subitem_expression);
-                mConjugationButton.setVisibility(View.GONE);
+//                mConjugationButton.setVisibility(View.GONE);
                 break;
 
             default:
@@ -93,6 +103,19 @@ public class InputActivity extends Activity {
         }
 
         chekUpdate();
+
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
     }
 
     @Override
@@ -157,19 +180,19 @@ public class InputActivity extends Activity {
         idUpdate = bundle.getString(DicoContract._ID);
 
         kanjiSave = bundle.getString(DicoContract.KANJI);
-        mKanjiView.setText(kanjiSave);
+        mKanjiText.setText(kanjiSave);
 
         kanaSave = bundle.getString(DicoContract.KANA);
-        mKanaView.setText(kanaSave);
+        mKanaText.setText(kanaSave);
 
         inputSave = bundle.getString(DicoContract.INPUT);
-        mInputView.setText(inputSave);
+        mInputText.setText(inputSave);
 
         detailsSave = bundle.getString(DicoContract.DETAILS);
-        mDetailsView.setText(detailsSave);
+        mDetailsText.setText(detailsSave);
 
         tagsSave = bundle.getString(DicoContract.TAGS);
-        mTagsView.setText(tagsSave);
+        mTagsText.setText(tagsSave);
     }
 
 
@@ -184,56 +207,56 @@ public class InputActivity extends Activity {
     }
 
     private void reset() {
-        mKanjiView.setText(kanjiSave);
-        mKanjiView.setError(null);
+        mKanjiText.setText(kanjiSave);
+        mKanjiWrapper.setError(null);
 
-        mKanaView.setText(kanaSave);
-        mKanaView.setError(null);
+        mKanaText.setText(kanaSave);
+        mKanaWrapper.setError(null);
 
-        mInputView.setText(inputSave);
-        mInputView.setError(null);
+        mInputText.setText(inputSave);
+        mInputWrapper.setError(null);
 
-        mDetailsView.setText(detailsSave);
-        mDetailsView.setError(null);
+        mDetailsText.setText(detailsSave);
+        mDetailsWrapper.setError(null);
 
-        mTagsView.setText(tagsSave);
-        mTagsView.setError(null);
+        mTagsText.setText(tagsSave);
+        mTagsWrapper.setError(null);
     }
 
     private void validate() {
         boolean isNoError = true;
 
-        String inputText = mInputView.getText().toString();
+        String inputText = mInputText.getText().toString();
         if (inputText.isEmpty()) {
             isNoError = false;
-            mInputView.setError(getResources().getString(R.string.input_error_empty));
+            mInputWrapper.setError(getResources().getString(R.string.input_error_empty));
         } else if (InputUtils.containsJapanese(inputText)) {
             isNoError = false;
-            mInputView.setError(getResources().getString(R.string.input_error_input));
+            mInputWrapper.setError(getResources().getString(R.string.input_error_input));
         } else {
-            mInputView.setError(null);
+            mInputWrapper.setError(null);
         }
 
-        String kanjiText = mKanjiView.getText().toString();
-        String kanaText = mKanaView.getText().toString();
+        String kanjiText = mKanjiText.getText().toString();
+        String kanaText = mKanaText.getText().toString();
 
         if (kanjiText.isEmpty() && kanaText.isEmpty()) {
             isNoError = false;
-            mKanjiView.setError(getResources().getString(R.string.input_error_all_empty));
-            mKanaView.setError(getResources().getString(R.string.input_error_all_empty));
+            mKanjiWrapper.setError(getResources().getString(R.string.input_error_all_empty));
+            mKanaWrapper.setError(getResources().getString(R.string.input_error_all_empty));
         } else {
             if (InputUtils.isOnlyJapanese(kanjiText)) {
-                mKanjiView.setError(null);
+                mKanjiWrapper.setError(null);
             } else {
                 isNoError = false;
-                mKanjiView.setError(getResources().getString(R.string.input_error_japanese));
+                mKanjiWrapper.setError(getResources().getString(R.string.input_error_japanese));
             }
 
             if (InputUtils.isOnlyKana(kanaText)) {
-                mKanaView.setError(null);
+                mKanaWrapper.setError(null);
             } else {
                 isNoError = false;
-                mKanaView.setError(getResources().getString(R.string.input_error_kana));
+                mKanaWrapper.setError(getResources().getString(R.string.input_error_kana));
             }
         }
 
@@ -260,13 +283,13 @@ public class InputActivity extends Activity {
         final String[] selectionArgs = {idUpdate};
 
         final ContentValues values = new ContentValues();
-        final String inputData = StringUtils.capitalize(mInputView.getText().toString());
+        final String inputData = StringUtils.capitalize(mInputText.getText().toString());
         values.put(DicoContract.INPUT, inputData);
         values.put(DicoContract.SORT_LETTER, inputData.substring(0, 1));
-        values.put(DicoContract.KANJI, mKanjiView.getText().toString());
-        values.put(DicoContract.KANA, mKanaView.getText().toString());
-        values.put(DicoContract.TAGS, mTagsView.getText().toString());
-        values.put(DicoContract.DETAILS, mDetailsView.getText().toString());
+        values.put(DicoContract.KANJI, mKanjiText.getText().toString());
+        values.put(DicoContract.KANA, mKanaText.getText().toString());
+        values.put(DicoContract.TAGS, mTagsText.getText().toString());
+        values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
 
         getContentResolver().update(mType.uri, values, where, selectionArgs);
 
@@ -276,13 +299,13 @@ public class InputActivity extends Activity {
 
     private void insert() {
         final ContentValues values = new ContentValues();
-        final String inputData = StringUtils.capitalize(mInputView.getText().toString());
+        final String inputData = StringUtils.capitalize(mInputText.getText().toString());
         values.put(DicoContract.INPUT, inputData);
         values.put(DicoContract.SORT_LETTER, inputData.substring(0, 1));
-        values.put(DicoContract.KANJI, mKanjiView.getText().toString());
-        values.put(DicoContract.KANA, mKanaView.getText().toString());
-        values.put(DicoContract.TAGS, mTagsView.getText().toString());
-        values.put(DicoContract.DETAILS, mDetailsView.getText().toString());
+	    values.put(DicoContract.KANJI, mKanjiText.getText().toString());
+        values.put(DicoContract.KANA, mKanaText.getText().toString());
+        values.put(DicoContract.TAGS, mTagsText.getText().toString());
+        values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
         values.put(DicoContract.TYPE, mType.code);
 
         getContentResolver().insert(mType.uri, values);
