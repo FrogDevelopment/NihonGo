@@ -49,7 +49,7 @@ public class ParametersFragment extends Fragment {
 	}
 
 	@OnClick(R.id.options_reset_favorite)
-	void onClickReseteFavorite() {
+	void onClickResetFavorite() {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_erase_confirmation)
 				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
@@ -63,13 +63,13 @@ public class ParametersFragment extends Fragment {
 	}
 
 	@OnClick(R.id.options_reset_learned)
-	void onClickReseteLearned() {
+	void onClickResetLearned() {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_erase_confirmation)
 				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
 					final ContentValues values = new ContentValues();
 					values.put(DicoContract.LEARNED, "0");
-					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
+					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_LEARNED, values, null, null);
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
