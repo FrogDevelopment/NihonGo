@@ -216,8 +216,6 @@
     <string name="kanji" translatable="false">Kanji</string>
     <string name="kana" translatable="false">Kana</string>
 
-    <string name="ok" translatable="false">OK</string>
-
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

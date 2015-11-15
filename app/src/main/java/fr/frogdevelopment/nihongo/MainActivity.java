@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -68,12 +69,35 @@ public class MainActivity extends AppCompatActivity {
 		handleIntent(getIntent());
 	}
 
+	private void initIME() {
+		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+		boolean isNoJapanIME = true;
+		List<InputMethodInfo> inputMethodInfos = imm.getInputMethodList();
+		for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
+			for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
+				String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
+				if (Locale.JAPAN.toString().equals(locale)) {
+					isNoJapanIME = false;
+					break;
+				}
+			}
+		}
+
+		if (isNoJapanIME) {
+			SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME.value, 0);
+			boolean rememberWarning = settings.getBoolean(Preferences.REMEMBER_WARNING_IME.value, false);
+			if (!rememberWarning) {
+				WarningIMEDialog.show(getFragmentManager());
+			}
+		}
+	}
+
 	private void initToolbar() {
 		setSupportActionBar(toolbar);
 		final ActionBar actionBar = getSupportActionBar();
 
 		if (actionBar != null) {
-//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
@@ -99,25 +123,6 @@ public class MainActivity extends AppCompatActivity {
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-	}
-
-	private void initIME() {
-		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-		boolean isNoJapanIME = true;
-		List<InputMethodInfo> inputMethodInfos = imm.getInputMethodList();
-		for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
-			for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
-				String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
-				if (Locale.JAPAN.toString().equals(locale)) {
-					isNoJapanIME = false;
-					break;
-				}
-			}
-		}
-
-		if (isNoJapanIME)
-			WarningIMEDialog.newInstance().show(getFragmentManager(), "warningIMEDialog");
 	}
 
 	@Override
