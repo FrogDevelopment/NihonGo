@@ -6,8 +6,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="fr.frogdevelopment.nihongo"
           android:installLocation="auto"
-          android:versionCode="26"
-          android:versionName="0.4.0">
+          android:versionCode="28"
+          android:versionName="0.5.0">
 
     <!-- défini dans build.gradle -->
     <uses-sdk/>
@@ -164,16 +164,6 @@
             android:name=".test.TestResultActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_test"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.frogdevelopment.nihongo.MainActivity"/>
-        </activity>
-
-        <activity
-            android:name=".conjugation.ConjugationActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="FIXME"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

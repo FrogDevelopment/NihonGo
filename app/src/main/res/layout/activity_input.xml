@@ -112,13 +112,6 @@
                     android:inputType="textMultiLine|textCapSentences"/>
             </android.support.design.widget.TextInputLayout>
 
-            <!--<Button-->
-            <!--android:id="@+id/input_conjugation"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Conjugation"-->
-            <!--android:visibility="gone"/>-->
-
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

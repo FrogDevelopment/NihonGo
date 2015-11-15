@@ -26,7 +26,7 @@ public class InputUtils {
     private static final int RANGE_ROMAN_START = 0xFF00;
     private static final int RANGE_ROMAN_END = 0xFFEF;
 
-    //    CJK unifed ideographs - Common and uncommon kanji ( 4e00 - 9fbf)
+    //    CJK unified ideographs - Common and uncommon kanji ( 4e00 - 9fbf)
     private static final int RANGE_KANJI_START = 0x4E00;
     private static final int RANGE_KANJI_END = 0x9fbf;
 
@@ -56,7 +56,7 @@ public class InputUtils {
     }
 
     public static boolean isOnlyJapanese(String input) {
-        boolean isOnlyJapanaese = true;
+        boolean isOnlyJapanese = true;
         for (Character ch : input.toCharArray()) {
             if (ch >= RANGE_PUNCTUATION_START && ch <= RANGE_PUNCTUATION_END) { // PUNCTUATION
                 continue;
@@ -71,15 +71,15 @@ public class InputUtils {
             } else if (ch.equals('~')) { // FIXME
                 continue;
             } else {
-                isOnlyJapanaese = false;
+                isOnlyJapanese = false;
                 break;
             }
         }
-        return isOnlyJapanaese;
+        return isOnlyJapanese;
     }
 
     public static boolean isOnlyKana(final String input) {
-        boolean isOnlyJapanaese = true;
+        boolean isOnlyKana = true;
         for (Character ch : input.toCharArray()) {
             if (ch >= RANGE_PUNCTUATION_START && ch <= RANGE_PUNCTUATION_END) { // PUNCTUATION
                 continue;
@@ -90,28 +90,28 @@ public class InputUtils {
             } else if (ch >= RANGE_KATAKANA_START && ch <= RANGE_KATAKANA_END) { // KATAKANA
                 continue;
             } else {
-                isOnlyJapanaese = false;
+                isOnlyKana = false;
                 break;
             }
         }
-        return isOnlyJapanaese;
+        return isOnlyKana;
     }
 
     public static boolean containsJapanese(String input) {
-        boolean containsJapanase = false;
+        boolean containsJapanese = false;
         for (char ch : input.toCharArray()) {
             if (ch >= RANGE_HIRAGANA_START && ch <= RANGE_HIRAGANA_END) { // HIRAGANA
-                containsJapanase = true;
+                containsJapanese = true;
                 break;
             } else if (ch >= RANGE_KATAKANA_START && ch <= RANGE_KATAKANA_END) { // KATAKANA
-                containsJapanase = true;
+                containsJapanese = true;
                 break;
             } else if (ch >= RANGE_KANJI_START && ch <= RANGE_KANJI_END) { // KANJI
-                containsJapanase = true;
+                containsJapanese = true;
                 break;
             }
         }
-        return containsJapanase;
+        return containsJapanese;
     }
 
     public static boolean containsNoJapanese(String input) {

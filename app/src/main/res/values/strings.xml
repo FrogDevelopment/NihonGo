@@ -13,17 +13,17 @@
     <string name="warning_ime_remember">Don\'t display anymore</string>
 
     <!-- DRAWER -->
-    <string name="menu_icon">icon</string>
-    <string name="menu_subitem_review">Review</string>
-    <string name="menu_subitem_test" translatable="false">Test</string>
-    <string name="menu_subitem_word">Words</string>
-    <string name="menu_subitem_expression">Expressions</string>
-    <string name="menu_subitem_kana" translatable="false">Kana</string>
-    <string name="menu_subitem_import_export">Import/Export</string>
-    <string name="menu_subitem_parameters">Parameters</string>
-    <string name="menu_subitem_lessons">Lessons</string>
+    <string name="drawer_item_word">Words</string>
+    <string name="drawer_item_expression">Expressions</string>
+    <string name="drawer_item_kana" translatable="false">Kana</string>
+    <string name="drawer_item_review">Review</string>
+    <string name="drawer_item_test">Test</string>
+    <string name="drawer_item_lessons">Lessons</string>
+    <string name="drawer_item_parameters">Parameters</string>
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
     <string name="dialog_tags_title" translatable="false">Tags</string>
 
     <!-- ***** -->
@@ -102,6 +102,8 @@
     <string name="param_review">Review\'s parameters</string>
     <string name="param_reviewed">Reviews on japanese ?</string>
     <string name="param_sort_random">Random ?</string>
+    <string name="param_exclude_learned">Exclude learned ?</string>
+    <string name="param_only_favorite">Only Favorites ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Select the type of test</string>
     <string name="param_method">Method</string>
@@ -155,6 +157,7 @@
     <string name="test_back_title" translatable="false">ATTENTION</string>
     <string name="test_back_message">You\'re going to leave</string>
     <string name="test_next">Next</string>
+    <string name="test_details">Détails</string>
 
     <string name="test_results_title">Results</string>
     <string name="test_results_details">Test : %1$s\nAnswer expected : %2$s\nAnswer given : %3$s</string>
@@ -176,8 +179,8 @@
     <!-- HELP -->
     <!-- ****** -->
     <string name="help_chart_description">Hiragana and Katakana</string>
-    <string name="help_hiragana" translatable="false">Hiragana</string>
-    <string name="help_katakana" translatable="false">Katakana</string>
+    <string name="global_hiragana" translatable="false">Hiragana</string>
+    <string name="global_katakana" translatable="false">Katakana</string>
 
     <!-- ******* -->
     <!-- LESSONS -->
@@ -213,7 +216,8 @@
     <string name="kanji" translatable="false">Kanji</string>
     <string name="kana" translatable="false">Kana</string>
 
-    <string name="ok" translatable="false">OK</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

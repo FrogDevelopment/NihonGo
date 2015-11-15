@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -62,43 +63,10 @@ public class MainActivity extends AppCompatActivity {
 		setupDrawerLayout();
 
 		if (savedInstanceState == null) {
-			selectItemAtIndex(R.id.navigation_word, true);
+			selectItemAtIndex(R.id.navigation_word);
 		}
 
 		handleIntent(getIntent());
-	}
-
-	private void initToolbar() {
-		setSupportActionBar(toolbar);
-		final ActionBar actionBar = getSupportActionBar();
-
-		if (actionBar != null) {
-//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setHomeButtonEnabled(true);
-		}
-	}
-
-	private void setupDrawerLayout() {
-		NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
-		view.setNavigationItemSelectedListener(menuItem -> {
-			menuItem.setChecked(true);
-			mDrawerLayout.closeDrawers();
-
-			selectItemAtIndex(menuItem.getItemId(), true);
-
-			return true;
-		});
-
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
-
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				// Close the soft-keyboard
-				imm.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
-			}
-		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
 	private void initIME() {
@@ -116,8 +84,45 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 
-		if (isNoJapanIME)
-			WarningIMEDialog.newInstance().show(getFragmentManager(), "warningIMEDialog");
+		if (isNoJapanIME) {
+			SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME.value, 0);
+			boolean rememberWarning = settings.getBoolean(Preferences.REMEMBER_WARNING_IME.value, false);
+			if (!rememberWarning) {
+				WarningIMEDialog.show(getFragmentManager());
+			}
+		}
+	}
+
+	private void initToolbar() {
+		setSupportActionBar(toolbar);
+		final ActionBar actionBar = getSupportActionBar();
+
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeButtonEnabled(true);
+		}
+	}
+
+	private void setupDrawerLayout() {
+		NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+		view.setNavigationItemSelectedListener(menuItem -> {
+			menuItem.setChecked(true);
+			mDrawerLayout.closeDrawers();
+
+			selectItemAtIndex(menuItem.getItemId());
+
+			return true;
+		});
+
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				// Close the soft-keyboard
+				imm.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
+			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
 	@Override
@@ -141,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private static int CURRENT_VIEW = -1;
 
-	private void selectItemAtIndex(int id, boolean invalideOptionsMenu) {
+	private void selectItemAtIndex(int id) {
 		if (!onSearch && CURRENT_VIEW == id) {
 			return;
 		}
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 		switch (id) {
 
 			case R.id.navigation_word:
-				mFragmentTitle = R.string.menu_subitem_word;
+				mFragmentTitle = R.string.drawer_item_word;
 				fragment = new DicoFragment();
 				args = new Bundle();
 				args.putSerializable("type", Type.WORD);
@@ -161,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 				break;
 
 			case R.id.navigation_expression:
-				mFragmentTitle = R.string.menu_subitem_expression;
+				mFragmentTitle = R.string.drawer_item_expression;
 				fragment = new DicoFragment();
 				args = new Bundle();
 				args.putSerializable("type", Type.EXPRESSION);
@@ -178,19 +183,19 @@ public class MainActivity extends AppCompatActivity {
 				fragment = new TestParametersFragment();
 				break;
 
-			case R.id.navigation_kana:
-				mFragmentTitle = R.string.menu_subitem_kana;
+			case R.id.navigation_hiragana:
+				mFragmentTitle = R.string.drawer_item_kana;
 //				fragment = new HelpKanaFragment();
 				fragment = new BlankFragment();
 				break;
 
 			case R.id.navigation_parameters:
-				mFragmentTitle = R.string.menu_subitem_parameters;
+				mFragmentTitle = R.string.drawer_item_parameters;
 				fragment = new ParametersFragment();
 				break;
 
 			case R.id.navigation_lessons:
-				mFragmentTitle = R.string.menu_subitem_lessons;
+				mFragmentTitle = R.string.drawer_item_lessons;
 				fragment = new LessonsFragment();
 				break;
 
@@ -204,9 +209,10 @@ public class MainActivity extends AppCompatActivity {
 		fragmentTransaction.commit();
 
 		mDrawerLayout.closeDrawers();
-		if (invalideOptionsMenu) {
-			invalidateOptionsMenu();
-		}
+
+		// todo voir utilité
+		invalidateOptionsMenu();
+
 
 		CURRENT_VIEW = id;
 		setTitle(mFragmentTitle);
@@ -225,17 +231,45 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggls
+		// Pass any configuration change to the drawer toggle
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (onSearch || CURRENT_VIEW != R.id.navigation_word) {
+			selectItemAtIndex(R.id.navigation_word);
+			onSearch = false;
+		} else {
+			// todo : un toast demandant un back une seconde fois pour sortir
+			new AlertDialog.Builder(this)
+					.setIcon(R.drawable.ic_warning_black)
+					.setTitle(R.string.closing_activity_title)
+					.setMessage(R.string.closing_activity_message)
+					.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
+					.setNegativeButton(getString(R.string.no), null)
+					.show();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		CURRENT_VIEW = -1;
+		onSearch = false;
+		super.onDestroy();
+	}
+
+	// ************************************************************ \\
 	// ************************** SEARCH ************************** \\
+	// ************************************************************ \\
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		setIntent(intent);
 		handleIntent(intent);
 	}
+
+	private boolean onSearch = false;
 
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -256,29 +290,4 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private boolean onSearch = false;
-
-	@Override
-	public void onBackPressed() {
-		if (onSearch || CURRENT_VIEW != R.id.navigation_word) {
-			selectItemAtIndex(R.id.navigation_word, true);
-			onSearch = false;
-		} else {
-			// todo : un toast demandant un back une seconde fois pour sortir
-			new AlertDialog.Builder(this)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle(R.string.closing_activity_title)
-					.setMessage(R.string.closing_activity_message)
-					.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
-					.setNegativeButton(getString(R.string.no), null)
-					.show();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		CURRENT_VIEW = -1;
-		onSearch = false;
-		super.onDestroy();
-	}
 }

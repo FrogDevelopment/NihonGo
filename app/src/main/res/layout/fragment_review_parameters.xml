@@ -24,91 +24,126 @@
                 android:id="@+id/review_switch_language"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/param_reviewed"
                 android:checked="true"
-                android:textOn="@string/yes"
-                android:textOff="@string/no"
                 android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/param_reviewed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textOff="@string/no"
+                android:textOn="@string/yes"/>
 
             <Switch
                 android:id="@+id/review_switch_sort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/param_sort_random"
                 android:checked="true"
-                android:textOn="@string/yes"
-                android:textOff="@string/no"
                 android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/param_sort_random"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textOff="@string/no"
+                android:textOn="@string/yes"/>
 
             <Switch
                 android:id="@+id/review_switch_learned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Exclure les 'appris'"
-                android:checked="true"
-                android:textOn="@string/yes"
-                android:textOff="@string/no"
+                android:checked="false"
                 android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/param_exclude_learned"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textOff="@string/no"
+                android:textOn="@string/yes"/>
 
-             <Switch
+            <Switch
                 android:id="@+id/review_switch_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Seulement les favoris"
-                android:checked="true"
-                android:textOn="@string/yes"
-                android:textOff="@string/no"
+                android:checked="false"
                 android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/param_only_favorite"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textOff="@string/no"
+                android:textOn="@string/yes"/>
 
             <LinearLayout
                 android:id="@+id/review_param_quantity"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="10dp">
 
-                <TextView
-                    android:id="@+id/review_param_quantity_title"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/review_param_quantity_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/param_quantity"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:id="@+id/review_param_quantity_selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/param_quantity_selection"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:textStyle="italic"/>
+                </LinearLayout>
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/param_quantity"/>
-
-                <TextView
-                    android:id="@+id/review_param_quantity_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:textSize="12sp"
-                    android:text="@string/param_quantity_selection"/>
+                    android:background="@drawable/arrow_touch"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/review_param_tag"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="10dp">
 
-                <TextView
-                    android:id="@+id/review_param_tag_title"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/review_param_tag_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/param_tag_title"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:id="@+id/review_param_tag_selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/param_tag_selection"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:textStyle="italic"/>
+
+                </LinearLayout>
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/param_tag_title"/>
+                    android:background="@drawable/arrow_touch"/>
 
-                <TextView
-                    android:id="@+id/review_param_tag_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:textSize="12sp"
-                    android:text="@string/param_tag_selection"/>
             </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

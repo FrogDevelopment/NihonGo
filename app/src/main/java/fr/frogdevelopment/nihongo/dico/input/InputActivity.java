@@ -49,8 +49,6 @@ public class InputActivity extends AppCompatActivity {
 	TextInputLayout mDetailsWrapper;
 	@Bind(R.id.input_details)
 	EditText        mDetailsText;
-//    @Bind(R.id.input_conjugation)
-//    Button   mConjugationButton;
 
 	// Initial Data
 	protected String idUpdate;
@@ -75,26 +73,11 @@ public class InputActivity extends AppCompatActivity {
 
 		switch (mType) {
 			case WORD:
-				setTitle(R.string.menu_subitem_word);
-//                mConjugationButton.setVisibility(View.VISIBLE);
-//
-//                // fixme gérer création/maj du mot (si création id = null !!!)
-//                mConjugationButton.setOnClickListener(v -> {
-//                    Bundle args = new Bundle();
-//                    args.putString(ConjugationContract.WORD_ID, idUpdate);
-//                    args.putString(DicoContract.INPUT, inputSave);
-//
-//                    Intent intent = new Intent(getApplicationContext(), ConjugationActivity.class);
-//                    intent.putExtras(args);
-//
-//                    startActivity(intent);
-//                        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                });
+				setTitle(R.string.drawer_item_word);
                 break;
 
             case EXPRESSION:
-                setTitle(R.string.menu_subitem_expression);
-//                mConjugationButton.setVisibility(View.GONE);
+                setTitle(R.string.drawer_item_expression);
                 break;
 
             default:
@@ -112,7 +95,6 @@ public class InputActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }

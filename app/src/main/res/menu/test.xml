@@ -10,7 +10,7 @@
         android:id="@+id/menu_test_detail"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="ifRoom"
-        android:title="détails"/>
+        android:title="@string/test_details"/>
 
     <item
         android:id="@+id/menu_test_pass"

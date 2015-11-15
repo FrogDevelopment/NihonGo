@@ -218,12 +218,6 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		getListView().setSelector(R.drawable.dico_selector);
-	}
-
-	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate the options menu from XML
 		inflater.inflate(R.menu.dico, menu);
@@ -244,7 +238,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				return true;
 			}
 		});
-		// fixme
+
 		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -292,7 +286,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		final int nbSelectedRows = selectedRows.size();
 		// Ask the user if they want to delete
 		new AlertDialog.Builder(getActivity())
-				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setIcon(R.drawable.ic_warning_black)
 				.setTitle(R.string.delete_title)
 				.setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))
 				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {

@@ -34,7 +34,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 		Bundle args = new Bundle();
 		args.putParcelable("item", item);
 		args.putBoolean("isJapaneseReviewed", isJapaneseReviewed);
-		args.putString("count", position + "/" + mCount);
+		args.putString("count", (position + 1) + "/" + mCount);
 
 		fragment.setArguments(args);
 

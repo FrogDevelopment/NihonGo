@@ -54,12 +54,12 @@ public class HelpKanaFragment extends Fragment implements ActionBar.TabListener 
         for (int i = 0; i < 2; i++) {
             switch (i) {
                 case INDEX_HIRAGANA:
-                    title = R.string.help_hiragana;
+                    title = R.string.global_hiragana;
                     icon = R.drawable.ic_hiragana;
                     break;
 
                 case INDEX_KATAKANA:
-                    title = R.string.help_katakana;
+                    title = R.string.global_katakana;
                     icon = R.drawable.ic_katakana;
                     break;
 

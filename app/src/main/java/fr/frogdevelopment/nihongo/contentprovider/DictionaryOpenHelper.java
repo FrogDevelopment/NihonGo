@@ -22,15 +22,11 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         DicoContract.create(db);
-        ConjugationContract.create(db);
     }
 
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion <= 10) {
-            ConjugationContract.create(db);
-        }
         if (newVersion <= 11) {
             db.execSQL(DicoContract.UPDATE_11);
         }

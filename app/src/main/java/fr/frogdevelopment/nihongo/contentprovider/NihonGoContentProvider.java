@@ -24,7 +24,7 @@ public class NihonGoContentProvider extends ContentProvider {
 
 	public static final String AUTHORITY = ".NihonGoContentProvider";
 
-	// used for the UriMachter
+	// used for the UriMatcher
 	private static final int    WORDS                  = 10;
 	private static final int    WORD_ID                = 11;
 	private static final int    WORDS_GROUP_BY_TAG     = 12;
@@ -55,19 +55,12 @@ public class NihonGoContentProvider extends ContentProvider {
 	private static final String CONTENT_ERASE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_ERASE;
 	public static final  Uri    URI_ERASE          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_ERASE);
 
-	private static final int    CONJUGATIONS                  = 60;
-	private static final int    CONJUGATION_ID                = 61;
-	private static final String BASE_PATH_CONJUGATION         = "conjugation";
-	private static final String CONTENT_CONJUGATION_TYPE      = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + BASE_PATH_CONJUGATION + "s";
-	private static final String CONTENT_CONJUGATION_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_CONJUGATION;
-	public static final  Uri    URI_CONJUGATION               = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_CONJUGATION);
-
-	private static final int    RESET_FAVORITE              = 70;
+	private static final int    RESET_FAVORITE              = 60;
 	private static final String BASE_PATH_RESET_FAVORITE    = "reset_favorite";
 	private static final String CONTENT_RESET_FAVORITE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_RESET_FAVORITE;
 	public static final  Uri    URI_RESET_FAVORITE          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_RESET_FAVORITE);
 
-	private static final int    RESET_LEARNED              = 80;
+	private static final int    RESET_LEARNED              = 70;
 	private static final String BASE_PATH_RESET_LEARNED    = "reset_learned";
 	private static final String CONTENT_RESET_LEARNED_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + BASE_PATH_RESET_LEARNED;
 	public static final  Uri    URI_RESET_LEARNED          = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_RESET_LEARNED);
@@ -88,9 +81,6 @@ public class NihonGoContentProvider extends ContentProvider {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_ERASE, ERASE);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_RESET_FAVORITE, RESET_FAVORITE);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH_RESET_LEARNED, RESET_LEARNED);
-
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_CONJUGATION, CONJUGATIONS);
-		sURIMatcher.addURI(AUTHORITY, BASE_PATH_CONJUGATION + "/#", CONJUGATION_ID);
 	}
 
 	@Override
@@ -128,11 +118,6 @@ public class NihonGoContentProvider extends ContentProvider {
 
 			case RESET_LEARNED:
 				return CONTENT_RESET_LEARNED_TYPE;
-
-			case CONJUGATIONS:
-				return CONTENT_CONJUGATION_TYPE;
-			case CONJUGATION_ID:
-				return CONTENT_CONJUGATION_ITEM_TYPE;
 
 			default:
 				return null;
@@ -189,14 +174,6 @@ public class NihonGoContentProvider extends ContentProvider {
 
 				break;
 
-			case CONJUGATION_ID:
-				queryBuilder.setTables(ConjugationContract.TABLE_NAME);
-				queryBuilder.appendWhere(ConjugationContract._ID + "=" + uri.getLastPathSegment());
-				break;
-			case CONJUGATIONS:
-				queryBuilder.setTables(ConjugationContract.TABLE_NAME);
-				break;
-
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -221,10 +198,6 @@ public class NihonGoContentProvider extends ContentProvider {
 				id = sqlDB.insert(DicoContract.TABLE_NAME, null, values);
 				break;
 
-			case CONJUGATIONS:
-				id = sqlDB.insert(ConjugationContract.TABLE_NAME, null, values);
-				break;
-
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -232,7 +205,6 @@ public class NihonGoContentProvider extends ContentProvider {
 		Uri newUri = ContentUris.withAppendedId(uri, id);
 		getContext().getContentResolver().notifyChange(newUri, null);
 
-//        return Uri.parse(BASE_PATH_WORD + "/" + id);
 		return newUri;
 	}
 
@@ -258,13 +230,6 @@ public class NihonGoContentProvider extends ContentProvider {
 				} else {
 					rowsUpdated = sqlDB.update(DicoContract.TABLE_NAME, values, DicoContract._ID + "=" + id + " and " + selection, selectionArgs);
 				}
-				break;
-
-			case CONJUGATIONS:
-				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, selection, selectionArgs);
-				break;
-			case CONJUGATION_ID:
-				rowsUpdated = sqlDB.update(ConjugationContract.TABLE_NAME, values, ConjugationContract._ID + "=" + id, null);
 				break;
 
 			default:
@@ -299,14 +264,6 @@ public class NihonGoContentProvider extends ContentProvider {
 			case ERASE:
 				rowsDeleted = sqlDB.delete(DicoContract.TABLE_NAME, null, null);
 				sqlDB.delete("sqlite_sequence", "name='" + DicoContract.TABLE_NAME + "'", null); // reset du compteur
-				break;
-
-			case CONJUGATIONS:
-				selectionDico = String.format(selection, ConjugationContract._ID);
-				rowsDeleted = sqlDB.delete(ConjugationContract.TABLE_NAME, selectionDico, selectionArgs);
-				break;
-			case CONJUGATION_ID:
-				rowsDeleted = sqlDB.delete(ConjugationContract.TABLE_NAME, ConjugationContract._ID + "=" + id, null);
 				break;
 
 			default:

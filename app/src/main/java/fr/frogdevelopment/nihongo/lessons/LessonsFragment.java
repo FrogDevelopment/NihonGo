@@ -294,7 +294,7 @@ public class LessonsFragment extends ListFragment {
 		if (lesson.isBought)
 			if (checkPackPresent(lesson.sku))
 				new AlertDialog.Builder(getActivity())
-						.setIcon(android.R.drawable.ic_dialog_alert)
+						.setIcon(R.drawable.ic_warning_black)
 						.setTitle(R.string.lesson_already_present)
 						.setMessage(R.string.lesson_continue)
 						.setPositiveButton(getString(R.string.yes), (dialog, which) -> fetchData(lesson))

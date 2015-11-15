@@ -9,7 +9,7 @@
         android:id="@+id/image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/img_drawer"
+        android:background="@drawable/drawer_background"
         android:contentDescription="@string/app_name"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 </LinearLayout>
