@@ -74,7 +74,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		final ActionBar actionBar = getSupportActionBar();
 
 		if (actionBar != null) {
-//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
@@ -97,7 +96,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 	public void delete(final Item item) {
 		// Ask the user if they want to delete
 		new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setIcon(R.drawable.ic_warning_black)
 				.setTitle(R.string.delete_title)
 				.setMessage(R.string.delete_detail)
 				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> onDelete(item))
@@ -123,7 +122,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.FAVORITE, item.favorite);
 
-		udpateItem(item, values);
+		updateItem(item, values);
 	}
 
 	@Override
@@ -131,10 +130,10 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.LEARNED, item.learned);
 
-		udpateItem(item, values);
+		updateItem(item, values);
 	}
 
-	private void udpateItem(Item item, ContentValues values) {
+	private void updateItem(Item item, ContentValues values) {
 		final String where = DicoContract._ID + "=?";
 		final String[] selectionArgs = {item.id};
 

@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 		switch (id) {
 
 			case R.id.navigation_word:
-				mFragmentTitle = R.string.menu_subitem_word;
+				mFragmentTitle = R.string.drawer_item_word;
 				fragment = new DicoFragment();
 				args = new Bundle();
 				args.putSerializable("type", Type.WORD);
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 				break;
 
 			case R.id.navigation_expression:
-				mFragmentTitle = R.string.menu_subitem_expression;
+				mFragmentTitle = R.string.drawer_item_expression;
 				fragment = new DicoFragment();
 				args = new Bundle();
 				args.putSerializable("type", Type.EXPRESSION);
@@ -183,19 +183,19 @@ public class MainActivity extends AppCompatActivity {
 				fragment = new TestParametersFragment();
 				break;
 
-			case R.id.navigation_kana:
-				mFragmentTitle = R.string.menu_subitem_kana;
+			case R.id.navigation_hiragana:
+				mFragmentTitle = R.string.drawer_item_kana;
 //				fragment = new HelpKanaFragment();
 				fragment = new BlankFragment();
 				break;
 
 			case R.id.navigation_parameters:
-				mFragmentTitle = R.string.menu_subitem_parameters;
+				mFragmentTitle = R.string.drawer_item_parameters;
 				fragment = new ParametersFragment();
 				break;
 
 			case R.id.navigation_lessons:
-				mFragmentTitle = R.string.menu_subitem_lessons;
+				mFragmentTitle = R.string.drawer_item_lessons;
 				fragment = new LessonsFragment();
 				break;
 
