@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
-        android:id="@+id/menu_group1"
+        android:id="@+id/group_dico"
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_word"
             android:checked="true"
-            android:title="@string/menu_subitem_word"/>
+            android:title="@string/drawer_item_word"/>
         <item
             android:id="@+id/navigation_expression"
-            android:title="@string/menu_subitem_expression"/>
-        <item
-            android:id="@+id/navigation_kana"
-            android:title="@string/menu_subitem_kana"/>
-    </group>
-    <group
-        android:id="@+id/menu_group2"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/navigation_review"
-            android:title="@string/menu_subitem_review"/>
-        <item
-            android:id="@+id/navigation_test"
-            android:title="@string/menu_subitem_test"/>
+            android:title="@string/drawer_item_expression"/>
     </group>
 
     <group
-        android:id="@+id/menu_group3"
+        android:id="@+id/group_todo"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_review"
+            android:title="@string/drawer_item_review"/>
+        <item
+            android:id="@+id/navigation_test"
+            android:title="@string/drawer_item_test"/>
+    </group>
+
+    <group
+        android:id="@+id/group_kana"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_hiragana"
+            android:icon="@drawable/ic_hiragana"
+            android:title="@string/global_hiragana"/>
+        <item
+            android:id="@+id/navigation_katakana"
+            android:icon="@drawable/ic_katakana"
+            android:title="@string/global_katakana"/>
+    </group>
+
+    <group
+        android:id="@+id/group_config"
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_lessons"
-            android:title="@string/menu_subitem_lessons"/>
+            android:title="@string/drawer_item_lessons"/>
         <item
             android:id="@+id/navigation_parameters"
-            android:title="@string/menu_subitem_parameters"/>
+            android:title="@string/drawer_item_parameters"/>
     </group>
 
 </menu>

@@ -13,17 +13,17 @@
     <string name="warning_ime_remember">Don\'t display anymore</string>
 
     <!-- DRAWER -->
-    <string name="menu_icon">icon</string>
-    <string name="menu_subitem_review">Review</string>
-    <string name="menu_subitem_test" translatable="false">Test</string>
-    <string name="menu_subitem_word">Words</string>
-    <string name="menu_subitem_expression">Expressions</string>
-    <string name="menu_subitem_kana" translatable="false">Kana</string>
-    <string name="menu_subitem_import_export">Import/Export</string>
-    <string name="menu_subitem_parameters">Parameters</string>
-    <string name="menu_subitem_lessons">Lessons</string>
+    <string name="drawer_item_word">Words</string>
+    <string name="drawer_item_expression">Expressions</string>
+    <string name="drawer_item_kana" translatable="false">Kana</string>
+    <string name="drawer_item_review">Review</string>
+    <string name="drawer_item_test">Test</string>
+    <string name="drawer_item_lessons">Lessons</string>
+    <string name="drawer_item_parameters">Parameters</string>
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
     <string name="dialog_tags_title" translatable="false">Tags</string>
 
     <!-- ***** -->
@@ -179,8 +179,8 @@
     <!-- HELP -->
     <!-- ****** -->
     <string name="help_chart_description">Hiragana and Katakana</string>
-    <string name="help_hiragana" translatable="false">Hiragana</string>
-    <string name="help_katakana" translatable="false">Katakana</string>
+    <string name="global_hiragana" translatable="false">Hiragana</string>
+    <string name="global_katakana" translatable="false">Katakana</string>
 
     <!-- ******* -->
     <!-- LESSONS -->

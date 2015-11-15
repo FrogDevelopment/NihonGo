@@ -10,13 +10,13 @@
     <string name="warning_ime_remember">Ne plus afficher</string>
 
     <!-- DRAWER -->
-    <string name="menu_icon">icône</string>
-    <string name="menu_subitem_review">Révisions</string>
-    <string name="menu_subitem_word">Mots</string>
-    <string name="menu_subitem_expression">Expressions</string>
-    <string name="menu_subitem_import_export">Importer/Exporter</string>
-    <string name="menu_subitem_parameters">Paramètres</string>
-    <string name="menu_subitem_lessons">Leçons</string>
+    <string name="drawer_item_word">Mots</string>
+    <string name="drawer_item_expression">Expressions</string>
+    <string name="drawer_item_review">Révisions</string>
+    <string name="drawer_item_test">Test</string>
+    <string name="drawer_item_parameters">Paramètres</string>
+    <string name="drawer_item_lessons">Leçons</string>
+
     <string name="drawer_open">Ouvrir le navigateur</string>
     <string name="drawer_close">Fermer le navigateur</string>
 
