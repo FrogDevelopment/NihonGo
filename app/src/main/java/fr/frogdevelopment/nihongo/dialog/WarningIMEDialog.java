@@ -27,7 +27,7 @@ public class WarningIMEDialog extends DialogFragment {
 
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setIcon(android.R.drawable.stat_sys_warning);
+		builder.setIcon(R.drawable.ic_warning_black);
 		builder.setTitle(R.string.warning_ime_title);
 		final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_warning_ime, null);
 		builder.setView(dialogView);

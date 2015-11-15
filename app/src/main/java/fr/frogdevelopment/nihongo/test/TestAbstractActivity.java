@@ -182,7 +182,7 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 	@Override
 	public void onBackPressed() {
 		new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.stat_sys_warning)
+				.setIcon(R.drawable.ic_warning_black)
 				.setTitle(R.string.test_back_title)
 				.setMessage(R.string.test_back_message)
 				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> finishTest())

@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 		setupDrawerLayout();
 
 		if (savedInstanceState == null) {
-			selectItemAtIndex(R.id.navigation_word, true);
+			selectItemAtIndex(R.id.navigation_word);
 		}
 
 		handleIntent(getIntent());
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 			menuItem.setChecked(true);
 			mDrawerLayout.closeDrawers();
 
-			selectItemAtIndex(menuItem.getItemId(), true);
+			selectItemAtIndex(menuItem.getItemId());
 
 			return true;
 		});
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private static int CURRENT_VIEW = -1;
 
-	private void selectItemAtIndex(int id, boolean invalideOptionsMenu) {
+	private void selectItemAtIndex(int id) {
 		if (!onSearch && CURRENT_VIEW == id) {
 			return;
 		}
@@ -209,9 +209,10 @@ public class MainActivity extends AppCompatActivity {
 		fragmentTransaction.commit();
 
 		mDrawerLayout.closeDrawers();
-		if (invalideOptionsMenu) {
-			invalidateOptionsMenu();
-		}
+
+		// todo voir utilité
+		invalidateOptionsMenu();
+
 
 		CURRENT_VIEW = id;
 		setTitle(mFragmentTitle);
@@ -230,17 +231,45 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggls
+		// Pass any configuration change to the drawer toggle
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (onSearch || CURRENT_VIEW != R.id.navigation_word) {
+			selectItemAtIndex(R.id.navigation_word);
+			onSearch = false;
+		} else {
+			// todo : un toast demandant un back une seconde fois pour sortir
+			new AlertDialog.Builder(this)
+					.setIcon(R.drawable.ic_warning_black)
+					.setTitle(R.string.closing_activity_title)
+					.setMessage(R.string.closing_activity_message)
+					.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
+					.setNegativeButton(getString(R.string.no), null)
+					.show();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		CURRENT_VIEW = -1;
+		onSearch = false;
+		super.onDestroy();
+	}
+
+	// ************************************************************ \\
 	// ************************** SEARCH ************************** \\
+	// ************************************************************ \\
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		setIntent(intent);
 		handleIntent(intent);
 	}
+
+	private boolean onSearch = false;
 
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -261,29 +290,4 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private boolean onSearch = false;
-
-	@Override
-	public void onBackPressed() {
-		if (onSearch || CURRENT_VIEW != R.id.navigation_word) {
-			selectItemAtIndex(R.id.navigation_word, true);
-			onSearch = false;
-		} else {
-			// todo : un toast demandant un back une seconde fois pour sortir
-			new AlertDialog.Builder(this)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle(R.string.closing_activity_title)
-					.setMessage(R.string.closing_activity_message)
-					.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
-					.setNegativeButton(getString(R.string.no), null)
-					.show();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		CURRENT_VIEW = -1;
-		onSearch = false;
-		super.onDestroy();
-	}
 }
