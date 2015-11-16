@@ -15,6 +15,13 @@
         android:fastScrollEnabled="true"
         android:scrollbarStyle="outsideOverlay"/>
 
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_results"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"

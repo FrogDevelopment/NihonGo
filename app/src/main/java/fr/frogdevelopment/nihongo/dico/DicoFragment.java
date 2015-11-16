@@ -32,6 +32,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -126,13 +127,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data.getCount() == 0) {
-			// There are no results
-			Toast.makeText(getActivity(), R.string.no_results, Toast.LENGTH_LONG).show();
-		}
-
 		dicoAdapter.swapCursor(data, isSortByLetter);
-
 		getLoaderManager().destroyLoader(0);
 	}
 

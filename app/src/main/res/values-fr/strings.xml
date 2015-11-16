@@ -148,7 +148,7 @@
     <string name="menu_search">chercher</string>
     <string name="search_label">Recherche</string>
     <string name="search_hint">Rechercher un mot</string>
-    <string name="no_results">Pas de résultats</string>
+    <string name="no_results">Aucunes entrées</string>
 
     <plurals name="search_results">
         <item quantity="one">%1$d résultat</item>

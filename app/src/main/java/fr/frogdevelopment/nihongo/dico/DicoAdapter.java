@@ -187,6 +187,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
 		mapSectionByPosition.clear();
 
 		if (cursor == null) {
+            notifyDataSetChanged();
 			return null;
 		}
 
@@ -222,6 +223,8 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
         Set<String> sectionLetters = mapPositionByLetter.keySet();
         sections = new String[sectionLetters.size()];
         sectionLetters.toArray(sections);
+
+        notifyDataSetChanged();
 
         return cursor;
     }
