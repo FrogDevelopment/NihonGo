@@ -126,13 +126,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data.getCount() == 0) {
-			// There are no results
-			Toast.makeText(getActivity(), R.string.no_results, Toast.LENGTH_LONG).show();
-		}
-
 		dicoAdapter.swapCursor(data, isSortByLetter);
-
 		getLoaderManager().destroyLoader(0);
 	}
 

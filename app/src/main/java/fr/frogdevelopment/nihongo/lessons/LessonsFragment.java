@@ -398,7 +398,7 @@ public class LessonsFragment extends ListFragment {
 			getListView().invalidateViews();
 		}
 
-		Toast.makeText(getActivity(), getActivity().getString(R.string.lesson_donwload_sucess, lesson.title), Toast.LENGTH_LONG).show();
+		Toast.makeText(getActivity(), getActivity().getString(R.string.lesson_download_success, lesson.title), Toast.LENGTH_LONG).show();
 		inProgress(false);
 	}
 

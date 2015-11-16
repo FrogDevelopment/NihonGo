@@ -62,7 +62,7 @@
     <!-- UPDATE -->
     <string name="update_title">Mise à jour</string>
     <string name="update_confirmation">Voulez-vous mettre à jour cette saisie ?</string>
-    <string name="update_alerte">La saisie \'%s\' existe déjà, voulez-vous la mettre à jour ?</string>
+    <string name="update_alert">La saisie \'%s\' existe déjà, voulez-vous la mettre à jour ?</string>
 
     <!-- ***** -->
     <!-- INPUT -->
@@ -165,7 +165,7 @@
     <!-- ******* -->
     <string name="lesson_already_present">Pack déjà récupéré</string>
     <string name="lesson_continue">Continuer ?</string>
-    <string name="lesson_donwload_sucess">\'%s\' téléchargé avec succès</string>
+    <string name="lesson_download_success">\'%s\' téléchargé avec succès</string>
 
     <string name="param_quantity_all">Tout</string>
 
