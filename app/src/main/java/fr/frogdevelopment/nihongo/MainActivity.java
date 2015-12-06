@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
-import fr.frogdevelopment.nihongo.kana.BlankFragment;
+import fr.frogdevelopment.nihongo.kana.KanaViewPage;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
 import fr.frogdevelopment.nihongo.options.ParametersFragment;
 import fr.frogdevelopment.nihongo.review.ReviewParametersFragment;
@@ -184,9 +184,19 @@ public class MainActivity extends AppCompatActivity {
 				break;
 
 			case R.id.navigation_hiragana:
-				mFragmentTitle = R.string.drawer_item_kana;
-//				fragment = new HelpKanaFragment();
-				fragment = new BlankFragment();
+				mFragmentTitle = R.string.global_hiragana;
+				fragment = new KanaViewPage();
+				args = new Bundle();
+				args.putInt("imageSource", R.drawable.table_hiragana);
+				fragment.setArguments(args);
+				break;
+
+			case R.id.navigation_katakana:
+				mFragmentTitle = R.string.global_katakana;
+				fragment = new KanaViewPage();
+				args = new Bundle();
+				args.putInt("imageSource", R.drawable.table_katakana);
+				fragment.setArguments(args);
 				break;
 
 			case R.id.navigation_parameters:
