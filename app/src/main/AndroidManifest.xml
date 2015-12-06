@@ -170,26 +170,6 @@
                 android:value="fr.frogdevelopment.nihongo.MainActivity"/>
         </activity>
 
-        <activity
-            android:name=".kana.KanaActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="FIXME"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.frogdevelopment.nihongo.MainActivity"/>
-        </activity>
-
-        <activity
-            android:name=".kana.DrawingActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="FIXME"
-            android:parentActivityName=".kana.KanaActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".kana.KanaActivity"/>
-        </activity>
-
 
     </application>
 
