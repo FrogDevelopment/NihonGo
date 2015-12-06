@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.help;
+package fr.frogdevelopment.nihongo.kana;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 
-public class HelpFragment extends Fragment {
+public class KanaViewPage extends Fragment {
 
     @Bind(R.id.help_imageView)
     ImageView imageView;
@@ -25,7 +25,7 @@ public class HelpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View rootView = inflater.inflate(R.layout.fragment_help, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_kana, container, false);
         ButterKnife.bind(this, rootView);
 
         final Bundle arguments = getArguments();

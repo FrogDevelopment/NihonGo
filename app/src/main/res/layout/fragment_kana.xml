@@ -12,7 +12,6 @@
         android:id="@+id/help_imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/help_chart_description"
-        android:src="@drawable/table_hiragana"/>
+        android:contentDescription="@string/help_chart_description"/>
 
 </LinearLayout>
