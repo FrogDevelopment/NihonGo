@@ -84,7 +84,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		final ActionBar actionBar = getSupportActionBar();
 
 		if (actionBar != null) {
-//			actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
