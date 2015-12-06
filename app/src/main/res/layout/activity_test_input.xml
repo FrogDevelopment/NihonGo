@@ -7,11 +7,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
+    <TextView
+        android:id="@+id/test_count"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="end"
+        android:textSize="20sp"/>
+
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/test_input_separator"
-        android:layout_height="wrap_content">
+        android:layout_below="@id/test_count">
 
         <TextView
             android:id="@+id/test_input_to_find"
@@ -24,15 +32,15 @@
     <Button
         android:id="@+id/test_input_validate_button"
         android:layout_width="fill_parent"
-        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:text="@string/test_next"/>
 
     <EditText
         android:id="@+id/test_input_answer"
         android:layout_width="fill_parent"
-        android:layout_above="@id/test_input_validate_button"
         android:layout_height="wrap_content"
+        android:layout_above="@id/test_input_validate_button"
         android:inputType="text"
         android:textSize="60sp">
 
@@ -40,8 +48,8 @@
     </EditText>
 
     <View
-        android:layout_width="fill_parent"
         android:id="@+id/test_input_separator"
+        android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:layout_above="@id/test_input_answer"
         android:background="@android:color/darker_gray"/>

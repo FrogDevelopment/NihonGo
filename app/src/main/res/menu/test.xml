@@ -11,16 +11,4 @@
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="ifRoom"
         android:title="@string/test_details"/>
-
-    <item
-        android:id="@+id/menu_test_pass"
-        android:icon="@android:drawable/ic_media_next"
-        app:showAsAction="ifRoom"
-        android:title="@string/test_next"/>
-
-    <item
-        android:id="@+id/menu_test_index"
-        app:showAsAction="always"
-        android:enabled="false"
-        android:title=""/>
 </menu>

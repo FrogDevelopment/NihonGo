@@ -4,7 +4,6 @@
 
 package fr.frogdevelopment.nihongo.test;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -12,9 +11,13 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,13 +25,22 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
-public abstract class TestAbstractActivity extends Activity implements LoaderCallbacks<Cursor> {
+public abstract class TestAbstractActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_ID = 710;
+
+	@Bind(R.id.toolbar)
+	Toolbar toolbar;
+
+	@Bind(R.id.test_count)
+	TextView mCount;
+
 	protected int          typeTest;
 	protected boolean      isDisplayKanji;
 	protected int          quantityMax;
@@ -41,9 +53,13 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 
 	protected String currentDetails;
 
-	protected int limit;
+	private final   int     layout;
+	protected final int     limit;
 
-	protected boolean showMenuNext = false;
+	protected TestAbstractActivity(int layout, int limit) {
+		this.layout = layout;
+		this.limit = limit;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +67,10 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setProgressBarIndeterminate(true);
+
+		setContentView(layout);
+
+		ButterKnife.bind(this);
 
 		first = true;
 		quantity = 0;
@@ -70,6 +90,18 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 		getLoaderManager().initLoader(LOADER_ID, bundle, this);
 
 		setProgressBarIndeterminateVisibility(false);
+
+		initToolbar();
+	}
+
+	private void initToolbar() {
+		setSupportActionBar(toolbar);
+		final ActionBar actionBar = getSupportActionBar();
+
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeButtonEnabled(true);
+		}
 	}
 
 	@Override
@@ -77,15 +109,8 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 		if (currentDetails != null) {
 			getMenuInflater().inflate(R.menu.test, menu);
 
-			MenuItem nextMenuItem = menu.findItem(R.id.menu_test_pass);
-			nextMenuItem.setVisible(showMenuNext);
-
 			MenuItem detailsMenuItem = menu.findItem(R.id.menu_test_detail);
 			detailsMenuItem.setVisible(StringUtils.isNoneBlank(currentDetails));
-
-			MenuItem indexMenuItem = menu.findItem(R.id.menu_test_index);
-			String title = (quantity + 1) + "/" + quantityMax;
-			indexMenuItem.setTitle(title);
 
 			return true;
 		}
@@ -101,9 +126,9 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 				onBackPressed();
 				return true;
 
-			case R.id.menu_test_pass:
-				validate("");
-				return true;
+//			case R.id.menu_test_pass:
+//				validate("");
+//				return true;
 
 			case R.id.menu_test_detail:
 				new AlertDialog.Builder(this)
@@ -197,6 +222,9 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 			successCounter++;
 		}
 		quantity++;
+
+		String count = (quantity + 1) + "/" + quantityMax;
+		mCount.setText(count);
 
 		if (quantity == quantityMax) {
 			finishTest();

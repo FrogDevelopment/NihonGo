@@ -6,7 +6,6 @@ package fr.frogdevelopment.nihongo.test;
 
 import android.content.Loader;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Random;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -26,22 +24,12 @@ public class TestInputActivity extends TestAbstractActivity {
 
     @Bind(R.id.test_input_to_find)
     TextView toFindView;
+
     @Bind(R.id.test_input_answer)
     EditText answerView;
 
-
     public TestInputActivity() {
-        limit = 1;
-        showMenuNext = false;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_test_input);
-
-        ButterKnife.bind(this);
+        super(R.layout.activity_test_input, 1);
     }
 
     @OnClick(R.id.test_input_validate_button)

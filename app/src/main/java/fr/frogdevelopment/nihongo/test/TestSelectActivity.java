@@ -6,7 +6,6 @@ package fr.frogdevelopment.nihongo.test;
 
 import android.content.Loader;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Random;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -41,17 +39,7 @@ public class TestSelectActivity extends TestAbstractActivity {
     }
 
     public TestSelectActivity() {
-        limit = ANSWERS.size();
-        showMenuNext = true;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_test_select);
-
-        ButterKnife.bind(this);
+        super(R.layout.activity_test_select, ANSWERS.size());
     }
 
     @OnClick({R.id.test_select_answer_1, R.id.test_select_answer_2, R.id.test_select_answer_3, R.id.test_select_answer_4, R.id.test_select_answer_5, R.id.test_select_answer_6})
