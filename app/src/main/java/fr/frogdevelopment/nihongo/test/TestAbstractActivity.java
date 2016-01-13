@@ -97,6 +97,8 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		setProgressBarIndeterminateVisibility(false);
 
 		initToolbar();
+
+		displayQuantity();
 	}
 
 	private void initToolbar() {
@@ -228,14 +230,17 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		}
 		quantity++;
 
-		String count = (quantity + 1) + "/" + quantityMax;
-		mCount.setText(count);
-
-		if (quantity == quantityMax) {
+		if (quantity  == quantityMax) {
 			finishTest();
 		} else {
+			displayQuantity();
 			getLoaderManager().restartLoader(LOADER_ID, null, this);
 		}
+	}
+
+	private void displayQuantity() {
+		String count = (quantity + 1) + "/" + quantityMax;
+		mCount.setText(count);
 	}
 
 	protected void finishTest() {
