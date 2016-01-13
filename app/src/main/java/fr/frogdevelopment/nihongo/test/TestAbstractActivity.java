@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewStub;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -63,12 +64,16 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setProgressBarIndeterminate(true);
 
-		setContentView(layout);
+		setContentView(R.layout.activity_test);
+		ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
+		stub.setLayoutResource(layout);
+		stub.inflate();
 
 		ButterKnife.bind(this);
 
