@@ -6,8 +6,10 @@ package fr.frogdevelopment.nihongo.test;
 
 import android.content.Loader;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,125 +26,127 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 public class TestSelectActivity extends TestAbstractActivity {
 
-    @Bind(R.id.test_select_to_find)
-    TextView mToFindView;
+	@Bind(R.id.test_select_to_find)
+	TextView mToFindView;
 
-    private static final List<Integer> ANSWERS = new ArrayList<>(6);
+	@Bind(R.id.test_select_answers)
+	LinearLayout answers;
 
-    static {
-        ANSWERS.add(R.id.test_select_answer_1);
-        ANSWERS.add(R.id.test_select_answer_2);
-        ANSWERS.add(R.id.test_select_answer_3);
-        ANSWERS.add(R.id.test_select_answer_4);
-        ANSWERS.add(R.id.test_select_answer_5);
-        ANSWERS.add(R.id.test_select_answer_6);
-    }
+	public TestSelectActivity() {
+		super(R.layout.activity_test_select);
+	}
 
-    public TestSelectActivity() {
-        super(R.layout.activity_test_select, ANSWERS.size());
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    @OnClick({R.id.test_select_answer_1, R.id.test_select_answer_2, R.id.test_select_answer_3, R.id.test_select_answer_4, R.id.test_select_answer_5, R.id.test_select_answer_6})
-    void onClickAnswers(View view) {
-        Button answerButton = (Button) view;
-        CharSequence testAnswer = answerButton.getText();
+		for (int i = 0; i < limit; i++) {
+			Button button = new Button(this);
+			answers.addView(button);
+			button.setOnClickListener(this::onClickAnswers);
+		}
+	}
 
-        validate(testAnswer);
-    }
+	void onClickAnswers(View view) {
+		Button answerButton = (Button) view;
+		CharSequence testAnswer = answerButton.getText();
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		validate(testAnswer);
+	}
 
-        if (data.getCount() < limit) {
-            finishTest();
-        }
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        int testIndex = new Random().nextInt(limit);
+		if (data.getCount() < limit) {
+			finishTest();
+		}
 
-        int index = 0;
-        Item item;
-        Button mResponseView;
-        String toFind = null;
-        while (data.moveToNext()) {
-            item = new Item(data);
+		int testIndex = new Random().nextInt(limit);
 
-            // AFFICHAGE
-            mResponseView = (Button) findViewById(ANSWERS.get(index));
-            String answer = null;
-            switch (typeTest) {
+		int index = 0;
+		Item item;
+		Button mResponseView;
+		String toFind = null;
+		while (data.moveToNext()) {
+			item = new Item(data);
 
-                case 0: // Kanji -> Hiragana
-                    answer = item.kana;
-                    break;
+			// AFFICHAGE
+			mResponseView = (Button) answers.getChildAt(index);
+			String answer = null;
+			switch (typeTest) {
 
-                case 1: // Hiragana -> Kanji
-                    if (item.kanji.contains("?")) {
-                        String[] kanjis = item.kanji.split("?");
-                        answer = kanjis[new Random().nextInt(2) - 1];
-                    } else
-                        answer = item.kanji;
-                    break;
+				case 0: // Kanji -> Hiragana
+					answer = item.kana;
+					break;
 
-                case 2: // Japanese -> French
-                    answer = item.input;
-                    break;
+				case 1: // Hiragana -> Kanji
+					if (item.kanji.contains("?")) {
+						String[] kanjis = item.kanji.split("?");
+						answer = kanjis[new Random().nextInt(2) - 1];
+					} else
+						answer = item.kanji;
+					break;
 
-                case 3: // French -> Japanese
-                    if (isDisplayKanji && StringUtils.isNotBlank(item.kanji)) {
-                        answer = item.kanji;
-                    } else {
-                        answer = item.kana;
-                    }
-                    break;
-            }
+				case 2: // Japanese -> French
+					answer = item.input;
+					break;
 
-            mResponseView.setText(answer);
+				case 3: // French -> Japanese
+					if (isDisplayKanji && StringUtils.isNotBlank(item.kanji)) {
+						answer = item.kanji;
+					} else {
+						answer = item.kana;
+					}
+					break;
+			}
 
-            // REPONSE
-            if (testIndex == index) {
-                idsDone.add(item.id);
-                currentDetails = item.details;
+			mResponseView.setText(answer);
 
-                switch (typeTest) {
-                    case 0: // Kanji -> Hiragana
-                        if (item.kanji.contains("?")) {
-                            String[] kanjis = item.kanji.split("?");
-                            toFind = kanjis[new Random().nextInt(2) - 1];
-                        } else
-                            toFind = item.kanji;
-                        break;
+			// REPONSE
+			if (testIndex == index) {
+				idsDone.add(item.id);
+				currentDetails = item.details;
 
-                    case 1: // Hiragana -> Kanji
-                        toFind = item.kana;
-                        break;
+				switch (typeTest) {
+					case 0: // Kanji -> Hiragana
+						if (item.kanji.contains("?")) {
+							String[] kanjis = item.kanji.split("?");
+							toFind = kanjis[new Random().nextInt(2) - 1];
+						} else
+							toFind = item.kanji;
+						break;
 
-                    case 2: // Japanese -> French
+					case 1: // Hiragana -> Kanji
+						toFind = item.kana;
+						break;
 
-                        if (isDisplayKanji && StringUtils.isNoneBlank(item.kanji)) {
-                            toFind = item.kanji;
-                        } else {
-                            toFind = item.kana;
-                        }
-                        break;
+					case 2: // Japanese -> French
 
-                    case 3: // French -> Japanese
-                        toFind = item.input;
-                        break;
-                }
+						if (isDisplayKanji && StringUtils.isNoneBlank(item.kanji)) {
+							toFind = item.kanji;
+						} else {
+							toFind = item.kana;
+						}
+						break;
+
+					case 3: // French -> Japanese
+						toFind = item.input;
+						break;
+				}
 
 
-                mToFindView.setText(toFind);
+				mToFindView.setText(toFind);
 
-                results.add(new Result(toFind, answer, false));
-            }
+				results.add(new Result(toFind, answer, false));
+			}
 
-            index++;
-        }
+			index++;
+		}
 
-        data.close();
+		data.close();
 
-        super.onLoadFinished(loader, data);
-    }
+		super.onLoadFinished(loader, data);
+	}
 
 
 }

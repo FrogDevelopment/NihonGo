@@ -29,7 +29,7 @@ public class TestInputActivity extends TestAbstractActivity {
     EditText answerView;
 
     public TestInputActivity() {
-        super(R.layout.activity_test_input, 1);
+        super(R.layout.activity_test_input);
     }
 
     @OnClick(R.id.test_input_validate_button)

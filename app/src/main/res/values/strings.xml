@@ -108,6 +108,8 @@
     <string name="param_type_selection">Select the type of test</string>
     <string name="param_method">Method</string>
     <string name="param_method_selection">Select the method of test</string>
+    <string name="param_nb_answers">Nb answers</string>
+    <string name="param_nb_answers_selection">2</string>
     <string name="param_quantity">Quantity</string>
     <string name="param_quantity_selection">Select the quantity of test</string>
     <string name="param_kanji_display">Display in Kanji</string>
@@ -127,6 +129,14 @@
     <string-array name="param_methods">
         <item>MCQ</item>
         <item>Write</item>
+    </string-array>
+
+    <string-array name="param_nb_answers" translatable="false">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="param_quantities" translatable="false">

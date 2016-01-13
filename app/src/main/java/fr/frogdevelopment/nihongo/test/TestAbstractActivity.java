@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewStub;
-import android.view.Window;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -49,26 +48,21 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	protected String[]     tags;
 	protected boolean      first;
 	protected List<String> idsDone;
+	protected int     limit;
 
 	protected ArrayList<Result> results;
 
 	protected String currentDetails;
 
 	private final   int     layout;
-	protected final int     limit;
 
-	protected TestAbstractActivity(int layout, int limit) {
+	protected TestAbstractActivity(int layout) {
 		this.layout = layout;
-		this.limit = limit;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
 		super.onCreate(savedInstanceState);
-
-		setProgressBarIndeterminate(true);
 
 		setContentView(R.layout.activity_test);
 		ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
@@ -87,14 +81,9 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		typeTest = bundle.getInt(TestParametersFragment.TYPE_TEST);
 		isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
 		tags = bundle.getStringArray("tags");
-
-		// Show the Up button in the action bar.
-		if (getActionBar() != null)
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		limit = bundle.getInt(TestParametersFragment.NB_ANSWER);
 
 		getLoaderManager().initLoader(LOADER_ID, bundle, this);
-
-		setProgressBarIndeterminateVisibility(false);
 
 		initToolbar();
 
@@ -113,14 +102,14 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (currentDetails != null) {
-			getMenuInflater().inflate(R.menu.test, menu);
-
-			MenuItem detailsMenuItem = menu.findItem(R.id.menu_test_detail);
-			detailsMenuItem.setVisible(StringUtils.isNoneBlank(currentDetails));
-
-			return true;
-		}
+//		if (currentDetails != null) {
+//			getMenuInflater().inflate(R.menu.test, menu);
+//
+//			MenuItem detailsMenuItem = menu.findItem(R.id.menu_test_detail);
+//			detailsMenuItem.setVisible(StringUtils.isNoneBlank(currentDetails));
+//
+//			return true;
+//		}
 
 		return false;
 	}
@@ -137,14 +126,14 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 //				validate("");
 //				return true;
 
-			case R.id.menu_test_detail:
-				new AlertDialog.Builder(this)
-						.setTitle(R.string.input_textView_details)
-						.setMessage(currentDetails)
-						.create()
-						.show();
-
-				return true;
+//			case R.id.menu_test_detail:
+//				new AlertDialog.Builder(this)
+//						.setTitle(R.string.input_textView_details)
+//						.setMessage(currentDetails)
+//						.create()
+//						.show();
+//
+//				return true;
 
 		}
 		return super.onOptionsItemSelected(item);
@@ -204,7 +193,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		invalidateOptionsMenu();
+//		invalidateOptionsMenu();
 	}
 
 	@Override
@@ -244,8 +233,6 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	}
 
 	protected void finishTest() {
-		setProgressBarIndeterminateVisibility(true);
-
 		finish();
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
