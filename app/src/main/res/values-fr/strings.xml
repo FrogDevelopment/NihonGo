@@ -100,7 +100,7 @@
     <string name="param_method">Méthode</string>
     <string name="param_method_selection">Sélectionner la méthode du test</string>
     <string name="param_nb_answers">Nb réponses</string>
-    <string name="param_nb_answers_selection">2</string>
+    <string name="param_nb_answers_selection">Sélectionner le nombre de réponse</string>
     <string name="param_quantity">Quantité</string>
     <string name="param_quantity_selection">Sélectionner la quantité pour le test</string>
     <string name="param_kanji_display">Afficher en Kanji</string>

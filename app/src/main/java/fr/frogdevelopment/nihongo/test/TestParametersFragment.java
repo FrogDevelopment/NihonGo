@@ -144,6 +144,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 					selectedMethod = which;
 					mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[which]);
 					mNbAnswers.setVisibility(selectedMethod == 0 ? View.VISIBLE : View.GONE); // display when QCM selected
+					mNbAnswersSelected.setText(nbAnswers);
 					if (selectedMethod == 1) { // when input selected, only 1 answer
 						nbAnswers = "1";
 					}
@@ -161,9 +162,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 				.setTitle(R.string.param_quantity_selection)
 				.setItems(R.array.param_nb_answers, (dialog, which) -> {
 					nbAnswers = getResources().getStringArray(R.array.param_nb_answers)[which];
-					mNbAnswersSelected.setText(selectedQuantity);
-
-					startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+					mNbAnswersSelected.setText(nbAnswers);
 				})
 				.create()
 				.show();
