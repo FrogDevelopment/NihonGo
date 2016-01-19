@@ -13,8 +13,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 
-import fr.frogdevelopment.nihongo.Preferences;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class WarningIMEDialog extends DialogFragment {
 
@@ -36,11 +37,7 @@ public class WarningIMEDialog extends DialogFragment {
 		builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
 			final CheckBox remember = (CheckBox) dialogView.findViewById(R.id.warningCB);
 
-			SharedPreferences settings = getActivity().getSharedPreferences(Preferences.PREFS_NAME.value, 0);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean(Preferences.REMEMBER_WARNING_IME.value, remember.isChecked());
-			// Commit the edits!
-			editor.apply();
+			PreferencesHelper.getInstance(getActivity()).saveBoolean(Preferences.REMEMBER_WARNING_IME, remember.isChecked());
 
 			getDialog().dismiss();
 		});

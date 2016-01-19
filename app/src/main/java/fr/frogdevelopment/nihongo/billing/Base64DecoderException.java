@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.lessons.billing;
+package fr.frogdevelopment.nihongo.billing;
 
 /**
  * Exception thrown when encountering an invalid Base64 input character.

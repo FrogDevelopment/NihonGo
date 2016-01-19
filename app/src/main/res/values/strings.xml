@@ -195,6 +195,8 @@
     <!-- ******* -->
     <!-- LESSONS -->
     <!-- ******* -->
+    <string name="no_connection">No connection</string>
+    <string name="lesson_present"> - present</string>
     <string name="lesson_already_present">Pack already fetched</string>
     <string name="lesson_continue">Continue ?</string>
     <string name="lesson_download_success">\'%s\' successfully downloaded</string>

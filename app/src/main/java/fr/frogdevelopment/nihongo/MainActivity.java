@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -36,6 +35,8 @@ import fr.frogdevelopment.nihongo.dico.DicoFragment;
 import fr.frogdevelopment.nihongo.kana.KanaViewPage;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
 import fr.frogdevelopment.nihongo.options.ParametersFragment;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import fr.frogdevelopment.nihongo.review.ReviewParametersFragment;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
 
@@ -85,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		if (isNoJapanIME) {
-			SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME.value, 0);
-			boolean rememberWarning = settings.getBoolean(Preferences.REMEMBER_WARNING_IME.value, false);
+			boolean rememberWarning = PreferencesHelper.getInstance(this).getBoolean(Preferences.REMEMBER_WARNING_IME);
 			if (!rememberWarning) {
 				WarningIMEDialog.show(getFragmentManager());
 			}

@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.lessons.billing;
+package fr.frogdevelopment.nihongo.billing;
 
 /**
  * Represents the result of an in-app billing operation.

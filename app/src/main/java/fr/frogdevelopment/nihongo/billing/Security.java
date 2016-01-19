@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.lessons.billing;
+package fr.frogdevelopment.nihongo.billing;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -53,7 +53,7 @@ public class Security {
     }
 
     /**
-     * Generates a PublicKey instance from a string containing the
+     * Generates a PUBLIC_KEY instance from a string containing the
      * Base64-encoded public key.
      *
      * @param encodedPublicKey Base64-encoded public key

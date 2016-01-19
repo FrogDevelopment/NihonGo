@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import fr.frogdevelopment.nihongo.R;
 
 public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
 
@@ -58,16 +59,13 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         LessonsFragment.Lesson item = getItem(position);
         String title = item.title;
         if (item.isPresent) {
-            title += " - Installé";
-            holder.text.setTypeface(holder.text.getTypeface(), Typeface.BOLD);
-        } else if (item.isBought) {
-            title += " - Acheté";
+            title += getContext().getString(R.string.lesson_present);
             holder.text.setTypeface(holder.text.getTypeface(), Typeface.ITALIC);
+            holder.text.setClickable(false);
         } else {
-            title += " - " + item.price;
-            holder.text.setTypeface(holder.text.getTypeface(), Typeface.NORMAL);
+            holder.text.setTypeface(holder.text.getTypeface(), Typeface.BOLD);
+            holder.text.setClickable(true);
         }
-
         holder.text.setText(title);
 
         return convertView;

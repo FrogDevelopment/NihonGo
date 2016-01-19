@@ -2,7 +2,7 @@
  * Copyright (c) Frog Development 2015.
  */
 
-package fr.frogdevelopment.nihongo.lessons.billing;
+package fr.frogdevelopment.nihongo.billing;
 
 // This code was converted from code at http://iharder.sourceforge.net/base64/
 // Lots of extraneous features were removed.
