@@ -8,7 +8,7 @@ public enum Preferences {
 
     REMEMBER_WARNING_IME("rememberWarningIME"),
     PACKS("packs"),
-    NO_ADVERTISING("sku_no_advertissing");
+    NO_ADVERTISING("no_advertising");
 
     public final String code;
 

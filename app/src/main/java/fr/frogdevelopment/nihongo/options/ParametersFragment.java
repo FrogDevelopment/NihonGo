@@ -6,6 +6,7 @@ package fr.frogdevelopment.nihongo.options;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,8 +22,10 @@ import java.util.Collections;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import fr.frogdevelopment.nihongo.BuildConfig;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.billing.FIXME;
+import fr.frogdevelopment.nihongo.billing.IabBroadcastReceiver;
 import fr.frogdevelopment.nihongo.billing.IabHelper;
 import fr.frogdevelopment.nihongo.billing.IabResult;
 import fr.frogdevelopment.nihongo.billing.Purchase;
@@ -32,166 +35,206 @@ import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 // fixme utiliser les préférences XML ? http://developer.android.com/guide/topics/ui/settings.html
-public class ParametersFragment extends Fragment {
+// http://developer.android.com/training/in-app-billing/preparing-iab-app.html
+public class ParametersFragment extends Fragment implements IabBroadcastReceiver.IabBroadcastListener{
 
-    private static final String LOG_TAG = "NIHON_GO";
+	private static final String LOG_TAG = "NIHON_GO";
 
-    @Bind(R.id.options_no_advertising_button)
-    Button mNoAdvertisingButton;
+	@Bind(R.id.options_no_advertising_button)
+	Button mNoAdvertisingButton;
 
-    @Bind(R.id.options_no_advertising_text)
-    TextView mNoAdvertisingText;
+	@Bind(R.id.options_no_advertising_text)
+	TextView mNoAdvertisingText;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_options_parameters, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		View view = inflater.inflate(R.layout.fragment_options_parameters, container, false);
 
-        ButterKnife.bind(this, view);
+		ButterKnife.bind(this, view);
 
-        boolean noAdvertising = PreferencesHelper.getInstance(getContext()).getBoolean(Preferences.NO_ADVERTISING);
-        manageNoAdvertisingViews(noAdvertising);
+		boolean noAdvertising = PreferencesHelper.getInstance(getContext()).getBoolean(Preferences.NO_ADVERTISING);
+		manageNoAdvertisingViews(noAdvertising);
 
-        return view;
-    }
+		// fixme gérer cas pas de connexion
+		initIabHelper();
 
-    private void manageNoAdvertisingViews(boolean noAdvertising) {
-        mNoAdvertisingButton.setEnabled(!noAdvertising);
-        mNoAdvertisingText.setText(noAdvertising ? R.string.options_no_advertising_purchased : R.string.options_no_advertising_not_purchased);
-    }
+		return view;
+	}
 
-    @OnClick(R.id.options_erase)
-    void onClickErase() {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(R.string.options_erase_data_confirmation)
-                .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                    getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
+	private void manageNoAdvertisingViews(boolean noAdvertising) {
+		mNoAdvertisingButton.setEnabled(!noAdvertising);
+		mNoAdvertisingText.setText(noAdvertising ? R.string.options_no_advertising_purchased : R.string.options_no_advertising_not_purchased);
+	}
 
-                    PreferencesHelper.getInstance(getContext()).saveString(Preferences.PACKS, "");
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
-                .show();
-    }
+	@OnClick(R.id.options_erase)
+	void onClickErase() {
+		new AlertDialog.Builder(getActivity())
+				.setMessage(R.string.options_erase_data_confirmation)
+				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+					getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
 
-    @OnClick(R.id.options_reset_favorite)
-    void onClickResetFavorite() {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(R.string.options_erase_data_confirmation)
-                .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                    final ContentValues values = new ContentValues();
-                    values.put(DicoContract.FAVORITE, "0");
-                    getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
-                .show();
-    }
+					PreferencesHelper.getInstance(getContext()).saveString(Preferences.PACKS, "");
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.create()
+				.show();
+	}
 
-    @OnClick(R.id.options_reset_learned)
-    void onClickResetLearned() {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(R.string.options_erase_data_confirmation)
-                .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                    final ContentValues values = new ContentValues();
-                    values.put(DicoContract.LEARNED, "0");
-                    getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_LEARNED, values, null, null);
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
-                .show();
-    }
+	@OnClick(R.id.options_reset_favorite)
+	void onClickResetFavorite() {
+		new AlertDialog.Builder(getActivity())
+				.setMessage(R.string.options_erase_data_confirmation)
+				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+					final ContentValues values = new ContentValues();
+					values.put(DicoContract.FAVORITE, "0");
+					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.create()
+				.show();
+	}
+
+	@OnClick(R.id.options_reset_learned)
+	void onClickResetLearned() {
+		new AlertDialog.Builder(getActivity())
+				.setMessage(R.string.options_erase_data_confirmation)
+				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+					final ContentValues values = new ContentValues();
+					values.put(DicoContract.LEARNED, "0");
+					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_LEARNED, values, null, null);
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.create()
+				.show();
+	}
 
 
-    // The helper object
-    private IabHelper mHelper;
+	// The helper object
+	private IabHelper mHelper;
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mHelper != null) mHelper.dispose();
-        mHelper = null;
-    }
+	// Provides purchase notification while this app is running
+	IabBroadcastReceiver mBroadcastReceiver;
 
-    @OnClick(R.id.options_no_advertising_restore)
-    void checkPurchase() {
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mHelper != null) mHelper.dispose();
+		mHelper = null;
+	}
 
-        // Create the helper, passing it our context and the public key to verify signatures with
-        Log.d(LOG_TAG, "Creating IAB helper.");
-        mHelper = new IabHelper(getActivity(), FIXME.PUBLIC_KEY.value);
+	private void initIabHelper() {
 
-        // enable debug logging (for a production application, you should set this to false).
-        mHelper.enableDebugLogging(false);
+		// Create the helper, passing it our context and the public key to verify signatures with
+		Log.d(LOG_TAG, "Creating IAB helper.");
+		mHelper = new IabHelper(getActivity(), FIXME.PUBLIC_KEY.value);
 
-        final String sku = Preferences.NO_ADVERTISING.code;
+		// enable debug logging (for a production application, you should set this to false).
+		mHelper.enableDebugLogging(BuildConfig.DEBUG);
 
-        // Start setup. This is asynchronous and the specified listener will be called once setup completes.
-        Log.d(LOG_TAG, "Starting setup.");
-        mHelper.startSetup(result -> {
-            Log.d(LOG_TAG, "Setup finished.");
+		// Start setup. This is asynchronous and the specified listener will be called once setup completes.
+		Log.d(LOG_TAG, "Starting setup.");
+		mHelper.startSetup(result -> {
+			Log.d(LOG_TAG, "Setup finished.");
 
-            if (!result.isSuccess()) {
-                // Oh noes, there was a problem.
-                Log.e(LOG_TAG, "**** TrivialDrive Error: Problem setting up in-app billing: " + result);
-                return;
-            }
+			if (!result.isSuccess()) {
+				// Oh no, there was a problem.
+				complain("Problem setting up in-app billing: " + result);
+				return;
+			}
 
-            // Have we been disposed of in the meantime? If so, quit.
-            if (mHelper == null) return;
+			// Have we been disposed of in the meantime? If so, quit.
+			if (mHelper == null) return;
 
-            // IAB is fully set up. Now, let's get an inventory of stuff we own.
-            Log.d(LOG_TAG, "Setup successful. Querying inventory.");
-            mHelper.queryInventoryAsync(true, Collections.singletonList(sku), (result1, inventory) -> {
-                if (result1.isFailure()) {
-                    // fixme handle error
-                    return;
-                }
+			// Important: Dynamically register for broadcast messages about updated purchases.
+			// We register the receiver here instead of as a <receiver> in the Manifest
+			// because we always call getPurchases() at startup, so therefore we can ignore
+			// any broadcasts sent while the app isn't running.
+			// Note: registering this listener in an Activity is a bad idea, but is done here
+			// because this is a SAMPLE. Regardless, the receiver must be registered after
+			// IabHelper is setup, but before first call to getPurchases().
+			mBroadcastReceiver = new IabBroadcastReceiver(ParametersFragment.this);
+			IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+			getContext().registerReceiver(mBroadcastReceiver, broadcastFilter);
 
-                // update the UI
-                boolean noAdvertising = inventory.hasPurchase(sku);
-                PreferencesHelper.getInstance(getContext()).saveBoolean(Preferences.NO_ADVERTISING, noAdvertising);
-                manageNoAdvertisingViews(noAdvertising);
-            });
-        });
-    }
+			// IAB is fully set up. Now, let's get an inventory of stuff we own.
+			Log.d(LOG_TAG, "Setup successful.");
+			checkPurchase();
+		});
+	}
 
-    @OnClick(R.id.options_no_advertising_button)
-    void buyNoAdvertising() {
-        if (mHelper != null) mHelper.flagEndAsync();
+	@OnClick(R.id.options_no_advertising_restore)
+	void checkPurchase() {
+		Log.d(LOG_TAG, "Querying inventory.");
+		String sku = Preferences.NO_ADVERTISING.code;
+		mHelper.queryInventoryAsync(true, Collections.singletonList(sku), (result1, inventory) -> {
+			if (result1.isFailure()) {
+				// fixme handle error
+				return;
+			}
 
-        final String sku = Preferences.NO_ADVERTISING.code;
+			// update the UI
+			boolean noAdvertising = inventory.hasPurchase(sku);
+			PreferencesHelper.getInstance(getContext()).saveBoolean(Preferences.NO_ADVERTISING, noAdvertising);
+			manageNoAdvertisingViews(noAdvertising);
+		});
+	}
 
-        mHelper.launchPurchaseFlow(getActivity(), sku, 10001, new IabHelper.OnIabPurchaseFinishedListener() {
-            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-                if (result.isFailure()) {
-                    Log.d(LOG_TAG, "Error purchasing: " + result);
-                    // fixme meilleur message
-                    Toast.makeText(getActivity(), "Erreur ?", Toast.LENGTH_LONG).show();
-                    return;
-                }
+	@OnClick(R.id.options_no_advertising_button)
+	void buyNoAdvertising() {
+		if (mHelper != null) mHelper.flagEndAsync();
 
-                // fixme
-                // Security Recommendation: When you receive the purchase response from Google Play, make sure to check the returned data signature, the orderId,
-                // and the developerPayload string in the Purchase object to make sure that you are getting the expected values.
-                // You should verify that the orderId is a unique value that you have not previously processed,
-                // and the developerPayload string matches the token that you sent previously with the purchase request.
-                // As a further security precaution, you should perform the verification on your own secure server.
-                // purchase.getOrderId();
+		final String sku = Preferences.NO_ADVERTISING.code;
 
-                if (!FIXME.DEVELOPER_PAYLOAD.value.equals(purchase.getDeveloperPayload())) {
-                    // fixme meilleur message
-                    Toast.makeText(getActivity(), "Erreur ?", Toast.LENGTH_LONG).show();
-                    return;
-                }
+		mHelper.launchPurchaseFlow(getActivity(), sku, 10001, new IabHelper.OnIabPurchaseFinishedListener() {
+			public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+				if (result.isFailure()) {
+					Log.d(LOG_TAG, "Error purchasing: " + result);
+					// fixme meilleur message
+					Toast.makeText(getActivity(), "Erreur ?", Toast.LENGTH_LONG).show();
+					return;
+				}
 
-                if (purchase.getSku().equals(sku)) {
-                    PreferencesHelper.getInstance(getContext()).saveBoolean(Preferences.NO_ADVERTISING, true);
-                    manageNoAdvertisingViews(true);
-                } else {
-                    // fixme meilleur message
-                    Toast.makeText(getActivity(), "Erreur ?", Toast.LENGTH_LONG).show();
-                }
-            }
-        }, FIXME.DEVELOPER_PAYLOAD.value);
-    }
+				// fixme
+				// Security Recommendation: When you receive the purchase response from Google Play, make sure to check the returned data signature, the orderId,
+				// and the developerPayload string in the Purchase object to make sure that you are getting the expected values.
+				// You should verify that the orderId is a unique value that you have not previously processed,
+				// and the developerPayload string matches the token that you sent previously with the purchase request.
+				// As a further security precaution, you should perform the verification on your own secure server.
+				// purchase.getOrderId();
+
+				if (!FIXME.DEVELOPER_PAYLOAD.value.equals(purchase.getDeveloperPayload())) {
+					// fixme meilleur message
+					Toast.makeText(getActivity(), "Erreur ?", Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				if (purchase.getSku().equals(sku)) {
+					PreferencesHelper.getInstance(getContext()).saveBoolean(Preferences.NO_ADVERTISING, true);
+					manageNoAdvertisingViews(true);
+				} else {
+					// fixme meilleur message
+					Toast.makeText(getActivity(), "Erreur ?", Toast.LENGTH_LONG).show();
+				}
+			}
+		}, FIXME.DEVELOPER_PAYLOAD.value);
+	}
+
+	void complain(String message) {
+		Log.e(LOG_TAG, "**** TrivialDrive Error: " + message);
+		alert("Error: " + message);
+	}
+
+	void alert(String message) {
+		AlertDialog.Builder bld = new AlertDialog.Builder(getContext());
+		bld.setMessage(message);
+		bld.setNeutralButton("OK", null);
+		Log.d(LOG_TAG, "Showing alert dialog: " + message);
+		bld.create().show();
+	}
+
+	@Override
+	public void receivedBroadcast() {
+
+	}
 }

@@ -27,7 +27,7 @@
         android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray" />
 
-    <TextView
+    <Button
         android:id="@+id/options_erase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
-    <TextView
+    <Button
         android:id="@+id/options_reset_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
-    <TextView
+    <Button
         android:id="@+id/options_reset_learned"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,9 +77,9 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <TextView
+        <Button
             android:id="@+id/options_no_advertising_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/options_no_advertising_purchase"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -94,7 +94,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <Button
         android:id="@+id/options_no_advertising_restore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,46 +102,5 @@
         android:text="@string/options_restore_purchase"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:paddingTop="15dp"
-        android:text="@string/options_advertising"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
-
-    <LinearLayout
-        android:id="@+id/options_advertising"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/options_no_advertising_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/options_no_advertising_purchase"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/options_no_advertising_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/options_no_advertising_purchased"
-            android:textSize="13sp" />
-
-    </LinearLayout>
-
 
 </LinearLayout>

@@ -24,6 +24,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -68,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		handleIntent(getIntent());
+
+		// PUB
+		AdView mAdView = (AdView) findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder()
+				.addTestDevice("C0FB3332A7EBAEF3452C4C311F32D12B")
+				.build();
+		mAdView.loadAd(adRequest);
 	}
 
 	private void initIME() {
