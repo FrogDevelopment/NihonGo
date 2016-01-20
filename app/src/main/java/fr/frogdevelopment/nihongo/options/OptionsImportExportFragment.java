@@ -41,8 +41,6 @@ public class OptionsImportExportFragment extends Fragment {
     EditText mNameExportView;
     @Bind(R.id.options_export_select)
     Button   mButtonExport;
-    @Bind(R.id.options_erase)
-    Button   mButtonErase;
 
     public OptionsImportExportFragment() {
         // Required empty public constructor
@@ -159,10 +157,5 @@ public class OptionsImportExportFragment extends Fragment {
         }
 
         return null;
-    }
-
-    @OnClick(R.id.options_erase)
-    void onClickErase() {
-        getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
     }
 }

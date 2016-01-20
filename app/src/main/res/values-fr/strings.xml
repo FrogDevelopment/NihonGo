@@ -182,13 +182,26 @@
     <string name="options_import">Importer les données</string>
     <string name="options_import_success">Import réussi</string>
     <string name="options_import_failed">Import échoué</string>
-    <string name="options_erase">Suppression des données</string>
-    <string name="options_erase_btn">Effacer les données</string>
-    <string name="options_erase_confirmation">Êtes vous sûre ?</string>
-    <string name="options_erase_success">Suppression réussie</string>
     <string name="options_file_chooser_get_file_manager">Veuillez installer un gestionnaire de fichier.</string>
     <string name="options_file_chooser_prompt">Choississez un fichier</string>
     <string name="options_error_fetch_data">Une erreur est survenue pendant la récupération des données.</string>
+
+    <string name="options_data">Données</string>
+    <string name="options_erase_data_btn">Supprimer les données</string>
+    <string name="options_erase_data_confirmation">Vous êtes sur le point de supprimer toutes vos données, continuer ?</string>
+    <string name="options_erase_data_success">Suppression réussie</string>
+    <string name="options_reset_favorite_btn">Réinitaliser les Favoris</string>
+    <string name="options_reset_favorite_confirmation">Vous êtes sur le point de réinitialiser vos Favoris, continuer ?</string>
+    <string name="options_reset_favorite_success">Réinitalisation réussie</string>
+    <string name="options_reset_learned_btn">Réinitaliser les Appris</string>
+    <string name="options_reset_learned_erase_confirmation">Vous êtes sur le point de réinitialiser vos Appris, continuer ?</string>
+    <string name="options_reset_learned_erase_success">Réinitalisation réussie</string>
+    <string name="options_advertising">Publicité</string>
+    <string name="options_no_advertising_purchase">Enlever la publicité</string>
+    <string name="options_no_advertising_purchased">Activé. Merci de votre soutient</string>
+    <string name="options_no_advertising_not_purchased">Inactivé</string>
+    <string name="options_restore_purchase">Restaurer mes achats</string>
+
 
     <string name="closing_activity_title">Sortie</string>
     <string name="closing_activity_message">Êtes vous sûr de vouloir quitter ?</string>

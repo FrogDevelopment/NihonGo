@@ -80,24 +80,4 @@
         android:text="@string/options_import"
         android:layout_marginBottom="30dp"/>
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="Suppression des données"/>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray"/>
-
-    <Button
-        android:id="@+id/options_erase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/options_erase"/>
-
-
 </LinearLayout>

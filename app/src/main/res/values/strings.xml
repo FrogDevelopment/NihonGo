@@ -210,14 +210,25 @@
     <string name="options_import">Import data</string>
     <string name="options_import_success">Import success</string>
     <string name="options_import_failed">Import failed</string>
-    <string name="options_erase">Erasing data</string>
-    <string name="options_erase_btn">Erase data</string>
-    <string name="options_erase_confirmation">Are you sure ?</string>
-    <string name="options_erase_success">Erase success</string>
     <string name="options_file_chooser_get_file_manager">Please install a File Manager.</string>
     <string name="options_file_chooser_prompt">Select a File to Upload</string>
     <string name="options_error_fetch_data">An error occurred while fetching data.</string>
 
+    <string name="options_data">Data</string>
+    <string name="options_erase_data_btn">Erase data</string>
+    <string name="options_erase_data_confirmation">You're going to erase all your data, continue ?</string>
+    <string name="options_erase_data_success">Erase success</string>
+    <string name="options_reset_favorite_btn">Reset Favorite</string>
+    <string name="options_reset_favorite_confirmation">You're going to reset your Favorites, continue ?</string>
+    <string name="options_reset_favorite_success">Reset success</string>
+    <string name="options_reset_learned_btn">Reset Learned</string>
+    <string name="options_reset_learned_erase_confirmation">You're going to reset your Learned, continue ?</string>
+    <string name="options_reset_learned_erase_success">Reset success</string>
+    <string name="options_advertising">Advertising</string>
+    <string name="options_no_advertising_purchase">Remove advertising</string>
+    <string name="options_no_advertising_purchased">Actived. Thanks for support</string>
+    <string name="options_no_advertising_not_purchased">Inactived</string>
+    <string name="options_restore_purchase">Restore my purchases</string>
 
     <string name="closing_activity_title">Exit</string>
     <string name="closing_activity_message">Are you sure you want to exit ?</string>
