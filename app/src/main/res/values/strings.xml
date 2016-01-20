@@ -5,6 +5,8 @@
 
 <resources>
 
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="app_name" translatable="false">Nihon Go !</string>
 
     <!-- WARNING IME -->
@@ -216,18 +218,18 @@
 
     <string name="options_data">Data</string>
     <string name="options_erase_data_btn">Erase data</string>
-    <string name="options_erase_data_confirmation">You're going to erase all your data, continue ?</string>
+    <string name="options_erase_data_confirmation">You\'re going to erase all your data, continue ?</string>
     <string name="options_erase_data_success">Erase success</string>
     <string name="options_reset_favorite_btn">Reset Favorite</string>
-    <string name="options_reset_favorite_confirmation">You're going to reset your Favorites, continue ?</string>
+    <string name="options_reset_favorite_confirmation">You\'re going to reset your Favorites, continue ?</string>
     <string name="options_reset_favorite_success">Reset success</string>
     <string name="options_reset_learned_btn">Reset Learned</string>
-    <string name="options_reset_learned_erase_confirmation">You're going to reset your Learned, continue ?</string>
+    <string name="options_reset_learned_erase_confirmation">You\'re going to reset your Learned, continue ?</string>
     <string name="options_reset_learned_erase_success">Reset success</string>
     <string name="options_advertising">Advertising</string>
     <string name="options_no_advertising_purchase">Remove advertising</string>
-    <string name="options_no_advertising_purchased">Actived. Thanks for support</string>
-    <string name="options_no_advertising_not_purchased">Inactived</string>
+    <string name="options_no_advertising_purchased">Active. Thanks for support</string>
+    <string name="options_no_advertising_not_purchased">Inactive</string>
     <string name="options_restore_purchase">Restore my purchases</string>
 
     <string name="closing_activity_title">Exit</string>
