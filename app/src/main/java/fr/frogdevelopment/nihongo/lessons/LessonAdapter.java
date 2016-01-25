@@ -61,10 +61,8 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         if (item.isPresent) {
             title += getContext().getString(R.string.lesson_present);
             holder.text.setTypeface(holder.text.getTypeface(), Typeface.ITALIC);
-            holder.text.setClickable(false);
         } else {
             holder.text.setTypeface(holder.text.getTypeface(), Typeface.BOLD);
-            holder.text.setClickable(true);
         }
         holder.text.setText(title);
 

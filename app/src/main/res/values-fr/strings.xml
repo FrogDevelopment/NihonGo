@@ -165,6 +165,7 @@
     <!-- ******* -->
     <!-- LESSONS -->
     <!-- ******* -->
+    <string name="lesson_tag">Leçon </string>
     <string name="no_connection">Pas de connexion</string>
     <string name="lesson_present"> - présent</string>
     <string name="lesson_already_present">Pack déjà récupéré</string>

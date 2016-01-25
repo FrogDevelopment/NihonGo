@@ -23,6 +23,7 @@ public class Item implements Row, Parcelable {
 	public final String kana;
 	public final String tags;
 	public final String details;
+	public final String example;
 	public       String favorite;
 	public       String learned;
 
@@ -50,6 +51,7 @@ public class Item implements Row, Parcelable {
 		kana = cursor.getString(DicoContract.INDEX_KANA);
 		tags = cursor.getString(DicoContract.INDEX_TAGS);
 		details = cursor.getString(DicoContract.INDEX_DETAILS);
+		example = cursor.getString(DicoContract.INDEX_EXAMPLE);
 		favorite = cursor.getString(DicoContract.INDEX_FAVORITE);
 		learned = cursor.getString(DicoContract.INDEX_LEARNED);
 	}
@@ -65,6 +67,7 @@ public class Item implements Row, Parcelable {
 		out.writeString(kanji);
 		out.writeString(kana);
 		out.writeString(details);
+		out.writeString(example);
 		out.writeString(tags);
 		out.writeString(favorite);
 		out.writeString(learned);
@@ -87,6 +90,7 @@ public class Item implements Row, Parcelable {
 		kanji = in.readString();
 		kana = in.readString();
 		details = in.readString();
+		example = in.readString();
 		tags = in.readString();
 		favorite = in.readString();
 		learned = in.readString();
@@ -116,6 +120,7 @@ public class Item implements Row, Parcelable {
 		args.putString(DicoContract.KANA, kana);
 		args.putString(DicoContract.TAGS, tags);
 		args.putString(DicoContract.DETAILS, details);
+		args.putString(DicoContract.EXAMPLE, example);
 		args.putString(DicoContract.FAVORITE, favorite);
 		args.putString(DicoContract.LEARNED, learned);
 

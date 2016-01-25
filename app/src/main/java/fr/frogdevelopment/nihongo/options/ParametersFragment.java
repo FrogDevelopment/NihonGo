@@ -76,7 +76,7 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
 
-                    PreferencesHelper.getInstance(getContext()).saveString(Preferences.PACKS, "");
+                    PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, "");
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()

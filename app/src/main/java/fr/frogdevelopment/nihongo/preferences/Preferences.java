@@ -7,7 +7,7 @@ package fr.frogdevelopment.nihongo.preferences;
 public enum Preferences {
 
     REMEMBER_WARNING_IME("rememberWarningIME"),
-    PACKS("packs"),
+    LESSONS("lessons"),
     NO_ADVERTISING("no_advertising");
 
     public final String code;
