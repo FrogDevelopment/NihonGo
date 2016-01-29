@@ -13,8 +13,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -46,6 +49,7 @@ import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 import fr.frogdevelopment.nihongo.ConnectionHelper;
+import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -77,8 +81,11 @@ public class LessonsFragment extends ListFragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+
+		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
 
 		myLocale = Locale.getDefault().toString();
 		if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
@@ -86,6 +93,8 @@ public class LessonsFragment extends ListFragment {
 		}
 
 		new TestConnectionTask(this).execute();
+
+		return rootView;
 	}
 
 	private class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
@@ -105,14 +114,12 @@ public class LessonsFragment extends ListFragment {
 		protected void onPostExecute(Boolean result) {
 			if (result) {
 				reference.get().getAvailableProducts();
-			} else {
-				reference.get().setEmptyText(getString(R.string.no_connection));
 			}
 		}
 	}
 
 	private void inProgress(boolean wait) {
-		getActivity().setProgressBarIndeterminateVisibility(wait);
+		((MainActivity)getActivity()).showLoading(wait);
 		getListView().setEnabled(!wait);
 	}
 

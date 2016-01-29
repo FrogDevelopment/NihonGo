@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
 	@Bind(R.id.toolbar)
 	Toolbar toolbar;
+
+	@Bind(R.id.progress_spinner)
+	ProgressBar progressBar;
 
 	private ActionBarDrawerToggle mDrawerToggle;
 
@@ -277,6 +281,10 @@ public class MainActivity extends AppCompatActivity {
 		CURRENT_VIEW = -1;
 		onSearch = false;
 		super.onDestroy();
+	}
+
+	public void showLoading(boolean show) {
+		progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
 	}
 
 	// ************************************************************ \\
