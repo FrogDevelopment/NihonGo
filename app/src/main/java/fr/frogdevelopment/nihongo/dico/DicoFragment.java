@@ -26,7 +26,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -52,7 +51,7 @@ import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.
 import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.URI_SEARCH_WORD;
 import static fr.frogdevelopment.nihongo.dico.DicoAdapter.ViewHolder;
 
-public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor>, OnTouchListener {
+public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_ID = 100;
 
@@ -76,7 +75,6 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_dico, container, false);
 
 		ButterKnife.bind(this, rootView);
-		mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
 
 		getLoaderManager().initLoader(LOADER_ID, getArguments(), this);
 		int resource;
@@ -138,8 +136,10 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		getListView().setOnTouchListener(this);
+		GestureDetector mGestureDetector = new GestureDetector(getContext(), gestureListener);
+		getListView().setOnTouchListener((v, event) -> mGestureDetector.onTouchEvent(event));
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setMultiChoiceModeListener(multiChoiceListener);
 		getListView().setOnItemLongClickListener((parent, view1, position, id) -> {
 			if (dicoAdapter.isLetterHeader(position)) {
 				return true;
@@ -147,65 +147,6 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 			((ListView) parent).setItemChecked(position, ((ListView) parent).isItemChecked(position));
 			return false;
-		});
-
-		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
-
-			private int rowSelectedNumber = 0;
-			final private Set<Integer> selectedRows = new HashSet<>();
-
-			@Override
-			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				getActivity().getMenuInflater().inflate(R.menu.dico_context, menu);
-				isContextActionBar = true;
-				return true;
-			}
-
-			@Override
-			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				menu.findItem(R.id.action_update).setVisible(rowSelectedNumber == 1);
-				return true;
-			}
-
-			@Override
-			public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
-				switch (item.getItemId()) {
-					case R.id.action_delete:
-						onDelete(actionMode, selectedRows);
-						break;
-
-					case R.id.action_update:
-						onUpdate(selectedRows.iterator().next());
-						actionMode.finish();
-						break;
-
-				}
-				return false;
-			}
-
-			@Override
-			public void onDestroyActionMode(ActionMode mode) {
-				rowSelectedNumber = 0;
-				selectedRows.clear();
-				isContextActionBar = false;
-			}
-
-			@Override
-			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-				if (dicoAdapter.isLetterHeader(position)) {
-					return;
-				}
-
-				if (checked) {
-					rowSelectedNumber++;
-					selectedRows.add(position);
-				} else {
-					selectedRows.remove(position);
-					rowSelectedNumber--;
-				}
-				mode.setTitle(getResources().getQuantityString(R.plurals.action_selection, rowSelectedNumber, rowSelectedNumber));
-				mode.invalidate();
-			}
 		});
 
 		super.onViewCreated(view, savedInstanceState);
@@ -314,14 +255,67 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				.show();
 	}
 
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return mGestureDetector.onTouchEvent(event);
-	}
+	private MultiChoiceModeListener multiChoiceListener = new MultiChoiceModeListener() {
 
-	private GestureDetector mGestureDetector;
+		private int rowSelectedNumber = 0;
+		final private Set<Integer> selectedRows = new HashSet<>();
 
-	private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			getActivity().getMenuInflater().inflate(R.menu.dico_context, menu);
+			isContextActionBar = true;
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			menu.findItem(R.id.action_update).setVisible(rowSelectedNumber == 1);
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.action_delete:
+					onDelete(actionMode, selectedRows);
+					break;
+
+				case R.id.action_update:
+					onUpdate(selectedRows.iterator().next());
+					actionMode.finish();
+					break;
+
+			}
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			rowSelectedNumber = 0;
+			selectedRows.clear();
+			isContextActionBar = false;
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+			if (dicoAdapter.isLetterHeader(position)) {
+				return;
+			}
+
+			if (checked) {
+				rowSelectedNumber++;
+				selectedRows.add(position);
+			} else {
+				selectedRows.remove(position);
+				rowSelectedNumber--;
+			}
+			mode.setTitle(getResources().getQuantityString(R.plurals.action_selection, rowSelectedNumber, rowSelectedNumber));
+			mode.invalidate();
+		}
+	};
+
+
+	private GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
 
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent event) {
@@ -395,5 +389,5 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 			}
 			return false;
 		}
-	}
+	};
 }

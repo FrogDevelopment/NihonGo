@@ -13,9 +13,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -42,9 +46,11 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
@@ -76,6 +82,7 @@ public class LessonsFragment extends ListFragment {
 	private String myLocale;
 
 	private Set<String> lessonsDownloaded;
+	final private Map<String, Lesson> selectedLessons = new HashMap<>();
 
 	public LessonsFragment() {
 	}
@@ -83,7 +90,6 @@ public class LessonsFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 
 		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
 
@@ -95,6 +101,12 @@ public class LessonsFragment extends ListFragment {
 		new TestConnectionTask(this).execute();
 
 		return rootView;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setMultiChoiceModeListener(multiChoiceListener);
 	}
 
 	private class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
@@ -119,7 +131,7 @@ public class LessonsFragment extends ListFragment {
 	}
 
 	private void inProgress(boolean wait) {
-		((MainActivity)getActivity()).showLoading(wait);
+		((MainActivity) getActivity()).showLoading(wait);
 		getListView().setEnabled(!wait);
 	}
 
@@ -169,22 +181,34 @@ public class LessonsFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-
 		final Lesson lesson = adapter.getItem(position);
-		if (lesson.isPresent) {
+		selectedLessons.put(lesson.code, lesson);
+		checkBeforeDownloadLessons();
+	}
+
+	private void checkBeforeDownloadLessons() {
+		boolean onPresent = false;
+		for (Lesson lesson : selectedLessons.values()) {
+			if (lesson.isPresent) {
+				onPresent = true;
+				break;
+			}
+		}
+
+		if (onPresent) {
 			new AlertDialog.Builder(getContext())
 					.setIcon(R.drawable.ic_warning_black)
 					.setTitle(R.string.lesson_already_present)
 					.setMessage(R.string.lesson_continue)
-					.setPositiveButton(getString(R.string.yes), (dialog, which) -> fetchData(lesson))
+					.setPositiveButton(getString(R.string.yes), (dialog, which) -> downloadLessons())
 					.setNegativeButton(getString(R.string.no), null)
 					.show();
 		} else {
-			fetchData(lesson);
+			downloadLessons();
 		}
 	}
 
-	private void fetchData(final Lesson lesson) {
+	private void downloadLessons() {
 
 		final String url = BASE_URL + LESSONS_FILE;
 		Log.d(LOG_TAG, "Calling : " + url);
@@ -201,12 +225,12 @@ public class LessonsFragment extends ListFragment {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, final File file) {
 				Log.d(LOG_TAG, "File downloaded");
-				insertData(file, lesson);
+				insertData(file);
 			}
 		});
 	}
 
-	private void insertData(File file, final Lesson lesson) {
+	private void insertData(File file) {
 		adapter.setEnabled(false);
 
 		try (Reader in = new FileReader(file)) {
@@ -215,6 +239,8 @@ public class LessonsFragment extends ListFragment {
 			String col_example = myLocale + "_example";
 			String tag = getString(R.string.lesson_tag);
 
+			Set<String> selectedCodes = selectedLessons.keySet();
+
 			ContentProviderOperation.Builder builder;
 			ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 			CSVParser parse = CSVFormat.TDF.withHeader().withSkipHeaderRecord().parse(in);
@@ -222,7 +248,7 @@ public class LessonsFragment extends ListFragment {
 
 				String code = record.get("tags");
 
-				if (!lesson.code.equals(code)) {
+				if (!selectedCodes.contains(code)) {
 					continue;
 				}
 
@@ -248,11 +274,11 @@ public class LessonsFragment extends ListFragment {
 						.withValue(DicoContract.TAGS, tag + " " + record.get("tags"));
 
 				ops.add(builder.build());
+
+
 			}
 
 			getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
-
-			lesson.isPresent = true;
 
 		} catch (RemoteException | OperationApplicationException | IOException e) {
 			Log.e(LOG_TAG, "Error while fetching data", e);
@@ -262,10 +288,13 @@ public class LessonsFragment extends ListFragment {
 			getListView().invalidateViews();
 		}
 
-		lessonsDownloaded.add(lesson.code);
+		for (Lesson lesson : selectedLessons.values()) {
+			lesson.isPresent = true;
+			lessonsDownloaded.add(lesson.code);
+		}
 		PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
 
-		Toast.makeText(getContext(), getString(R.string.lesson_download_success, lesson.title), Toast.LENGTH_LONG).show();
+		Toast.makeText(getContext(), getString(R.string.lesson_download_success, selectedLessons.size()), Toast.LENGTH_LONG).show();
 		inProgress(false);
 	}
 
@@ -291,5 +320,50 @@ public class LessonsFragment extends ListFragment {
 		}
 	}
 
+	private AbsListView.MultiChoiceModeListener multiChoiceListener = new AbsListView.MultiChoiceModeListener() {
 
+		private int rowSelectedNumber = 0;
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			getActivity().getMenuInflater().inflate(R.menu.lessons_context, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.lessons_download:
+					checkBeforeDownloadLessons();
+					break;
+
+			}
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			rowSelectedNumber = 0;
+			selectedLessons.clear();
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+			Lesson lesson = adapter.getItem(position);
+			if (checked) {
+				rowSelectedNumber++;
+				selectedLessons.put(lesson.code, lesson);
+			} else {
+				selectedLessons.remove(lesson.code);
+				rowSelectedNumber--;
+			}
+			mode.setTitle(getResources().getQuantityString(R.plurals.action_lesson, rowSelectedNumber, rowSelectedNumber));
+			mode.invalidate();
+		}
+	};
 }

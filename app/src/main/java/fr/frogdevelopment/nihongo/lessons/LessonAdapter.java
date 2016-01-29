@@ -49,7 +49,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            convertView = mInflater.inflate(android.R.layout.simple_list_item_activated_1, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

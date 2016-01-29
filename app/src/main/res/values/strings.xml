@@ -200,9 +200,15 @@
     <string name="lesson_tag">Lesson </string>
     <string name="no_connection">No connection</string>
     <string name="lesson_present"> - present</string>
-    <string name="lesson_already_present">Pack already fetched</string>
+    <string name="lesson_already_present">Lesson already fetched</string>
     <string name="lesson_continue">Continue ?</string>
-    <string name="lesson_download_success">\'%s\' successfully downloaded</string>
+    <string name="lesson_download">Download</string>
+    <string name="lesson_download_success">Download successful</string>
+
+    <plurals name="action_lesson">
+        <item quantity="one">%1$d lesson selected.</item>
+        <item quantity="other">%1$d lessons selected.</item>
+    </plurals>
 
     <!-- ******* -->
     <!-- OPTIONS -->
