@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -31,7 +32,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -248,7 +248,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 						final String selection = "_ID IN (" + inList.toString() + ")";
 						getActivity().getContentResolver().delete(mType.uri, selection, selectionArgs);
 					}
-					Toast.makeText(getActivity(), R.string.delete_done, Toast.LENGTH_LONG).show();
+					Snackbar.make(getActivity().findViewById(R.id.dico_layout), R.string.delete_done, Snackbar.LENGTH_LONG).show();
 					actionMode.finish();
 				})
 				.setNegativeButton(android.R.string.no, null)

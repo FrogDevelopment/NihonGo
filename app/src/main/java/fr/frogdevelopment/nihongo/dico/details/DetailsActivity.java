@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -17,7 +18,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -107,7 +107,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 	private void onDelete(Item item) {
 		Uri uri = Uri.parse(mType.uri + "/" + item.id);
 		getContentResolver().delete(uri, null, null);
-		Toast.makeText(this, R.string.delete_done, Toast.LENGTH_LONG).show();
+		Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG).show();
 		back();
 	}
 
