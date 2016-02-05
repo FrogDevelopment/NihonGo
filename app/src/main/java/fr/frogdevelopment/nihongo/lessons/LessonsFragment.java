@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -187,6 +188,11 @@ public class LessonsFragment extends ListFragment {
 	}
 
 	private void checkBeforeDownloadLessons() {
+
+		if (selectedLessons.isEmpty()) {
+			return;
+		}
+
 		boolean onPresent = false;
 		for (Lesson lesson : selectedLessons.values()) {
 			if (lesson.isPresent) {
@@ -294,8 +300,10 @@ public class LessonsFragment extends ListFragment {
 		}
 		PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
 
-		Toast.makeText(getContext(), getString(R.string.lesson_download_success, selectedLessons.size()), Toast.LENGTH_LONG).show();
+		// todo remplacer tous les Toast par des Snackbar (sauf les Toast pour erreur)
+		Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success, selectedLessons.size()), Snackbar.LENGTH_SHORT).show();
 		inProgress(false);
+		selectedLessons.clear();
 	}
 
 	static class Lesson implements Comparable<Lesson> {
@@ -327,6 +335,8 @@ public class LessonsFragment extends ListFragment {
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			getActivity().getMenuInflater().inflate(R.menu.lessons_context, menu);
+			rowSelectedNumber = 0;
+			selectedLessons.clear();
 			return true;
 		}
 
@@ -339,17 +349,17 @@ public class LessonsFragment extends ListFragment {
 		public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
 			switch (item.getItemId()) {
 				case R.id.lessons_download:
+					actionMode.finish();
 					checkBeforeDownloadLessons();
-					break;
-
+					return true;
 			}
+
 			return false;
 		}
 
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
-			rowSelectedNumber = 0;
-			selectedLessons.clear();
+
 		}
 
 		@Override
