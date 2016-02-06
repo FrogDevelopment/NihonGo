@@ -2,14 +2,15 @@
   ~ Copyright (c) Frog Development 2015.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal|top"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:context="fr.frogdevelopment.nihongo.options.ParametersFragment">
+<LinearLayout android:id="@+id/parameters_layout"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal|top"
+              android:orientation="vertical"
+              android:padding="10dp"
+              tools:context="fr.frogdevelopment.nihongo.options.ParametersFragment">
 
     <TextView
         android:layout_width="fill_parent"
@@ -18,14 +19,14 @@
         android:paddingTop="15dp"
         android:text="@string/options_data"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"/>
 
     <Button
         android:id="@+id/options_erase"
@@ -34,7 +35,7 @@
         android:padding="10dp"
         android:text="@string/options_erase_data_btn"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"/>
 
     <Button
         android:id="@+id/options_reset_favorite"
@@ -43,7 +44,7 @@
         android:padding="10dp"
         android:text="@string/options_reset_favorite_btn"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"/>
 
     <Button
         android:id="@+id/options_reset_learned"
@@ -52,7 +53,7 @@
         android:padding="10dp"
         android:text="@string/options_reset_learned_btn"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"/>
 
     <TextView
         android:layout_width="fill_parent"
@@ -61,14 +62,14 @@
         android:paddingTop="15dp"
         android:text="@string/options_advertising"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"/>
 
     <LinearLayout
         android:id="@+id/options_advertising"
@@ -83,14 +84,14 @@
             android:layout_height="wrap_content"
             android:text="@string/options_no_advertising_purchase"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"/>
 
         <TextView
             android:id="@+id/options_no_advertising_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/options_no_advertising_purchased"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
     </LinearLayout>
 
@@ -101,6 +102,6 @@
         android:padding="10dp"
         android:text="@string/options_restore_purchase"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"/>
 
 </LinearLayout>
