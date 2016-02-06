@@ -303,6 +303,8 @@ public class LessonsFragment extends ListFragment {
 		protected void onPostExecute(Boolean result) {
 			if (result) {
 				reference.get().getAvailableProducts();
+			} else {
+				// fixme récupérer les lessons présentes et les afficher mais sans être cliquable + message d'informations
 			}
 		}
 	}
