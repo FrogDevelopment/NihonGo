@@ -63,7 +63,6 @@ import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-// todo : proposer rafraîchissement de la vue
 public class LessonsFragment extends ListFragment {
 
 	private static final String LOG_TAG = "NIHON_GO";
@@ -71,7 +70,7 @@ public class LessonsFragment extends ListFragment {
 	// http://loopj.com/android-async-http/
 	private static final AsyncHttpClient CLIENT = new AsyncHttpClient();
 
-	// fixme
+	// fixme utiliser variable externe
 	private static final String   BASE_URL               = "http://legall.benoit.free.fr/nihon_go/";
 	private static final String   AVAILABLE_LESSONS_FILE = "available_lessons_2.json";
 	private static final String   LESSONS_FILE           = "lessons.tsv";
