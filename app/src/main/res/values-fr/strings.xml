@@ -30,7 +30,7 @@
     <!-- ***** -->
     <!-- DICO  -->
     <!-- ***** -->
-
+    <string name="dico_no_data">Aucunes données</string>
     <string name="title_activity_details">Détails</string>
 
     <!-- CONTEXT MENU -->

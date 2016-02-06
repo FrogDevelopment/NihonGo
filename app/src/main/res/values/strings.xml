@@ -39,6 +39,7 @@
     <!-- DICO -->
     <!-- ***** -->
 
+    <string name="dico_no_data">No data</string>
     <string name="title_activity_details">Details</string>
 
     <!-- CONTEXT MENU -->
