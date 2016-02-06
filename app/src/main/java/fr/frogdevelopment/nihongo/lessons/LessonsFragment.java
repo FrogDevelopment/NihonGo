@@ -149,10 +149,11 @@ public class LessonsFragment extends ListFragment {
 
 					adapter = new LessonAdapter(getActivity(), lessonsAvailable);
 					setListAdapter(adapter);
-					inProgress(false);
 				} catch (JSONException e) {
 					Log.e(LOG_TAG, "Data Fetch KO", e);
 					Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+				} finally {
+					inProgress(false);					
 				}
 			}
 		});
