@@ -110,27 +110,6 @@ public class LessonsFragment extends ListFragment {
 		getListView().setMultiChoiceModeListener(multiChoiceListener);
 	}
 
-	private class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
-
-		private final WeakReference<LessonsFragment> reference;
-
-		public TestConnectionTask(LessonsFragment fragment) {
-			this.reference = new WeakReference<>(fragment);
-		}
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			return ConnectionHelper.hasActiveInternetConnection(getContext());
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			if (result) {
-				reference.get().getAvailableProducts();
-			}
-		}
-	}
-
 	private void inProgress(boolean wait) {
 		((MainActivity) getActivity()).showLoading(wait);
 		getListView().setEnabled(!wait);
@@ -231,79 +210,9 @@ public class LessonsFragment extends ListFragment {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, final File file) {
 				Log.d(LOG_TAG, "File downloaded");
-				insertData(file);
+				new DownloadTask().execute(file);
 			}
 		});
-	}
-
-	private void insertData(File file) {
-		adapter.setEnabled(false);
-
-		try (Reader in = new FileReader(file)) {
-			String col_input = myLocale + "_input";
-			String col_details = myLocale + "_details";
-			String col_example = myLocale + "_example";
-			String tag = getString(R.string.lesson_tag);
-
-			Set<String> selectedCodes = selectedLessons.keySet();
-
-			ContentProviderOperation.Builder builder;
-			ArrayList<ContentProviderOperation> ops = new ArrayList<>();
-			CSVParser parse = CSVFormat.TDF.withHeader().withSkipHeaderRecord().parse(in);
-			for (CSVRecord record : parse.getRecords()) {
-
-				String code = record.get("tags");
-
-				if (!selectedCodes.contains(code)) {
-					continue;
-				}
-
-				String input = StringUtils.capitalize(record.get(col_input));
-				if (StringUtils.isBlank(input)) {
-					continue;
-				}
-
-				// Normalizer.normalize(source, Normalizer.Form.NFD) renvoi une chaine unicode décomposé.
-				// C'est à dire que les caractères accentués seront décomposé en deux caractères (par exemple "à" se transformera en "a`").
-				// Le replaceAll("[\u0300-\u036F]", "") supprimera tous les caractères unicode allant de u0300 à u036F,
-				// c'est à dire la plage de code des diacritiques (les accents qu'on a décomposé ci-dessus donc).
-				String sortLetter = Normalizer.normalize(input.substring(0, 1), Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
-
-				builder = ContentProviderOperation.newInsert(NihonGoContentProvider.URI_WORD)
-						.withValue(DicoContract.SORT_LETTER, sortLetter)
-						.withValue(DicoContract.INPUT, input)
-						.withValue(DicoContract.KANJI, record.get("kanji"))
-						.withValue(DicoContract.KANA, record.get("kana"))
-						.withValue(DicoContract.DETAILS, record.get(col_details))
-						.withValue(DicoContract.EXAMPLE, record.get(col_example))
-						.withValue(DicoContract.TYPE, record.get("type"))
-						.withValue(DicoContract.TAGS, tag + " " + record.get("tags"));
-
-				ops.add(builder.build());
-
-
-			}
-
-			getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
-
-		} catch (RemoteException | OperationApplicationException | IOException e) {
-			Log.e(LOG_TAG, "Error while fetching data", e);
-			Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG);
-		} finally {
-			adapter.setEnabled(true);
-			getListView().invalidateViews();
-		}
-
-		for (Lesson lesson : selectedLessons.values()) {
-			lesson.isPresent = true;
-			lessonsDownloaded.add(lesson.code);
-		}
-		PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
-
-		// todo remplacer tous les Toast par des Snackbar (sauf les Toast pour erreur)
-		Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success, selectedLessons.size()), Snackbar.LENGTH_SHORT).show();
-		inProgress(false);
-		selectedLessons.clear();
 	}
 
 	static class Lesson implements Comparable<Lesson> {
@@ -376,4 +285,105 @@ public class LessonsFragment extends ListFragment {
 			mode.invalidate();
 		}
 	};
+
+	private class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
+
+		private final WeakReference<LessonsFragment> reference;
+
+		public TestConnectionTask(LessonsFragment fragment) {
+			this.reference = new WeakReference<>(fragment);
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+			return ConnectionHelper.hasActiveInternetConnection(getContext());
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result) {
+				reference.get().getAvailableProducts();
+			}
+		}
+	}
+
+	private class DownloadTask extends AsyncTask<File, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(File... params) {
+			File file = params[0];
+
+			try (Reader in = new FileReader(file)) {
+				String col_input = myLocale + "_input";
+				String col_details = myLocale + "_details";
+				String col_example = myLocale + "_example";
+				String tag = getString(R.string.lesson_tag);
+
+				Set<String> selectedCodes = selectedLessons.keySet();
+
+				ContentProviderOperation.Builder builder;
+				ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+				CSVParser parse = CSVFormat.TDF.withHeader().withSkipHeaderRecord().parse(in);
+				for (CSVRecord record : parse.getRecords()) {
+
+					String code = record.get("tags");
+
+					if (!selectedCodes.contains(code)) {
+						continue;
+					}
+
+					String input = StringUtils.capitalize(record.get(col_input));
+					if (StringUtils.isBlank(input)) {
+						continue;
+					}
+
+					// Normalizer.normalize(source, Normalizer.Form.NFD) renvoi une chaine unicode décomposé.
+					// C'est à dire que les caractères accentués seront décomposé en deux caractères (par exemple "à" se transformera en "a`").
+					// Le replaceAll("[\u0300-\u036F]", "") supprimera tous les caractères unicode allant de u0300 à u036F,
+					// c'est à dire la plage de code des diacritiques (les accents qu'on a décomposé ci-dessus donc).
+					String sortLetter = Normalizer.normalize(input.substring(0, 1), Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
+
+					builder = ContentProviderOperation.newInsert(NihonGoContentProvider.URI_WORD)
+							.withValue(DicoContract.SORT_LETTER, sortLetter)
+							.withValue(DicoContract.INPUT, input)
+							.withValue(DicoContract.KANJI, record.get("kanji"))
+							.withValue(DicoContract.KANA, record.get("kana"))
+							.withValue(DicoContract.DETAILS, record.get(col_details))
+							.withValue(DicoContract.EXAMPLE, record.get(col_example))
+							.withValue(DicoContract.TYPE, record.get("type"))
+							.withValue(DicoContract.TAGS, tag + " " + record.get("tags"));
+
+					ops.add(builder.build());
+				}
+
+				getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+
+			} catch (RemoteException | OperationApplicationException | IOException e) {
+				Log.e(LOG_TAG, "Error while fetching data", e);
+				return false;
+			}
+
+			for (Lesson lesson : selectedLessons.values()) {
+				lesson.isPresent = true;
+				lessonsDownloaded.add(lesson.code);
+			}
+
+			PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
+
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result) {
+				getListView().invalidateViews();
+				Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success, selectedLessons.size()), Snackbar.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+			}
+
+			selectedLessons.clear();
+			inProgress(false);
+		}
+	}
 }
