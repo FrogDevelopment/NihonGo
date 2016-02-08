@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 
-
 public class DetailsFragment extends Fragment {
 
 	interface OnFragmentInteractionListener {
@@ -48,6 +47,8 @@ public class DetailsFragment extends Fragment {
 	TextView             mKanaView;
 	@Bind(R.id.details_word_details)
 	TextView             mDetailsView;
+	@Bind(R.id.details_word_example)
+	TextView             mExampleView;
 	@Bind(R.id.details_word_tags)
 	TextView             mTagsView;
 	@Bind(R.id.fab_favorite)
@@ -154,6 +155,12 @@ public class DetailsFragment extends Fragment {
 		if (StringUtils.isNoneEmpty(mItem.details)) {
 			mDetailsView.setText(mItem.details);
 			mDetailsView.setVisibility(View.VISIBLE);
+		}
+
+		mExampleView.setText(mItem.example);
+		if (StringUtils.isNoneEmpty(mItem.example)) {
+			mExampleView.setText(mItem.example);
+			mExampleView.setVisibility(View.VISIBLE);
 		}
 
 		if (StringUtils.isNoneEmpty(mItem.tags)) {

@@ -69,6 +69,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		initToolbar();
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ButterKnife.unbind(this);
+	}
+
 	private void initToolbar() {
 		setSupportActionBar(toolbar);
 		final ActionBar actionBar = getSupportActionBar();
