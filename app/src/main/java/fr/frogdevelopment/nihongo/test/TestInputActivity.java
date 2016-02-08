@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,9 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 
 public class TestInputActivity extends TestAbstractActivity {
+
+    @Bind(R.id.test_input_scroll)
+    ScrollView mScrollView;
 
     @Bind(R.id.test_input_to_find)
     TextView toFindView;
@@ -39,6 +43,7 @@ public class TestInputActivity extends TestAbstractActivity {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+	    mScrollView.smoothScrollTo(0,0);
         answerView.setText(null);
 
         Item item;
@@ -54,8 +59,8 @@ public class TestInputActivity extends TestAbstractActivity {
             switch (typeTest) {
 
                 case 0: // Kanji -> Hiragana
-                    if (item.kanji.contains("?")) {
-                        String[] kanjis = item.kanji.split("?");
+                    if (item.kanji.contains("、")) {
+                        String[] kanjis = item.kanji.split("、");
                         toFind = kanjis[new Random().nextInt(2) - 1];
                     } else
                         toFind = item.kanji;

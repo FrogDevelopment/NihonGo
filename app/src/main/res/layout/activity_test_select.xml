@@ -16,7 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -28,7 +28,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="60sp"/>
+            android:textSize="40sp"/>
 
     </ScrollView>
 
