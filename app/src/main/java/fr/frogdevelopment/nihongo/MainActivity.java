@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		CURRENT_VIEW = -1;
 		onSearch = false;
+		ButterKnife.unbind(this);
 		super.onDestroy();
 	}
 

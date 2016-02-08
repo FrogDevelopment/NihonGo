@@ -29,7 +29,7 @@ public class KanaViewPage extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 
 		View rootView = inflater.inflate(R.layout.fragment_kana, container, false);
 		ButterKnife.bind(this, rootView);
@@ -48,6 +48,7 @@ public class KanaViewPage extends Fragment {
 	@Override
 	public void onDestroyView() {
 		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+		ButterKnife.unbind(this);
 		super.onDestroyView();
 	}
 

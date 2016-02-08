@@ -68,7 +68,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 
 		mType = (Type) getArguments().getSerializable("type");
 
@@ -96,6 +96,12 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		initFabAdd();
 
 		return rootView;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ButterKnife.unbind(this);
 	}
 
 	private void initFabAdd() {

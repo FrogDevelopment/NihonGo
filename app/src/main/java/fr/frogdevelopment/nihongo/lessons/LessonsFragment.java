@@ -53,6 +53,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import fr.frogdevelopment.nihongo.ConnectionHelper;
 import fr.frogdevelopment.nihongo.MainActivity;
@@ -90,7 +91,7 @@ public class LessonsFragment extends ListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 
 		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
 
@@ -103,6 +104,13 @@ public class LessonsFragment extends ListFragment {
 
 		return rootView;
 	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ButterKnife.unbind(this);
+	}
+
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {

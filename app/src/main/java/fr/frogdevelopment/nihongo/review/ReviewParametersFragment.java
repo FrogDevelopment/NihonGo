@@ -78,6 +78,13 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 	}
 
 	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ButterKnife.unbind(this);
+	}
+
+
+	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
 		return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);

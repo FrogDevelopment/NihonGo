@@ -79,6 +79,14 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 	}
 
+
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ButterKnife.unbind(this);
+	}
+
 	private void initToolbar() {
 		setSupportActionBar(toolbar);
 		final ActionBar actionBar = getSupportActionBar();

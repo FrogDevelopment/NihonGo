@@ -34,7 +34,6 @@ public class ReviewFragment extends Fragment {
 
 	private WeakReference<OnFragmentInteractionListener> mListener;
 
-
 	@Bind(R.id.review_count)
 	TextView             mCount;
 	@Bind(R.id.review_reviewed)
@@ -66,6 +65,13 @@ public class ReviewFragment extends Fragment {
 
 		return rootView;
 	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ButterKnife.unbind(this);
+	}
+
 
 	private void initFabs() {
 		mFabFavorite.setOnClickListener(view -> {

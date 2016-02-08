@@ -90,6 +90,12 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		displayQuantity();
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ButterKnife.unbind(this);
+	}
+
 	private void initToolbar() {
 		setSupportActionBar(toolbar);
 		final ActionBar actionBar = getSupportActionBar();

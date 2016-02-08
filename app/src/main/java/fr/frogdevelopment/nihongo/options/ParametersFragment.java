@@ -70,6 +70,13 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 		return view;
 	}
 
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ButterKnife.unbind(this);
+	}
+
+
 	@OnClick(R.id.options_erase)
 	void onClickErase() {
 		new AlertDialog.Builder(getActivity())
