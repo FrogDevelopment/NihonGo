@@ -21,18 +21,21 @@ public class ConnectionHelper {
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null) {
-                for (NetworkInfo element : info) {
-                    if (element.getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-                }
-            }
+	    if (connectivity == null) {
+		    return false;
+	    }
 
-        }
-        return false;
+	    NetworkInfo[] info = connectivity.getAllNetworkInfo();
+	    if (info == null) {
+		    return false;
+	    }
+
+	    for (NetworkInfo element : info) {
+	        if (element.getState() == NetworkInfo.State.CONNECTED) {
+	            return true;
+	        }
+	    }
+	    return false;
     }
 
     public static boolean hasActiveInternetConnection(Context context) {
