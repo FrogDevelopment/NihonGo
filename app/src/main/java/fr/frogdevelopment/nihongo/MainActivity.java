@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -23,8 +24,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -59,6 +62,85 @@ public class MainActivity extends AppCompatActivity {
 
 	private InputMethodManager imm;
 
+	@Bind(R.id.ad_view)
+	AdView mAdView;
+
+	@Bind(R.id.ad_image)
+	ImageView mAdImageView;
+
+	@Bind(R.id.ad_divider)
+	View mAdDivider;
+
+	private static final int      REFRESH_RATE_IN_SECONDS = 10;
+	private final        Handler  refreshHandler          = new Handler();
+	private final        Runnable refreshRunnable         = new RefreshRunnable();
+	private              boolean  firstAdReceived         = false;
+
+	private AdListener adListener = new AdListener() {
+		@Override
+		public void onAdFailedToLoad(int errorCode) {
+			if (!firstAdReceived) {
+				// Hide the AdView and show the custom image.
+				mAdView.setVisibility(View.GONE);
+				mAdImageView.setVisibility(View.VISIBLE);
+
+				// Schedule an ad refresh.
+				refreshHandler.removeCallbacks(refreshRunnable);
+				refreshHandler.postDelayed(refreshRunnable, REFRESH_RATE_IN_SECONDS * 1000);
+			}
+		}
+
+		@Override
+		public void onAdLoaded() {
+			// Hide the custom image and show the AdView.
+			mAdView.setVisibility(View.VISIBLE);
+			mAdImageView.setVisibility(View.GONE);
+			firstAdReceived = true;
+		}
+	};
+
+	private class RefreshRunnable implements Runnable {
+		@Override
+		public void run() {
+			// Load an ad with an ad request.
+			loadAdViewRequest();
+		}
+	}
+
+	private void loadAdViewRequest() {
+
+		boolean noAdvertisingPurchased = PreferencesHelper.getInstance(this).getBoolean(Preferences.NO_ADVERTISING);
+
+		if (noAdvertisingPurchased) {
+			mAdView.setVisibility(View.GONE);
+			mAdImageView.setVisibility(View.GONE);
+			mAdDivider.setVisibility(View.GONE);
+		} else {
+			AdRequest.Builder builder = new AdRequest.Builder();
+			if (BuildConfig.DEBUG) {
+				builder.addTestDevice("C0FB3332A7EBAEF3452C4C311F32D12B");
+			}
+			AdRequest adRequest = builder.build();
+			mAdView.loadAd(adRequest);
+		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		// Remove any pending ad refreshes.
+		refreshHandler.removeCallbacks(refreshRunnable);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (!firstAdReceived) {
+			// Request a new ad immediately.
+			refreshHandler.post(refreshRunnable);
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,11 +159,9 @@ public class MainActivity extends AppCompatActivity {
 		handleIntent(getIntent());
 
 		// PUB
-		AdView mAdView = (AdView) findViewById(R.id.adView);
-		AdRequest adRequest = new AdRequest.Builder()
-				.addTestDevice("C0FB3332A7EBAEF3452C4C311F32D12B")
-				.build();
-		mAdView.loadAd(adRequest);
+		mAdView.setAdListener(adListener);
+
+		loadAdViewRequest();
 	}
 
 	private void initIME() {

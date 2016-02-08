@@ -53,13 +53,30 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <!-- PUB -->
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
+            <ImageView
+                android:id="@+id/ad_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/test"
+                android:visibility="gone"
+                android:contentDescription="@string/no_connection"/>
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/ad_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_ad_unit_id">
             </com.google.android.gms.ads.AdView>
+
+            <View
+                android:id="@+id/ad_divider"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:background="@android:color/darker_gray"/>
 
             <!-- The main content view -->
             <FrameLayout
