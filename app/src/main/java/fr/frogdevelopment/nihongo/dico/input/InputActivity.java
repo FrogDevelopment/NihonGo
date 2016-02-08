@@ -6,6 +6,7 @@ package fr.frogdevelopment.nihongo.dico.input;
 
 import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -25,7 +26,6 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Type;
 
 public class InputActivity extends AppCompatActivity {
-
 
 	@Bind(R.id.toolbar)
 	Toolbar         toolbar;
@@ -49,6 +49,10 @@ public class InputActivity extends AppCompatActivity {
 	TextInputLayout mDetailsWrapper;
 	@Bind(R.id.input_details)
 	EditText        mDetailsText;
+	@Bind(R.id.wrapper_example)
+	TextInputLayout mExampleWrapper;
+	@Bind(R.id.input_example)
+	EditText        mExampleText;
 
 	// Initial Data
 	protected String idUpdate;
@@ -57,6 +61,7 @@ public class InputActivity extends AppCompatActivity {
 	protected String inputSave;
 	private   String tagsSave;
 	private   String detailsSave;
+	private   String exampleSave;
 
 	protected boolean isUpdate;
 
@@ -85,7 +90,7 @@ public class InputActivity extends AppCompatActivity {
                 break;
         }
 
-        chekUpdate();
+        checkUpdate();
 
         initToolbar();
     }
@@ -146,7 +151,7 @@ public class InputActivity extends AppCompatActivity {
     }
 
 
-    private void chekUpdate() {
+    private void checkUpdate() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey(DicoContract._ID)) {
             fillDataToUpdate();
@@ -173,6 +178,9 @@ public class InputActivity extends AppCompatActivity {
         detailsSave = bundle.getString(DicoContract.DETAILS);
         mDetailsText.setText(detailsSave);
 
+        exampleSave = bundle.getString(DicoContract.EXAMPLE);
+        mExampleText.setText(exampleSave);
+
         tagsSave = bundle.getString(DicoContract.TAGS);
         mTagsText.setText(tagsSave);
     }
@@ -185,6 +193,7 @@ public class InputActivity extends AppCompatActivity {
         kanaSave = "";
         inputSave = "";
         detailsSave = "";
+	    exampleSave = "";
         tagsSave = "";
     }
 
@@ -200,6 +209,9 @@ public class InputActivity extends AppCompatActivity {
 
         mDetailsText.setText(detailsSave);
         mDetailsWrapper.setError(null);
+
+        mExampleText.setText(exampleSave);
+        mExampleWrapper.setError(null);
 
         mTagsText.setText(tagsSave);
         mTagsWrapper.setError(null);
@@ -272,11 +284,12 @@ public class InputActivity extends AppCompatActivity {
         values.put(DicoContract.KANA, mKanaText.getText().toString());
         values.put(DicoContract.TAGS, mTagsText.getText().toString());
         values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
+        values.put(DicoContract.EXAMPLE, mExampleText.getText().toString());
 
         getContentResolver().update(mType.uri, values, where, selectionArgs);
 
         // TOAST
-        Toast.makeText(this, R.string.input_update_OK, Toast.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_LONG).show();
     }
 
     private void insert() {
@@ -288,11 +301,12 @@ public class InputActivity extends AppCompatActivity {
         values.put(DicoContract.KANA, mKanaText.getText().toString());
         values.put(DicoContract.TAGS, mTagsText.getText().toString());
         values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
+	    values.put(DicoContract.EXAMPLE, mExampleText.getText().toString());
         values.put(DicoContract.TYPE, mType.code);
 
         getContentResolver().insert(mType.uri, values);
 
         // TOAST
-        Toast.makeText(this, R.string.input_save_OK, Toast.LENGTH_LONG).show();
+	    Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_LONG).show();
     }
 }
