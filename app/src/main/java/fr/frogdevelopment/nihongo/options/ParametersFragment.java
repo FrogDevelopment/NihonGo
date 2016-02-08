@@ -208,6 +208,7 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 		// We will be notified of completion via mPurchaseFinishedListener
 		Log.d(LOG_TAG, "Launching purchase flow for no advertising.");
 
+		mHelper.flagEndAsync();
 		mHelper.launchPurchaseFlow(getActivity(), Preferences.NO_ADVERTISING.code, RC_REQUEST, mPurchaseFinishedListener, FIXME.DEVELOPER_PAYLOAD.value);
 	}
 
