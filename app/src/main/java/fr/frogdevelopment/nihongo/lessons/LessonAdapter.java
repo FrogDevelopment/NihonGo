@@ -28,6 +28,22 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         mInflater = context.getLayoutInflater();
     }
 
+    private boolean enabled = true;
+
+    void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return enabled;
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return enabled;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;

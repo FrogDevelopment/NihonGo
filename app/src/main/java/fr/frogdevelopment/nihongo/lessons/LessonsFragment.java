@@ -42,7 +42,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.ref.WeakReference;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,6 +76,8 @@ public class LessonsFragment extends ListFragment {
 	private static final String[] LANGUAGES              = {"fr_FR", "en_US"};
 	private static final String   DEFAULT_LANGUAGE       = "en_US";
 
+	private boolean hasInternet = false;
+
 	private LessonAdapter adapter;
 
 	private String myLocale;
@@ -98,7 +99,7 @@ public class LessonsFragment extends ListFragment {
 			myLocale = DEFAULT_LANGUAGE;
 		}
 
-		new TestConnectionTask(this).execute();
+		new TestConnectionTask().execute();
 
 		return rootView;
 	}
@@ -114,12 +115,31 @@ public class LessonsFragment extends ListFragment {
 		getListView().setEnabled(!wait);
 	}
 
-	private void getAvailableProducts() {
+	private void getDownloadedLessons() {
+		String lessonsSaved = PreferencesHelper.getInstance(getContext()).getString(Preferences.LESSONS);
+		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
+	}
+
+	private void test() {
+
+		getDownloadedLessons();
+
+		String tag = getString(R.string.lesson_tag);
+
+		List<Lesson> lessons = new ArrayList<>();
+		for (String code : lessonsDownloaded) {
+			lessons.add(new Lesson(code, tag + " " + code, true));
+		}
+
+		// update the UI
+		setLessons(lessons);
+	}
+
+	private void getAvailableLessons() {
 
 		inProgress(true);
 
-		String lessonsSaved = PreferencesHelper.getInstance(getContext()).getString(Preferences.LESSONS);
-		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
+		getDownloadedLessons();
 
 		String url = BASE_URL + AVAILABLE_LESSONS_FILE;
 		Log.d(LOG_TAG, "Calling : " + url);
@@ -143,20 +163,26 @@ public class LessonsFragment extends ListFragment {
 						String code = jsonArray.getString(index);
 						lessonsAvailable.add(new Lesson(code, tag + " " + code, lessonsDownloaded.contains(code)));
 					}
-
 					// update the UI
-					Collections.sort(lessonsAvailable);
+					setLessons(lessonsAvailable);
 
-					adapter = new LessonAdapter(getActivity(), lessonsAvailable);
-					setListAdapter(adapter);
 				} catch (JSONException e) {
 					Log.e(LOG_TAG, "Data Fetch KO", e);
 					Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
 				} finally {
-					inProgress(false);					
+					inProgress(false);
 				}
 			}
 		});
+	}
+
+	private void setLessons(List<Lesson> lessonsAvailable) {
+		// update the UI
+		Collections.sort(lessonsAvailable);
+
+		adapter = new LessonAdapter(getActivity(), lessonsAvailable);
+		setListAdapter(adapter);
+		adapter.setEnabled(hasInternet);
 	}
 
 	@Override
@@ -233,7 +259,7 @@ public class LessonsFragment extends ListFragment {
 
 		@Override
 		public int compareTo(@NonNull Lesson another) {
-			return title.compareTo(another.code);
+			return code.compareTo(another.code);
 		}
 	}
 
@@ -288,12 +314,6 @@ public class LessonsFragment extends ListFragment {
 
 	private class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
 
-		private final WeakReference<LessonsFragment> reference;
-
-		public TestConnectionTask(LessonsFragment fragment) {
-			this.reference = new WeakReference<>(fragment);
-		}
-
 		@Override
 		protected Boolean doInBackground(String... params) {
 			return ConnectionHelper.hasActiveInternetConnection(getContext());
@@ -302,10 +322,13 @@ public class LessonsFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result) {
-				reference.get().getAvailableProducts();
+				getAvailableLessons();
 			} else {
 				// fixme récupérer les lessons présentes et les afficher mais sans être cliquable + message d'informations
+				test();
 			}
+
+			hasInternet = result;
 		}
 	}
 
