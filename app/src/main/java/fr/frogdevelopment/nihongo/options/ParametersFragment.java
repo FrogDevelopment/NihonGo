@@ -21,7 +21,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.BuildConfig;
+import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.TestConnectionTask;
 import fr.frogdevelopment.nihongo.billing.FIXME;
 import fr.frogdevelopment.nihongo.billing.IabBroadcastReceiver;
 import fr.frogdevelopment.nihongo.billing.IabHelper;
@@ -37,6 +39,9 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 public class ParametersFragment extends Fragment implements IabBroadcastReceiver.IabBroadcastListener {
 
 	private static final String LOG_TAG = "NIHON_GO";
+
+	@Bind(R.id.options_no_advertising_restore)
+	Button mRestorePurchaseButton;
 
 	@Bind(R.id.options_no_advertising_button)
 	Button mNoAdvertisingButton;
@@ -62,12 +67,17 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 
 		ButterKnife.bind(this, view);
 
-		// fixme gérer cas pas de connexion
 		noAdvertisingPurchased = PreferencesHelper.getInstance(getContext()).getBoolean(Preferences.NO_ADVERTISING);
 
 		updateUi();
 
-		initIabHelper();
+		new TestConnectionTask(getContext(), result -> {
+
+			if (result) {
+				initIabHelper();
+			}
+			mRestorePurchaseButton.setEnabled(result);
+		}).execute();
 
 		return view;
 	}
@@ -192,6 +202,7 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 	@OnClick(R.id.options_no_advertising_restore)
 	void checkPurchase() {
 		Log.d(LOG_TAG, "Querying inventory.");
+		setWaitScreen(true);
 		mHelper.queryInventoryAsync(mGotInventoryListener);
 	}
 
@@ -219,10 +230,8 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 		mNoAdvertisingText.setText(noAdvertisingPurchased ? R.string.options_no_advertising_purchased : R.string.options_no_advertising_not_purchased);
 	}
 
-	// Enables or disables the "please wait" screen.
 	void setWaitScreen(boolean set) {
-//        findViewById(R.id.screen_main).setVisibility(set ? View.GONE : View.VISIBLE);
-//        findViewById(R.id.screen_wait).setVisibility(set ? View.VISIBLE : View.GONE);
+		((MainActivity) getActivity()).showLoading(set);
 	}
 
 	void complain(String message) {

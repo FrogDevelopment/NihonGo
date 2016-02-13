@@ -55,9 +55,9 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
-import fr.frogdevelopment.nihongo.ConnectionHelper;
 import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.TestConnectionTask;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
@@ -99,8 +99,18 @@ public class LessonsFragment extends ListFragment {
 		if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
 			myLocale = DEFAULT_LANGUAGE;
 		}
+		getDownloadedLessons();
 
-		new TestConnectionTask().execute();
+		inProgress(true);
+		new TestConnectionTask(getContext(), result -> {
+			if (result) {
+				getAvailableLessons();
+			} else {
+				getOffLineLessons();
+			}
+
+			hasInternet = result;
+		}).execute();
 
 		return rootView;
 	}
@@ -120,7 +130,7 @@ public class LessonsFragment extends ListFragment {
 
 	private void inProgress(boolean wait) {
 		((MainActivity) getActivity()).showLoading(wait);
-		getListView().setEnabled(!wait);
+//		getListView().setEnabled(!wait);
 	}
 
 	private void getDownloadedLessons() {
@@ -128,10 +138,7 @@ public class LessonsFragment extends ListFragment {
 		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
 	}
 
-	private void test() {
-
-		getDownloadedLessons();
-
+	private void getOffLineLessons() {
 		String tag = getString(R.string.lesson_tag);
 
 		List<Lesson> lessons = new ArrayList<>();
@@ -144,10 +151,6 @@ public class LessonsFragment extends ListFragment {
 	}
 
 	private void getAvailableLessons() {
-
-		inProgress(true);
-
-		getDownloadedLessons();
 
 		String url = BASE_URL + AVAILABLE_LESSONS_FILE;
 		Log.d(LOG_TAG, "Calling : " + url);
@@ -177,7 +180,6 @@ public class LessonsFragment extends ListFragment {
 				} catch (JSONException e) {
 					Log.e(LOG_TAG, "Data Fetch KO", e);
 					Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-				} finally {
 					inProgress(false);
 				}
 			}
@@ -191,6 +193,8 @@ public class LessonsFragment extends ListFragment {
 		adapter = new LessonAdapter(getActivity(), lessonsAvailable);
 		setListAdapter(adapter);
 		adapter.setEnabled(hasInternet);
+
+		inProgress(false);
 	}
 
 	@Override
@@ -319,26 +323,6 @@ public class LessonsFragment extends ListFragment {
 			mode.invalidate();
 		}
 	};
-
-	private class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			return ConnectionHelper.hasActiveInternetConnection(getContext());
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			if (result) {
-				getAvailableLessons();
-			} else {
-				// fixme récupérer les lessons présentes et les afficher mais sans être cliquable + message d'informations
-				test();
-			}
-
-			hasInternet = result;
-		}
-	}
 
 	private class DownloadTask extends AsyncTask<File, Void, Boolean> {
 
