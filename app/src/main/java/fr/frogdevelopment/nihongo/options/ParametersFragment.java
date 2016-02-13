@@ -65,6 +65,8 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 		// fixme gérer cas pas de connexion
 		noAdvertisingPurchased = PreferencesHelper.getInstance(getContext()).getBoolean(Preferences.NO_ADVERTISING);
 
+		updateUi();
+
 		initIabHelper();
 
 		return view;
@@ -184,7 +186,6 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 
 			// IAB is fully set up. Now, let's get an inventory of stuff we own.
 			Log.d(LOG_TAG, "Setup successful.");
-			checkPurchase();
 		});
 	}
 
