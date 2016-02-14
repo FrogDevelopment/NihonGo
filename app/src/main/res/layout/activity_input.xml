@@ -109,7 +109,7 @@
                     android:id="@+id/input_details"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/input_textView_details"
+                    android:hint="@string/input_textView_info"
                     android:inputType="textMultiLine|textCapSentences"/>
             </android.support.design.widget.TextInputLayout>
 

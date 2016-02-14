@@ -10,5 +10,5 @@
         android:id="@+id/menu_test_detail"
         android:icon="@drawable/ic_info_white"
         app:showAsAction="ifRoom"
-        android:title="@string/test_details"/>
+        android:title="@string/test_info"/>
 </menu>

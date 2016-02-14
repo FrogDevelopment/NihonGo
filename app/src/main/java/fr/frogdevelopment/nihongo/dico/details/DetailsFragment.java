@@ -45,10 +45,16 @@ public class DetailsFragment extends Fragment {
 	TextView             mKanjiView;
 	@Bind(R.id.details_word_kana)
 	TextView             mKanaView;
-	@Bind(R.id.details_word_details)
+	@Bind(R.id.details_word_info_title)
+	TextView             mDetailsTitleView;
+	@Bind(R.id.details_word_info)
 	TextView             mDetailsView;
+	@Bind(R.id.details_word_example_title)
+	TextView             mExampleTitleView;
 	@Bind(R.id.details_word_example)
 	TextView             mExampleView;
+	@Bind(R.id.details_word_tags_title)
+	TextView             mTagsTitleView;
 	@Bind(R.id.details_word_tags)
 	TextView             mTagsView;
 	@Bind(R.id.fab_favorite)
@@ -155,17 +161,20 @@ public class DetailsFragment extends Fragment {
 		if (StringUtils.isNoneEmpty(mItem.details)) {
 			mDetailsView.setText(mItem.details);
 			mDetailsView.setVisibility(View.VISIBLE);
+			mDetailsTitleView.setVisibility(View.VISIBLE);
 		}
 
 		mExampleView.setText(mItem.example);
 		if (StringUtils.isNoneEmpty(mItem.example)) {
 			mExampleView.setText(mItem.example);
 			mExampleView.setVisibility(View.VISIBLE);
+			mExampleTitleView.setVisibility(View.VISIBLE);
 		}
 
 		if (StringUtils.isNoneEmpty(mItem.tags)) {
 			mTagsView.setText(mItem.tags);
 			mTagsView.setVisibility(View.VISIBLE);
+			mTagsTitleView.setVisibility(View.VISIBLE);
 		}
 	}
 
