@@ -140,10 +140,10 @@ public class InputActivity extends AppCompatActivity {
 
 	private void back() {
 		finish();
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
 	private void initData() {
+		mKanjiText.requestFocus();
 		mKanjiText.setText(itemUpdate == null ? "" : itemUpdate.kanji);
 		mKanjiWrapper.setError(null);
 
@@ -209,16 +209,13 @@ public class InputActivity extends AppCompatActivity {
 
 	private void saveOrUpdate() {
 		if (itemUpdate != null) {
-			updateById();
+			update();
 		} else {
 			insert();
-			initData();
 		}
-
-		back();
 	}
 
-	private void updateById() {
+	private void update() {
 		final String where = DicoContract._ID + "=?";
 		final String[] selectionArgs = {itemUpdate.id};
 
@@ -235,7 +232,14 @@ public class InputActivity extends AppCompatActivity {
 		getContentResolver().update(mType.uri, values, where, selectionArgs);
 
 		// TOAST
-		Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_LONG).show();
+		Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_SHORT)
+				.setCallback(new Snackbar.Callback() {
+					@Override
+					public void onDismissed(Snackbar snackbar, int event) {
+						back();
+					}
+				})
+				.show();
 	}
 
 	private void insert() {
@@ -253,6 +257,13 @@ public class InputActivity extends AppCompatActivity {
 		getContentResolver().insert(mType.uri, values);
 
 		// TOAST
-		Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_LONG).show();
+		Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_SHORT)
+				.setCallback(new Snackbar.Callback() {
+					@Override
+					public void onDismissed(Snackbar snackbar, int event) {
+						initData();
+					}
+				})
+				.show();
 	}
 }
