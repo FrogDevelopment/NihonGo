@@ -34,6 +34,7 @@
 
     <string name="search_word">Search for words</string>
     <string name="search_expression">Search for expressions</string>
+    <string name="search_current">Searching for \"%1$s\"</string>
 
     <!-- ***** -->
     <!-- DICO -->

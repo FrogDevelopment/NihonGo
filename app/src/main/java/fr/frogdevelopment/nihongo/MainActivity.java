@@ -4,7 +4,6 @@
 
 package fr.frogdevelopment.nihongo;
 
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -314,10 +314,6 @@ public class MainActivity extends AppCompatActivity {
 
 		mDrawerLayout.closeDrawers();
 
-		// todo voir utilité
-		invalidateOptionsMenu();
-
-
 		CURRENT_VIEW = id;
 		setTitle(mFragmentTitle);
 	}
@@ -345,13 +341,9 @@ public class MainActivity extends AppCompatActivity {
 			selectItemAtIndex(R.id.navigation_word);
 			onSearch = false;
 		} else {
-			// todo : un toast demandant un back une seconde fois pour sortir
-			new AlertDialog.Builder(this)
-					.setIcon(R.drawable.ic_warning_black)
-					.setTitle(R.string.closing_activity_title)
-					.setMessage(R.string.closing_activity_message)
-					.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
-					.setNegativeButton(getString(R.string.no), null)
+			Snackbar
+					.make(findViewById(R.id.dico_layout), R.string.closing_activity_message, Snackbar.LENGTH_LONG)
+					.setAction(R.string.yes, v -> finish())
 					.show();
 		}
 	}
@@ -393,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
 
 			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-			setTitle(CURRENT_VIEW == R.id.navigation_word ? R.string.search_word : R.string.search_expression);
+			setTitle(getString(R.string.search_current, query));
 
 			onSearch = true;
 		}
