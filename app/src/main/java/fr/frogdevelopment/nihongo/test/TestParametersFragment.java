@@ -167,8 +167,8 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 	void onClickNbAnswers(View v) {
 		new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.param_quantity_selection)
-				.setItems(R.array.param_nb_answers, (dialog, which) -> {
-					nbAnswers = getResources().getStringArray(R.array.param_nb_answers)[which];
+				.setItems(R.array.param_quantities_answers, (dialog, which) -> {
+					nbAnswers = getResources().getStringArray(R.array.param_quantities_answers)[which];
 					mNbAnswersSelected.setText(nbAnswers);
 				})
 				.create()
