@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,7 +71,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 		mType = (Type) getArguments().getSerializable("type");
 
-		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_dico, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_dico, container, false);
 
 		ButterKnife.bind(this, rootView);
 
@@ -87,7 +86,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				break;
 
 			default:
-				throw new IllegalStateException("Type inconnue !");
+				throw new IllegalStateException("Unknow Type : " + mType);
 		}
 		dicoAdapter = new DicoAdapter(getActivity(), resource);
 		setListAdapter(dicoAdapter);
