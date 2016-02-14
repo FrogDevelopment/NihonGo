@@ -17,6 +17,7 @@
     <item
         android:id="@+id/action_sort"
         android:title="@string/action_dico_sort_tag"
+        android:icon="@drawable/ic_sort_by_alpha_white"
         app:showAsAction="never"/>
 
     <item
