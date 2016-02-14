@@ -219,7 +219,11 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	private void onUpdate(final int position) {
 		final Item item = (Item) dicoAdapter.getItem(position);
 
-		startActivity(item.getUpdateIntent(getActivity(), mType));
+		Intent intent = new Intent(getContext(), InputActivity.class);
+		intent.putExtra("type", mType);
+		intent.putExtra("item", item);
+
+		startActivity(intent);
 		getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 

@@ -4,15 +4,11 @@
 
 package fr.frogdevelopment.nihongo.data;
 
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
 public class Item implements Row, Parcelable {
 
@@ -111,23 +107,4 @@ public class Item implements Row, Parcelable {
 		return id.hashCode();
 	}
 
-
-	public Intent getUpdateIntent(Context packageContext, Type type) {
-		Bundle args = new Bundle();
-		args.putString(DicoContract._ID, id);
-		args.putString(DicoContract.INPUT, input);
-		args.putString(DicoContract.KANJI, kanji);
-		args.putString(DicoContract.KANA, kana);
-		args.putString(DicoContract.TAGS, tags);
-		args.putString(DicoContract.DETAILS, details);
-		args.putString(DicoContract.EXAMPLE, example);
-		args.putString(DicoContract.FAVORITE, favorite);
-		args.putString(DicoContract.LEARNED, learned);
-
-		Intent intent = new Intent(packageContext, InputActivity.class);
-		intent.putExtras(args);
-		intent.putExtra("type", type);
-
-		return intent;
-	}
 }

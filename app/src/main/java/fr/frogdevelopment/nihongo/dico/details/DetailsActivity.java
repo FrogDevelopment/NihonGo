@@ -6,6 +6,7 @@ package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -28,6 +29,7 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
@@ -119,7 +121,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
 	@Override
 	public void update(Item item) {
-		startActivity(item.getUpdateIntent(this, mType));
+
+		Intent intent = new Intent(this, InputActivity.class);
+		intent.putExtra("type", mType);
+		intent.putExtra("item", item);
+
+		startActivity(intent);
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
