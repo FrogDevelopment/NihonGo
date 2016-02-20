@@ -69,13 +69,15 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 
 		noAdvertisingPurchased = PreferencesHelper.getInstance(getContext()).getBoolean(Preferences.NO_ADVERTISING);
 
-		updateUi();
+		mNoAdvertisingText.setText(noAdvertisingPurchased ? R.string.options_no_advertising_purchased : R.string.options_no_advertising_not_purchased);
 
 		new TestConnectionTask(getContext(), result -> {
 
 			if (result) {
 				initIabHelper();
 			}
+
+			mNoAdvertisingButton.setEnabled(result && !noAdvertisingPurchased);
 			mRestorePurchaseButton.setEnabled(result);
 		}).execute();
 
@@ -87,7 +89,6 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 		super.onDestroyView();
 		ButterKnife.unbind(this);
 	}
-
 
 	@OnClick(R.id.options_erase)
 	void onClickErase() {
