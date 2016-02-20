@@ -16,6 +16,7 @@
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_parameters">Paramètres</string>
     <string name="drawer_item_lessons">Leçons</string>
+    <string name="drawer_item_about">À propos</string>
 
     <string name="drawer_open">Ouvrir le navigateur</string>
     <string name="drawer_close">Fermer le navigateur</string>

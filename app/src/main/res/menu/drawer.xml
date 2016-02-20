@@ -51,6 +51,10 @@
             android:id="@+id/navigation_parameters"
             android:icon="@drawable/ic_settings_white"
             android:title="@string/drawer_item_parameters"/>
+        <item
+            android:id="@+id/navigation_about"
+            android:icon="@drawable/ic_info_white"
+            android:title="@string/drawer_item_about"/>
     </group>
 
 </menu>
