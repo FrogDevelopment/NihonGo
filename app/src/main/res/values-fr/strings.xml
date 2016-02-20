@@ -173,9 +173,9 @@
     <!-- ******* -->
     <!-- LESSONS -->
     <!-- ******* -->
+    <string name="lesson_description">Vocabulaire gratuit téléchargeable, basé sur les leçons Minna No Nihongo.</string>
     <string name="lesson_tag">Leçon </string>
     <string name="no_connection">Pas de connexion</string>
-    <string name="lesson_present"> - présent</string>
     <string name="lesson_already_present">Leçon déjà récupérée</string>
     <string name="lesson_continue">Continuer ?</string>
     <string name="lesson_download">Télécharger</string>

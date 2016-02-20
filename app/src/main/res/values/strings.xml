@@ -204,9 +204,9 @@
     <!-- ******* -->
     <!-- LESSONS -->
     <!-- ******* -->
+    <string name="lesson_description">Free downloadable vocabulary available, based on Minna No Nihongo lessons.</string>
     <string name="lesson_tag">Lesson </string>
     <string name="no_connection">No connection</string>
-    <string name="lesson_present"> - present</string>
     <string name="lesson_already_present">Lesson already fetched</string>
     <string name="lesson_continue">Continue ?</string>
     <string name="lesson_download">Download</string>

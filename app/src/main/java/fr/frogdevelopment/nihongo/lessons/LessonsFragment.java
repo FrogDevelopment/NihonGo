@@ -70,7 +70,7 @@ public class LessonsFragment extends ListFragment {
 	// http://loopj.com/android-async-http/
 	private static final AsyncHttpClient CLIENT = new AsyncHttpClient();
 
-	// fixme utiliser variable externe
+	// fixme use external variables
 	private static final String   BASE_URL               = "http://legall.benoit.free.fr/nihon_go/";
 	private static final String   AVAILABLE_LESSONS_FILE = "available_lessons_2.json";
 	private static final String   LESSONS_FILE           = "lessons.tsv";
@@ -264,6 +264,10 @@ public class LessonsFragment extends ListFragment {
 			this.isPresent = isPresent;
 		}
 
+		public void setPresent(boolean present) {
+			isPresent = present;
+		}
+
 		@Override
 		public String toString() {
 			return title;
@@ -324,7 +328,7 @@ public class LessonsFragment extends ListFragment {
 		}
 	};
 
-	private class DownloadTask extends AsyncTask<File, Void, Boolean> {
+	private class DownloadTask extends AsyncTask<File, String, Boolean> {
 
 		@Override
 		protected Boolean doInBackground(File... params) {
@@ -337,6 +341,7 @@ public class LessonsFragment extends ListFragment {
 				String tag = getString(R.string.lesson_tag);
 
 				Set<String> selectedCodes = selectedLessons.keySet();
+				String previousCode = null;
 
 				ContentProviderOperation.Builder builder;
 				ArrayList<ContentProviderOperation> ops = new ArrayList<>();
@@ -348,6 +353,15 @@ public class LessonsFragment extends ListFragment {
 					if (!selectedCodes.contains(code)) {
 						continue;
 					}
+
+					// next lesson, save previous one and update UI
+					if (previousCode != null && !code.equals(previousCode)) {
+						getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+						publishProgress(previousCode);
+						ops.clear();
+					}
+
+					previousCode = code;
 
 					String input = StringUtils.capitalize(record.get(col_input));
 					if (StringUtils.isBlank(input)) {
@@ -373,7 +387,9 @@ public class LessonsFragment extends ListFragment {
 					ops.add(builder.build());
 				}
 
+				// save last lesson and update UI
 				getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+				publishProgress(previousCode);
 
 			} catch (RemoteException | OperationApplicationException | IOException e) {
 				Log.e(LOG_TAG, "Error while fetching data", e);
@@ -391,10 +407,20 @@ public class LessonsFragment extends ListFragment {
 		}
 
 		@Override
+		protected void onProgressUpdate(String... progress) {
+			try {
+				int index = Integer.valueOf(progress[0]);
+				adapter.getItem(index - 1).setPresent(true);
+				adapter.notifyDataSetChanged();
+			} catch (NumberFormatException e) {
+				Log.e(LOG_TAG, "Error while fetching data", e);
+			}
+		}
+
+		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result) {
-				getListView().invalidateViews();
-				Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success, selectedLessons.size()), Snackbar.LENGTH_SHORT).show();
+				Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success), Snackbar.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
 			}

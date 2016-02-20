@@ -3,15 +3,34 @@
   ~ Copyright (c) Frog Development 2015.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/lessons_layout"
+<RelativeLayout android:id="@+id/lessons_layout"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/lesson_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:text="@string/lesson_description"/>
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/no_connection"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/temp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:padding="5dp"-->
+    <!--android:text="@string/no_connection"/>-->
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/lesson_description"
         android:fastScrollAlwaysVisible="true"
         android:fastScrollEnabled="true"
         android:scrollbarStyle="outsideOverlay"/>
@@ -21,6 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/no_connection"/>
+        android:text="@string/dico_no_data"/>
 
 </RelativeLayout>

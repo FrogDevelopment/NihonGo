@@ -49,7 +49,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:drawableStart="@drawable/ic_visibility_white"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="30sp"
@@ -72,7 +71,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:drawableStart="@drawable/ic_visibility_white"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="30sp"
