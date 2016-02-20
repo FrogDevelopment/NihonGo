@@ -383,7 +383,7 @@ public class LessonsFragment extends ListFragment {
 							.withValue(DicoContract.DETAILS, record.get(col_details))
 							.withValue(DicoContract.EXAMPLE, record.get(col_example))
 							.withValue(DicoContract.TYPE, record.get("type"))
-							.withValue(DicoContract.TAGS, tag + " " + numberFormat.format(code));
+							.withValue(DicoContract.TAGS, tag + " " + numberFormat.format(Integer.valueOf(code)));
 
 					ops.add(builder.build());
 				}
