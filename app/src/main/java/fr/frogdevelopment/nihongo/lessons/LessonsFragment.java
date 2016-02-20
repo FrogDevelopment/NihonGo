@@ -99,7 +99,9 @@ public class LessonsFragment extends ListFragment {
 		if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
 			myLocale = DEFAULT_LANGUAGE;
 		}
-		getDownloadedLessons();
+		// Downloaded Lessons
+		String lessonsSaved = PreferencesHelper.getInstance(getContext()).getString(Preferences.LESSONS);
+		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
 
 		inProgress(true);
 		new TestConnectionTask(getContext(), result -> {
@@ -131,11 +133,6 @@ public class LessonsFragment extends ListFragment {
 	private void inProgress(boolean wait) {
 		((MainActivity) getActivity()).showLoading(wait);
 //		getListView().setEnabled(!wait);
-	}
-
-	private void getDownloadedLessons() {
-		String lessonsSaved = PreferencesHelper.getInstance(getContext()).getString(Preferences.LESSONS);
-		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
 	}
 
 	private void getOffLineLessons() {

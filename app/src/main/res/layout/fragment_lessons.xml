@@ -16,16 +16,6 @@
         android:padding="5dp"
         android:text="@string/lesson_description"/>
 
-
-    <!--<TextView-->
-    <!--android:id="@+id/no_connection"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@id/temp"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:padding="5dp"-->
-    <!--android:text="@string/no_connection"/>-->
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
@@ -37,9 +27,9 @@
 
     <TextView
         android:id="@android:id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:text="@string/dico_no_data"/>
 
 </RelativeLayout>
