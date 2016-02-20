@@ -42,7 +42,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -340,6 +342,8 @@ public class LessonsFragment extends ListFragment {
 				Set<String> selectedCodes = selectedLessons.keySet();
 				String previousCode = null;
 
+				NumberFormat numberFormat = new DecimalFormat("00");
+
 				ContentProviderOperation.Builder builder;
 				ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 				CSVParser parse = CSVFormat.TDF.withHeader().withSkipHeaderRecord().parse(in);
@@ -379,7 +383,7 @@ public class LessonsFragment extends ListFragment {
 							.withValue(DicoContract.DETAILS, record.get(col_details))
 							.withValue(DicoContract.EXAMPLE, record.get(col_example))
 							.withValue(DicoContract.TYPE, record.get("type"))
-							.withValue(DicoContract.TAGS, tag + " " + record.get("tags"));
+							.withValue(DicoContract.TAGS, tag + " " + numberFormat.format(code));
 
 					ops.add(builder.build());
 				}
