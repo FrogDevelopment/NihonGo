@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewStub;
 import android.widget.TextView;
@@ -30,10 +29,11 @@ import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
+import fr.frogdevelopment.nihongo.data.Item;
 
 public abstract class TestAbstractActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_ID = 710;
+	protected static final int LOADER_ID_ITEMS_TO_FIND = 710;
 
 	@Bind(R.id.toolbar)
 	Toolbar toolbar;
@@ -44,17 +44,14 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	protected int          typeTest;
 	protected boolean      isDisplayKanji;
 	protected int          quantityMax;
-	protected int          quantity;
+	protected int          currentItemIndex = 0;
 	protected String[]     tags;
-	protected boolean      first;
-	protected List<String> idsDone;
-	protected int     limit;
+	protected int          nbAnswer;
 
+	protected List<Item>        itemsToFind = new ArrayList<>();
 	protected ArrayList<Result> results;
 
-	protected String currentDetails;
-
-	private final   int     layout;
+	private final int layout;
 
 	protected TestAbstractActivity(int layout) {
 		this.layout = layout;
@@ -71,23 +68,18 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 		ButterKnife.bind(this);
 
-		first = true;
-		quantity = 0;
 		Bundle bundle = getIntent().getExtras();
 
 		quantityMax = bundle.getInt(TestParametersFragment.QUANTITY);
-		idsDone = new ArrayList<>(quantityMax);
 		results = new ArrayList<>(quantityMax);
 		typeTest = bundle.getInt(TestParametersFragment.TYPE_TEST);
 		isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
 		tags = bundle.getStringArray("tags");
-		limit = bundle.getInt(TestParametersFragment.NB_ANSWER);
+		nbAnswer = bundle.getInt(TestParametersFragment.NB_ANSWER);
 
-		getLoaderManager().initLoader(LOADER_ID, bundle, this);
+		getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
 
 		initToolbar();
-
-		displayQuantity();
 	}
 
 	@Override
@@ -107,47 +99,20 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-//		if (currentDetails != null) {
-//			getMenuInflater().inflate(R.menu.test, menu);
-//
-//			MenuItem detailsMenuItem = menu.findItem(R.id.menu_test_detail);
-//			detailsMenuItem.setVisible(StringUtils.isNoneBlank(currentDetails));
-//
-//			return true;
-//		}
-
-		return false;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
 			case android.R.id.home:
 				onBackPressed();
 				return true;
-
-//			case R.id.menu_test_pass:
-//				validate("");
-//				return true;
-
-//			case R.id.menu_test_detail:
-//				new AlertDialog.Builder(this)
-//						.setTitle(R.string.input_textView_details)
-//						.setMessage(currentDetails)
-//						.create()
-//						.show();
-//
-//				return true;
-
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle options) {
-		String selection = "INPUT != '~'";
+		String selection = "INPUT != '~'"; // fixme
 
 		switch (typeTest) {
 
@@ -170,36 +135,24 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 			selection += "AND (" + StringUtils.join(likes, " OR ") + ")";
 		}
 
-		String[] selectionArgs;
-		if (first) {
-			selectionArgs = null;
-			first = false;
-		} else {
+		String sortOrder = "RANDOM() LIMIT " + quantityMax;
 
-			StringBuilder inList = new StringBuilder(quantity);
-			selectionArgs = new String[quantity];
-			int i = 0;
-			for (String idDone : idsDone) {
-				if (i > 0) {
-					inList.append(",");
-				}
-				inList.append("?");
-
-				selectionArgs[i] = idDone;
-				i++;
-			}
-
-			selection += "AND _ID NOT IN (" + inList.toString() + ")";
-		}
-
-		String sortOrder = "RANDOM() LIMIT " + limit;
-
-		return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, selectionArgs, sortOrder);
+		return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//		invalidateOptionsMenu();
+		quantityMax = data.getCount();
+
+		displayQuantity();
+
+		while (data.moveToNext()) {
+			itemsToFind.add(new Item(data));
+		}
+
+		data.close();
+
+		next(itemsToFind.get(currentItemIndex));
 	}
 
 	@Override
@@ -220,23 +173,25 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	private int successCounter = 0;
 
 	protected void validate(CharSequence testAnswer) {
-		if (results.get(quantity).setAnswerGiven(testAnswer)) {
+		if (results.get(currentItemIndex).setAnswerGiven(testAnswer)) {
 			successCounter++;
 		}
-		quantity++;
+		currentItemIndex++;
 
-		if (quantity  == quantityMax) {
+		if (currentItemIndex == quantityMax) {
 			finishTest();
 		} else {
 			displayQuantity();
-			getLoaderManager().restartLoader(LOADER_ID, null, this);
+			next(itemsToFind.get(currentItemIndex));
 		}
 	}
 
-	private void displayQuantity() {
-		String count = (quantity + 1) + "/" + quantityMax;
+	protected void displayQuantity() {
+		String count = (currentItemIndex + 1) + "/" + quantityMax;
 		mCount.setText(count);
 	}
+
+	abstract protected void next(Item item);
 
 	protected void finishTest() {
 		finish();
@@ -245,7 +200,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		Intent intent = new Intent(this, TestResultActivity.class);
 		intent.putParcelableArrayListExtra("results", results);
 		intent.putExtra("successCounter", successCounter);
-		intent.putExtra("quantity", quantity);
+		intent.putExtra("quantity", currentItemIndex);
 
 		startActivity(intent);
 	}

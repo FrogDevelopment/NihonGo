@@ -30,6 +30,6 @@
         android:checkable="true"
         android:icon="@drawable/ic_help_white_24dp"
         android:title="@string/help"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
 </menu>
