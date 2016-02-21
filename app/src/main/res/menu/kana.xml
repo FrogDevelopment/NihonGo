@@ -9,7 +9,7 @@
     <item
         android:id="@+id/action_drawing"
         android:title="FIXME"
-        android:icon="@drawable/ic_gesture"
+        android:icon="@drawable/ic_gesture_black"
         app:showAsAction="always"/>
 
 </menu>

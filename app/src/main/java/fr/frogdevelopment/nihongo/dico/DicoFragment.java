@@ -162,7 +162,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		// Inflate the options menu from XML
 		inflater.inflate(R.menu.dico, menu);
 
-		MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
+		MenuItem searchMenuItem = menu.findItem(R.id.dico_menu_search);
 
 		searchMenuItem.setVisible(true);
 		MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
@@ -195,13 +195,13 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_sort:
+			case R.id.dico_action_sort:
 				isSortByLetter = !isSortByLetter;
 				getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);
 				item.setTitle(isSortByLetter ? R.string.action_dico_sort_tag : R.string.action_dico_sort_letter);
 				break;
 
-			case R.id.action_filter_by_favorite:
+			case R.id.dico_action_filter_by_favorite:
 				isFilterByFavorite = !isFilterByFavorite;
 				item.setChecked(isFilterByFavorite);
 				getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);

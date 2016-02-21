@@ -5,6 +5,8 @@
 
 <resources>
 
+    <string name="help">Aide</string>
+
     <!-- WARNING IME -->
     <string name="warning_ime_text">Un clavier japonais est requis pour utiliser cette application.</string>
     <string name="warning_ime_remember">Ne plus afficher</string>

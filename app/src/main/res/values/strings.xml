@@ -9,6 +9,8 @@
 
     <string name="app_name" translatable="false">Nihon Go !</string>
 
+    <string name="help">Help</string>
+
     <!-- WARNING IME -->
     <string name="warning_ime_title" translatable="false">ATTENTION</string>
     <string name="warning_ime_text">Japanese Keyboard required for this application.</string>

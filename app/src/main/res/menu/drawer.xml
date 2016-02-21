@@ -32,11 +32,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_hiragana"
-            android:icon="@drawable/ic_hiragana"
+            android:icon="@drawable/ic_hiragana_white"
             android:title="@string/global_hiragana"/>
         <item
             android:id="@+id/navigation_katakana"
-            android:icon="@drawable/ic_katakana"
+            android:icon="@drawable/ic_katakana_white"
             android:title="@string/global_katakana"/>
     </group>
 
