@@ -4,7 +4,6 @@
 
 package fr.frogdevelopment.nihongo.test;
 
-import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -41,17 +41,17 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	@Bind(R.id.test_count)
 	TextView mCount;
 
-	protected int          typeTest;
-	protected boolean      isDisplayKanji;
-	protected int          quantityMax;
-	protected int          currentItemIndex = 0;
-	protected String[]     tags;
-	protected int          nbAnswer;
+	protected int     typeTest;
+	protected boolean isDisplayKanji;
+	protected int     quantityMax;
+	protected int currentItemIndex = 0;
+	protected String[] tags;
+	protected int      nbAnswer;
 
-	protected List<Item>        itemsToFind = new ArrayList<>();
+	protected List<Item> itemsToFind = new ArrayList<>();
 	protected ArrayList<Result> results;
 
-	private final int layout;
+	private final int      layout;
 
 	protected TestAbstractActivity(int layout) {
 		this.layout = layout;
@@ -71,7 +71,6 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		Bundle bundle = getIntent().getExtras();
 
 		quantityMax = bundle.getInt(TestParametersFragment.QUANTITY);
-		results = new ArrayList<>(quantityMax);
 		typeTest = bundle.getInt(TestParametersFragment.TYPE_TEST);
 		isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
 		tags = bundle.getStringArray("tags");
@@ -143,6 +142,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		quantityMax = data.getCount();
+		results = new ArrayList<>(quantityMax);
 
 		displayQuantity();
 
@@ -161,6 +161,10 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	@Override
 	public void onBackPressed() {
+//		Snackbar
+//				.make(stub.getRootView(), R.string.test_back_message, Snackbar.LENGTH_LONG)
+//				.setAction(R.string.positive_button_continue, v -> finish())
+//				.show();
 		new AlertDialog.Builder(this)
 				.setIcon(R.drawable.ic_warning_black)
 				.setTitle(R.string.test_back_title)
@@ -193,7 +197,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	abstract protected void next(Item item);
 
-	protected void finishTest() {
+	private void finishTest() {
 		finish();
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 

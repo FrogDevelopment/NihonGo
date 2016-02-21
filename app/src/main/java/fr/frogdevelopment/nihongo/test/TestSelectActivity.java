@@ -110,6 +110,8 @@ public class TestSelectActivity extends TestAbstractActivity {
 		// To find items
 		if (loader.getId() == TestAbstractActivity.LOADER_ID_ITEMS_TO_FIND) {
 			quantityMax = data.getCount();
+			results = new ArrayList<>(quantityMax);
+
 			displayQuantity();
 
 			ArrayList<String> idsToFind = new ArrayList<>();
