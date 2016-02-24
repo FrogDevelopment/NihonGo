@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/test"
+                android:src="@drawable/no_advert_off_line"
                 android:visibility="gone"
                 android:contentDescription="@string/no_connection"/>
 

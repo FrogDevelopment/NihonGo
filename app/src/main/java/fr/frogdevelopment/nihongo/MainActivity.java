@@ -36,6 +36,7 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
@@ -105,6 +106,11 @@ public class MainActivity extends AppCompatActivity {
 			// Load an ad with an ad request.
 			loadAdViewRequest();
 		}
+	}
+
+	@OnClick(R.id.ad_image)
+	public void onClickNoAdvertising() {
+		selectItemAtIndex(R.id.navigation_parameters);
 	}
 
 	private void loadAdViewRequest() {
