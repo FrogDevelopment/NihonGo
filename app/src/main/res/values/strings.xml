@@ -9,8 +9,6 @@
 
     <string name="app_name" translatable="false">Nihon Go !</string>
 
-    <string name="help">Help</string>
-
     <!-- WARNING IME -->
     <string name="warning_ime_title" translatable="false">ATTENTION</string>
     <string name="warning_ime_text">Japanese Keyboard required for this application.</string>
@@ -257,5 +255,18 @@
 
     <string name="kanji" translatable="false">Kanji</string>
     <string name="kana" translatable="false">Kana</string>
+
+    <!-- ******* -->
+    <!--   HELP  -->
+    <!-- ******* -->
+    <string name="help_title">Help</string>
+    <string name="help_dico_intro">Here is some help for the dico view</string>
+    <string name="help_dico_one_press_description">1 press</string>
+    <string name="help_dico_one_press">Press 1 time to switch between Kanji and Kana</string>
+    <string name="help_dico_two_press_description">2 presses</string>
+    <string name="help_dico_two_press">Press 2 times to enter detail\'s view</string>
+    <string name="help_dico_press_and_hold_description">Press and hold</string>
+    <string name="help_dico_press_and_hold">Press and hold to select the line</string>
+    <string name="help_dico_add">Add new input</string>
 
 </resources>

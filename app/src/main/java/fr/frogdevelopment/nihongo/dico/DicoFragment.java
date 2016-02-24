@@ -43,6 +43,7 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Row;
 import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
@@ -205,6 +206,10 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 				isFilterByFavorite = !isFilterByFavorite;
 				item.setChecked(isFilterByFavorite);
 				getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);
+				break;
+
+			case R.id.dico_help:
+				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_dico);
 				break;
 
 			default:

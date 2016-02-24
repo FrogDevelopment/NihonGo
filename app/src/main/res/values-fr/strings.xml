@@ -226,5 +226,17 @@
     <string name="no">Non</string>
     <string name="input_textView_tags">Tags (séparés par des virgules)</string>
 
+    <!-- ******* -->
+    <!--   HELP  -->
+    <!-- ******* -->
+    <string name="help_title">Aide</string>
+    <string name="help_dico_intro">Voici quelques aides pour le dictionnaire</string>
+    <string name="help_dico_one_press_description">1 pression</string>
+    <string name="help_dico_one_press">Presser 1 fois pour permutter entre Kanji et Kana</string>
+    <string name="help_dico_two_press_description">2 pressions</string>
+    <string name="help_dico_two_press">Presser 2 fois pour afficher la vue détaillée</string>
+    <string name="help_dico_press_and_hold_description">Presser et maintenir</string>
+    <string name="help_dico_press_and_hold">Presser et maintenir pour sélectionner la ligne</string>
+    <string name="help_dico_add">Ajouter une nouvelle entrée</string>
 
 </resources>
