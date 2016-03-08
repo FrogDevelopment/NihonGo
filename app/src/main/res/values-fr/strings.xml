@@ -237,4 +237,10 @@
     <string name="help_dico_press_and_hold">Presser et maintenir pour sélectionner la ligne</string>
     <string name="help_dico_add">Ajouter une nouvelle entrée</string>
 
+    <string name="help_details_intro">Voici quelques aides pour la vue détaillée</string>
+    <string name="help_details_swap">Swap gauche et droite pour naviguer</string>
+
+    <string name="help_review_intro">Voici quelques aides pour la vue de révision</string>
+    <string name="help_review_learned">Tag comme appris</string>
+    <string name="help_review_favorite">Tag comme favoris</string>
 </resources>

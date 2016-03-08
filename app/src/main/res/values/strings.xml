@@ -269,4 +269,11 @@
     <string name="help_dico_press_and_hold">Press and hold to select the line</string>
     <string name="help_dico_add">Add new input</string>
 
+    <string name="help_details_intro">Here is some help for the details view</string>
+    <string name="help_details_swap">Swap left and right to navigate</string>
+
+    <string name="help_review_intro">Here is some help for the review view</string>
+    <string name="help_review_learned">Tag as learned</string>
+    <string name="help_review_favorite">Tag as favorite</string>
+
 </resources>

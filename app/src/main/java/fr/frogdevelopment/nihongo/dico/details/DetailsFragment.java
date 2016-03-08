@@ -24,6 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class DetailsFragment extends Fragment {
 
@@ -98,7 +99,7 @@ public class DetailsFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.dico_context, menu);
+		inflater.inflate(R.menu.details, menu);
 	}
 
 	@Override
@@ -112,6 +113,9 @@ public class DetailsFragment extends Fragment {
 				mListener.get().update(mItem);
 				break;
 
+			case R.id.details_help:
+				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
+				break;
 
 			default:
 				return false;

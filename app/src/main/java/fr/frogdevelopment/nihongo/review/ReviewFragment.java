@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextSwitcher;
@@ -23,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class ReviewFragment extends Fragment {
 
@@ -63,6 +67,8 @@ public class ReviewFragment extends Fragment {
 
 		ButterKnife.bind(this, rootView);
 
+		setHasOptionsMenu(true);
+
 		populateView();
 
 		initFabs();
@@ -71,11 +77,30 @@ public class ReviewFragment extends Fragment {
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.review, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+			case R.id.review_help:
+				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review);
+				break;
+
+			default:
+				return false;
+		}
+
+		return true;
+	}
+
+	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		ButterKnife.unbind(this);
 	}
-
 
 	private void initFabs() {
 		mFabFavorite.setOnClickListener(view -> {
