@@ -82,11 +82,28 @@
                 android:id="@+id/review_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="start"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="30sp"
-                android:textStyle="italic"
-                android:visibility="invisible"/>
+                android:textSize="20sp"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/review_example"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/review_tags"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                android:textStyle="italic"/>
 
         </LinearLayout>
     </ScrollView>

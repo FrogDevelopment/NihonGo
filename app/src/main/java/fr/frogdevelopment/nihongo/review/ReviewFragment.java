@@ -44,6 +44,10 @@ public class ReviewFragment extends Fragment {
 	TextSwitcher         mTest;
 	@Bind(R.id.review_details)
 	TextView             mDetails;
+	@Bind(R.id.review_example)
+	TextView             mExemple;
+	@Bind(R.id.review_tags)
+	TextView             mTags;
 	@Bind(R.id.fab_favorite)
 	FloatingActionButton mFabFavorite;
 	@Bind(R.id.fab_learned)
@@ -149,7 +153,29 @@ public class ReviewFragment extends Fragment {
 			mReviewed.setText(mItem.input);
 		}
 
-		mDetails.setText(mItem.details);
+		if (StringUtils.isNotBlank(mItem.details)) {
+			mDetails.setText(mItem.details);
+			mDetails.setVisibility(View.VISIBLE);
+		} else {
+			mDetails.setText(null);
+			mDetails.setVisibility(View.GONE);
+		}
+
+		if (StringUtils.isNotBlank(mItem.example)) {
+			mExemple.setText(mItem.example);
+			mExemple.setVisibility(View.VISIBLE);
+		} else {
+			mExemple.setText(null);
+			mTags.setVisibility(View.GONE);
+		}
+
+		if (StringUtils.isNotBlank(mItem.tags)) {
+			mTags.setText(mItem.tags);
+			mTags.setVisibility(View.VISIBLE);
+		} else {
+			mTags.setText(null);
+			mTags.setVisibility(View.GONE);
+		}
 	}
 
 	@OnClick(R.id.review_textSwitcher_kana)
@@ -162,9 +188,6 @@ public class ReviewFragment extends Fragment {
 	void onClickTest() {
 		mTest.setText(test);
 		mTest.setClickable(false);
-		if (mDetails.getVisibility() == View.INVISIBLE) {
-			mDetails.setVisibility(View.VISIBLE);
-		}
 	}
 
 }
