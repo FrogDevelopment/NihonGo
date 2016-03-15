@@ -16,11 +16,23 @@
         android:padding="5dp"
         android:text="@string/lesson_description"/>
 
+    <TextView
+        android:id="@+id/lesson_no_connection_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lesson_description"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/lesson_no_connection_test"
+        android:textStyle="italic"
+        android:visibility="visible"
+        />
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/lesson_description"
+        android:layout_below="@id/lesson_no_connection_test"
         android:fastScrollAlwaysVisible="true"
         android:fastScrollEnabled="true"
         android:scrollbarStyle="outsideOverlay"/>
@@ -30,6 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/dico_no_data"/>
+        android:text="@string/fetching_data"/>
 
 </RelativeLayout>

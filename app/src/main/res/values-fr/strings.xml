@@ -5,6 +5,8 @@
 
 <resources>
 
+    <string name="no_connection">Pas de connexion</string>
+
     <!-- WARNING IME -->
     <string name="warning_ime_text">Un clavier japonais est requis pour utiliser cette application.</string>
     <string name="warning_ime_remember">Ne plus afficher</string>
@@ -175,8 +177,9 @@
     <!-- LESSONS -->
     <!-- ******* -->
     <string name="lesson_description">Vocabulaire gratuit téléchargeable, basé sur les leçons Minna No Nihongo.</string>
+    <string name="lesson_no_connection_test">Aucune connexion détectée, seul les leçons téléchargés sont affichées.</string>
     <string name="lesson_tag">Leçon </string>
-    <string name="no_connection">Pas de connexion</string>
+    <string name="fetching_data">Récupération des données</string>
     <string name="lesson_already_present">Leçon déjà récupérée</string>
     <string name="lesson_continue">Continuer ?</string>
     <string name="lesson_download">Télécharger</string>
