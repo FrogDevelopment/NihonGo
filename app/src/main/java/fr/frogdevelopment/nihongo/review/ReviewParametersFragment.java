@@ -43,19 +43,19 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 	private static final int LOADER_ID = 700;
 
 	@Bind(R.id.review_switch_language)
-	Switch    mSwitchLanguageView;
+	Switch   mSwitchLanguageView;
 	@Bind(R.id.review_switch_sort)
-	Switch    mSwitchSortView;
+	Switch   mSwitchSortView;
 	@Bind(R.id.review_switch_learned)
-	Switch    mSwitchLearned;
+	Switch   mSwitchLearned;
 	@Bind(R.id.review_switch_favorite)
-	Switch    mSwitchFavorite;
+	Switch   mSwitchFavorite;
 	@Bind(R.id.review_param_quantity_selection)
-	TextView  mQuantitySelected;
+	TextView mQuantitySelected;
 	@Bind(R.id.review_param_tag_selection)
-	TextView  mTagSelected;
+	TextView mTagSelected;
 	@Bind(R.id.review_button_start)
-	Button    startButton;
+	Button   startButton;
 
 	private String[] quantities;
 	private String selectedQuantity = null;
@@ -74,6 +74,18 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 		quantities = getResources().getStringArray(R.array.param_quantities);
 		quantities = ArrayUtils.add(quantities, getResources().getString(R.string.param_quantity_all));
 
+		if (savedInstanceState != null) {
+			mSwitchLanguageView.setChecked(savedInstanceState.getBoolean("isJapaneseReviewed"));
+			mSwitchSortView.setChecked(savedInstanceState.getBoolean("isRandom"));
+			savedInstanceState.getString("count");
+			selectedQuantity = savedInstanceState.getString("count");
+			mQuantitySelected.setText(selectedQuantity);
+			mSelectedTags = savedInstanceState.getStringArray("tags");
+			mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
+			mSwitchLearned.setChecked(savedInstanceState.getBoolean("excludeLearned"));
+			mSwitchFavorite.setChecked(savedInstanceState.getBoolean("onlyFavorite"));
+		}
+
 		return rootView;
 	}
 
@@ -82,7 +94,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 		super.onDestroyView();
 		ButterKnife.unbind(this);
 	}
-
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -157,6 +168,20 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 
 		startActivity(intent);
 		getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+
+		// Store UI state to the savedInstanceState.
+		savedInstanceState.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
+		savedInstanceState.putBoolean("isRandom", mSwitchSortView.isChecked());
+		savedInstanceState.putString("count", selectedQuantity);
+		savedInstanceState.putStringArray("tags", mSelectedTags);
+		savedInstanceState.putBoolean("excludeLearned", mSwitchLearned.isChecked());
+		savedInstanceState.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
+
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 }
