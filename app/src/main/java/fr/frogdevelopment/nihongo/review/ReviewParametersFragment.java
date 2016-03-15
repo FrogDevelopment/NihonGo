@@ -77,7 +77,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 		if (savedInstanceState != null) {
 			mSwitchLanguageView.setChecked(savedInstanceState.getBoolean("isJapaneseReviewed"));
 			mSwitchSortView.setChecked(savedInstanceState.getBoolean("isRandom"));
-			savedInstanceState.getString("count");
 			selectedQuantity = savedInstanceState.getString("count");
 			mQuantitySelected.setText(selectedQuantity);
 			mSelectedTags = savedInstanceState.getStringArray("tags");
