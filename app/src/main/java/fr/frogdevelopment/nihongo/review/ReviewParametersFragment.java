@@ -156,12 +156,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 	@OnClick(R.id.review_button_start)
 	void onClickButtonStart() {
 		Bundle options = new Bundle();
-		options.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
-		options.putBoolean("isRandom", mSwitchSortView.isChecked());
-		options.putString("count", selectedQuantity);
-		options.putStringArray("tags", mSelectedTags);
-		options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
-		options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
+		populateUiSelection(options);
 
 		Intent intent = new Intent(getActivity(), ReviewActivity.class);
 		intent.putExtras(options);
@@ -170,16 +165,20 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 		getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
+	private void populateUiSelection(Bundle options) {
+		options.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
+		options.putBoolean("isRandom", mSwitchSortView.isChecked());
+		options.putString("count", selectedQuantity);
+		options.putStringArray("tags", mSelectedTags);
+		options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
+		options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
+	}
+
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 
 		// Store UI state to the savedInstanceState.
-		savedInstanceState.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
-		savedInstanceState.putBoolean("isRandom", mSwitchSortView.isChecked());
-		savedInstanceState.putString("count", selectedQuantity);
-		savedInstanceState.putStringArray("tags", mSelectedTags);
-		savedInstanceState.putBoolean("excludeLearned", mSwitchLearned.isChecked());
-		savedInstanceState.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
+		populateUiSelection(savedInstanceState);
 
 		super.onSaveInstanceState(savedInstanceState);
 	}
