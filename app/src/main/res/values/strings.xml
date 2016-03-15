@@ -9,6 +9,8 @@
 
     <string name="app_name" translatable="false">Nihon Go !</string>
 
+    <string name="no_connection">No connection</string>
+
     <!-- WARNING IME -->
     <string name="warning_ime_title" translatable="false">ATTENTION</string>
     <string name="warning_ime_text">Japanese Keyboard required for this application.</string>
@@ -206,8 +208,9 @@
     <!-- LESSONS -->
     <!-- ******* -->
     <string name="lesson_description">Free downloadable vocabulary available, based on Minna No Nihongo lessons.</string>
+    <string name="lesson_no_connection_test">No connection available, only downloaded lessons are displayed.</string>
     <string name="lesson_tag">Lesson </string>
-    <string name="no_connection">No connection</string>
+    <string name="fetching_data">Fetching data</string>
     <string name="lesson_already_present">Lesson already fetched</string>
     <string name="lesson_continue">Continue ?</string>
     <string name="lesson_download">Download</string>
@@ -275,5 +278,11 @@
     <string name="help_review_intro">Here is some help for the review view</string>
     <string name="help_review_learned">Tag as learned</string>
     <string name="help_review_favorite">Tag as favorite</string>
+
+    <!-- ******* -->
+    <!--  ABOUT  -->
+    <!-- ******* -->
+    <string name="about_hiragana_link"><a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
+    <string name="about_katakana_link"><a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
 
 </resources>
