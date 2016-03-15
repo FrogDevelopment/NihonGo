@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Frog Development 2015.
+  -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:autoLink="web"
+        android:clickable="true"
+        android:linksClickable="true"
+        android:padding="2dp"
+        android:text="@string/about_hiragana_link"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:autoLink="web"
+        android:clickable="true"
+        android:linksClickable="true"
+        android:padding="2dp"
+        android:text="@string/about_katakana_link"/>
+
+
+</LinearLayout>

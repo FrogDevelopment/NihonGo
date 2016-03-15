@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -76,10 +77,34 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		adapter = new ReviewAdapter(getSupportFragmentManager(), isJapaneseReviewed);
 		viewPager.setAdapter(adapter);
 
-		getLoaderManager().initLoader(LOADER_ID, null, this);
+		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				ReviewFragment fragment = adapter.getItemAt(position);
+				if (position + 1 == adapter.getCount()) {
+					if (fragment.mFabAgain.getVisibility() == View.GONE) {
+						fragment.mFabAgain.show();
+					}
+				} else {
+					if (fragment.mFabAgain.getVisibility() == View.VISIBLE) {
+						fragment.mFabAgain.hide();
+					}
+				}
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+
+			}
+		});
+
+		getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
 	}
-
-
 
 	@Override
 	public void onDestroy() {
@@ -99,14 +124,13 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		final Bundle options = getIntent().getExtras();
 
-		final String count = options.getString("count");
+		final String count = args.getString("count");
 		String limit = "";
 		if (NumberUtils.isNumber(count)) {
 			limit = " LIMIT " + Integer.parseInt(count);
 		}
-		final String[] tags = options.getStringArray("tags");
+		final String[] tags = args.getStringArray("tags");
 
 		String selection = "1 = 1";
 		String[] likes = null;
@@ -117,18 +141,18 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
 		}
 
-		final boolean excludeLearned = options.getBoolean("excludeLearned");
+		final boolean excludeLearned = args.getBoolean("excludeLearned");
 		if (excludeLearned) {
 			selection += " AND LEARNED = '0'";
 		}
 
-		final boolean onlyFavorite = options.getBoolean("onlyFavorite");
+		final boolean onlyFavorite = args.getBoolean("onlyFavorite");
 		if (onlyFavorite) {
 			selection += " AND FAVORITE = '1'";
 		}
 
 		String sortOrder;
-		final boolean isRandom = options.getBoolean("isRandom");
+		final boolean isRandom = args.getBoolean("isRandom");
 		if (isRandom) {
 			sortOrder = "RANDOM()" + limit;
 		} else {
@@ -153,7 +177,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.FAVORITE, item.favorite);
 
-		udpateItem(item, values);
+		updateItem(item, values);
 	}
 
 	@Override
@@ -161,14 +185,20 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.LEARNED, item.learned);
 
-		udpateItem(item, values);
+		updateItem(item, values);
 	}
 
-	private void udpateItem(Item item, ContentValues values) {
+	private void updateItem(Item item, ContentValues values) {
 		final String where = DicoContract._ID + "=?";
 		final String[] selectionArgs = {item.id};
 
 		getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
+	}
+
+	@Override
+	public void reviewAgain() {
+		viewPager.setAdapter(adapter);
+		getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
 	}
 
 }

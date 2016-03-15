@@ -146,6 +146,15 @@
         app:layout_anchorGravity="bottom|right|end">
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_again"
+            style="@style/FabStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_again_white_24dp"/>
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_learned"
             style="@style/FabStyle"
             android:layout_width="wrap_content"

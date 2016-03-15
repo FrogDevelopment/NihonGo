@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.frogdevelopment.nihongo.data.Item;
 
@@ -20,6 +23,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 	private int mCount = 0;
 	private       List<Item> items;
 	private final boolean    isJapaneseReviewed;
+	private final Map<Integer, ReviewFragment> mapFragments = new HashMap<>();
 
 	public ReviewAdapter(FragmentManager fm, boolean isJapaneseType) {
 		super(fm);
@@ -38,7 +42,15 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 
 		fragment.setArguments(args);
 
+		mapFragments.put(position, fragment);
+
 		return fragment;
+	}
+
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		mapFragments.remove(position);
+		super.destroyItem(container, position, object);
 	}
 
 	@Override
@@ -60,5 +72,9 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 		}
 
 		notifyDataSetChanged();
+	}
+
+	public ReviewFragment getItemAt(int position) {
+		return mapFragments.get(position);
 	}
 }

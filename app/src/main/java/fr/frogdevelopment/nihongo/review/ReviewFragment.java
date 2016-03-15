@@ -34,6 +34,8 @@ public class ReviewFragment extends Fragment {
 		void setFavorite(Item item);
 
 		void setLearned(Item item);
+
+		void reviewAgain();
 	}
 
 	private WeakReference<OnFragmentInteractionListener> mListener;
@@ -58,6 +60,8 @@ public class ReviewFragment extends Fragment {
 	TextView             mTagsTitle;
 	@Bind(R.id.review_tags)
 	TextView             mTags;
+	@Bind(R.id.fab_again)
+	FloatingActionButton mFabAgain;
 	@Bind(R.id.fab_favorite)
 	FloatingActionButton mFabFavorite;
 	@Bind(R.id.fab_learned)
@@ -109,6 +113,8 @@ public class ReviewFragment extends Fragment {
 	}
 
 	private void initFabs() {
+		mFabAgain.setOnClickListener(view -> mListener.get().reviewAgain());
+
 		mFabFavorite.setOnClickListener(view -> {
 			mItem.switchFavorite();
 			mListener.get().setFavorite(mItem);
