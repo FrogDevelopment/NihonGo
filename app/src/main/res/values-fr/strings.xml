@@ -241,6 +241,6 @@
     <string name="help_details_swap">Swap gauche et droite pour naviguer</string>
 
     <string name="help_review_intro">Voici quelques aides pour la vue de révision</string>
-    <string name="help_review_learned">Tag comme appris</string>
-    <string name="help_review_favorite">Tag comme favoris</string>
+    <string name="help_review_learned">Tagger comme appris</string>
+    <string name="help_review_favorite">Tagger comme favoris</string>
 </resources>
