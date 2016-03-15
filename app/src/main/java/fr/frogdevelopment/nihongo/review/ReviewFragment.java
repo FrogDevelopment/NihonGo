@@ -46,10 +46,16 @@ public class ReviewFragment extends Fragment {
 	TextSwitcher         mKana;
 	@Bind(R.id.review_textSwitcher_test)
 	TextSwitcher         mTest;
-	@Bind(R.id.review_details)
-	TextView             mDetails;
+	@Bind(R.id.review_info_title)
+	TextView             mInfoTitle;
+	@Bind(R.id.review_info)
+	TextView             mInfo;
+	@Bind(R.id.review_example_title)
+	TextView             mExampleTitle;
 	@Bind(R.id.review_example)
-	TextView             mExemple;
+	TextView             mExample;
+	@Bind(R.id.review_tags_title)
+	TextView             mTagsTitle;
 	@Bind(R.id.review_tags)
 	TextView             mTags;
 	@Bind(R.id.fab_favorite)
@@ -179,27 +185,33 @@ public class ReviewFragment extends Fragment {
 		}
 
 		if (StringUtils.isNotBlank(mItem.details)) {
-			mDetails.setText(mItem.details);
-			mDetails.setVisibility(View.VISIBLE);
+			mInfo.setText(mItem.details);
+			mInfo.setVisibility(View.VISIBLE);
+			mInfoTitle.setVisibility(View.VISIBLE);
 		} else {
-			mDetails.setText(null);
-			mDetails.setVisibility(View.GONE);
+			mInfo.setText(null);
+			mInfo.setVisibility(View.GONE);
+			mInfoTitle.setVisibility(View.GONE);
 		}
 
 		if (StringUtils.isNotBlank(mItem.example)) {
-			mExemple.setText(mItem.example);
-			mExemple.setVisibility(View.VISIBLE);
+			mExample.setText(mItem.example);
+			mExample.setVisibility(View.VISIBLE);
+			mExampleTitle.setVisibility(View.VISIBLE);
 		} else {
-			mExemple.setText(null);
-			mTags.setVisibility(View.GONE);
+			mExample.setText(null);
+			mExample.setVisibility(View.GONE);
+			mExampleTitle.setVisibility(View.GONE);
 		}
 
 		if (StringUtils.isNotBlank(mItem.tags)) {
 			mTags.setText(mItem.tags);
 			mTags.setVisibility(View.VISIBLE);
+			mTagsTitle.setVisibility(View.VISIBLE);
 		} else {
 			mTags.setText(null);
 			mTags.setVisibility(View.GONE);
+			mTagsTitle.setVisibility(View.GONE);
 		}
 	}
 

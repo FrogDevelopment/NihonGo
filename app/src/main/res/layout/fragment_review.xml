@@ -79,13 +79,33 @@
             </TextSwitcher>
 
             <TextView
-                android:id="@+id/review_details"
+                android:id="@+id/review_info_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="12sp"
+                android:text="@string/details_info"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/review_info"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
                 android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/review_example_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="12sp"
+                android:text="@string/details_example"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/review_example"
@@ -95,6 +115,16 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
                 android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/review_tags_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="12sp"
+                android:text="@string/details_tags"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/review_tags"
