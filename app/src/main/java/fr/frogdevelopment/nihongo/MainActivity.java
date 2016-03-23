@@ -37,6 +37,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import fr.frogdevelopment.nihongo.about.AboutFragment;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
@@ -307,6 +308,11 @@ public class MainActivity extends AppCompatActivity {
 			case R.id.navigation_lessons:
 				mFragmentTitle = R.string.drawer_item_lessons;
 				fragment = new LessonsFragment();
+				break;
+
+			case R.id.navigation_about:
+				mFragmentTitle = R.string.drawer_item_about;
+				fragment = new AboutFragment();
 				break;
 
 			default:
