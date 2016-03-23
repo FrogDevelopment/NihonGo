@@ -282,7 +282,8 @@
     <!-- ******* -->
     <!--  ABOUT  -->
     <!-- ******* -->
-    <string name="about_hiragana_link"><a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
-    <string name="about_katakana_link"><a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
+    <string name="about_drawer_header_link" translatable="false">About the drawer picture : <a href="https://commons.wikimedia.org/wiki/File:Tsunami_by_hokusai_19th_century.jpg">Katsushika Hokusai (葛飾北斎) [Public domain], via Wikimedia Commons</a></string>
+    <string name="about_hiragana_link" translatable="false">About the Hiragana table : <a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
+    <string name="about_katakana_link" translatable="false">About the Katakana table : <a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
 
 </resources>

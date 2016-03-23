@@ -10,22 +10,26 @@
     android:padding="6dp">
 
     <TextView
+        android:id="@+id/about_drawer_header_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:autoLink="web"
-        android:clickable="true"
-        android:linksClickable="true"
+        android:padding="2dp"
+        android:text="@string/about_drawer_header_link"/>
+
+    <TextView
+        android:id="@+id/about_hiragana_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:padding="2dp"
         android:text="@string/about_hiragana_link"/>
 
     <TextView
+        android:id="@+id/about_katakana_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:autoLink="web"
-        android:clickable="true"
-        android:linksClickable="true"
         android:padding="2dp"
         android:text="@string/about_katakana_link"/>
 

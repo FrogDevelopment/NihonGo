@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) Frog Development 2015.
+ */
+
+package fr.frogdevelopment.nihongo.about;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import fr.frogdevelopment.nihongo.R;
+
+public class AboutFragment extends Fragment  {
+
+	@Bind(R.id.about_drawer_header_link)
+	TextView drawerHeader;
+	@Bind(R.id.about_hiragana_link)
+	TextView hiragana;
+	@Bind(R.id.about_katakana_link)
+	TextView katakana;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		View view = inflater.inflate(R.layout.fragment_about, container, false);
+
+		ButterKnife.bind(this, view);
+
+		drawerHeader.setMovementMethod(LinkMovementMethod.getInstance());
+		hiragana.setMovementMethod(LinkMovementMethod.getInstance());
+		katakana.setMovementMethod(LinkMovementMethod.getInstance());
+
+		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ButterKnife.unbind(this);
+	}
+}
