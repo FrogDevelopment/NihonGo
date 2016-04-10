@@ -204,6 +204,7 @@ public class ParametersFragment extends Fragment implements IabBroadcastReceiver
 	void checkPurchase() {
 		Log.d(LOG_TAG, "Querying inventory.");
 		setWaitScreen(true);
+		mHelper.flagEndAsync();
 		mHelper.queryInventoryAsync(mGotInventoryListener);
 	}
 
