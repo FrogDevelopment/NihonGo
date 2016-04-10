@@ -7,6 +7,7 @@ package fr.frogdevelopment.nihongo.about;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +33,10 @@ public class AboutFragment extends Fragment  {
 
 		ButterKnife.bind(this, view);
 
-		drawerHeader.setMovementMethod(LinkMovementMethod.getInstance());
-		hiragana.setMovementMethod(LinkMovementMethod.getInstance());
-		katakana.setMovementMethod(LinkMovementMethod.getInstance());
+		MovementMethod instance = LinkMovementMethod.getInstance();
+		drawerHeader.setMovementMethod(instance);
+		hiragana.setMovementMethod(instance);
+		katakana.setMovementMethod(instance);
 
 		return view;
 	}
