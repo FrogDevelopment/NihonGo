@@ -21,8 +21,6 @@ public class AboutFragment extends Fragment  {
 
 	@Bind(R.id.about_logos_link)
 	TextView logos;
-	@Bind(R.id.about_drawer_header_link)
-	TextView drawerHeader;
 	@Bind(R.id.about_hiragana_link)
 	TextView hiragana;
 	@Bind(R.id.about_katakana_link)
@@ -37,7 +35,6 @@ public class AboutFragment extends Fragment  {
 
 		MovementMethod instance = LinkMovementMethod.getInstance();
 		logos.setMovementMethod(instance);
-		drawerHeader.setMovementMethod(instance);
 		hiragana.setMovementMethod(instance);
 		katakana.setMovementMethod(instance);
 
