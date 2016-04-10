@@ -5,6 +5,8 @@
 
 <resources>
 
+    <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
+
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9262384952442366/1210248138</string>
 
     <string name="app_name" translatable="false">Nihon Go !</string>
@@ -282,6 +284,7 @@
     <!-- ******* -->
     <!--  ABOUT  -->
     <!-- ******* -->
+    <string name="about_logos_link" translatable="false">Logos designer : <a href="http://mikaniitsu.com/">NIITSU Mika</a></string>
     <string name="about_drawer_header_link" translatable="false">About the drawer picture : <a href="https://commons.wikimedia.org/wiki/File:Tsunami_by_hokusai_19th_century.jpg">Katsushika Hokusai (葛飾北斎) [Public domain], via Wikimedia Commons</a></string>
     <string name="about_hiragana_link" translatable="false">About the Hiragana table : <a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
     <string name="about_katakana_link" translatable="false">About the Katakana table : <a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
