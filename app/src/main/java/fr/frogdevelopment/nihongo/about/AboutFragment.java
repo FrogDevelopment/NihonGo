@@ -19,8 +19,6 @@ import fr.frogdevelopment.nihongo.R;
 
 public class AboutFragment extends Fragment  {
 
-	@Bind(R.id.about_logos_link)
-	TextView logos;
 	@Bind(R.id.about_hiragana_link)
 	TextView hiragana;
 	@Bind(R.id.about_katakana_link)
@@ -34,7 +32,6 @@ public class AboutFragment extends Fragment  {
 		ButterKnife.bind(this, view);
 
 		MovementMethod instance = LinkMovementMethod.getInstance();
-		logos.setMovementMethod(instance);
 		hiragana.setMovementMethod(instance);
 		katakana.setMovementMethod(instance);
 
