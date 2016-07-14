@@ -177,7 +177,11 @@ public class TestSelectActivity extends TestAbstractActivity {
 			case 1: // Hiragana -> Kanji
 				if (item.kanji.contains("、")) {
 					String[] kanjis = item.kanji.split("、");
-					answer = kanjis[new Random().nextInt(2) - 1];
+					int i = 0;
+					while (i < 1) {
+						i = new Random().nextInt(2);
+					}
+					answer = kanjis[i - 1];
 				} else
 					answer = item.kanji;
 				break;
