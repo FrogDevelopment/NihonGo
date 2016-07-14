@@ -56,8 +56,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
@@ -81,7 +82,7 @@ public class LessonsFragment extends ListFragment {
 	private static final String[] LANGUAGES              = {"fr_FR", "en_US"};
 	private static final String   DEFAULT_LANGUAGE       = "en_US";
 
-	@Bind(R.id.lesson_no_connection_test)
+	@BindView(R.id.lesson_no_connection_test)
 	TextView noConnection;
 
 	private boolean hasInternet = false;
@@ -92,6 +93,7 @@ public class LessonsFragment extends ListFragment {
 
 	private Set<String> lessonsDownloaded;
 	final private Map<String, Lesson> selectedLessons = new HashMap<>();
+	private Unbinder unbinder;
 
 	public LessonsFragment() {
 	}
@@ -102,7 +104,7 @@ public class LessonsFragment extends ListFragment {
 
 		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		myLocale = Locale.getDefault().toString();
 		if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
@@ -131,7 +133,7 @@ public class LessonsFragment extends ListFragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
 

@@ -36,8 +36,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -55,16 +56,17 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	private static final int LOADER_ID = 100;
 
-	private   boolean isContextActionBar = false;
-	protected boolean isSortByLetter     = true;
-	protected boolean isFilterByFavorite = false;
+	private boolean isContextActionBar = false;
+	private boolean isSortByLetter     = true;
+	private boolean isFilterByFavorite = false;
 
-	protected DicoAdapter dicoAdapter;
+	private DicoAdapter dicoAdapter;
 
-	@Bind(R.id.fab_add)
+	@BindView(R.id.fab_add)
 	FloatingActionButton mFabAdd;
 
 	private Type mType;
+	private Unbinder unbinder;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 		View rootView = inflater.inflate(R.layout.fragment_dico, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		getLoaderManager().initLoader(LOADER_ID, getArguments(), this);
 		int resource;
@@ -101,7 +103,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
 	private void initFabAdd() {

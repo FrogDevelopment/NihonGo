@@ -9,6 +9,8 @@ buildscript {
 
     dependencies {
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+
     }
 }
 
@@ -19,6 +21,7 @@ repositories {
 
 apply plugin: 'com.android.application' //or apply plugin: 'java'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     signingConfigs {
@@ -27,12 +30,12 @@ android {
             keyPassword 'bReiZhZiOn21'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 24
+    buildToolsVersion '23.0.3'
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 24
     }
     buildTypes {
         release {
@@ -54,13 +57,13 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
-    compile 'org.apache.commons:commons-csv:1.1'
-    compile 'commons-io:commons-io:2.4'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.apache.commons:commons-csv:1.4'
+    compile 'commons-io:commons-io:2.5'
 }

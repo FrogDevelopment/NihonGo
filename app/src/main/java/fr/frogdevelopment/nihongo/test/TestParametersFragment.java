@@ -30,9 +30,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -47,27 +48,27 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 	static final String NB_ANSWER     = "nbAnswer";
 	static final String DISPLAY_KANJI = "isDisplayKanji";
 
-	@Bind(R.id.test_param_type_selection)
+	@BindView(R.id.test_param_type_selection)
 	TextView mTypeSelected;
 
-	@Bind(R.id.test_param_method_selection)
+	@BindView(R.id.test_param_method_selection)
 	TextView mMethodSelected;
 
-	@Bind(R.id.test_param_nb_answers)
+	@BindView(R.id.test_param_nb_answers)
 	View     mNbAnswers;
-	@Bind(R.id.test_param_nb_answers_selection)
+	@BindView(R.id.test_param_nb_answers_selection)
 	TextView mNbAnswersSelected;
 
-	@Bind(R.id.test_param_quantity_selection)
+	@BindView(R.id.test_param_quantity_selection)
 	TextView mQuantitySelected;
 
-	@Bind(R.id.test_param_kanji)
+	@BindView(R.id.test_param_kanji)
 	Switch mKanjiSwitch;
 
-	@Bind(R.id.test_param_tag_selection)
+	@BindView(R.id.test_param_tag_selection)
 	TextView mTagSelected;
 
-	@Bind(R.id.test_button_start)
+	@BindView(R.id.test_button_start)
 	Button startButton;
 
 	private int          selectedType     = -1;
@@ -77,12 +78,13 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 	private List<String> items            = new ArrayList<>();
 	private ArrayList<Integer> mSelectedItems;
 	private String[]           mSelectedTags;
+	private Unbinder unbinder;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_test_parameters, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -92,7 +94,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
 

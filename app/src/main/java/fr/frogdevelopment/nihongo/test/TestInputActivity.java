@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Random;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -21,13 +21,13 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 public class TestInputActivity extends TestAbstractActivity {
 
-	@Bind(R.id.test_input_scroll)
+	@BindView(R.id.test_input_scroll)
 	ScrollView mScrollView;
 
-	@Bind(R.id.test_input_to_find)
+	@BindView(R.id.test_input_to_find)
 	TextView toFindView;
 
-	@Bind(R.id.test_input_answer)
+	@BindView(R.id.test_input_answer)
 	EditText answerView;
 
 	public TestInputActivity() {

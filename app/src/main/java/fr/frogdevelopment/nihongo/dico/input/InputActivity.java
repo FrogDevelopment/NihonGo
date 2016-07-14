@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -27,31 +27,31 @@ import fr.frogdevelopment.nihongo.data.Type;
 
 public class InputActivity extends AppCompatActivity {
 
-	@Bind(R.id.toolbar)
+	@BindView(R.id.toolbar)
 	Toolbar         toolbar;
-	@Bind(R.id.wrapper_kanji)
+	@BindView(R.id.wrapper_kanji)
 	TextInputLayout mKanjiWrapper;
-	@Bind(R.id.input_kanji)
+	@BindView(R.id.input_kanji)
 	EditText        mKanjiText;
-	@Bind(R.id.wrapper_kana)
+	@BindView(R.id.wrapper_kana)
 	TextInputLayout mKanaWrapper;
-	@Bind(R.id.input_kana)
+	@BindView(R.id.input_kana)
 	EditText        mKanaText;
-	@Bind(R.id.wrapper_input)
+	@BindView(R.id.wrapper_input)
 	TextInputLayout mInputWrapper;
-	@Bind(R.id.input_input)
+	@BindView(R.id.input_input)
 	EditText        mInputText;
-	@Bind(R.id.wrapper_tags)
+	@BindView(R.id.wrapper_tags)
 	TextInputLayout mTagsWrapper;
-	@Bind(R.id.input_tags)
+	@BindView(R.id.input_tags)
 	EditText        mTagsText;
-	@Bind(R.id.wrapper_details)
+	@BindView(R.id.wrapper_details)
 	TextInputLayout mDetailsWrapper;
-	@Bind(R.id.input_details)
+	@BindView(R.id.input_details)
 	EditText        mDetailsText;
-	@Bind(R.id.wrapper_example)
+	@BindView(R.id.wrapper_example)
 	TextInputLayout mExampleWrapper;
-	@Bind(R.id.input_example)
+	@BindView(R.id.input_example)
 	EditText        mExampleText;
 
 	// Initial Data
@@ -96,12 +96,6 @@ public class InputActivity extends AppCompatActivity {
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ButterKnife.unbind(this);
 	}
 
 	@Override

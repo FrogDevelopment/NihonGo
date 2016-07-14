@@ -22,7 +22,7 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -33,10 +33,10 @@ import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
-	@Bind(R.id.toolbar)
+	@BindView(R.id.toolbar)
 	Toolbar toolbar;
 
-	@Bind(R.id.details_viewpager)
+	@BindView(R.id.details_viewpager)
 	ViewPager mViewPager;
 
 	private Type mType;
@@ -74,7 +74,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		ButterKnife.unbind(this);
 	}
 
 	private void initToolbar() {

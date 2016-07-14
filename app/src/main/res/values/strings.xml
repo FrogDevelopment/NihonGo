@@ -246,11 +246,6 @@
     <string name="options_reset_learned_btn">Reset Learned</string>
     <string name="options_reset_learned_erase_confirmation">You\'re going to reset your Learned, continue ?</string>
     <string name="options_reset_learned_erase_success">Reset success</string>
-    <string name="options_advertising">Advertising</string>
-    <string name="options_no_advertising_purchase">Remove advertising</string>
-    <string name="options_no_advertising_purchased">Active. Thanks for support</string>
-    <string name="options_no_advertising_not_purchased">Inactive</string>
-    <string name="options_restore_purchase">Restore my purchases</string>
 
     <string name="closing_activity_title">Exit</string>
     <string name="closing_activity_message">Are you sure you want to exit ?</string>

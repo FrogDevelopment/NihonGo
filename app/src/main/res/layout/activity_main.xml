@@ -5,7 +5,6 @@
 
 <android.support.v4.widget.DrawerLayout
     android:id="@+id/drawer_layout"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -51,32 +50,6 @@
             android:layout_marginBottom="?attr/actionBarSize"
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <!-- PUB -->
-            <ImageView
-                android:id="@+id/ad_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/no_advert_off_line"
-                android:visibility="gone"
-                android:contentDescription="@string/no_connection"/>
-
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/ad_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                ads:adSize="SMART_BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id">
-            </com.google.android.gms.ads.AdView>
-
-            <View
-                android:id="@+id/ad_divider"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="15dp"
-                android:background="@android:color/darker_gray"/>
 
             <!-- The main content view -->
             <FrameLayout

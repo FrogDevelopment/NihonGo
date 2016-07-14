@@ -22,7 +22,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -34,10 +34,10 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 	private static final int LOADER_ID = 710;
 	private ReviewAdapter adapter;
 
-	@Bind(R.id.toolbar)
+	@BindView(R.id.toolbar)
 	Toolbar toolbar;
 
-	@Bind(R.id.review_viewpager)
+	@BindView(R.id.review_viewpager)
 	ViewPager viewPager;
 
 	@Override
@@ -104,12 +104,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		});
 
 		getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ButterKnife.unbind(this);
 	}
 
 	private void initToolbar() {

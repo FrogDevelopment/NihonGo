@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 
@@ -71,7 +71,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
 
 	class ViewHolder {
 
-		@Bind(R.id.lesson_row)
+		@BindView(R.id.lesson_row)
 		TextView text;
 
 		private ViewHolder(View view) {

@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -35,10 +35,10 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	protected static final int LOADER_ID_ITEMS_TO_FIND = 710;
 
-	@Bind(R.id.toolbar)
+	@BindView(R.id.toolbar)
 	Toolbar toolbar;
 
-	@Bind(R.id.test_count)
+	@BindView(R.id.test_count)
 	TextView mCount;
 
 	protected int     typeTest;
@@ -79,12 +79,6 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
 
 		initToolbar();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ButterKnife.unbind(this);
 	}
 
 	private void initToolbar() {

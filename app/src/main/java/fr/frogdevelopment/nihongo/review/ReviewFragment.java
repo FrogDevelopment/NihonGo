@@ -21,14 +21,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class ReviewFragment extends Fragment {
+
+	private Unbinder unbinder;
 
 	interface OnFragmentInteractionListener {
 		void setFavorite(Item item);
@@ -40,31 +43,31 @@ public class ReviewFragment extends Fragment {
 
 	private WeakReference<OnFragmentInteractionListener> mListener;
 
-	@Bind(R.id.review_count)
+	@BindView(R.id.review_count)
 	TextView             mCount;
-	@Bind(R.id.review_reviewed)
+	@BindView(R.id.review_reviewed)
 	TextView             mReviewed;
-	@Bind(R.id.review_textSwitcher_kana)
+	@BindView(R.id.review_textSwitcher_kana)
 	TextSwitcher         mKana;
-	@Bind(R.id.review_textSwitcher_test)
+	@BindView(R.id.review_textSwitcher_test)
 	TextSwitcher         mTest;
-	@Bind(R.id.review_info_title)
+	@BindView(R.id.review_info_title)
 	TextView             mInfoTitle;
-	@Bind(R.id.review_info)
+	@BindView(R.id.review_info)
 	TextView             mInfo;
-	@Bind(R.id.review_example_title)
+	@BindView(R.id.review_example_title)
 	TextView             mExampleTitle;
-	@Bind(R.id.review_example)
+	@BindView(R.id.review_example)
 	TextView             mExample;
-	@Bind(R.id.review_tags_title)
+	@BindView(R.id.review_tags_title)
 	TextView             mTagsTitle;
-	@Bind(R.id.review_tags)
+	@BindView(R.id.review_tags)
 	TextView             mTags;
-	@Bind(R.id.fab_again)
+	@BindView(R.id.fab_again)
 	FloatingActionButton mFabAgain;
-	@Bind(R.id.fab_favorite)
+	@BindView(R.id.fab_favorite)
 	FloatingActionButton mFabFavorite;
-	@Bind(R.id.fab_learned)
+	@BindView(R.id.fab_learned)
 	FloatingActionButton mFabLearned;
 
 	private Item   mItem;
@@ -75,7 +78,7 @@ public class ReviewFragment extends Fragment {
 		// The last two arguments ensure LayoutParams are inflated properly.
 		View rootView = inflater.inflate(R.layout.fragment_review, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		setHasOptionsMenu(true);
 
@@ -109,7 +112,7 @@ public class ReviewFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
 	private void initFabs() {

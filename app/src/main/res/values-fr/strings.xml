@@ -213,11 +213,6 @@
     <string name="options_reset_learned_btn">Réinitaliser les Appris</string>
     <string name="options_reset_learned_erase_confirmation">Vous êtes sur le point de réinitialiser vos Appris, continuer ?</string>
     <string name="options_reset_learned_erase_success">Réinitalisation réussie</string>
-    <string name="options_advertising">Publicité</string>
-    <string name="options_no_advertising_purchase">Enlever la publicité</string>
-    <string name="options_no_advertising_purchased">Activé. Merci de votre soutient</string>
-    <string name="options_no_advertising_not_purchased">Inactivé</string>
-    <string name="options_restore_purchase">Restaurer mes achats</string>
 
 
     <string name="closing_activity_title">Sortie</string>

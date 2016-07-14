@@ -23,10 +23,11 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
@@ -37,10 +38,11 @@ public class OptionsImportExportFragment extends Fragment {
     private static final int FLAG_EXPORT = 0;
     private static final int FLAG_IMPORT = 1;
 
-    @Bind(R.id.options_export_name)
+    @BindView(R.id.options_export_name)
     EditText mNameExportView;
-    @Bind(R.id.options_export_select)
+    @BindView(R.id.options_export_select)
     Button   mButtonExport;
+    private Unbinder unbinder;
 
     public OptionsImportExportFragment() {
         // Required empty public constructor
@@ -51,7 +53,7 @@ public class OptionsImportExportFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_options_import_export, container, false);
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         // First of all we check if the external storage of the device is available for writing.
         // Remember that the external storage is not necessarily the sd card. Very often it is the device storage.
@@ -62,6 +64,12 @@ public class OptionsImportExportFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @OnClick({R.id.options_import, R.id.options_export_select})

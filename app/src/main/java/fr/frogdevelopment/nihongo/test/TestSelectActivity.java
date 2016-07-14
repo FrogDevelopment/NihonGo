@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -29,10 +29,10 @@ public class TestSelectActivity extends TestAbstractActivity {
 
 	private static final int LOADER_ID_ITEMS_QCM = 720;
 
-	@Bind(R.id.test_select_to_find)
+	@BindView(R.id.test_select_to_find)
 	TextView mToFindView;
 
-	@Bind(R.id.test_select_answers)
+	@BindView(R.id.test_select_answers)
 	LinearLayout answers;
 
 	private List<Item> itemsQCM = new ArrayList<>();

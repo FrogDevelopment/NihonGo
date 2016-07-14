@@ -30,9 +30,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -42,19 +43,19 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 
 	private static final int LOADER_ID = 700;
 
-	@Bind(R.id.review_switch_language)
+	@BindView(R.id.review_switch_language)
 	Switch   mSwitchLanguageView;
-	@Bind(R.id.review_switch_sort)
+	@BindView(R.id.review_switch_sort)
 	Switch   mSwitchSortView;
-	@Bind(R.id.review_switch_learned)
+	@BindView(R.id.review_switch_learned)
 	Switch   mSwitchLearned;
-	@Bind(R.id.review_switch_favorite)
+	@BindView(R.id.review_switch_favorite)
 	Switch   mSwitchFavorite;
-	@Bind(R.id.review_param_quantity_selection)
+	@BindView(R.id.review_param_quantity_selection)
 	TextView mQuantitySelected;
-	@Bind(R.id.review_param_tag_selection)
+	@BindView(R.id.review_param_tag_selection)
 	TextView mTagSelected;
-	@Bind(R.id.review_button_start)
+	@BindView(R.id.review_button_start)
 	Button   startButton;
 
 	private String[] quantities;
@@ -62,12 +63,13 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 	private ArrayList<Integer> mSelectedItems;
 	private String[]           mSelectedTags;
 	private List<String>       items;
+	private Unbinder unbinder;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -91,7 +93,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
 	@Override

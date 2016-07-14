@@ -20,13 +20,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class DetailsFragment extends Fragment {
+
+	private Unbinder unbinder;
 
 	interface OnFragmentInteractionListener {
 		void update(Item item);
@@ -40,27 +43,27 @@ public class DetailsFragment extends Fragment {
 
 	private WeakReference<OnFragmentInteractionListener> mListener;
 
-	@Bind(R.id.details_word_input)
+	@BindView(R.id.details_word_input)
 	TextView             mInputView;
-	@Bind(R.id.details_word_kanji)
+	@BindView(R.id.details_word_kanji)
 	TextView             mKanjiView;
-	@Bind(R.id.details_word_kana)
+	@BindView(R.id.details_word_kana)
 	TextView             mKanaView;
-	@Bind(R.id.details_word_info_title)
+	@BindView(R.id.details_word_info_title)
 	TextView             mDetailsTitleView;
-	@Bind(R.id.details_word_info)
+	@BindView(R.id.details_word_info)
 	TextView             mDetailsView;
-	@Bind(R.id.details_word_example_title)
+	@BindView(R.id.details_word_example_title)
 	TextView             mExampleTitleView;
-	@Bind(R.id.details_word_example)
+	@BindView(R.id.details_word_example)
 	TextView             mExampleView;
-	@Bind(R.id.details_word_tags_title)
+	@BindView(R.id.details_word_tags_title)
 	TextView             mTagsTitleView;
-	@Bind(R.id.details_word_tags)
+	@BindView(R.id.details_word_tags)
 	TextView             mTagsView;
-	@Bind(R.id.fab_favorite)
+	@BindView(R.id.fab_favorite)
 	FloatingActionButton mFabFavorite;
-	@Bind(R.id.fab_learned)
+	@BindView(R.id.fab_learned)
 	FloatingActionButton mFabLearned;
 
 	private Item mItem;
@@ -70,7 +73,7 @@ public class DetailsFragment extends Fragment {
 		// The last two arguments ensure LayoutParams are inflated properly.
 		View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		setHasOptionsMenu(true);
 
@@ -138,6 +141,12 @@ public class DetailsFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		unbinder.unbind();
 	}
 
 	private void populateView() {
