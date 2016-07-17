@@ -50,8 +50,7 @@ public class HelpDialog extends DialogFragment {
 
 
 		// Use the Builder class for convenient dialog construction
-		AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-				.setTitle(R.string.help_title)
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.help_title)
 
 				// Inflate and set the layout for the dialog
 				// Pass null as the parent view because its going in the dialog layout
