@@ -7,15 +7,14 @@ package fr.frogdevelopment.nihongo.options;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -25,14 +24,17 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 // fixme utiliser les préférences XML ? http://developer.android.com/guide/topics/ui/settings.html
 public class ParametersFragment extends Fragment {
 
-	private Unbinder unbinder;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_options_parameters, container, false);
 
-		unbinder = ButterKnife.bind(this, view);
+		Button eraseButton = (Button)view.findViewById(R.id.options_erase);
+		eraseButton.setOnClickListener(v -> onClickErase());
+		Button favoriteButton = (Button)view.findViewById(R.id.options_reset_favorite);
+		favoriteButton.setOnClickListener(v -> onClickResetFavorite());
+		Button learnedButton = (Button)view.findViewById(R.id.options_reset_learned);
+		learnedButton.setOnClickListener(v -> onClickResetLearned());
 
 		return view;
 	}
@@ -40,51 +42,56 @@ public class ParametersFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		unbinder.unbind();
 	}
 
-	@OnClick(R.id.options_erase)
-	void onClickErase() {
+	private void onClickErase() {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_erase_data_confirmation)
-				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-					getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
 
-					PreferencesHelper.getInstance(getActivity()).saveString(Preferences.LESSONS, "");
+						PreferencesHelper.getInstance(getActivity()).saveString(Preferences.LESSONS, "");
 
-					Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_erase_data_success, Snackbar.LENGTH_LONG).show();
+						Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_erase_data_success, Snackbar.LENGTH_LONG).show();
+					}
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
 				.show();
 	}
 
-	@OnClick(R.id.options_reset_favorite)
-	void onClickResetFavorite() {
+	private void onClickResetFavorite() {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_reset_favorite_confirmation)
-				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-					final ContentValues values = new ContentValues();
-					values.put(DicoContract.FAVORITE, "0");
-					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						final ContentValues values = new ContentValues();
+						values.put(DicoContract.FAVORITE, "0");
+						getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
 
-					Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_reset_favorite_success, Snackbar.LENGTH_LONG).show();
+						Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_reset_favorite_success, Snackbar.LENGTH_LONG).show();
+					}
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
 				.show();
 	}
 
-	@OnClick(R.id.options_reset_learned)
-	void onClickResetLearned() {
+	private void onClickResetLearned() {
 		new AlertDialog.Builder(getActivity())
 				.setMessage(R.string.options_reset_learned_erase_confirmation)
-				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-					final ContentValues values = new ContentValues();
-					values.put(DicoContract.LEARNED, "0");
-					getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_LEARNED, values, null, null);
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						final ContentValues values = new ContentValues();
+						values.put(DicoContract.LEARNED, "0");
+						getActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_LEARNED, values, null, null);
 
-					Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_reset_learned_erase_success, Snackbar.LENGTH_LONG).show();
+						Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_reset_learned_erase_success, Snackbar.LENGTH_LONG).show();
+					}
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
