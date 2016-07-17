@@ -4,8 +4,8 @@
 
 package fr.frogdevelopment.nihongo.about;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.view.LayoutInflater;
@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 
-public class AboutFragment extends Fragment  {
+public class AboutFragment extends Fragment {
 
 	@BindView(R.id.about_hiragana_link)
 	TextView hiragana;

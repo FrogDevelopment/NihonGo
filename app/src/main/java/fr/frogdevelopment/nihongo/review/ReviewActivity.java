@@ -28,6 +28,9 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ReviewFragment.OnFragmentInteractionListener {
 
@@ -74,7 +77,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
 		final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean("isJapaneseReviewed");
 
-		adapter = new ReviewAdapter(getSupportFragmentManager(), isJapaneseReviewed);
+		adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
 		viewPager.setAdapter(adapter);
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -104,7 +107,13 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		});
 
 		getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
+
+		boolean doNotshow = PreferencesHelper.getInstance(getApplicationContext()).getBoolean(Preferences.HELP_REVIEW);
+		if (!doNotshow) {
+			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
+		}
 	}
+
 
 	private void initToolbar() {
 		setSupportActionBar(toolbar);

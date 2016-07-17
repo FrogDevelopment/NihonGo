@@ -5,18 +5,19 @@
 package fr.frogdevelopment.nihongo.dico;
 
 import android.app.AlertDialog;
+import android.app.ListFragment;
+import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.view.ActionMode;
@@ -47,12 +48,14 @@ import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.URI_SEARCH_EXPRESSION;
 import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.URI_SEARCH_WORD;
 import static fr.frogdevelopment.nihongo.dico.DicoAdapter.ViewHolder;
 
-public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor> {
+public class DicoFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_ID = 100;
 
@@ -65,7 +68,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 	@BindView(R.id.fab_add)
 	FloatingActionButton mFabAdd;
 
-	private Type mType;
+	private Type     mType;
 	private Unbinder unbinder;
 
 	@Override
@@ -98,6 +101,15 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 		initFabAdd();
 
 		return rootView;
+	}
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		boolean doNotshow = PreferencesHelper.getInstance(getActivity()).getBoolean(Preferences.HELP_DICO);
+		if (!doNotshow) {
+			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_dico, true);
+		}
 	}
 
 	@Override
@@ -144,7 +156,7 @@ public class DicoFragment extends ListFragment implements LoaderCallbacks<Cursor
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		GestureDetector mGestureDetector = new GestureDetector(getContext(), gestureListener);
+		GestureDetector mGestureDetector = new GestureDetector(getActivity(), gestureListener);
 		getListView().setOnTouchListener((v, event) -> mGestureDetector.onTouchEvent(event));
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(multiChoiceListener);

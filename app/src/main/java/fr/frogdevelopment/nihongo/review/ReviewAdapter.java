@@ -4,17 +4,16 @@
 
 package fr.frogdevelopment.nihongo.review;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fr.frogdevelopment.nihongo.data.Item;
 
@@ -23,7 +22,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 	private int mCount = 0;
 	private       List<Item> items;
 	private final boolean    isJapaneseReviewed;
-	private final Map<Integer, ReviewFragment> mapFragments = new HashMap<>();
+	private final SparseArray<ReviewFragment> mapFragments         = new SparseArray<>();
 
 	public ReviewAdapter(FragmentManager fm, boolean isJapaneseType) {
 		super(fm);

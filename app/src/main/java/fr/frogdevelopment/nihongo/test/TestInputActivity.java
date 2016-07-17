@@ -18,7 +18,6 @@ import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 
-
 public class TestInputActivity extends TestAbstractActivity {
 
 	@BindView(R.id.test_input_scroll)

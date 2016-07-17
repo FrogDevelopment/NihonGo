@@ -5,14 +5,14 @@
 package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -29,7 +29,10 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
@@ -63,12 +66,17 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		mType = (Type) args.getSerializable("type");
 		List<Item> items = args.getParcelableArrayList("items");
 
-		DetailsAdapter mAdapter = new DetailsAdapter(getSupportFragmentManager(), items, mType);
+		DetailsAdapter mAdapter = new DetailsAdapter(getFragmentManager(), items, mType);
 		mViewPager.setAdapter(mAdapter);
 		int position = args.getInt("position");
 		mViewPager.setCurrentItem(position);
 
 		initToolbar();
+
+		boolean doNotshow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
+		if (!doNotshow) {
+			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details, true);
+		}
 	}
 
 	@Override

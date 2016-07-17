@@ -24,7 +24,6 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 
-
 public class TestSelectActivity extends TestAbstractActivity {
 
 	private static final int LOADER_ID_ITEMS_QCM = 720;

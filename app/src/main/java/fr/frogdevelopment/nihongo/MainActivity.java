@@ -4,6 +4,7 @@
 
 package fr.frogdevelopment.nihongo;
 
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +12,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -224,9 +223,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		// Insert the fragment by replacing any existing fragment
-		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.content_frame, fragment);
-		fragmentTransaction.commit();
+		getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 		mDrawerLayout.closeDrawers();
 
@@ -298,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 			final DicoFragment fragment = new DicoFragment();
 			fragment.setArguments(args);
 
-			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+			getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 			setTitle(getString(R.string.search_current, query));
 

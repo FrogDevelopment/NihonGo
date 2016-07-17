@@ -4,6 +4,8 @@
 
 package fr.frogdevelopment.nihongo.lessons;
 
+import android.app.AlertDialog;
+import android.app.ListFragment;
 import android.content.ContentProviderOperation;
 import android.content.OperationApplicationException;
 import android.os.AsyncTask;
@@ -11,8 +13,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ListFragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -111,11 +111,11 @@ public class LessonsFragment extends ListFragment {
 			myLocale = DEFAULT_LANGUAGE;
 		}
 		// Downloaded Lessons
-		String lessonsSaved = PreferencesHelper.getInstance(getContext()).getString(Preferences.LESSONS);
+		String lessonsSaved = PreferencesHelper.getInstance(getActivity()).getString(Preferences.LESSONS);
 		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
 
 		inProgress(true);
-		new TestConnectionTask(getContext(), result -> {
+		new TestConnectionTask(getActivity(), result -> {
 			if (result) {
 				getAvailableLessons();
 			} else {
@@ -169,7 +169,7 @@ public class LessonsFragment extends ListFragment {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray response) {
 				Log.e(LOG_TAG, "KO", throwable);
-				Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
 				inProgress(false);
 			}
 
@@ -189,7 +189,7 @@ public class LessonsFragment extends ListFragment {
 
 				} catch (JSONException e) {
 					Log.e(LOG_TAG, "Data Fetch KO", e);
-					Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
 					inProgress(false);
 				}
 			}
@@ -229,7 +229,7 @@ public class LessonsFragment extends ListFragment {
 		}
 
 		if (onPresent) {
-			new AlertDialog.Builder(getContext())
+			new AlertDialog.Builder(getActivity())
 					.setIcon(R.drawable.ic_warning_black)
 					.setTitle(R.string.lesson_already_present)
 					.setMessage(R.string.lesson_continue)
@@ -246,12 +246,12 @@ public class LessonsFragment extends ListFragment {
 		final String url = BASE_URL + LESSONS_FILE;
 		Log.d(LOG_TAG, "Calling : " + url);
 		inProgress(true);
-		CLIENT.get(url, new FileAsyncHttpResponseHandler(getContext()) {
+		CLIENT.get(url, new FileAsyncHttpResponseHandler(getActivity()) {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
 				Log.e(LOG_TAG, "KO", throwable);
-				Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
 				inProgress(false);
 			}
 

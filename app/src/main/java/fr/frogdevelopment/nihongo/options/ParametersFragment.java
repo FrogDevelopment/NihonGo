@@ -5,10 +5,10 @@
 package fr.frogdevelopment.nihongo.options;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,7 @@ import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 // fixme utiliser les préférences XML ? http://developer.android.com/guide/topics/ui/settings.html
-public class ParametersFragment extends Fragment  {
+public class ParametersFragment extends Fragment {
 
 	private Unbinder unbinder;
 
@@ -50,7 +50,7 @@ public class ParametersFragment extends Fragment  {
 				.setPositiveButton(android.R.string.ok, (dialog, id) -> {
 					getActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
 
-					PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, "");
+					PreferencesHelper.getInstance(getActivity()).saveString(Preferences.LESSONS, "");
 
 					Snackbar.make(getActivity().findViewById(R.id.parameters_layout), R.string.options_erase_data_success, Snackbar.LENGTH_LONG).show();
 				})
