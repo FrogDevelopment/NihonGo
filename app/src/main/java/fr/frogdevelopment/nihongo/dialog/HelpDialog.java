@@ -72,8 +72,7 @@ public class HelpDialog extends DialogFragment {
 								preferences = Preferences.HELP_REVIEW;
 								break;
 							default:
-								preferences = Preferences.HELP_START;
-								break;
+								throw new IllegalStateException("Unknow resId " + resId);
 						}
 
 						PreferencesHelper.getInstance(getActivity()).saveBoolean(preferences, remember.isChecked());

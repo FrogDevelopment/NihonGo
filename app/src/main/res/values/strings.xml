@@ -16,7 +16,7 @@
     <!-- WARNING IME -->
     <string name="warning_ime_title" translatable="false">ATTENTION</string>
     <string name="warning_ime_text">Japanese Keyboard required for this application.</string>
-    <string name="warning_ime_remember">Don\'t display anymore</string>
+    <string name="cb_remember">Don\'t display anymore</string>
 
     <!-- DRAWER -->
     <string name="drawer_item_word">Words</string>
@@ -275,6 +275,8 @@
     <string name="help_review_intro">Here is some help for the review view</string>
     <string name="help_review_learned">Tag as learned</string>
     <string name="help_review_favorite">Tag as favorite</string>
+
+    <string name="help_dico_start">Welcome to Nihon Go !\n\nblablablablabla blabala\n\nWould you like to get some vocabulary ?</string>
 
     <!-- ******* -->
     <!--  ABOUT  -->

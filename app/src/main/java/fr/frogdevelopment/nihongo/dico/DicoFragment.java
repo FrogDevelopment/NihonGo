@@ -10,6 +10,7 @@ import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -40,6 +41,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -146,6 +148,20 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		dicoAdapter.swapCursor(data, isSortByLetter);
 		getLoaderManager().destroyLoader(0);
+
+		if (dicoAdapter.getCount() == 0) {
+			new AlertDialog.Builder(getActivity())
+					.setMessage(R.string.help_dico_start)
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+							((MainActivity) getActivity()).selectItemAtIndex(R.id.navigation_lessons);
+						}
+					})
+					.setNegativeButton(android.R.string.no, null)
+					.create()
+					.show();
+		}
 	}
 
 	@Override
@@ -237,7 +253,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
 	private void onUpdate(final int position) {
 		final Item item = (Item) dicoAdapter.getItem(position);
 
-		Intent intent = new Intent(getContext(), InputActivity.class);
+		Intent intent = new Intent(getActivity(), InputActivity.class);
 		intent.putExtra("type", mType);
 		intent.putExtra("item", item);
 

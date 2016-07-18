@@ -9,7 +9,7 @@
 
     <!-- WARNING IME -->
     <string name="warning_ime_text">Un clavier japonais est requis pour utiliser cette application.</string>
-    <string name="warning_ime_remember">Ne plus afficher</string>
+    <string name="cb_remember">Ne plus afficher</string>
 
     <!-- DRAWER -->
     <string name="drawer_item_word">Mots</string>
