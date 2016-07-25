@@ -70,375 +70,378 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class LessonsFragment extends ListFragment {
 
-	private static final String LOG_TAG = "NIHON_GO";
+    private static final String LOG_TAG = "NIHON_GO";
 
-	// http://loopj.com/android-async-http/
-	private static final AsyncHttpClient CLIENT = new AsyncHttpClient();
+    // http://loopj.com/android-async-http/
+    private static final AsyncHttpClient CLIENT = new AsyncHttpClient();
 
-	// fixme use external variables
-	private static final String   BASE_URL               = "http://legall.benoit.free.fr/nihon_go/";
-	private static final String   AVAILABLE_LESSONS_FILE = "available_lessons_2.json";
-	private static final String   LESSONS_FILE           = "lessons.tsv";
-	private static final String[] LANGUAGES              = {"fr_FR", "en_US"};
-	private static final String   DEFAULT_LANGUAGE       = "en_US";
+    // fixme use external variables
+    private static final String BASE_URL = "http://legall.benoit.free.fr/nihon_go/";
+    private static final String AVAILABLE_LESSONS_FILE = "available_lessons_2.json";
+    private static final String LESSONS_FILE = "lessons.tsv";
+    private static final String[] LANGUAGES = {"fr_FR", "en_US"};
+    private static final String DEFAULT_LANGUAGE = "en_US";
 
-	@BindView(R.id.lesson_no_connection_test)
-	TextView noConnection;
+    @BindView(R.id.lesson_no_connection_test)
+    TextView noConnection;
 
-	private boolean hasInternet = false;
+    private boolean hasInternet = false;
 
-	private LessonAdapter adapter;
+    private LessonAdapter adapter;
 
-	private String myLocale;
+    private String myLocale;
 
-	private Set<String> lessonsDownloaded;
-	final private Map<String, Lesson> selectedLessons = new HashMap<>();
-	private Unbinder unbinder;
+    private Set<String> lessonsDownloaded;
+    final private Map<String, Lesson> selectedLessons = new HashMap<>();
+    private Unbinder unbinder;
 
-	public LessonsFragment() {
-	}
+    public LessonsFragment() {
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-		RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
+        RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
 
-		unbinder = ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
-		myLocale = Locale.getDefault().toString();
-		if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
-			myLocale = DEFAULT_LANGUAGE;
-		}
-		// Downloaded Lessons
-		String lessonsSaved = PreferencesHelper.getInstance(getActivity()).getString(Preferences.LESSONS);
-		lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
+        myLocale = Locale.getDefault().toString();
+        if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
+            myLocale = DEFAULT_LANGUAGE;
+        }
+        // Downloaded Lessons
+        String lessonsSaved = PreferencesHelper.getInstance(getActivity()).getString(Preferences.LESSONS);
+        lessonsDownloaded = new HashSet<>(Arrays.asList(lessonsSaved.split(";")));
 
-		inProgress(true);
-		new TestConnectionTask(getActivity(), result -> {
-			if (result) {
-				getAvailableLessons();
-			} else {
-				getOffLineLessons();
-			}
+        inProgress(true);
+        new TestConnectionTask(getActivity(), result -> {
+            if (result) {
+                getAvailableLessons();
+            } else {
+                getOffLineLessons();
+            }
 
-			noConnection.setVisibility(result ? View.GONE : View.VISIBLE);
+            noConnection.setVisibility(result ? View.GONE : View.VISIBLE);
 
-			hasInternet = result;
-		}).execute();
+            hasInternet = result;
+        }).execute();
 
-		return rootView;
-	}
+        return rootView;
+    }
 
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		unbinder.unbind();
-	}
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		getListView().setMultiChoiceModeListener(multiChoiceListener);
-	}
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        getListView().setMultiChoiceModeListener(multiChoiceListener);
+    }
 
-	private void inProgress(boolean wait) {
-		((MainActivity) getActivity()).showLoading(wait);
+    private void inProgress(boolean wait) {
+        ((MainActivity) getActivity()).showLoading(wait);
 //		getListView().setEnabled(!wait);
-	}
+    }
 
-	private void getOffLineLessons() {
-		String tag = getString(R.string.lesson_tag);
+    private void getOffLineLessons() {
+        String tag = getString(R.string.lesson_tag);
 
-		List<Lesson> lessons = new ArrayList<>();
-		for (String code : lessonsDownloaded) {
-			lessons.add(new Lesson(code, tag + " " + code, true));
-		}
+        List<Lesson> lessons = new ArrayList<>();
+        for (String code : lessonsDownloaded) {
+            lessons.add(new Lesson(code, tag + " " + code, true));
+        }
 
-		// update the UI
-		setLessons(lessons);
-	}
+        // update the UI
+        setLessons(lessons);
+    }
 
-	private void getAvailableLessons() {
+    private void getAvailableLessons() {
 
-		String url = BASE_URL + AVAILABLE_LESSONS_FILE;
-		Log.d(LOG_TAG, "Calling : " + url);
-		CLIENT.get(url, new JsonHttpResponseHandler() {
+        String url = BASE_URL + AVAILABLE_LESSONS_FILE;
+        Log.d(LOG_TAG, "Calling : " + url);
+        CLIENT.get(url, new JsonHttpResponseHandler() {
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray response) {
-				Log.e(LOG_TAG, "KO", throwable);
-				Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-				inProgress(false);
-			}
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray response) {
+                Log.e(LOG_TAG, "KO", throwable);
+                Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                inProgress(false);
+            }
 
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-				try {
-					JSONArray jsonArray = response.getJSONArray(myLocale);
-					String tag = getString(R.string.lesson_tag);
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray(myLocale);
+                    String tag = getString(R.string.lesson_tag);
 
-					List<Lesson> lessonsAvailable = new ArrayList<>();
-					for (int index = 0, nbItem = jsonArray.length(); index < nbItem; index++) {
-						String code = jsonArray.getString(index);
-						lessonsAvailable.add(new Lesson(code, tag + " " + code, lessonsDownloaded.contains(code)));
-					}
-					// update the UI
-					setLessons(lessonsAvailable);
+                    List<Lesson> lessonsAvailable = new ArrayList<>();
+                    for (int index = 0, nbItem = jsonArray.length(); index < nbItem; index++) {
+                        String code = jsonArray.getString(index);
+                        lessonsAvailable.add(new Lesson(code, tag + " " + code, lessonsDownloaded.contains(code)));
+                    }
+                    // update the UI
+                    setLessons(lessonsAvailable);
 
-				} catch (JSONException e) {
-					Log.e(LOG_TAG, "Data Fetch KO", e);
-					Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-					inProgress(false);
-				}
-			}
-		});
-	}
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Data Fetch KO", e);
+                    Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                    inProgress(false);
+                }
+            }
+        });
+    }
 
-	private void setLessons(List<Lesson> lessonsAvailable) {
-		// update the UI
-		Collections.sort(lessonsAvailable);
+    private void setLessons(List<Lesson> lessonsAvailable) {
+        // update the UI
+        Collections.sort(lessonsAvailable);
 
-		adapter = new LessonAdapter(getActivity(), lessonsAvailable);
-		setListAdapter(adapter);
-		adapter.setEnabled(hasInternet);
+        adapter = new LessonAdapter(getActivity(), lessonsAvailable);
+        setListAdapter(adapter);
+        adapter.setEnabled(hasInternet);
 
-		inProgress(false);
-	}
+        inProgress(false);
+    }
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		final Lesson lesson = adapter.getItem(position);
-		selectedLessons.put(lesson.code, lesson);
-		checkBeforeDownloadLessons();
-	}
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        final Lesson lesson = adapter.getItem(position);
+        selectedLessons.put(lesson.code, lesson);
+        checkBeforeDownloadLessons();
+    }
 
-	private void checkBeforeDownloadLessons() {
+    private void checkBeforeDownloadLessons() {
 
-		if (selectedLessons.isEmpty()) {
-			return;
-		}
+        if (selectedLessons.isEmpty()) {
+            return;
+        }
 
-		boolean onPresent = false;
-		for (Lesson lesson : selectedLessons.values()) {
-			if (lesson.isPresent) {
-				onPresent = true;
-				break;
-			}
-		}
+        boolean onPresent = false;
+        for (Lesson lesson : selectedLessons.values()) {
+            if (lesson.isPresent) {
+                onPresent = true;
+                break;
+            }
+        }
 
-		if (onPresent) {
-			new AlertDialog.Builder(getActivity())
-					.setIcon(R.drawable.ic_warning_black)
-					.setTitle(R.string.lesson_already_present)
-					.setMessage(R.string.lesson_continue)
-					.setPositiveButton(getString(R.string.yes), (dialog, which) -> downloadLessons())
-					.setNegativeButton(getString(R.string.no), null)
-					.show();
-		} else {
-			downloadLessons();
-		}
-	}
+        if (onPresent) {
+            new AlertDialog.Builder(getActivity())
+                    .setIcon(R.drawable.ic_warning_black)
+                    .setTitle(R.string.lesson_already_present)
+                    .setMessage(R.string.lesson_continue)
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> downloadLessons())
+                    .setNegativeButton(getString(R.string.no), null)
+                    .show();
+        } else {
+            downloadLessons();
+        }
+    }
 
-	private void downloadLessons() {
+    private void downloadLessons() {
 
-		final String url = BASE_URL + LESSONS_FILE;
-		Log.d(LOG_TAG, "Calling : " + url);
-		inProgress(true);
-		CLIENT.get(url, new FileAsyncHttpResponseHandler(getActivity()) {
+        final String url = BASE_URL + LESSONS_FILE;
+        Log.d(LOG_TAG, "Calling : " + url);
+        inProgress(true);
+        CLIENT.get(url, new FileAsyncHttpResponseHandler(getActivity()) {
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-				Log.e(LOG_TAG, "KO", throwable);
-				Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-				inProgress(false);
-			}
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                Log.e(LOG_TAG, "KO", throwable);
+                Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                inProgress(false);
+            }
 
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, final File file) {
-				Log.d(LOG_TAG, "File downloaded");
-				new DownloadTask().execute(file);
-			}
-		});
-	}
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, final File file) {
+                Log.d(LOG_TAG, "File downloaded");
+                new DownloadTask().execute(file);
+            }
+        });
+    }
 
-	static class Lesson implements Comparable<Lesson> {
-		public final String  code;
-		public final String  title;
-		public       boolean isPresent;
+    static class Lesson implements Comparable<Lesson> {
+        public final String code;
+        public final String title;
+        public boolean isPresent;
 
-		public Lesson(String code, String title, boolean isPresent) {
-			this.code = code;
-			this.title = title;
-			this.isPresent = isPresent;
-		}
+        public Lesson(String code, String title, boolean isPresent) {
+            this.code = code;
+            this.title = title;
+            this.isPresent = isPresent;
+        }
 
-		public void setPresent(boolean present) {
-			isPresent = present;
-		}
+        public void setPresent(boolean present) {
+            isPresent = present;
+        }
 
-		@Override
-		public String toString() {
-			return title;
-		}
+        @Override
+        public String toString() {
+            return title;
+        }
 
-		@Override
-		public int compareTo(@NonNull Lesson another) {
-			return code.compareTo(another.code);
-		}
-	}
+        @Override
+        public int compareTo(@NonNull Lesson another) {
+            return code.compareTo(another.code);
+        }
+    }
 
-	private AbsListView.MultiChoiceModeListener multiChoiceListener = new AbsListView.MultiChoiceModeListener() {
+    private AbsListView.MultiChoiceModeListener multiChoiceListener = new AbsListView.MultiChoiceModeListener() {
 
-		private int rowSelectedNumber = 0;
+        private int rowSelectedNumber = 0;
 
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			getActivity().getMenuInflater().inflate(R.menu.lessons_context, menu);
-			rowSelectedNumber = 0;
-			selectedLessons.clear();
-			return true;
-		}
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            getActivity().getMenuInflater().inflate(R.menu.lessons_context, menu);
+            rowSelectedNumber = 0;
+            selectedLessons.clear();
+            return true;
+        }
 
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return true;
-		}
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
 
-		@Override
-		public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
-			switch (item.getItemId()) {
-				case R.id.lessons_download:
-					actionMode.finish();
-					checkBeforeDownloadLessons();
-					return true;
-			}
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.lessons_download:
+                    actionMode.finish();
+                    checkBeforeDownloadLessons();
+                    return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
 
-		}
+        }
 
-		@Override
-		public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-			Lesson lesson = adapter.getItem(position);
-			if (checked) {
-				rowSelectedNumber++;
-				selectedLessons.put(lesson.code, lesson);
-			} else {
-				selectedLessons.remove(lesson.code);
-				rowSelectedNumber--;
-			}
-			mode.setTitle(getResources().getQuantityString(R.plurals.action_lesson, rowSelectedNumber, rowSelectedNumber));
-			mode.invalidate();
-		}
-	};
+        @Override
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            Lesson lesson = adapter.getItem(position);
+            if (checked) {
+                rowSelectedNumber++;
+                selectedLessons.put(lesson.code, lesson);
+            } else {
+                selectedLessons.remove(lesson.code);
+                rowSelectedNumber--;
+            }
+            mode.setTitle(getResources().getQuantityString(R.plurals.action_lesson, rowSelectedNumber, rowSelectedNumber));
+            mode.invalidate();
+        }
+    };
 
-	private class DownloadTask extends AsyncTask<File, String, Boolean> {
+    private class DownloadTask extends AsyncTask<File, String, Boolean> {
 
-		@Override
-		protected Boolean doInBackground(File... params) {
-			File file = params[0];
+        @Override
+        protected Boolean doInBackground(File... params) {
+            File file = params[0];
 
-			try (Reader in = new FileReader(file)) {
-				String col_input = myLocale + "_input";
-				String col_details = myLocale + "_details";
-				String col_example = myLocale + "_example";
-				String tag = getString(R.string.lesson_tag);
+            try (Reader in = new FileReader(file)) {
+                String col_input = myLocale + "_input";
+                String col_details = myLocale + "_details";
+                String col_example = myLocale + "_example";
+                String tag = getString(R.string.lesson_tag);
 
-				Set<String> selectedCodes = selectedLessons.keySet();
-				String previousCode = null;
+                Set<String> selectedCodes = selectedLessons.keySet();
+                String previousCode = null;
 
-				NumberFormat numberFormat = new DecimalFormat("00");
+                NumberFormat numberFormat = new DecimalFormat("00");
 
-				ContentProviderOperation.Builder builder;
-				ArrayList<ContentProviderOperation> ops = new ArrayList<>();
-				CSVParser parse = CSVFormat.TDF.withHeader().withSkipHeaderRecord().parse(in);
-				for (CSVRecord record : parse.getRecords()) {
+                ContentProviderOperation.Builder builder;
+                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+                CSVParser parse = CSVFormat.TDF.withHeader().withSkipHeaderRecord().parse(in);
+                for (CSVRecord record : parse.getRecords()) {
 
-					String code = record.get("tags");
+                    String code = record.get("tags");
 
-					if (!selectedCodes.contains(code)) {
-						continue;
-					}
+                    if (!selectedCodes.contains(code)) {
+                        continue;
+                    }
 
-					// next lesson, save previous one and update UI
-					if (previousCode != null && !code.equals(previousCode)) {
-						getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
-						publishProgress(previousCode);
-						ops.clear();
-					}
+                    // next lesson, save previous one and update UI
+                    if (previousCode != null && !code.equals(previousCode)) {
+                        getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+                        publishProgress(previousCode);
+                        ops.clear();
+                    }
 
-					previousCode = code;
+                    previousCode = code;
 
-					String input = StringUtils.capitalize(record.get(col_input));
-					if (StringUtils.isBlank(input)) {
-						continue;
-					}
+                    String input = StringUtils.capitalize(record.get(col_input));
+                    if (StringUtils.isBlank(input)) {
+                        continue;
+                    }
 
-					// Normalizer.normalize(source, Normalizer.Form.NFD) renvoi une chaine unicode décomposé.
-					// C'est à dire que les caractères accentués seront décomposé en deux caractères (par exemple "à" se transformera en "a`").
-					// Le replaceAll("[\u0300-\u036F]", "") supprimera tous les caractères unicode allant de u0300 à u036F,
-					// c'est à dire la plage de code des diacritiques (les accents qu'on a décomposé ci-dessus donc).
-					String sortLetter = Normalizer.normalize(input.substring(0, 1), Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
+                    // Normalizer.normalize(source, Normalizer.Form.NFD) renvoi une chaine unicode décomposé.
+                    // C'est à dire que les caractères accentués seront décomposé en deux caractères (par exemple "à" se transformera en "a`").
+                    // Le replaceAll("[\u0300-\u036F]", "") supprimera tous les caractères unicode allant de u0300 à u036F,
+                    // c'est à dire la plage de code des diacritiques (les accents qu'on a décomposé ci-dessus donc).
+                    String sortLetter = Normalizer.normalize(input.substring(0, 1), Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
 
-					builder = ContentProviderOperation.newInsert(NihonGoContentProvider.URI_WORD)
-							.withValue(DicoContract.SORT_LETTER, sortLetter)
-							.withValue(DicoContract.INPUT, input)
-							.withValue(DicoContract.KANJI, record.get("kanji"))
-							.withValue(DicoContract.KANA, record.get("kana"))
-							.withValue(DicoContract.DETAILS, record.get(col_details))
-							.withValue(DicoContract.EXAMPLE, record.get(col_example))
-							.withValue(DicoContract.TYPE, record.get("type"))
-							.withValue(DicoContract.TAGS, tag + " " + numberFormat.format(Integer.valueOf(code)));
+                    builder = ContentProviderOperation.newInsert(NihonGoContentProvider.URI_WORD)
+                            .withValue(DicoContract.SORT_LETTER, sortLetter)
+                            .withValue(DicoContract.INPUT, input)
+                            .withValue(DicoContract.KANJI, record.get("kanji"))
+                            .withValue(DicoContract.KANA, record.get("kana"))
+                            .withValue(DicoContract.DETAILS, record.get(col_details))
+                            .withValue(DicoContract.EXAMPLE, record.get(col_example))
+                            .withValue(DicoContract.TYPE, record.get("type"))
+                            .withValue(DicoContract.TAGS, tag + " " + numberFormat.format(Integer.valueOf(code)));
 
-					ops.add(builder.build());
-				}
+                    ops.add(builder.build());
+                }
 
-				// save last lesson and update UI
-				getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
-				publishProgress(previousCode);
+                // save last lesson and update UI
+                getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+                publishProgress(previousCode);
 
-			} catch (RemoteException | OperationApplicationException | IOException e) {
-				Log.e(LOG_TAG, "Error while fetching data", e);
-				return false;
-			}
+            } catch (RemoteException | OperationApplicationException | IOException e) {
+                Log.e(LOG_TAG, "Error while fetching data", e);
+                return false;
+            }
 
-			for (Lesson lesson : selectedLessons.values()) {
-				lesson.isPresent = true;
-				lessonsDownloaded.add(lesson.code);
-			}
+            for (Lesson lesson : selectedLessons.values()) {
+                lesson.isPresent = true;
+                lessonsDownloaded.add(lesson.code);
+            }
 
-			PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
+            PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
 
-			return true;
-		}
+            return true;
+        }
 
-		@Override
-		protected void onProgressUpdate(String... progress) {
-			try {
-				int index = Integer.valueOf(progress[0]);
-				adapter.getItem(index - 1).setPresent(true);
-				adapter.notifyDataSetChanged();
-			} catch (NumberFormatException e) {
-				Log.e(LOG_TAG, "Error while fetching data", e);
-			}
-		}
+        @Override
+        protected void onProgressUpdate(String... progress) {
+            try {
+                String progressValue = progress[0];
+                if (StringUtils.isNotBlank(progressValue)) {
+                    int index = Integer.valueOf(progressValue);
+                    adapter.getItem(index - 1).setPresent(true);
+                    adapter.notifyDataSetChanged();
+                }
+            } catch (NumberFormatException e) {
+                Log.e(LOG_TAG, "Error while fetching data", e);
+            }
+        }
 
-		@Override
-		protected void onPostExecute(Boolean result) {
-			if (result) {
-				Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success), Snackbar.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-			}
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success), Snackbar.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+            }
 
-			selectedLessons.clear();
-			inProgress(false);
-		}
-	}
+            selectedLessons.clear();
+            inProgress(false);
+        }
+    }
 }
