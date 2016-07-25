@@ -101,8 +101,7 @@
     <string name="param_test">Paramétrage du test</string>
     <string name="param_review">Paramétrage de la révision</string>
     <string name="param_reviewed">Révision en japonais ?</string>
-    <string name="param_sort_random">Aléatoire ?</string>
-    <string name="param_exclude_learned">Exclure les appris</string>
+    <string name="param_exclude_learned">Exclure les appris ?</string>
     <string name="param_only_favorite">Seulement les favoris ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Sélectionner le type du test</string>
@@ -110,8 +109,10 @@
     <string name="param_method_selection">Sélectionner la méthode du test</string>
     <string name="param_nb_answers">Nb réponses</string>
     <string name="param_nb_answers_selection">Sélectionner le nombre de réponse</string>
+    <string name="param_sort">Ordre</string>
+    <string name="param_sort_selection">Sélectionner l\'ordre de tri</string>
     <string name="param_quantity">Quantité</string>
-    <string name="param_quantity_selection">Sélectionner la quantité pour le test</string>
+    <string name="param_quantity_selection">Sélectionner la quantité</string>
     <string name="param_kanji_display">Afficher en Kanji</string>
     <string name="param_kanji_write">Saisir en Kanji</string>
     <string name="param_tag_title">Tag (Optionnel)</string>
@@ -129,6 +130,12 @@
     <string-array name="param_methods">
         <item>QCM</item>
         <item>Saisie</item>
+    </string-array>
+
+    <string-array name="param_sorts">
+        <item>nouveau -> ancien</item>
+        <item>ancien -> nouveau</item>
+        <item>aléatoire</item>
     </string-array>
 
     <string name="param_quantity_all">Tout</string>
