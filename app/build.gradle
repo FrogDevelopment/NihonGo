@@ -30,7 +30,7 @@ android {
         }
     }
     compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.1'
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo"
         minSdkVersion 19
@@ -56,9 +56,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v13:24.0.0'
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v13:24.1.0'
+    compile 'com.android.support:appcompat-v7:24.1.0'
+    compile 'com.android.support:design:24.1.0'
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
