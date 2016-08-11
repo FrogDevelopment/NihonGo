@@ -10,7 +10,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <android.support.design.widget.CoordinatorLayout
@@ -28,9 +27,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways"
+                app:layout_scrollFlags="enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
 
                 <ProgressBar
@@ -44,26 +43,17 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
+        <!-- The main content view -->
+        <FrameLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <!-- The main content view -->
-            <FrameLayout
-                android:id="@+id/content_frame"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="fill_vertical"/>
-
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:layout_marginTop="?android:attr/actionBarSize"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
     <!-- The navigation drawer -->
-
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="240dp"
