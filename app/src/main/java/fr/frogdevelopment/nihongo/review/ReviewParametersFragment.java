@@ -38,6 +38,7 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.dialog.TagsDialog;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
@@ -57,6 +58,9 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
     TextView mTagSelected;
     @BindView(R.id.review_button_start)
     Button startButton;
+
+    @BindView(R.id.review_switch_keep)
+    Switch mSwitchKeepView;
 
     private int selectedSort = -1;
     private String[] quantities;
@@ -79,14 +83,29 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
         if (savedInstanceState != null) {
             mSwitchLanguageView.setChecked(savedInstanceState.getBoolean("isJapaneseReviewed"));
+            mSwitchLearned.setChecked(savedInstanceState.getBoolean("excludeLearned"));
+            mSwitchFavorite.setChecked(savedInstanceState.getBoolean("onlyFavorite"));
             selectedSort = savedInstanceState.getInt("sort");
             mSortSelected.setText(getResources().getStringArray(R.array.param_sorts)[selectedSort]);
             selectedQuantity = savedInstanceState.getString("count");
             mQuantitySelected.setText(selectedQuantity);
             mSelectedTags = savedInstanceState.getStringArray("tags");
             mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
-            mSwitchLearned.setChecked(savedInstanceState.getBoolean("excludeLearned"));
-            mSwitchFavorite.setChecked(savedInstanceState.getBoolean("onlyFavorite"));
+
+            checkStartButtonEnabled();
+        } else {
+            if (PreferencesHelper.getInstance(getActivity()).getBoolean("keepReviewConfig")) {
+                mSwitchKeepView.setChecked(true);
+                mSwitchLanguageView.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("isJapaneseReviewed"));
+                mSwitchLearned.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("excludeLearned"));
+                mSwitchFavorite.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("onlyFavorite"));
+                selectedSort = PreferencesHelper.getInstance(getActivity()).getInt("sort");
+                mSortSelected.setText(getResources().getStringArray(R.array.param_sorts)[selectedSort]);
+                selectedQuantity = PreferencesHelper.getInstance(getActivity()).getString("count");
+                mQuantitySelected.setText(selectedQuantity);
+
+                checkStartButtonEnabled();
+            }
         }
 
         return rootView;
@@ -94,8 +113,28 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        saveConfigIfNeed();
+
         unbinder.unbind();
+        super.onDestroyView();
+    }
+
+    private void saveConfigIfNeed() {
+        if (mSwitchKeepView.isChecked()) {
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("keepReviewConfig", true);
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("excludeLearned", mSwitchLearned.isChecked());
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("onlyFavorite", mSwitchFavorite.isChecked());
+            PreferencesHelper.getInstance(getActivity()).saveInt("sort", selectedSort);
+            PreferencesHelper.getInstance(getActivity()).saveString("count", selectedQuantity);
+        } else {
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("keepReviewConfig", false);
+            PreferencesHelper.getInstance(getActivity()).remove("isJapaneseReviewed");
+            PreferencesHelper.getInstance(getActivity()).remove("excludeLearned");
+            PreferencesHelper.getInstance(getActivity()).remove("onlyFavorite");
+            PreferencesHelper.getInstance(getActivity()).remove("sort");
+            PreferencesHelper.getInstance(getActivity()).remove("count");
+        }
     }
 
     @Override
@@ -132,10 +171,14 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
                     selectedSort = which;
                     mSortSelected.setText(getResources().getStringArray(R.array.param_sorts)[which]);
 
-                    startButton.setEnabled(selectedSort > -1 && selectedQuantity != null);
+                    checkStartButtonEnabled();
                 })
                 .create()
                 .show();
+    }
+
+    private void checkStartButtonEnabled() {
+        startButton.setEnabled(selectedSort > -1 && selectedQuantity != null);
     }
 
     @OnClick(R.id.review_param_quantity)
@@ -146,7 +189,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
                     selectedQuantity = quantities[which];
                     mQuantitySelected.setText(selectedQuantity);
 
-                    startButton.setEnabled(selectedSort > -1 && selectedQuantity != null);
+                    checkStartButtonEnabled();
                 })
                 .create()
                 .show();
@@ -184,11 +227,11 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
     private void populateUiSelection(Bundle options) {
         options.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
+        options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
+        options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
         options.putInt("sort", selectedSort);
         options.putString("count", selectedQuantity);
         options.putStringArray("tags", mSelectedTags);
-        options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
-        options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
     }
 
     @Override
@@ -196,6 +239,8 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
         // Store UI state to the savedInstanceState.
         populateUiSelection(savedInstanceState);
+
+        saveConfigIfNeed();
 
         super.onSaveInstanceState(savedInstanceState);
     }

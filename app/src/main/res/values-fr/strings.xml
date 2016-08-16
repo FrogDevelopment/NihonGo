@@ -119,6 +119,7 @@
     <string name="param_tag_selection">Sélectionner un tag</string>
     <string name="param.tags.dialog.title">Sélectionner un ou plusieurs tags</string>
     <string name="param_button_start">Démarrer</string>
+    <string name="param_keep_config">Garder la configuration ?</string>
 
     <string-array name="param_types">
         <item>Kanji -> Hiragana</item>

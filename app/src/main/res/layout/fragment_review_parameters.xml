@@ -177,6 +177,16 @@
         </LinearLayout>
     </ScrollView>
 
+    <Switch
+        android:id="@+id/review_switch_keep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:padding="10dp"
+        android:text="@string/param_keep_config"
+        android:textOff="@string/no"
+        android:textOn="@string/yes"/>
+
     <Button
         android:id="@+id/review_button_start"
         android:layout_width="wrap_content"
