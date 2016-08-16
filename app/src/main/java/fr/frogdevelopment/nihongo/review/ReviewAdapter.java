@@ -76,4 +76,11 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 	public ReviewFragment getItemAt(int position) {
 		return mapFragments.get(position);
 	}
+
+	public void clear() {
+		items.clear();
+		mCount = 0;
+		mapFragments.clear();
+		notifyDataSetChanged();
+	}
 }

@@ -108,8 +108,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
         getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
 
-        boolean doNotshow = PreferencesHelper.getInstance(getApplicationContext()).getBoolean(Preferences.HELP_REVIEW);
-        if (!doNotshow) {
+        boolean doNotShow = PreferencesHelper.getInstance(getApplicationContext()).getBoolean(Preferences.HELP_REVIEW);
+        if (!doNotShow) {
             HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
         }
     }
@@ -211,6 +211,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
     @Override
     public void reviewAgain() {
+        adapter.clear();
         viewPager.setAdapter(adapter);
         getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
     }
