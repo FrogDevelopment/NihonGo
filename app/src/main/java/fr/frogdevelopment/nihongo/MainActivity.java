@@ -109,17 +109,14 @@ public class MainActivity extends AppCompatActivity {
 
 	private void setupDrawerLayout() {
 		NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
-		view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-			@Override
-			public boolean onNavigationItemSelected(MenuItem menuItem) {
-				menuItem.setChecked(true);
-				mDrawerLayout.closeDrawers();
+		view.setNavigationItemSelectedListener(menuItem -> {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
 
-				MainActivity.this.selectItemAtIndex(menuItem.getItemId());
+            MainActivity.this.selectItemAtIndex(menuItem.getItemId());
 
-				return true;
-			}
-		});
+            return true;
+        });
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 

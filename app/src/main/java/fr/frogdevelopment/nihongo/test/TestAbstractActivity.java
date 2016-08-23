@@ -10,11 +10,12 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
 
@@ -51,10 +52,11 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	protected List<Item> itemsToFind = new ArrayList<>();
 	protected ArrayList<Result> results;
 
-	private final int      layout;
+	private final int mLayout;
+    private View mView;
 
-	protected TestAbstractActivity(int layout) {
-		this.layout = layout;
+    protected TestAbstractActivity(int mLayout) {
+		this.mLayout = mLayout;
 	}
 
 	@Override
@@ -63,10 +65,10 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 		setContentView(R.layout.activity_test);
 		ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
-		stub.setLayoutResource(layout);
-		stub.inflate();
+		stub.setLayoutResource(mLayout);
+        mView = stub.inflate();
 
-		ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
 		Bundle bundle = getIntent().getExtras();
 
@@ -155,16 +157,9 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
 	@Override
 	public void onBackPressed() {
-//		Snackbar
-//				.make(stub.getRootView(), R.string.test_back_message, Snackbar.LENGTH_LONG)
-//				.setAction(R.string.positive_button_continue, v -> finish())
-//				.show();
-		new AlertDialog.Builder(this)
-				.setIcon(R.drawable.ic_warning_black)
-				.setTitle(R.string.test_back_title)
-				.setMessage(R.string.test_back_message)
-				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> finishTest())
-				.setNegativeButton(android.R.string.no, null)
+		Snackbar
+				.make(mView, R.string.test_back_message, Snackbar.LENGTH_LONG)
+				.setAction(R.string.positive_button_continue, v -> finishTest())
 				.show();
 	}
 

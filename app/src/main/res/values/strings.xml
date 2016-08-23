@@ -187,7 +187,7 @@
     <string name="test_tab_selection">SELECTION</string>
     <string name="test_tab_input">INPUT</string>
     <string name="test_back_title" translatable="false">ATTENTION</string>
-    <string name="test_back_message">You\'re going to leave</string>
+    <string name="test_back_message">Warning ! You\'re going to leave the test.</string>
     <string name="test_next">Next</string>
     <string name="test_info">Information</string>
 
@@ -284,7 +284,7 @@
     <string name="help_review_learned">Tag as learned</string>
     <string name="help_review_favorite">Tag as favorite</string>
 
-    <string name="help_dico_start">Welcome to Nihon Go !\n\nblablablablabla blabala\n\nWould you like to get some vocabulary ?</string>
+    <string name="help_dico_start">Welcome to Nihon Go !\n\nLooks like you didn\'t have yet vocabulary.\n\nWould you like to get some ?</string>
 
     <!-- ******* -->
     <!--  ABOUT  -->

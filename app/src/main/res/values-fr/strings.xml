@@ -155,7 +155,7 @@
     <!-- ******* -->
     <string name="test_tab_selection">SELECTION</string>
     <string name="test_tab_input">SAISIE</string>
-    <string name="test_back_message">Vous êtes sur le point de quitter le test</string>
+    <string name="test_back_message">Attention ! Vous êtes sur le point de quitter le test.</string>
     <string name="test_next">Suivant</string>
     <string name="test_info">Informations</string>
 
@@ -249,4 +249,6 @@
     <string name="help_review_intro">Voici quelques aides pour la vue de révision</string>
     <string name="help_review_learned">Tagger comme appris</string>
     <string name="help_review_favorite">Tagger comme favoris</string>
+
+    <string name="help_dico_start">Bienvenue dans Nihon Go !\n\nIl semblerait que vous n\'avez pas encore de vocabulaire.\n\nVoulez-vous en télécharger ?</string>
 </resources>
