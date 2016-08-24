@@ -165,7 +165,10 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	public void onBackPressed() {
 		Snackbar
 				.make(mView, R.string.test_back_message, Snackbar.LENGTH_LONG)
-				.setAction(R.string.positive_button_continue, v -> finishTest())
+				.setAction(R.string.positive_button_continue, v -> {
+                    results.remove(currentItemIndex);
+                    finishTest();
+                })
 				.show();
 	}
 
