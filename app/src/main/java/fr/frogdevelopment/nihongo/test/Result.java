@@ -64,9 +64,9 @@ class Result implements Parcelable {
     boolean setAnswerGiven(CharSequence answerGiven) {
         this.answerGiven = answerGiven.toString();
 
-        if (InputUtils.containsJapanese(answerExpected)) {
+        if (InputUtils.containsJapanese(answerExpected) && this.answerGiven.contains("~")) {
             // fixme
-            this.answerGiven = this.answerGiven.replace('~', InputUtils.WAVE_DASH);
+            this.answerGiven = this.answerGiven.replace('~', '～');
         }
 
         if (StringUtils.equalsIgnoreCase(answerExpected, this.answerGiven)) {
