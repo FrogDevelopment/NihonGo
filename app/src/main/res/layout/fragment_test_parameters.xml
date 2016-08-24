@@ -178,6 +178,17 @@
                 android:background="@drawable/arrow_touch"/>
         </LinearLayout>
 
+        <Switch
+            android:id="@+id/test_switch_learned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:padding="10dp"
+            android:text="@string/param_only_learned"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textOff="@string/no"
+            android:textOn="@string/yes"/>
+
         <LinearLayout
             android:id="@+id/test_param_tag"
             android:layout_width="match_parent"

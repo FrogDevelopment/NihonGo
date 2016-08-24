@@ -46,6 +46,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 	static final String TYPE_TEST     = "isTestJapanese";
 	static final String QUANTITY      = "count";
 	static final String NB_ANSWER     = "nbAnswer";
+	static final String ONLY_LEARNED = "onlyLearned";
 	static final String DISPLAY_KANJI = "isDisplayKanji";
 
 	@BindView(R.id.test_param_type_selection)
@@ -61,6 +62,9 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
 	@BindView(R.id.test_param_quantity_selection)
 	TextView mQuantitySelected;
+
+	@BindView(R.id.test_switch_learned)
+	Switch mLearnedSwitch;
 
 	@BindView(R.id.test_param_kanji)
 	Switch mKanjiSwitch;
@@ -230,6 +234,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 		options.putInt(TYPE_TEST, selectedType);
 		options.putInt(QUANTITY, Integer.valueOf(selectedQuantity));
 		options.putInt(NB_ANSWER, Integer.valueOf(nbAnswers));
+		options.putBoolean(ONLY_LEARNED, mLearnedSwitch.isChecked());
 		options.putBoolean(DISPLAY_KANJI, mKanjiSwitch.isChecked());
 		options.putStringArray("tags", mSelectedTags);
 		intent.putExtras(options);

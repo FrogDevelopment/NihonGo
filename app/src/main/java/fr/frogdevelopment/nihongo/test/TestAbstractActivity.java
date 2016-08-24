@@ -48,6 +48,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	protected int currentItemIndex = 0;
 	protected String[] tags;
 	protected int      nbAnswer;
+	private boolean onlyLearned;
 
 	protected List<Item> itemsToFind = new ArrayList<>();
 	protected ArrayList<Result> results;
@@ -55,7 +56,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 	private final int mLayout;
     private View mView;
 
-    protected TestAbstractActivity(int mLayout) {
+	protected TestAbstractActivity(int mLayout) {
 		this.mLayout = mLayout;
 	}
 
@@ -77,6 +78,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 		isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
 		tags = bundle.getStringArray("tags");
 		nbAnswer = bundle.getInt(TestParametersFragment.NB_ANSWER);
+		onlyLearned = bundle.getBoolean(TestParametersFragment.ONLY_LEARNED);
 
 		getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
 
@@ -122,12 +124,16 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 				break;
 		}
 
+		if (onlyLearned) {
+			selection += " AND LEARNED = '1'";
+		}
+
 		String[] likes = null;
 		if (ArrayUtils.isNotEmpty(tags)) {
 			for (String tag : tags) {
 				likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
 			}
-			selection += "AND (" + StringUtils.join(likes, " OR ") + ")";
+			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
 		}
 
 		String sortOrder = "RANDOM() LIMIT " + quantityMax;

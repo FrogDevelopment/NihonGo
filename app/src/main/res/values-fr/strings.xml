@@ -113,6 +113,7 @@
     <string name="param_sort_selection">Sélectionner l\'ordre de tri</string>
     <string name="param_quantity">Quantité</string>
     <string name="param_quantity_selection">Sélectionner la quantité</string>
+    <string name="param_only_learned">Seulement les appris ?</string>
     <string name="param_kanji_display">Afficher en Kanji</string>
     <string name="param_kanji_write">Saisir en Kanji</string>
     <string name="param_tag_title">Tag (Optionnel)</string>

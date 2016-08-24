@@ -127,6 +127,7 @@
     <string name="param_sort_selection">Select the sort order</string>
     <string name="param_quantity">Quantity</string>
     <string name="param_quantity_selection">Select the quantity</string>
+    <string name="param_only_learned">Only learned ?</string>
     <string name="param_kanji_display">Display in Kanji</string>
     <string name="param_kanji_write">Write in Kanji</string>
     <string name="param_tag_title">Tag (Optional)</string>
