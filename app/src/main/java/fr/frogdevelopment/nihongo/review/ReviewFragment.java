@@ -4,11 +4,14 @@
 
 package fr.frogdevelopment.nihongo.review;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextSwitcher;
@@ -18,36 +21,53 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class ReviewFragment extends Fragment {
+
+	private Unbinder unbinder;
 
 	interface OnFragmentInteractionListener {
 		void setFavorite(Item item);
 
 		void setLearned(Item item);
+
+		void reviewAgain();
 	}
 
 	private WeakReference<OnFragmentInteractionListener> mListener;
 
-
-	@Bind(R.id.review_count)
+	@BindView(R.id.review_count)
 	TextView             mCount;
-	@Bind(R.id.review_reviewed)
+	@BindView(R.id.review_reviewed)
 	TextView             mReviewed;
-	@Bind(R.id.review_textSwitcher_kana)
+	@BindView(R.id.review_textSwitcher_kana)
 	TextSwitcher         mKana;
-	@Bind(R.id.review_textSwitcher_test)
+	@BindView(R.id.review_textSwitcher_test)
 	TextSwitcher         mTest;
-	@Bind(R.id.review_details)
-	TextView             mDetails;
-	@Bind(R.id.fab_favorite)
+	@BindView(R.id.review_info_title)
+	TextView             mInfoTitle;
+	@BindView(R.id.review_info)
+	TextView             mInfo;
+	@BindView(R.id.review_example_title)
+	TextView             mExampleTitle;
+	@BindView(R.id.review_example)
+	TextView             mExample;
+	@BindView(R.id.review_tags_title)
+	TextView             mTagsTitle;
+	@BindView(R.id.review_tags)
+	TextView             mTags;
+	@BindView(R.id.fab_again)
+	FloatingActionButton mFabAgain;
+	@BindView(R.id.fab_favorite)
 	FloatingActionButton mFabFavorite;
-	@Bind(R.id.fab_learned)
+	@BindView(R.id.fab_learned)
 	FloatingActionButton mFabLearned;
 
 	private Item   mItem;
@@ -58,7 +78,9 @@ public class ReviewFragment extends Fragment {
 		// The last two arguments ensure LayoutParams are inflated properly.
 		View rootView = inflater.inflate(R.layout.fragment_review, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
+
+		setHasOptionsMenu(true);
 
 		populateView();
 
@@ -67,7 +89,35 @@ public class ReviewFragment extends Fragment {
 		return rootView;
 	}
 
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.review, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+			case R.id.review_help:
+				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review);
+				break;
+
+			default:
+				return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		unbinder.unbind();
+	}
+
 	private void initFabs() {
+		mFabAgain.setOnClickListener(view -> mListener.get().reviewAgain());
+
 		mFabFavorite.setOnClickListener(view -> {
 			mItem.switchFavorite();
 			mListener.get().setFavorite(mItem);
@@ -143,7 +193,35 @@ public class ReviewFragment extends Fragment {
 			mReviewed.setText(mItem.input);
 		}
 
-		mDetails.setText(mItem.details);
+		if (StringUtils.isNotBlank(mItem.details)) {
+			mInfo.setText(mItem.details);
+			mInfo.setVisibility(View.VISIBLE);
+			mInfoTitle.setVisibility(View.VISIBLE);
+		} else {
+			mInfo.setText(null);
+			mInfo.setVisibility(View.GONE);
+			mInfoTitle.setVisibility(View.GONE);
+		}
+
+		if (StringUtils.isNotBlank(mItem.example)) {
+			mExample.setText(mItem.example);
+			mExample.setVisibility(View.VISIBLE);
+			mExampleTitle.setVisibility(View.VISIBLE);
+		} else {
+			mExample.setText(null);
+			mExample.setVisibility(View.GONE);
+			mExampleTitle.setVisibility(View.GONE);
+		}
+
+		if (StringUtils.isNotBlank(mItem.tags)) {
+			mTags.setText(mItem.tags);
+			mTags.setVisibility(View.VISIBLE);
+			mTagsTitle.setVisibility(View.VISIBLE);
+		} else {
+			mTags.setText(null);
+			mTags.setVisibility(View.GONE);
+			mTagsTitle.setVisibility(View.GONE);
+		}
 	}
 
 	@OnClick(R.id.review_textSwitcher_kana)
@@ -156,9 +234,6 @@ public class ReviewFragment extends Fragment {
 	void onClickTest() {
 		mTest.setText(test);
 		mTest.setClickable(false);
-		if (mDetails.getVisibility() == View.INVISIBLE) {
-			mDetails.setVisibility(View.VISIBLE);
-		}
 	}
 
 }

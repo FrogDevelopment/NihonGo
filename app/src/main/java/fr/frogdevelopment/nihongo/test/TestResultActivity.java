@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -28,7 +28,7 @@ import fr.frogdevelopment.nihongo.R;
 
 public class TestResultActivity extends Activity {
 
-    @Bind(R.id.test_result_list)
+    @BindView(R.id.test_result_list)
     ListView mListView;
 
     private ResultAdapter adapter;
@@ -138,9 +138,9 @@ public class TestResultActivity extends Activity {
         }
 
         class ResultHolder {
-            @Bind(R.id.dico_test_test)
+            @BindView(R.id.dico_test_test)
             TextView test;
-            @Bind(R.id.dico_test_answer)
+            @BindView(R.id.dico_test_answer)
             TextView answer;
 
             public ResultHolder(View view) {

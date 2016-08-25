@@ -5,36 +5,41 @@
 package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.design.widget.Snackbar;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
+import fr.frogdevelopment.nihongo.dico.input.InputActivity;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
-	@Bind(R.id.toolbar)
+	@BindView(R.id.toolbar)
 	Toolbar toolbar;
 
-	@Bind(R.id.details_viewpager)
+	@BindView(R.id.details_viewpager)
 	ViewPager mViewPager;
 
 	private Type mType;
@@ -61,12 +66,22 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		mType = (Type) args.getSerializable("type");
 		List<Item> items = args.getParcelableArrayList("items");
 
-		DetailsAdapter mAdapter = new DetailsAdapter(getSupportFragmentManager(), items, mType);
+		DetailsAdapter mAdapter = new DetailsAdapter(getFragmentManager(), items, mType);
 		mViewPager.setAdapter(mAdapter);
 		int position = args.getInt("position");
 		mViewPager.setCurrentItem(position);
 
 		initToolbar();
+
+		boolean doNotshow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
+		if (!doNotshow) {
+			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details, true);
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 	}
 
 	private void initToolbar() {
@@ -107,13 +122,18 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 	private void onDelete(Item item) {
 		Uri uri = Uri.parse(mType.uri + "/" + item.id);
 		getContentResolver().delete(uri, null, null);
-		Toast.makeText(this, R.string.delete_done, Toast.LENGTH_LONG).show();
+		Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG).show();
 		back();
 	}
 
 	@Override
 	public void update(Item item) {
-		startActivity(item.getUpdateIntent(this, mType));
+
+		Intent intent = new Intent(this, InputActivity.class);
+		intent.putExtra("type", mType);
+		intent.putExtra("item", item);
+
+		startActivity(intent);
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 

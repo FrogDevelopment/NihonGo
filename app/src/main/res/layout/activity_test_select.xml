@@ -4,10 +4,19 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:gravity="center_horizontal"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              tools:context=".test.TestSelectActivity">
+
+    <TextView
+        android:id="@+id/test_count"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textSize="15sp"/>
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -19,50 +28,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="60sp"/>
+            android:textSize="40sp"/>
 
     </ScrollView>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"/>
+
     <LinearLayout
+        android:id="@+id/test_select_answers"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/darker_gray"/>
-
-        <Button
-            android:id="@+id/test_select_answer_1"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"/>
-
-        <Button
-            android:id="@+id/test_select_answer_2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/test_select_answer_3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/test_select_answer_4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/test_select_answer_5"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/test_select_answer_6"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
     </LinearLayout>
 
 </LinearLayout>

@@ -5,12 +5,18 @@
 
 <resources>
 
+    <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
+
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9262384952442366/1210248138</string>
+
     <string name="app_name" translatable="false">Nihon Go !</string>
+
+    <string name="no_connection">No connection</string>
 
     <!-- WARNING IME -->
     <string name="warning_ime_title" translatable="false">ATTENTION</string>
     <string name="warning_ime_text">Japanese Keyboard required for this application.</string>
-    <string name="warning_ime_remember">Don\'t display anymore</string>
+    <string name="cb_remember">Don\'t display anymore</string>
 
     <!-- DRAWER -->
     <string name="drawer_item_word">Words</string>
@@ -20,6 +26,7 @@
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_lessons">Lessons</string>
     <string name="drawer_item_parameters">Parameters</string>
+    <string name="drawer_item_about">About</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -32,12 +39,18 @@
 
     <string name="search_word">Search for words</string>
     <string name="search_expression">Search for expressions</string>
+    <string name="search_current">Searching for \"%1$s\"</string>
 
     <!-- ***** -->
     <!-- DICO -->
     <!-- ***** -->
 
+    <string name="dico_no_data">No data</string>
     <string name="title_activity_details">Details</string>
+
+    <string name="details_info">Information :</string>
+    <string name="details_example">Example :</string>
+    <string name="details_tags">Tags :</string>
 
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favorite</string>
@@ -68,7 +81,7 @@
     <!-- UPDATE -->
     <string name="update_title">Updating</string>
     <string name="update_confirmation">Update this input ?</string>
-    <string name="update_alerte">Input \'%s\' already present, do you want to update it ?</string>
+    <string name="update_alert">Input \'%s\' already present, do you want to update it ?</string>
 
     <!-- ***** -->
     <!-- INPUT -->
@@ -76,8 +89,9 @@
     <string name="input_textView_input">Word</string>
     <string name="input_textView_kanji" translatable="false">Kanji</string>
     <string name="input_textView_kana" translatable="false">Kana</string>
-    <string name="input_textView_details">Details</string>
-    <string name="input_textView_tags">Tags (comma separeted)</string>
+    <string name="input_textView_info">Information</string>
+    <string name="input_textView_example">Example</string>
+    <string name="input_textView_tags">Tags (comma separated)</string>
     <string name="input_button_validate">Validate</string>
     <string name="input_button_cancel">Cancel</string>
     <string name="input_error_empty">Input required !</string>
@@ -101,21 +115,26 @@
     <string name="param_test">Test\'s parameters</string>
     <string name="param_review">Review\'s parameters</string>
     <string name="param_reviewed">Reviews on japanese ?</string>
-    <string name="param_sort_random">Random ?</string>
     <string name="param_exclude_learned">Exclude learned ?</string>
     <string name="param_only_favorite">Only Favorites ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Select the type of test</string>
     <string name="param_method">Method</string>
-    <string name="param_method_selection">Select the method of test</string>
+    <string name="param_method_selection">Select the method for test</string>
+    <string name="param_nb_answers">Nb answers</string>
+    <string name="param_nb_answers_selection">Select the number of answers</string>
+    <string name="param_sort">Sort</string>
+    <string name="param_sort_selection">Select the sort order</string>
     <string name="param_quantity">Quantity</string>
-    <string name="param_quantity_selection">Select the quantity of test</string>
+    <string name="param_quantity_selection">Select the quantity</string>
+    <string name="param_only_learned">Only learned ?</string>
     <string name="param_kanji_display">Display in Kanji</string>
     <string name="param_kanji_write">Write in Kanji</string>
-    <string name="param_tag_title">Tag (Optionnal)</string>
+    <string name="param_tag_title">Tag (Optional)</string>
     <string name="param_tag_selection">Select a tag</string>
     <string name="param.tags.dialog.title">Select one or more tags</string>
     <string name="param_button_start">Start</string>
+    <string name="param_keep_config">Keep config ?</string>
 
     <string-array name="param_types">
         <item>Kanji -> Hiragana</item>
@@ -127,6 +146,20 @@
     <string-array name="param_methods">
         <item>MCQ</item>
         <item>Write</item>
+    </string-array>
+
+    <string-array name="param_sorts">
+        <item>new -> old</item>
+        <item>old -> new</item>
+        <item>random</item>
+    </string-array>
+
+    <string-array name="param_quantities_answers" translatable="false">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="param_quantities" translatable="false">
@@ -155,9 +188,9 @@
     <string name="test_tab_selection">SELECTION</string>
     <string name="test_tab_input">INPUT</string>
     <string name="test_back_title" translatable="false">ATTENTION</string>
-    <string name="test_back_message">You\'re going to leave</string>
+    <string name="test_back_message">Warning ! You\'re going to leave the test.</string>
     <string name="test_next">Next</string>
-    <string name="test_details">Détails</string>
+    <string name="test_info">Information</string>
 
     <string name="test_results_title">Results</string>
     <string name="test_results_details">Test : %1$s\nAnswer expected : %2$s\nAnswer given : %3$s</string>
@@ -185,9 +218,19 @@
     <!-- ******* -->
     <!-- LESSONS -->
     <!-- ******* -->
-    <string name="lesson_already_present">Pack already fetched</string>
+    <string name="lesson_description">Free downloadable vocabulary available, based on Minna No Nihongo lessons.</string>
+    <string name="lesson_no_connection_test">No connection available, only downloaded lessons are displayed.</string>
+    <string name="lesson_tag">Lesson </string>
+    <string name="fetching_data">Fetching data</string>
+    <string name="lesson_already_present">Lesson already fetched</string>
     <string name="lesson_continue">Continue ?</string>
-    <string name="lesson_donwload_sucess">\'%s\' successfully downloaded</string>
+    <string name="lesson_download">Download</string>
+    <string name="lesson_download_success">Download successful</string>
+
+    <plurals name="action_lesson">
+        <item quantity="one">%1$d lesson selected.</item>
+        <item quantity="other">%1$d lessons selected.</item>
+    </plurals>
 
     <!-- ******* -->
     <!-- OPTIONS -->
@@ -198,14 +241,20 @@
     <string name="options_import">Import data</string>
     <string name="options_import_success">Import success</string>
     <string name="options_import_failed">Import failed</string>
-    <string name="options_erase">Erasing data</string>
-    <string name="options_erase_btn">Erase data</string>
-    <string name="options_erase_confirmation">Are you sure ?</string>
-    <string name="options_erase_success">Erase success</string>
     <string name="options_file_chooser_get_file_manager">Please install a File Manager.</string>
     <string name="options_file_chooser_prompt">Select a File to Upload</string>
     <string name="options_error_fetch_data">An error occurred while fetching data.</string>
 
+    <string name="options_data">Data</string>
+    <string name="options_erase_data_btn">Erase data</string>
+    <string name="options_erase_data_confirmation">You\'re going to erase all your data, continue ?</string>
+    <string name="options_erase_data_success">Erase success</string>
+    <string name="options_reset_favorite_btn">Reset Favorite</string>
+    <string name="options_reset_favorite_confirmation">You\'re going to reset your Favorites, continue ?</string>
+    <string name="options_reset_favorite_success">Reset success</string>
+    <string name="options_reset_learned_btn">Reset Learned</string>
+    <string name="options_reset_learned_erase_confirmation">You\'re going to reset your Learned, continue ?</string>
+    <string name="options_reset_learned_erase_success">Reset success</string>
 
     <string name="closing_activity_title">Exit</string>
     <string name="closing_activity_message">Are you sure you want to exit ?</string>
@@ -216,8 +265,33 @@
     <string name="kanji" translatable="false">Kanji</string>
     <string name="kana" translatable="false">Kana</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- ******* -->
+    <!--   HELP  -->
+    <!-- ******* -->
+    <string name="help_title">Help</string>
+    <string name="help_dico_intro">Here is some help for the dico view</string>
+    <string name="help_dico_one_press_description">1 press</string>
+    <string name="help_dico_one_press">Press 1 time to switch between Kanji and Kana</string>
+    <string name="help_dico_two_press_description">2 presses</string>
+    <string name="help_dico_two_press">Press 2 times to enter detail\'s view</string>
+    <string name="help_dico_press_and_hold_description">Press and hold</string>
+    <string name="help_dico_press_and_hold">Press and hold to select the line</string>
+    <string name="help_dico_add">Add new input</string>
+
+    <string name="help_details_intro">Here is some help for the details view</string>
+    <string name="help_details_swap">Swap left and right to navigate</string>
+
+    <string name="help_review_intro">Here is some help for the review view</string>
+    <string name="help_review_learned">Tag as learned</string>
+    <string name="help_review_favorite">Tag as favorite</string>
+
+    <string name="help_dico_start">Welcome to Nihon Go !\n\nLooks like you didn\'t have yet vocabulary.\n\nWould you like to get some ?</string>
+
+    <!-- ******* -->
+    <!--  ABOUT  -->
+    <!-- ******* -->
+    <string name="about_hiragana_link" translatable="false">About the Hiragana table : <a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
+    <string name="about_katakana_link" translatable="false">About the Katakana table : <a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

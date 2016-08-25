@@ -4,10 +4,10 @@
 
 package fr.frogdevelopment.nihongo.dico.details;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,13 +20,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
-
+import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class DetailsFragment extends Fragment {
+
+	private Unbinder unbinder;
 
 	interface OnFragmentInteractionListener {
 		void update(Item item);
@@ -40,19 +43,27 @@ public class DetailsFragment extends Fragment {
 
 	private WeakReference<OnFragmentInteractionListener> mListener;
 
-	@Bind(R.id.details_word_input)
+	@BindView(R.id.details_word_input)
 	TextView             mInputView;
-	@Bind(R.id.details_word_kanji)
+	@BindView(R.id.details_word_kanji)
 	TextView             mKanjiView;
-	@Bind(R.id.details_word_kana)
+	@BindView(R.id.details_word_kana)
 	TextView             mKanaView;
-	@Bind(R.id.details_word_details)
+	@BindView(R.id.details_word_info_title)
+	TextView             mDetailsTitleView;
+	@BindView(R.id.details_word_info)
 	TextView             mDetailsView;
-	@Bind(R.id.details_word_tags)
+	@BindView(R.id.details_word_example_title)
+	TextView             mExampleTitleView;
+	@BindView(R.id.details_word_example)
+	TextView             mExampleView;
+	@BindView(R.id.details_word_tags_title)
+	TextView             mTagsTitleView;
+	@BindView(R.id.details_word_tags)
 	TextView             mTagsView;
-	@Bind(R.id.fab_favorite)
+	@BindView(R.id.fab_favorite)
 	FloatingActionButton mFabFavorite;
-	@Bind(R.id.fab_learned)
+	@BindView(R.id.fab_learned)
 	FloatingActionButton mFabLearned;
 
 	private Item mItem;
@@ -62,7 +73,7 @@ public class DetailsFragment extends Fragment {
 		// The last two arguments ensure LayoutParams are inflated properly.
 		View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
-		ButterKnife.bind(this, rootView);
+		unbinder = ButterKnife.bind(this, rootView);
 
 		setHasOptionsMenu(true);
 
@@ -91,7 +102,7 @@ public class DetailsFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.dico_context, menu);
+		inflater.inflate(R.menu.details, menu);
 	}
 
 	@Override
@@ -105,6 +116,9 @@ public class DetailsFragment extends Fragment {
 				mListener.get().update(mItem);
 				break;
 
+			case R.id.details_help:
+				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
+				break;
 
 			default:
 				return false;
@@ -127,6 +141,12 @@ public class DetailsFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		unbinder.unbind();
 	}
 
 	private void populateView() {
@@ -154,11 +174,20 @@ public class DetailsFragment extends Fragment {
 		if (StringUtils.isNoneEmpty(mItem.details)) {
 			mDetailsView.setText(mItem.details);
 			mDetailsView.setVisibility(View.VISIBLE);
+			mDetailsTitleView.setVisibility(View.VISIBLE);
+		}
+
+		mExampleView.setText(mItem.example);
+		if (StringUtils.isNoneEmpty(mItem.example)) {
+			mExampleView.setText(mItem.example);
+			mExampleView.setVisibility(View.VISIBLE);
+			mExampleTitleView.setVisibility(View.VISIBLE);
 		}
 
 		if (StringUtils.isNoneEmpty(mItem.tags)) {
 			mTagsView.setText(mItem.tags);
 			mTagsView.setVisibility(View.VISIBLE);
+			mTagsTitleView.setVisibility(View.VISIBLE);
 		}
 	}
 

@@ -5,10 +5,14 @@
 package fr.frogdevelopment.nihongo.dico.input;
 
 /**
- * @see www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml
- * @see en.wikipedia.org/wiki/Japanese_writing_system
+ * @see <a href="http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml">kanji_codes.unicode</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Japanese_writing_system">Japanese_writing_system</a>
  */
 public class InputUtils {
+
+    public static final char TILD = 0xFF5E; // '~'
+    public static final char WAVE_DASH = 0x301C; // '～'
+    public static final char TOTEN = 0x3001; // '、'
 
     // Japanese-style punctuation ( 3000 - 303f)
     private static final int RANGE_PUNCTUATION_START = 0x3000;
@@ -55,6 +59,7 @@ public class InputUtils {
         return true;
     }
 
+    @SuppressWarnings("UnnecessaryContinue")
     public static boolean isOnlyJapanese(String input) {
         boolean isOnlyJapanese = true;
         for (Character ch : input.toCharArray()) {
@@ -68,7 +73,7 @@ public class InputUtils {
                 continue;
             } else if (ch >= RANGE_KANJI_START && ch <= RANGE_KANJI_END) { // KANJI
                 continue;
-            } else if (ch.equals('~')) { // FIXME
+            } else if (ch == TILD || ch == WAVE_DASH) { // todo http://stackoverflow.com/questions/14450187/having-trouble-with-japanese-character-in-android
                 continue;
             } else {
                 isOnlyJapanese = false;
@@ -78,6 +83,7 @@ public class InputUtils {
         return isOnlyJapanese;
     }
 
+    @SuppressWarnings("UnnecessaryContinue")
     public static boolean isOnlyKana(final String input) {
         boolean isOnlyKana = true;
         for (Character ch : input.toCharArray()) {

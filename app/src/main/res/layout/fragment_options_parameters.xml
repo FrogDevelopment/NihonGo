@@ -2,12 +2,13 @@
   ~ Copyright (c) Frog Development 2015.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/parameters_layout"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
               android:gravity="center_horizontal|top"
+              android:orientation="vertical"
               android:padding="10dp"
               tools:context="fr.frogdevelopment.nihongo.options.ParametersFragment">
 
@@ -15,7 +16,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="@string/options_erase"/>
+        android:paddingTop="15dp"
+        android:text="@string/options_data"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <View
         android:layout_width="fill_parent"
@@ -26,49 +30,26 @@
 
     <Button
         android:id="@+id/options_erase"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/options_erase_btn"/>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="Reset Favorite"/>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray"/>
+        android:padding="10dp"
+        android:text="@string/options_erase_data_btn"
+        android:textColor="@android:color/black"/>
 
     <Button
         android:id="@+id/options_reset_favorite"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reset Favorite"/>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="Reset Learned"/>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray"/>
+        android:padding="10dp"
+        android:text="@string/options_reset_favorite_btn"
+        android:textColor="@android:color/black"/>
 
     <Button
         android:id="@+id/options_reset_learned"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reset Learned"/>
-
-
-
+        android:padding="10dp"
+        android:text="@string/options_reset_learned_btn"
+        android:textColor="@android:color/black"/>
 
 </LinearLayout>

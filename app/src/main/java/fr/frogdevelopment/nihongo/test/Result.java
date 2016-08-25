@@ -9,6 +9,10 @@ import android.os.Parcelable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.charset.StandardCharsets;
+
+import fr.frogdevelopment.nihongo.dico.input.InputUtils;
+
 class Result implements Parcelable {
 
     public boolean success;
@@ -59,13 +63,18 @@ class Result implements Parcelable {
 
     boolean setAnswerGiven(CharSequence answerGiven) {
         this.answerGiven = answerGiven.toString();
+
+        if (InputUtils.containsJapanese(answerExpected) && this.answerGiven.contains("~")) {
+            // fixme
+            this.answerGiven = this.answerGiven.replace('~', '～');
+        }
+
         if (StringUtils.equalsIgnoreCase(answerExpected, this.answerGiven)) {
             success = true;
         } else if (inputTest) {
-
             String splitChar;
-            if (this.answerGiven.contains("?")) {
-                splitChar = "?";
+            if (this.answerGiven.contains(String.valueOf(InputUtils.TOTEN))) {
+                splitChar = String.valueOf(InputUtils.TOTEN);
             } else {
                 splitChar = ",";
             }
@@ -105,6 +114,9 @@ class Result implements Parcelable {
 
     // http://rosettacode.org/wiki/Levenshtein_distance#Java
     private static double computeSimilarity(String s1, String s2) {
+        s1 = new String(s1.getBytes(StandardCharsets.UTF_8));
+        s2 = new String(s2.getBytes(StandardCharsets.UTF_8));
+
         if (s1.length() < s2.length()) { // s1 should always be bigger
             String swap = s1;
             s1 = s2;

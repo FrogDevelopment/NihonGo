@@ -32,17 +32,6 @@
                 android:textOn="@string/yes"/>
 
             <Switch
-                android:id="@+id/review_switch_sort"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:padding="10dp"
-                android:text="@string/param_sort_random"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textOff="@string/no"
-                android:textOn="@string/yes"/>
-
-            <Switch
                 android:id="@+id/review_switch_learned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,6 +52,46 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
                 android:textOn="@string/yes"/>
+
+            <LinearLayout
+                android:id="@+id/review_param_sort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/review_param_sort_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/param_sort"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:id="@+id/review_param_sort_selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/param_sort_selection"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:textStyle="italic"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/arrow_touch"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/review_param_quantity"
@@ -147,6 +176,16 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <Switch
+        android:id="@+id/review_switch_keep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:padding="10dp"
+        android:text="@string/param_keep_config"
+        android:textOff="@string/no"
+        android:textOn="@string/yes"/>
 
     <Button
         android:id="@+id/review_button_start"

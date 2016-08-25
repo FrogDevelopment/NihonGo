@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -105,7 +105,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
     }
 
     static class LetterViewHolder {
-	    @Bind(R.id.row_header)
+	    @BindView(R.id.row_header)
 	    TextView textView;
 
 	    public LetterViewHolder(View view) {
@@ -141,14 +141,14 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
 	}
 
 	static class ViewHolder {
-		@Bind(R.id.dico_input)
+		@BindView(R.id.dico_input)
 		TextView mInputView;
 
-		@Bind(R.id.dico_switcher)
+		@BindView(R.id.dico_switcher)
 		TextSwitcher switcher;
-		@Bind(R.id.dico_switcher_kanji)
+		@BindView(R.id.dico_switcher_kanji)
 		TextView     switcherKanji;
-		@Bind(R.id.dico_switcher_kana)
+		@BindView(R.id.dico_switcher_kana)
 		TextView     switcherKana;
 
 		private boolean switchable;

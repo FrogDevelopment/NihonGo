@@ -5,9 +5,11 @@
 
 <resources>
 
+    <string name="no_connection">Pas de connexion</string>
+
     <!-- WARNING IME -->
     <string name="warning_ime_text">Un clavier japonais est requis pour utiliser cette application.</string>
-    <string name="warning_ime_remember">Ne plus afficher</string>
+    <string name="cb_remember">Ne plus afficher</string>
 
     <!-- DRAWER -->
     <string name="drawer_item_word">Mots</string>
@@ -16,6 +18,7 @@
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_parameters">Paramètres</string>
     <string name="drawer_item_lessons">Leçons</string>
+    <string name="drawer_item_about">À propos</string>
 
     <string name="drawer_open">Ouvrir le navigateur</string>
     <string name="drawer_close">Fermer le navigateur</string>
@@ -26,12 +29,17 @@
 
     <string name="search_word">Recherche de mots</string>
     <string name="search_expression">Recherche d\'expressions</string>
+    <string name="search_current">Recherche de \"%1$s\"</string>
 
     <!-- ***** -->
     <!-- DICO  -->
     <!-- ***** -->
-
+    <string name="dico_no_data">Aucunes données</string>
     <string name="title_activity_details">Détails</string>
+
+    <string name="details_info">Informations :</string>
+    <string name="details_example">Exemple :</string>
+    <string name="details_tags">Tags :</string>
 
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favori</string>
@@ -62,13 +70,14 @@
     <!-- UPDATE -->
     <string name="update_title">Mise à jour</string>
     <string name="update_confirmation">Voulez-vous mettre à jour cette saisie ?</string>
-    <string name="update_alerte">La saisie \'%s\' existe déjà, voulez-vous la mettre à jour ?</string>
+    <string name="update_alert">La saisie \'%s\' existe déjà, voulez-vous la mettre à jour ?</string>
 
     <!-- ***** -->
     <!-- INPUT -->
     <!-- ***** -->
     <string name="input_textView_input">Mot</string>
-    <string name="input_textView_details">Détails </string>
+    <string name="input_textView_info">Informations </string>
+    <string name="input_textView_example">Exemple</string>
     <string name="input_button_validate">Valider</string>
     <string name="input_button_cancel">Annuler</string>
     <string name="input_error_empty">Saisie obligatoire !</string>
@@ -92,21 +101,26 @@
     <string name="param_test">Paramétrage du test</string>
     <string name="param_review">Paramétrage de la révision</string>
     <string name="param_reviewed">Révision en japonais ?</string>
-    <string name="param_sort_random">Aléatoire ?</string>
-    <string name="param_exclude_learned">Exclure les appris</string>
+    <string name="param_exclude_learned">Exclure les appris ?</string>
     <string name="param_only_favorite">Seulement les favoris ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Sélectionner le type du test</string>
     <string name="param_method">Méthode</string>
     <string name="param_method_selection">Sélectionner la méthode du test</string>
+    <string name="param_nb_answers">Nb réponses</string>
+    <string name="param_nb_answers_selection">Sélectionner le nombre de réponse</string>
+    <string name="param_sort">Ordre</string>
+    <string name="param_sort_selection">Sélectionner l\'ordre de tri</string>
     <string name="param_quantity">Quantité</string>
-    <string name="param_quantity_selection">Sélectionner la quantité pour le test</string>
+    <string name="param_quantity_selection">Sélectionner la quantité</string>
+    <string name="param_only_learned">Seulement les appris ?</string>
     <string name="param_kanji_display">Afficher en Kanji</string>
     <string name="param_kanji_write">Saisir en Kanji</string>
     <string name="param_tag_title">Tag (Optionnel)</string>
     <string name="param_tag_selection">Sélectionner un tag</string>
     <string name="param.tags.dialog.title">Sélectionner un ou plusieurs tags</string>
     <string name="param_button_start">Démarrer</string>
+    <string name="param_keep_config">Garder la configuration ?</string>
 
     <string-array name="param_types">
         <item>Kanji -> Hiragana</item>
@@ -119,6 +133,14 @@
         <item>QCM</item>
         <item>Saisie</item>
     </string-array>
+
+    <string-array name="param_sorts">
+        <item>nouveau -> ancien</item>
+        <item>ancien -> nouveau</item>
+        <item>aléatoire</item>
+    </string-array>
+
+    <string name="param_quantity_all">Tout</string>
 
     <!-- ******* -->
     <!-- REVIEW  -->
@@ -134,9 +156,9 @@
     <!-- ******* -->
     <string name="test_tab_selection">SELECTION</string>
     <string name="test_tab_input">SAISIE</string>
-    <string name="test_back_message">Vous êtes sur le point de quitter le test</string>
+    <string name="test_back_message">Attention ! Vous êtes sur le point de quitter le test.</string>
     <string name="test_next">Suivant</string>
-    <string name="test_details">Détails</string>
+    <string name="test_info">Informations</string>
 
 
     <string name="test_results_title">Résultats</string>
@@ -163,11 +185,19 @@
     <!-- ******* -->
     <!-- LESSONS -->
     <!-- ******* -->
-    <string name="lesson_already_present">Pack déjà récupéré</string>
+    <string name="lesson_description">Vocabulaire gratuit téléchargeable, basé sur les leçons Minna No Nihongo.</string>
+    <string name="lesson_no_connection_test">Aucune connexion détectée, seul les leçons téléchargés sont affichées.</string>
+    <string name="lesson_tag">Leçon </string>
+    <string name="fetching_data">Récupération des données</string>
+    <string name="lesson_already_present">Leçon déjà récupérée</string>
     <string name="lesson_continue">Continuer ?</string>
-    <string name="lesson_donwload_sucess">\'%s\' téléchargé avec succès</string>
+    <string name="lesson_download">Télécharger</string>
+    <string name="lesson_download_success">Téléchargement réussi</string>
 
-    <string name="param_quantity_all">Tout</string>
+    <plurals name="action_lesson">
+        <item quantity="one">%1$d leçon sélectionnée.</item>
+        <item quantity="other">%1$d leçons sélectionnées.</item>
+    </plurals>
 
     <!-- ******* -->
     <!-- OPTIONS -->
@@ -178,20 +208,48 @@
     <string name="options_import">Importer les données</string>
     <string name="options_import_success">Import réussi</string>
     <string name="options_import_failed">Import échoué</string>
-    <string name="options_erase">Suppression des données</string>
-    <string name="options_erase_btn">Effacer les données</string>
-    <string name="options_erase_confirmation">Êtes vous sûre ?</string>
-    <string name="options_erase_success">Suppression réussie</string>
     <string name="options_file_chooser_get_file_manager">Veuillez installer un gestionnaire de fichier.</string>
     <string name="options_file_chooser_prompt">Choississez un fichier</string>
     <string name="options_error_fetch_data">Une erreur est survenue pendant la récupération des données.</string>
 
+    <string name="options_data">Données</string>
+    <string name="options_erase_data_btn">Supprimer les données</string>
+    <string name="options_erase_data_confirmation">Vous êtes sur le point de supprimer toutes vos données, continuer ?</string>
+    <string name="options_erase_data_success">Suppression réussie</string>
+    <string name="options_reset_favorite_btn">Réinitaliser les Favoris</string>
+    <string name="options_reset_favorite_confirmation">Vous êtes sur le point de réinitialiser vos Favoris, continuer ?</string>
+    <string name="options_reset_favorite_success">Réinitalisation réussie</string>
+    <string name="options_reset_learned_btn">Réinitaliser les Appris</string>
+    <string name="options_reset_learned_erase_confirmation">Vous êtes sur le point de réinitialiser vos Appris, continuer ?</string>
+    <string name="options_reset_learned_erase_success">Réinitalisation réussie</string>
+
+
     <string name="closing_activity_title">Sortie</string>
-    <string name="closing_activity_message">Êtes vous sûr de vouloir quitter ?</string>
+    <string name="closing_activity_message">Êtes-vous sûr de vouloir quitter ?</string>
 
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="input_textView_tags">Tags (séparés par des virgules)</string>
 
+    <!-- ******* -->
+    <!--   HELP  -->
+    <!-- ******* -->
+    <string name="help_title">Aide</string>
+    <string name="help_dico_intro">Voici quelques aides pour le dictionnaire</string>
+    <string name="help_dico_one_press_description">1 pression</string>
+    <string name="help_dico_one_press">Presser 1 fois pour permutter entre Kanji et Kana</string>
+    <string name="help_dico_two_press_description">2 pressions</string>
+    <string name="help_dico_two_press">Presser 2 fois pour afficher la vue détaillée</string>
+    <string name="help_dico_press_and_hold_description">Presser et maintenir</string>
+    <string name="help_dico_press_and_hold">Presser et maintenir pour sélectionner la ligne</string>
+    <string name="help_dico_add">Ajouter une nouvelle entrée</string>
 
+    <string name="help_details_intro">Voici quelques aides pour la vue détaillée</string>
+    <string name="help_details_swap">Swap gauche et droite pour naviguer</string>
+
+    <string name="help_review_intro">Voici quelques aides pour la vue de révision</string>
+    <string name="help_review_learned">Tagger comme appris</string>
+    <string name="help_review_favorite">Tagger comme favoris</string>
+
+    <string name="help_dico_start">Bienvenue dans Nihon Go !\n\nIl semblerait que vous n\'avez pas encore de vocabulaire.\n\nVoulez-vous en télécharger ?</string>
 </resources>

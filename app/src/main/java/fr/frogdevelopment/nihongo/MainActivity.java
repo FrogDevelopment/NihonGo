@@ -4,16 +4,14 @@
 
 package fr.frogdevelopment.nihongo;
 
-import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -24,28 +22,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.frogdevelopment.nihongo.about.AboutFragment;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
-import fr.frogdevelopment.nihongo.kana.BlankFragment;
+import fr.frogdevelopment.nihongo.kana.KanaViewPage;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
 import fr.frogdevelopment.nihongo.options.ParametersFragment;
+import fr.frogdevelopment.nihongo.preferences.Preferences;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import fr.frogdevelopment.nihongo.review.ReviewParametersFragment;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-	@Bind(R.id.drawer_layout)
+	@BindView(R.id.drawer_layout)
 	DrawerLayout mDrawerLayout;
 
-	@Bind(R.id.toolbar)
+	@BindView(R.id.toolbar)
 	Toolbar toolbar;
+
+	@BindView(R.id.progress_spinner)
+	ProgressBar progressBar;
 
 	private ActionBarDrawerToggle mDrawerToggle;
 
@@ -85,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		if (isNoJapanIME) {
-			SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME.value, 0);
-			boolean rememberWarning = settings.getBoolean(Preferences.REMEMBER_WARNING_IME.value, false);
+			boolean rememberWarning = PreferencesHelper.getInstance(this).getBoolean(Preferences.REMEMBER_WARNING_IME);
 			if (!rememberWarning) {
 				WarningIMEDialog.show(getFragmentManager());
 			}
@@ -106,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
 	private void setupDrawerLayout() {
 		NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
 		view.setNavigationItemSelectedListener(menuItem -> {
-			menuItem.setChecked(true);
-			mDrawerLayout.closeDrawers();
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
 
-			selectItemAtIndex(menuItem.getItemId());
+            MainActivity.this.selectItemAtIndex(menuItem.getItemId());
 
-			return true;
-		});
+            return true;
+        });
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
@@ -122,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 				imm.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
 			}
 		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerLayout.addDrawerListener(mDrawerToggle);
 	}
 
 	@Override
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private static int CURRENT_VIEW = -1;
 
-	private void selectItemAtIndex(int id) {
+	public void selectItemAtIndex(int id) {
 		if (!onSearch && CURRENT_VIEW == id) {
 			return;
 		}
@@ -184,9 +188,19 @@ public class MainActivity extends AppCompatActivity {
 				break;
 
 			case R.id.navigation_hiragana:
-				mFragmentTitle = R.string.drawer_item_kana;
-//				fragment = new HelpKanaFragment();
-				fragment = new BlankFragment();
+				mFragmentTitle = R.string.global_hiragana;
+				fragment = new KanaViewPage();
+				args = new Bundle();
+				args.putInt("imageSource", R.drawable.table_hiragana);
+				fragment.setArguments(args);
+				break;
+
+			case R.id.navigation_katakana:
+				mFragmentTitle = R.string.global_katakana;
+				fragment = new KanaViewPage();
+				args = new Bundle();
+				args.putInt("imageSource", R.drawable.table_katakana);
+				fragment.setArguments(args);
 				break;
 
 			case R.id.navigation_parameters:
@@ -199,20 +213,19 @@ public class MainActivity extends AppCompatActivity {
 				fragment = new LessonsFragment();
 				break;
 
+			case R.id.navigation_about:
+				mFragmentTitle = R.string.drawer_item_about;
+				fragment = new AboutFragment();
+				break;
+
 			default:
 				return;
 		}
 
 		// Insert the fragment by replacing any existing fragment
-		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.content_frame, fragment);
-		fragmentTransaction.commit();
+		getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 		mDrawerLayout.closeDrawers();
-
-		// todo voir utilité
-		invalidateOptionsMenu();
-
 
 		CURRENT_VIEW = id;
 		setTitle(mFragmentTitle);
@@ -241,13 +254,9 @@ public class MainActivity extends AppCompatActivity {
 			selectItemAtIndex(R.id.navigation_word);
 			onSearch = false;
 		} else {
-			// todo : un toast demandant un back une seconde fois pour sortir
-			new AlertDialog.Builder(this)
-					.setIcon(R.drawable.ic_warning_black)
-					.setTitle(R.string.closing_activity_title)
-					.setMessage(R.string.closing_activity_message)
-					.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish())
-					.setNegativeButton(getString(R.string.no), null)
+			Snackbar
+					.make(findViewById(R.id.dico_layout), R.string.closing_activity_message, Snackbar.LENGTH_LONG)
+					.setAction(R.string.yes, v -> finish())
 					.show();
 		}
 	}
@@ -257,6 +266,10 @@ public class MainActivity extends AppCompatActivity {
 		CURRENT_VIEW = -1;
 		onSearch = false;
 		super.onDestroy();
+	}
+
+	public void showLoading(boolean show) {
+		progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
 	}
 
 	// ************************************************************ \\
@@ -282,9 +295,9 @@ public class MainActivity extends AppCompatActivity {
 			final DicoFragment fragment = new DicoFragment();
 			fragment.setArguments(args);
 
-			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+			getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-			setTitle(CURRENT_VIEW == R.id.navigation_word ? R.string.search_word : R.string.search_expression);
+			setTitle(getString(R.string.search_current, query));
 
 			onSearch = true;
 		}

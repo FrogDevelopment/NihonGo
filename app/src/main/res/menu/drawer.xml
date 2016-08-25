@@ -5,10 +5,12 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_word"
+            android:icon="@drawable/ic_translate_white"
             android:checked="true"
             android:title="@string/drawer_item_word"/>
         <item
             android:id="@+id/navigation_expression"
+            android:icon="@drawable/ic_comment_white"
             android:title="@string/drawer_item_expression"/>
     </group>
 
@@ -17,9 +19,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_review"
+            android:icon="@drawable/ic_fitness_center_white"
             android:title="@string/drawer_item_review"/>
         <item
             android:id="@+id/navigation_test"
+            android:icon="@drawable/ic_school_white"
             android:title="@string/drawer_item_test"/>
     </group>
 
@@ -28,11 +32,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_hiragana"
-            android:icon="@drawable/ic_hiragana"
+            android:icon="@drawable/ic_hiragana_white"
             android:title="@string/global_hiragana"/>
         <item
             android:id="@+id/navigation_katakana"
-            android:icon="@drawable/ic_katakana"
+            android:icon="@drawable/ic_katakana_white"
             android:title="@string/global_katakana"/>
     </group>
 
@@ -41,10 +45,16 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_lessons"
+            android:icon="@drawable/ic_archive_white"
             android:title="@string/drawer_item_lessons"/>
         <item
             android:id="@+id/navigation_parameters"
+            android:icon="@drawable/ic_settings_white"
             android:title="@string/drawer_item_parameters"/>
+        <item
+            android:id="@+id/navigation_about"
+            android:icon="@drawable/ic_info_white"
+            android:title="@string/drawer_item_about"/>
     </group>
 
 </menu>

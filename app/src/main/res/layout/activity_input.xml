@@ -31,6 +31,7 @@
 
     <!-- The main content view -->
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="?attr/actionBarSize"
@@ -108,7 +109,20 @@
                     android:id="@+id/input_details"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/input_textView_details"
+                    android:hint="@string/input_textView_info"
+                    android:inputType="textMultiLine|textCapSentences"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/wrapper_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_example"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/input_textView_example"
                     android:inputType="textMultiLine|textCapSentences"/>
             </android.support.design.widget.TextInputLayout>
 

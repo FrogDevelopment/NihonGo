@@ -4,17 +4,20 @@
 
 package fr.frogdevelopment.nihongo.test;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.Window;
+import android.view.View;
+import android.view.ViewStub;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,75 +25,74 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
+import fr.frogdevelopment.nihongo.data.Item;
 
-public abstract class TestAbstractActivity extends Activity implements LoaderCallbacks<Cursor> {
+public abstract class TestAbstractActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-	private static final int LOADER_ID = 710;
-	protected int          typeTest;
-	protected boolean      isDisplayKanji;
-	protected int          quantityMax;
-	protected int          quantity;
-	protected String[]     tags;
-	protected boolean      first;
-	protected List<String> idsDone;
+	protected static final int LOADER_ID_ITEMS_TO_FIND = 710;
 
+	@BindView(R.id.toolbar)
+	Toolbar toolbar;
+
+	@BindView(R.id.test_count)
+	TextView mCount;
+
+	protected int     typeTest;
+	protected boolean isDisplayKanji;
+	protected int     quantityMax;
+	protected int currentItemIndex = 0;
+	protected String[] tags;
+	protected int      nbAnswer;
+	private boolean onlyLearned;
+
+	protected List<Item> itemsToFind = new ArrayList<>();
 	protected ArrayList<Result> results;
 
-	protected String currentDetails;
+	private final int mLayout;
+    private View mView;
 
-	protected int limit;
-
-	protected boolean showMenuNext = false;
+	protected TestAbstractActivity(int mLayout) {
+		this.mLayout = mLayout;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setProgressBarIndeterminate(true);
+		setContentView(R.layout.activity_test);
+		ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
+		stub.setLayoutResource(mLayout);
+        mView = stub.inflate();
 
-		first = true;
-		quantity = 0;
+        ButterKnife.bind(this);
+
 		Bundle bundle = getIntent().getExtras();
 
 		quantityMax = bundle.getInt(TestParametersFragment.QUANTITY);
-		idsDone = new ArrayList<>(quantityMax);
-		results = new ArrayList<>(quantityMax);
 		typeTest = bundle.getInt(TestParametersFragment.TYPE_TEST);
 		isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
 		tags = bundle.getStringArray("tags");
+		nbAnswer = bundle.getInt(TestParametersFragment.NB_ANSWER);
+		onlyLearned = bundle.getBoolean(TestParametersFragment.ONLY_LEARNED);
 
-		// Show the Up button in the action bar.
-		if (getActionBar() != null)
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
 
-		getLoaderManager().initLoader(LOADER_ID, bundle, this);
-
-		setProgressBarIndeterminateVisibility(false);
+		initToolbar();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (currentDetails != null) {
-			getMenuInflater().inflate(R.menu.test, menu);
+	private void initToolbar() {
+		setSupportActionBar(toolbar);
+		final ActionBar actionBar = getSupportActionBar();
 
-			MenuItem nextMenuItem = menu.findItem(R.id.menu_test_pass);
-			nextMenuItem.setVisible(showMenuNext);
-
-			MenuItem detailsMenuItem = menu.findItem(R.id.menu_test_detail);
-			detailsMenuItem.setVisible(StringUtils.isNoneBlank(currentDetails));
-
-			MenuItem indexMenuItem = menu.findItem(R.id.menu_test_index);
-			String title = (quantity + 1) + "/" + quantityMax;
-			indexMenuItem.setTitle(title);
-
-			return true;
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeButtonEnabled(true);
 		}
-
-		return false;
 	}
 
 	@Override
@@ -100,27 +102,14 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 			case android.R.id.home:
 				onBackPressed();
 				return true;
-
-			case R.id.menu_test_pass:
-				validate("");
-				return true;
-
-			case R.id.menu_test_detail:
-				new AlertDialog.Builder(this)
-						.setTitle(R.string.input_textView_details)
-						.setMessage(currentDetails)
-						.create()
-						.show();
-
-				return true;
-
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle options) {
-		String selection = "INPUT != '~'";
+		String selection = "INPUT != '~'"; // fixme
 
 		switch (typeTest) {
 
@@ -135,44 +124,37 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 				break;
 		}
 
+		if (onlyLearned) {
+			selection += " AND LEARNED = '1'";
+		}
+
 		String[] likes = null;
 		if (ArrayUtils.isNotEmpty(tags)) {
 			for (String tag : tags) {
 				likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
 			}
-			selection += "AND (" + StringUtils.join(likes, " OR ") + ")";
+			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
 		}
 
-		String[] selectionArgs;
-		if (first) {
-			selectionArgs = null;
-			first = false;
-		} else {
+		String sortOrder = "RANDOM() LIMIT " + quantityMax;
 
-			StringBuilder inList = new StringBuilder(quantity);
-			selectionArgs = new String[quantity];
-			int i = 0;
-			for (String idDone : idsDone) {
-				if (i > 0) {
-					inList.append(",");
-				}
-				inList.append("?");
-
-				selectionArgs[i] = idDone;
-				i++;
-			}
-
-			selection += "AND _ID NOT IN (" + inList.toString() + ")";
-		}
-
-		String sortOrder = "RANDOM() LIMIT " + limit;
-
-		return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, selectionArgs, sortOrder);
+		return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		invalidateOptionsMenu();
+		quantityMax = data.getCount();
+		results = new ArrayList<>(quantityMax);
+
+		displayQuantity();
+
+		while (data.moveToNext()) {
+			itemsToFind.add(new Item(data));
+		}
+
+		data.close();
+
+		next(itemsToFind.get(currentItemIndex));
 	}
 
 	@Override
@@ -181,40 +163,46 @@ public abstract class TestAbstractActivity extends Activity implements LoaderCal
 
 	@Override
 	public void onBackPressed() {
-		new AlertDialog.Builder(this)
-				.setIcon(R.drawable.ic_warning_black)
-				.setTitle(R.string.test_back_title)
-				.setMessage(R.string.test_back_message)
-				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> finishTest())
-				.setNegativeButton(android.R.string.no, null)
+		Snackbar
+				.make(mView, R.string.test_back_message, Snackbar.LENGTH_LONG)
+				.setAction(R.string.positive_button_continue, v -> {
+                    results.remove(currentItemIndex);
+                    finishTest();
+                })
 				.show();
 	}
 
 	private int successCounter = 0;
 
 	protected void validate(CharSequence testAnswer) {
-		if (results.get(quantity).setAnswerGiven(testAnswer)) {
+		if (results.get(currentItemIndex).setAnswerGiven(testAnswer)) {
 			successCounter++;
 		}
-		quantity++;
+		currentItemIndex++;
 
-		if (quantity == quantityMax) {
+		if (currentItemIndex == quantityMax) {
 			finishTest();
 		} else {
-			getLoaderManager().restartLoader(LOADER_ID, null, this);
+			displayQuantity();
+			next(itemsToFind.get(currentItemIndex));
 		}
 	}
 
-	protected void finishTest() {
-		setProgressBarIndeterminateVisibility(true);
+	protected void displayQuantity() {
+		String count = (currentItemIndex + 1) + "/" + quantityMax;
+		mCount.setText(count);
+	}
 
+	abstract protected void next(Item item);
+
+	private void finishTest() {
 		finish();
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
 		Intent intent = new Intent(this, TestResultActivity.class);
 		intent.putParcelableArrayListExtra("results", results);
 		intent.putExtra("successCounter", successCounter);
-		intent.putExtra("quantity", quantity);
+		intent.putExtra("quantity", currentItemIndex);
 
 		startActivity(intent);
 	}

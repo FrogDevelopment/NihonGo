@@ -7,22 +7,27 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:id="@+id/dico_menu_search"
+        android:icon="@drawable/ic_search_white"
         android:title="@string/menu_search"
         android:visible="false"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
-        android:id="@+id/action_sort"
+        android:id="@+id/dico_action_sort"
         android:title="@string/action_dico_sort_tag"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_filter_by_favorite"
+        android:id="@+id/dico_action_filter_by_favorite"
         android:checkable="true"
         android:title="@string/action_dico_favorite_only"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/dico_help"
+        android:title="@string/help_title"
         app:showAsAction="never"/>
 
 </menu>
