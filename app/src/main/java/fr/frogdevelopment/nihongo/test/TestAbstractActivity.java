@@ -5,6 +5,7 @@
 package fr.frogdevelopment.nihongo.test;
 
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -34,177 +35,186 @@ import fr.frogdevelopment.nihongo.data.Item;
 
 public abstract class TestAbstractActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-	protected static final int LOADER_ID_ITEMS_TO_FIND = 710;
+    protected static final int LOADER_ID_ITEMS_TO_FIND = 710;
 
-	@BindView(R.id.toolbar)
-	Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
-	@BindView(R.id.test_count)
-	TextView mCount;
+    @BindView(R.id.test_count)
+    TextView mCount;
 
-	protected int     typeTest;
-	protected boolean isDisplayKanji;
-	protected int     quantityMax;
-	protected int currentItemIndex = 0;
-	protected String[] tags;
-	protected int      nbAnswer;
-	private boolean onlyLearned;
+    protected int typeTest;
+    protected boolean isDisplayKanji;
+    protected int quantityMax;
+    protected int currentItemIndex = 0;
+    protected String[] tags;
+    protected int nbAnswer;
+    private boolean onlyLearned;
 
-	protected List<Item> itemsToFind = new ArrayList<>();
-	protected ArrayList<Result> results;
+    protected List<Item> itemsToFind = new ArrayList<>();
+    protected ArrayList<Result> results;
 
-	private final int mLayout;
+    private final int mLayout;
     private View mView;
 
-	protected TestAbstractActivity(int mLayout) {
-		this.mLayout = mLayout;
-	}
+    protected TestAbstractActivity(int mLayout) {
+        this.mLayout = mLayout;
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_test);
-		ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
-		stub.setLayoutResource(mLayout);
+        setContentView(R.layout.activity_test);
+        ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
+        stub.setLayoutResource(mLayout);
         mView = stub.inflate();
 
         ButterKnife.bind(this);
 
-		Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
 
-		quantityMax = bundle.getInt(TestParametersFragment.QUANTITY);
-		typeTest = bundle.getInt(TestParametersFragment.TYPE_TEST);
-		isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
-		tags = bundle.getStringArray("tags");
-		nbAnswer = bundle.getInt(TestParametersFragment.NB_ANSWER);
-		onlyLearned = bundle.getBoolean(TestParametersFragment.ONLY_LEARNED);
+        quantityMax = bundle.getInt(TestParametersFragment.QUANTITY);
+        typeTest = bundle.getInt(TestParametersFragment.TYPE_TEST);
+        isDisplayKanji = bundle.getBoolean(TestParametersFragment.DISPLAY_KANJI);
+        tags = bundle.getStringArray("tags");
+        nbAnswer = bundle.getInt(TestParametersFragment.NB_ANSWER);
+        onlyLearned = bundle.getBoolean(TestParametersFragment.ONLY_LEARNED);
 
-		getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
+        getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
 
-		initToolbar();
-	}
+        initToolbar();
+    }
 
-	private void initToolbar() {
-		setSupportActionBar(toolbar);
-		final ActionBar actionBar = getSupportActionBar();
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
 
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setHomeButtonEnabled(true);
-		}
-	}
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
 
-			case android.R.id.home:
-				onBackPressed();
-				return true;
-		}
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
 
-		return super.onOptionsItemSelected(item);
-	}
+        return super.onOptionsItemSelected(item);
+    }
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle options) {
-		String selection = "INPUT != '~'"; // fixme
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle options) {
+        String selection = "INPUT != '~'"; // fixme
 
-		switch (typeTest) {
+        switch (typeTest) {
 
-			case 0: // Kanji -> Hiragana
-			case 1: // Hiragana -> Kanji
-				// katakana exclude
-				selection += " AND KANJI IS NOT NULL AND KANJI != ''";
-				break;
+            case 0: // Kanji -> Hiragana
+            case 1: // Hiragana -> Kanji
+                // katakana exclude
+                selection += " AND KANJI IS NOT NULL AND KANJI != ''";
+                break;
 
-			case 2: // Japanese -> French
-			case 3: // French -> Japanese
-				break;
-		}
+            case 2: // Japanese -> French
+            case 3: // French -> Japanese
+                break;
+        }
 
-		if (onlyLearned) {
-			selection += " AND LEARNED = '1'";
-		}
+        if (onlyLearned) {
+            selection += " AND LEARNED = '1'";
+        }
 
-		String[] likes = null;
-		if (ArrayUtils.isNotEmpty(tags)) {
-			for (String tag : tags) {
-				likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
-			}
-			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
-		}
+        String[] likes = null;
+        if (ArrayUtils.isNotEmpty(tags)) {
+            for (String tag : tags) {
+                likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
+            }
+            selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
+        }
 
-		String sortOrder = "RANDOM() LIMIT " + quantityMax;
+        String sortOrder = "RANDOM() LIMIT " + quantityMax;
 
-		return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
-	}
+        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
+    }
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		quantityMax = data.getCount();
-		results = new ArrayList<>(quantityMax);
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        quantityMax = data.getCount();
+        results = new ArrayList<>(quantityMax);
 
-		displayQuantity();
+        displayQuantity();
 
-		while (data.moveToNext()) {
-			itemsToFind.add(new Item(data));
-		}
+        while (data.moveToNext()) {
+            itemsToFind.add(new Item(data));
+        }
 
-		data.close();
+        data.close();
 
-		next(itemsToFind.get(currentItemIndex));
-	}
+        next(itemsToFind.get(currentItemIndex));
+    }
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-	}
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 
-	@Override
-	public void onBackPressed() {
-		Snackbar
-				.make(mView, R.string.test_back_message, Snackbar.LENGTH_LONG)
-				.setAction(R.string.positive_button_continue, v -> {
+    @Override
+    public void onBackPressed() {
+        Snackbar
+                .make(mView, R.string.test_back_message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.positive_button_continue, v -> {
                     results.remove(currentItemIndex);
                     finishTest();
                 })
-				.show();
-	}
+                .show();
+    }
 
-	private int successCounter = 0;
+    private int successCounter = 0;
 
-	protected void validate(CharSequence testAnswer) {
-		if (results.get(currentItemIndex).setAnswerGiven(testAnswer)) {
-			successCounter++;
-		}
-		currentItemIndex++;
+    protected void validate(CharSequence testAnswer) {
+        if (results.get(currentItemIndex).setAnswerGiven(testAnswer)) {
+            successCounter++;
+        } else {
+            final ContentValues values = new ContentValues();
+            values.put(DicoContract.LEARNED, false);
+            final String where = DicoContract._ID + "=?";
+            Item item = itemsToFind.get(currentItemIndex);
+            final String[] selectionArgs = {item.id};
 
-		if (currentItemIndex == quantityMax) {
-			finishTest();
-		} else {
-			displayQuantity();
-			next(itemsToFind.get(currentItemIndex));
-		}
-	}
+            getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
+        }
 
-	protected void displayQuantity() {
-		String count = (currentItemIndex + 1) + "/" + quantityMax;
-		mCount.setText(count);
-	}
+        currentItemIndex++;
 
-	abstract protected void next(Item item);
+        if (currentItemIndex == quantityMax) {
+            finishTest();
+        } else {
+            displayQuantity();
+            next(itemsToFind.get(currentItemIndex));
+        }
+    }
 
-	private void finishTest() {
-		finish();
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    protected void displayQuantity() {
+        String count = (currentItemIndex + 1) + "/" + quantityMax;
+        mCount.setText(count);
+    }
 
-		Intent intent = new Intent(this, TestResultActivity.class);
-		intent.putParcelableArrayListExtra("results", results);
-		intent.putExtra("successCounter", successCounter);
-		intent.putExtra("quantity", currentItemIndex);
+    abstract protected void next(Item item);
 
-		startActivity(intent);
-	}
+    private void finishTest() {
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        Intent intent = new Intent(this, TestResultActivity.class);
+        intent.putParcelableArrayListExtra("results", results);
+        intent.putExtra("successCounter", successCounter);
+        intent.putExtra("quantity", currentItemIndex);
+
+        startActivity(intent);
+    }
 
 }

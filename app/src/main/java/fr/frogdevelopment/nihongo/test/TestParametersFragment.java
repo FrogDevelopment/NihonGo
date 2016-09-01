@@ -118,7 +118,8 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
             String row = data.getString(0);
             double count = data.getDouble(1);
             double sum = data.getDouble(2);
-            String percent = " - " + String.valueOf(percentInstance.format(count / sum));
+//            String percent = " - " + String.valueOf(percentInstance.format(count / sum));
+            String percent = ""; // impacte sur la requete => créer un objet
             String[] tags = row.split(",");
             for (String t : Arrays.asList(tags)) {
                 uniqueItems.add(t + percent);
