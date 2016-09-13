@@ -11,8 +11,13 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +28,7 @@ import android.widget.TextView;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -67,7 +73,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
     private String selectedQuantity = null;
     private ArrayList<Integer> mSelectedItems;
     private String[] mSelectedTags;
-    private List<String> items;
+    private List<CharSequence> items;
     private Unbinder unbinder;
 
     @Override
@@ -145,16 +151,29 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Set<String> uniqueItems = new HashSet<>();
+        NumberFormat percentInstance = NumberFormat.getPercentInstance();
+        Set<CharSequence> uniqueItems = new HashSet<>();
         while (data.moveToNext()) {
             String row = data.getString(0);
+            double count = data.getDouble(1);
+            double sum = data.getDouble(2);
+            String percent = " - " + String.valueOf(percentInstance.format(count / sum));
             String[] tags = row.split(",");
-            uniqueItems.addAll(Arrays.asList(tags));
+            for (String tag : Arrays.asList(tags)) {
+                String text = tag + percent;
+                int start = tag.length();
+                int end = text.length();
+                SpannableStringBuilder str = new SpannableStringBuilder(text);
+                str.setSpan(new StyleSpan(Typeface.ITALIC), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                uniqueItems.add(str);
+            }
         }
 
         items = new ArrayList<>(uniqueItems);
 
-        Collections.sort(items);
+        Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
 
         data.close();
     }
@@ -206,8 +225,8 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
         mSelectedTags = null;
 
         for (Integer selectedIndex : mSelectedItems) {
-            String selectedTag = items.get(selectedIndex);
-            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag);
+            CharSequence selectedTag = items.get(selectedIndex);
+            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag.toString().split(" - ")[0]);
         }
 
         mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));

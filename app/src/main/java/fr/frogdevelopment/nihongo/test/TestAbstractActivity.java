@@ -176,17 +176,19 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     private int successCounter = 0;
 
     protected void validate(CharSequence testAnswer) {
+        final ContentValues values = new ContentValues();
         if (results.get(currentItemIndex).setAnswerGiven(testAnswer)) {
             successCounter++;
+            values.put(DicoContract.LEARNED, true);
         } else {
-            final ContentValues values = new ContentValues();
             values.put(DicoContract.LEARNED, false);
-            final String where = DicoContract._ID + "=?";
-            Item item = itemsToFind.get(currentItemIndex);
-            final String[] selectionArgs = {item.id};
-
-            getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
         }
+
+        final String where = DicoContract._ID + "=?";
+        Item item = itemsToFind.get(currentItemIndex);
+        final String[] selectionArgs = {item.id};
+
+        getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
 
         currentItemIndex++;
 

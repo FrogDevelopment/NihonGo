@@ -11,8 +11,13 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +85,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     private int selectedMethod = -1;
     private String selectedQuantity = null;
     private String nbAnswers = "2"; // default value
-    private List<String> items = new ArrayList<>();
+    private List<CharSequence> items = new ArrayList<>();
     private ArrayList<Integer> mSelectedItems;
     private String[] mSelectedTags;
     private Unbinder unbinder;
@@ -113,22 +118,28 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         NumberFormat percentInstance = NumberFormat.getPercentInstance();
-        Set<String> uniqueItems = new HashSet<>();
+        Set<CharSequence> uniqueItems = new HashSet<>();
         while (data.moveToNext()) {
             String row = data.getString(0);
             double count = data.getDouble(1);
             double sum = data.getDouble(2);
-//            String percent = " - " + String.valueOf(percentInstance.format(count / sum));
-            String percent = ""; // impacte sur la requete => créer un objet
+            String percent = " - " + String.valueOf(percentInstance.format(count / sum));
             String[] tags = row.split(",");
-            for (String t : Arrays.asList(tags)) {
-                uniqueItems.add(t + percent);
+            for (String tag : Arrays.asList(tags)) {
+                String text = tag + percent;
+                int start = tag.length();
+                int end = text.length();
+                SpannableStringBuilder str = new SpannableStringBuilder(text);
+                str.setSpan(new StyleSpan(Typeface.ITALIC), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                uniqueItems.add(str);
             }
         }
 
         items = new ArrayList<>(uniqueItems);
 
-        Collections.sort(items);
+        Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
 
         data.close();
     }
@@ -215,8 +226,8 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
         mSelectedTags = null;
 
         for (Integer selectedIndex : mSelectedItems) {
-            String selectedTag = items.get(selectedIndex);
-            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag);
+            CharSequence selectedTag = items.get(selectedIndex);
+            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag.toString().split(" - ")[0]);
         }
 
         mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
