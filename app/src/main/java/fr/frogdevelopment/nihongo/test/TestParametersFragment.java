@@ -44,16 +44,17 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.dialog.TagsDialog;
+import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class TestParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
     private static final int LOADER_ID = 700;
 
-    static final String TYPE_TEST = "isTestJapanese";
-    static final String QUANTITY = "count";
-    static final String NB_ANSWER = "nbAnswer";
-    static final String ONLY_LEARNED = "onlyLearned";
-    static final String DISPLAY_KANJI = "isDisplayKanji";
+    static final String TYPE_TEST = "test_isJapanese";
+    static final String QUANTITY = "test_count";
+    static final String NB_ANSWER = "test_nbAnswer";
+    static final String ONLY_LEARNED = "test_onlyLearned";
+    static final String DISPLAY_KANJI = "test_isDisplayKanji";
 
     @BindView(R.id.test_param_type_selection)
     TextView mTypeSelected;
@@ -81,6 +82,9 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     @BindView(R.id.test_button_start)
     Button startButton;
 
+    @BindView(R.id.test_switch_keep)
+    Switch mSwitchKeepView;
+
     private int selectedType = -1;
     private int selectedMethod = -1;
     private String selectedQuantity = null;
@@ -98,15 +102,73 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
+
+        if (savedInstanceState != null) {
+            mKanjiSwitch.setChecked(savedInstanceState.getBoolean("test_isJapanese"));
+            mLearnedSwitch.setChecked(savedInstanceState.getBoolean("test_excludeLearned"));
+            selectedType = savedInstanceState.getInt("test_type");
+            mTypeSelected.setText(getResources().getStringArray(R.array.param_types)[selectedType]);
+            selectedQuantity = savedInstanceState.getString("test_quantity");
+            mQuantitySelected.setText(selectedQuantity);
+            selectedMethod = savedInstanceState.getInt("test_method");
+            mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[selectedMethod]);
+            nbAnswers = savedInstanceState.getString("test_nbAnswers");
+            mNbAnswersSelected.setText(nbAnswers);
+            mSelectedTags = savedInstanceState.getStringArray("test_tags");
+            mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
+
+            checkStartButtonEnabled();
+        } else if (PreferencesHelper.getInstance(getActivity()).getBoolean("test_keepConfig")) {
+            mSwitchKeepView.setChecked(true);
+            mKanjiSwitch.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("test_isJapanese"));
+            mLearnedSwitch.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("test_excludeLearned"));
+            selectedType = PreferencesHelper.getInstance(getActivity()).getInt("test_type");
+            mTypeSelected.setText(getResources().getStringArray(R.array.param_types)[selectedType]);
+            selectedQuantity = PreferencesHelper.getInstance(getActivity()).getString("test_quantity");
+            mQuantitySelected.setText(selectedQuantity);
+            selectedMethod = PreferencesHelper.getInstance(getActivity()).getInt("test_method");
+            mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[selectedMethod]);
+            nbAnswers = PreferencesHelper.getInstance(getActivity()).getString("test_nbAnswers");
+            mNbAnswersSelected.setText(nbAnswers);
+            String test_tags = PreferencesHelper.getInstance(getActivity()).getString("test_tags");
+            mSelectedTags = test_tags.split(", ");
+            mTagSelected.setText(test_tags);
+
+            checkStartButtonEnabled();
+        }
+
         return rootView;
     }
 
     @Override
     public void onDestroyView() {
+        saveConfigIfNeed();
+
         super.onDestroyView();
         unbinder.unbind();
     }
 
+    private void saveConfigIfNeed() {
+        if (mSwitchKeepView.isChecked()) {
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("test_keepConfig", true);
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("test_isJapanese", mKanjiSwitch.isChecked());
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("test_excludeLearned", mLearnedSwitch.isChecked());
+            PreferencesHelper.getInstance(getActivity()).saveInt("test_type", selectedType);
+            PreferencesHelper.getInstance(getActivity()).saveString("test_quantity", selectedQuantity);
+            PreferencesHelper.getInstance(getActivity()).saveInt("test_method", selectedMethod);
+            PreferencesHelper.getInstance(getActivity()).saveString("test_nbAnswers", nbAnswers);
+            PreferencesHelper.getInstance(getActivity()).saveString("test_tags", StringUtils.join(mSelectedTags, ", "));
+        } else {
+            PreferencesHelper.getInstance(getActivity()).saveBoolean("test_keepConfig", false);
+            PreferencesHelper.getInstance(getActivity()).remove("test_isJapanese");
+            PreferencesHelper.getInstance(getActivity()).remove("test_excludeLearned");
+            PreferencesHelper.getInstance(getActivity()).remove("test_type");
+            PreferencesHelper.getInstance(getActivity()).remove("test_quantity");
+            PreferencesHelper.getInstance(getActivity()).remove("test_method");
+            PreferencesHelper.getInstance(getActivity()).remove("test_nbAnswers");
+            PreferencesHelper.getInstance(getActivity()).remove("test_tags");
+        }
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -148,6 +210,10 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
+    private void checkStartButtonEnabled() {
+        startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+    }
+
     @OnClick(R.id.test_param_type)
     public void onClickType(View v) {
         new AlertDialog.Builder(getActivity())
@@ -163,7 +229,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
                     } else {
                         mKanjiSwitch.setVisibility(View.INVISIBLE);
                     }
-                    startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+                    checkStartButtonEnabled();
                 })
                 .create()
                 .show();
@@ -183,7 +249,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
                     }
                     mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);
 
-                    startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+                    checkStartButtonEnabled();
                 })
                 .create()
                 .show();
@@ -209,7 +275,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
                     selectedQuantity = getResources().getStringArray(R.array.param_quantities)[which];
                     mQuantitySelected.setText(selectedQuantity);
 
-                    startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+                    checkStartButtonEnabled();
                 })
                 .create()
                 .show();
@@ -251,16 +317,33 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
         }
 
         Bundle options = new Bundle();
+        populateUiSelection(options);
+
+        intent.putExtras(options);
+
+        startActivity(intent);
+        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    private void populateUiSelection(Bundle options) {
         options.putInt(TYPE_TEST, selectedType);
         options.putInt(QUANTITY, Integer.valueOf(selectedQuantity));
         options.putInt(NB_ANSWER, Integer.valueOf(nbAnswers));
         options.putBoolean(ONLY_LEARNED, mLearnedSwitch.isChecked());
         options.putBoolean(DISPLAY_KANJI, mKanjiSwitch.isChecked());
-        options.putStringArray("tags", mSelectedTags);
-        intent.putExtras(options);
+        options.putStringArray("test_tags", mSelectedTags);
+        options.putInt("test_method", selectedMethod);
+    }
 
-        startActivity(intent);
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        // Store UI state to the savedInstanceState.
+        populateUiSelection(savedInstanceState);
+
+        saveConfigIfNeed();
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 }

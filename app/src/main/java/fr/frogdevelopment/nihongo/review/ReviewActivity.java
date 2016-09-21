@@ -75,7 +75,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
         initToolbar();
 
-        final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean("isJapaneseReviewed");
+        final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean("review_isJapanese");
 
         adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
         viewPager.setAdapter(adapter);
@@ -128,12 +128,12 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        final String count = args.getString("count");
+        final String count = args.getString("review_count");
         String limit = "";
         if (NumberUtils.isNumber(count)) {
             limit = " LIMIT " + Integer.parseInt(count);
         }
-        final String[] tags = args.getStringArray("tags");
+        final String[] tags = args.getStringArray("review_tags");
 
         String selection = "1 = 1";
         String[] likes = null;
@@ -144,18 +144,18 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
             selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
         }
 
-        final boolean excludeLearned = args.getBoolean("excludeLearned");
+        final boolean excludeLearned = args.getBoolean("review_excludeLearned");
         if (excludeLearned) {
             selection += " AND LEARNED = '0'";
         }
 
-        final boolean onlyFavorite = args.getBoolean("onlyFavorite");
+        final boolean onlyFavorite = args.getBoolean("review_onlyFavorite");
         if (onlyFavorite) {
             selection += " AND FAVORITE = '1'";
         }
 
         String sortOrder;
-        final int sort = args.getInt("sort");
+        final int sort = args.getInt("review_sort");
 
         switch (sort) {
             case 0: // new -> old
