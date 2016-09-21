@@ -5,7 +5,6 @@
 <android.support.design.widget.CoordinatorLayout
     android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,8 +16,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/review_count"
@@ -82,10 +81,10 @@
                 android:id="@+id/review_info_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="12sp"
-                android:text="@string/details_info"
                 android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_info"
+                android:textSize="12sp"
                 android:visibility="gone"/>
 
             <TextView
@@ -101,10 +100,10 @@
                 android:id="@+id/review_example_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="12sp"
-                android:text="@string/details_example"
                 android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_example"
+                android:textSize="12sp"
                 android:visibility="gone"/>
 
             <TextView
@@ -120,10 +119,10 @@
                 android:id="@+id/review_tags_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="12sp"
-                android:text="@string/details_tags"
                 android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_tags"
+                android:textSize="12sp"
                 android:visibility="gone"/>
 
             <TextView
@@ -141,9 +140,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_anchor="@id/review_content"
-        app:layout_anchorGravity="bottom|right|end">
+        android:layout_gravity="end|bottom"
+        android:orientation="horizontal">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_again"
@@ -151,8 +149,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_again_white_24dp"/>
+            android:src="@drawable/ic_again_white_24dp"
+            android:visibility="gone"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_learned"
