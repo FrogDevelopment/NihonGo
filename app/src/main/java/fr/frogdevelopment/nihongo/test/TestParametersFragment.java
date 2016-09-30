@@ -211,7 +211,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     }
 
     private void checkStartButtonEnabled() {
-        startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && selectedQuantity != null);
+        startButton.setEnabled(selectedType > -1 && selectedMethod > -1 && StringUtils.isNotBlank(selectedQuantity));
         if (selectedType > 1) {
             mKanjiSwitch.setVisibility(View.VISIBLE);
             mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);

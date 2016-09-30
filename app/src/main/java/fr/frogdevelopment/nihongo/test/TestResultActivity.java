@@ -7,33 +7,44 @@ package fr.frogdevelopment.nihongo.test;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import fr.frogdevelopment.nihongo.R;
 
-public class TestResultActivity extends Activity {
+public class TestResultActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.test_result_quantity)
+    TextView mQuantity;
 
     @BindView(R.id.test_result_list)
     ListView mListView;
 
     private ResultAdapter adapter;
-    private int           successCounter;
-    private int           quantity;
 
     @OnClick(R.id.test_result_ok)
     void back() {
@@ -53,39 +64,34 @@ public class TestResultActivity extends Activity {
 
         setContentView(R.layout.activity_test_result);
 
-        // Show the Up button in the action bar.
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().setTitle(R.string.test_results_title);
-        }
-
         ButterKnife.bind(this);
+
+        // Show the Up button in the action bar.
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setTitle(R.string.test_results_title);
+        }
 
         List<Result> results = getIntent().getParcelableArrayListExtra("results");
         adapter = new ResultAdapter(this, results);
         mListView.setAdapter(adapter);
+//        mListView.setTextFilterEnabled(true);
 
-        successCounter = getIntent().getIntExtra("successCounter", 0);
-        quantity = getIntent().getIntExtra("quantity", 0);
+        int successCounter = getIntent().getIntExtra("successCounter", 0);
+        int quantity = getIntent().getIntExtra("quantity", 0);
+        mQuantity.setText(successCounter + "/" + quantity);
 
         setProgressBarIndeterminateVisibility(false);
-
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.result, menu);
-
-        MenuItem indexMenuItem = menu.findItem(R.id.menu_result);
-        String title = successCounter + "/" + quantity;
-        indexMenuItem.setTitle(title);
-
-        return true;
+    @OnCheckedChanged(R.id.test_result_quantity_switch)
+    void onChecked(boolean checked) {
+        adapter.getFilter().filter(Boolean.toString(checked));
     }
 
     @OnItemClick(R.id.test_result_list)
-    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    void onItemClick(int position) {
         mListView.setItemChecked(position, true);
         Result item = adapter.getItem(position);
         new AlertDialog.Builder(this)
@@ -95,17 +101,25 @@ public class TestResultActivity extends Activity {
                 .show();
     }
 
-    class ResultAdapter extends ArrayAdapter<Result> {
+    class ResultAdapter extends ArrayAdapter<Result> implements Filterable {
 
+        private final Filter mFilter = new SuccessFilter();
+
+        private final Object mLock = new Object();
+
+        private List<Result> mObjects;
+        private List<Result> mOriginalValues;
         private final LayoutInflater mInflater;
 
-        public ResultAdapter(Activity context, List<Result> objects) {
-            super(context, R.layout.row_test_result, objects);
+        ResultAdapter(Activity context, List<Result> objects) {
+            super(context, R.layout.row_test_result);
+            mObjects = objects;
             mInflater = context.getLayoutInflater();
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getView(int position, View view, @NonNull ViewGroup parent) {
             ResultHolder holder;
             Result result = getItem(position);
 
@@ -148,6 +162,83 @@ public class TestResultActivity extends Activity {
             }
         }
 
+        @Override
+        public int getCount() {
+            return mObjects.size();
+        }
+
+        @Override
+        public int getPosition(@Nullable Result item) {
+            return mObjects.indexOf(item);
+        }
+
+        @Nullable
+        @Override
+        public Result getItem(int position) {
+            return mObjects.get(position);
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            return mFilter;
+        }
+
+        private class SuccessFilter extends Filter {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults results = new FilterResults();
+
+                if (mOriginalValues == null) {
+                    synchronized (mLock) {
+                        mOriginalValues = new ArrayList<>(mObjects);
+                    }
+                }
+                if (StringUtils.isBlank(constraint)) {
+                    final ArrayList<Result> list;
+                    synchronized (mLock) {
+                        list = new ArrayList<>(mOriginalValues);
+                    }
+                    results.values = list;
+                    results.count = list.size();
+                } else {
+                    final boolean showOnlyFails = Boolean.valueOf(constraint.toString());
+
+                    final ArrayList<Result> values;
+                    synchronized (mLock) {
+                        values = new ArrayList<>(mOriginalValues);
+                    }
+
+                    final int count = values.size();
+                    final ArrayList<Result> newValues = new ArrayList<>();
+
+                    for (int i = 0; i < count; i++) {
+                        final Result value = values.get(i);
+
+                        if (!showOnlyFails || !value.success) {
+                            newValues.add(value);
+                        }
+                    }
+
+                    results.values = newValues;
+                    results.count = newValues.size();
+                }
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                //noinspection unchecked
+                mObjects = (List<Result>) results.values;
+                if (results.count > 0) {
+                    notifyDataSetChanged();
+                } else {
+                    notifyDataSetInvalidated();
+                }
+            }
+        }
     }
 
 }
