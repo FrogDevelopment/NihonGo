@@ -193,6 +193,8 @@
     <string name="test_next">Next</string>
     <string name="test_info">Information</string>
 
+    <string name="test_input_empty">No response given, continue ?</string>
+
     <string name="test_results_title">Results</string>
     <string name="test_results_details">Test : %1$s\nAnswer expected : %2$s\nAnswer given : %3$s</string>
 
