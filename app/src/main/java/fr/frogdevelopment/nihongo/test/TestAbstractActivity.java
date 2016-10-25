@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
@@ -42,6 +43,10 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
     @BindView(R.id.test_count)
     TextView mCount;
+    @BindView(R.id.test_info_title)
+    TextView mInfoTitle;
+    @BindView(R.id.test_info)
+    TextView mInfo;
 
     protected int typeTest;
     protected boolean isDisplayKanji;
@@ -203,7 +208,18 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
             finishTest();
         } else {
             displayQuantity();
-            next(itemsToFind.get(currentItemIndex));
+            Item nextItem = itemsToFind.get(currentItemIndex);
+            next(nextItem);
+
+            if (TextUtils.isEmpty(nextItem.details)) {
+                mInfoTitle.setVisibility(View.GONE);
+                mInfo.setVisibility(View.GONE);
+                mInfo.setText(null);
+            } else {
+                mInfoTitle.setVisibility(View.VISIBLE);
+                mInfo.setVisibility(View.VISIBLE);
+                mInfo.setText(nextItem.details);
+            }
         }
     }
 

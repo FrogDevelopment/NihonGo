@@ -19,7 +19,7 @@
         android:id="@+id/test_input_scroll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/test_input_separator"
+        android:layout_above="@+id/test_info_title"
         android:layout_below="@id/test_count">
 
         <TextView
@@ -54,5 +54,23 @@
         android:layout_height="2dp"
         android:layout_above="@id/test_input_answer"
         android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/test_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/test_input_separator"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/test_info_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/test_info"
+        android:layout_marginTop="20dp"
+        android:text="@string/details_info"
+        android:textSize="12sp"
+        android:visibility="gone"/>
 
 </RelativeLayout>
