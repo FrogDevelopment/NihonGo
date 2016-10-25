@@ -76,13 +76,10 @@ public class TestResultActivity extends AppCompatActivity {
         List<Result> results = getIntent().getParcelableArrayListExtra("results");
         adapter = new ResultAdapter(this, results);
         mListView.setAdapter(adapter);
-//        mListView.setTextFilterEnabled(true);
 
         int successCounter = getIntent().getIntExtra("successCounter", 0);
         int quantity = getIntent().getIntExtra("quantity", 0);
         mQuantity.setText(successCounter + "/" + quantity);
-
-        setProgressBarIndeterminateVisibility(false);
     }
 
     @OnCheckedChanged(R.id.test_result_quantity_switch)

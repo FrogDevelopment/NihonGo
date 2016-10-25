@@ -47,7 +47,7 @@
             android:id="@+id/test_result_quantity_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
             android:padding="10dp"
             android:text="Show only failed"
             android:textAppearance="?android:attr/textAppearanceMedium"
