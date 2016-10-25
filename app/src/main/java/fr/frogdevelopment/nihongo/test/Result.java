@@ -21,6 +21,8 @@ class Result implements Parcelable {
     public final String test;
     public final String answerExpected;
     public String answerGiven;
+    public int nbSuccess;
+    public int nbFailed;
 
     public int describeContents() {
         return 0;
@@ -33,6 +35,8 @@ class Result implements Parcelable {
         out.writeString(test);
         out.writeString(answerExpected);
         out.writeString(answerGiven);
+        out.writeInt(nbSuccess);
+        out.writeInt(nbFailed);
     }
 
     public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
@@ -52,6 +56,8 @@ class Result implements Parcelable {
         test = in.readString();
         answerExpected = in.readString();
         answerGiven = in.readString();
+        nbSuccess = in.readInt();
+        nbFailed = in.readInt();
     }
 
     Result(CharSequence test, CharSequence answerExpected, boolean inputTest) {

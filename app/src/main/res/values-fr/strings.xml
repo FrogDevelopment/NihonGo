@@ -40,6 +40,7 @@
     <string name="details_info">Informations :</string>
     <string name="details_example">Exemple :</string>
     <string name="details_tags">Tags :</string>
+    <string name="details_ratio">Succès/Échec :</string>
 
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favori</string>

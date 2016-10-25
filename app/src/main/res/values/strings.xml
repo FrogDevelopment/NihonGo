@@ -51,6 +51,7 @@
     <string name="details_info">Information :</string>
     <string name="details_example">Example :</string>
     <string name="details_tags">Tags :</string>
+    <string name="details_ratio">Success/Failure :</string>
 
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favorite</string>

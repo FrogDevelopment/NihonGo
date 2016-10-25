@@ -134,6 +134,7 @@ public class TestResultActivity extends AppCompatActivity {
 
             holder.test.setText(result.test);
             holder.answer.setText(result.answerExpected);
+            holder.ratio.setText(result.nbSuccess + "/" + result.nbFailed);
 
             if (result.success) {
                 holder.answer.setTextColor(getContext().getResources().getColor(android.R.color.holo_green_dark));
@@ -156,6 +157,8 @@ public class TestResultActivity extends AppCompatActivity {
             TextView test;
             @BindView(R.id.dico_test_answer)
             TextView answer;
+            @BindView(R.id.dico_test_ratio)
+            TextView ratio;
 
             public ResultHolder(View view) {
                 ButterKnife.bind(this, view);
