@@ -112,7 +112,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
             mQuantitySelected.setText(selectedQuantity);
             selectedMethod = savedInstanceState.getInt("test_method");
             mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[selectedMethod]);
-            nbAnswers = savedInstanceState.getString("test_nbAnswers");
+            nbAnswers = savedInstanceState.getString("test_nbAnswers","2");
             mNbAnswersSelected.setText(nbAnswers);
             mSelectedTags = savedInstanceState.getStringArray("test_tags");
             mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
@@ -243,9 +243,6 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
                     mMethodSelected.setText(getResources().getStringArray(R.array.param_methods)[which]);
                     mNbAnswers.setVisibility(selectedMethod == 0 ? View.VISIBLE : View.GONE); // display when QCM selected
                     mNbAnswersSelected.setText(nbAnswers);
-                    if (selectedMethod == 1) { // when input selected, only 1 answer
-                        nbAnswers = "1";
-                    }
                     mKanjiSwitch.setText(selectedMethod == 1 && selectedType == 3 ? R.string.param_kanji_write : R.string.param_kanji_display);
 
                     checkStartButtonEnabled();
@@ -308,6 +305,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
             case 1:
                 intent = new Intent(getActivity(), TestInputActivity.class);
+                nbAnswers = "1"; // when input selected, only 1 answer
                 break;
 
             default:
