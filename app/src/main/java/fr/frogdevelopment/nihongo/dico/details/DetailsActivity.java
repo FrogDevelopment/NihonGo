@@ -36,167 +36,182 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
-	@BindView(R.id.toolbar)
-	Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
-	@BindView(R.id.details_viewpager)
-	ViewPager mViewPager;
+    @BindView(R.id.details_viewpager)
+    ViewPager mViewPager;
 
-	private Type mType;
+    private List<Item> mItems;
+    private Type mType;
+    private DetailsAdapter mAdapter;
 
-	@Override
-	public void onBackPressed() {
-		back();
-	}
+    @Override
+    public void onBackPressed() {
+        back();
+    }
 
-	private void back() {
-		NavUtils.navigateUpFromSameTask(this);
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-	}
+    private void back() {
+        NavUtils.navigateUpFromSameTask(this);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_details);
 
-		ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
-		Bundle args = getIntent().getExtras();
-		mType = (Type) args.getSerializable("type");
-		List<Item> items = args.getParcelableArrayList("items");
+        Bundle args = getIntent().getExtras();
+        mType = (Type) args.getSerializable("type");
+        mItems = args.getParcelableArrayList("items");
 
-		DetailsAdapter mAdapter = new DetailsAdapter(getFragmentManager(), items, mType);
-		mViewPager.setAdapter(mAdapter);
-		int position = args.getInt("position");
-		mViewPager.setCurrentItem(position);
+        mAdapter = new DetailsAdapter(getFragmentManager());
+        mViewPager.setAdapter(mAdapter);
+        int position = args.getInt("position");
+        mViewPager.setCurrentItem(position);
 
-		initToolbar();
+        initToolbar();
 
-		boolean doNotshow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
-		if (!doNotshow) {
-			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details, true);
-		}
-	}
+        boolean doNotShow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
+        if (!doNotShow) {
+            HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details, true);
+        }
+    }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
-	private void initToolbar() {
-		setSupportActionBar(toolbar);
-		final ActionBar actionBar = getSupportActionBar();
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
 
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setHomeButtonEnabled(true);
-		}
-	}
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				back();
-				return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                back();
+                return true;
 
-			default:
-				return false;
-		}
-	}
+            default:
+                return false;
+        }
+    }
 
-	// ************************************************************* \\
-	@Override
-	public void delete(final Item item) {
-		// Ask the user if they want to delete
-		new AlertDialog.Builder(this)
-				.setIcon(R.drawable.ic_warning_black)
-				.setTitle(R.string.delete_title)
-				.setMessage(R.string.delete_detail)
-				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> onDelete(item))
-				.setNegativeButton(android.R.string.no, null)
-				.show();
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		super.onActivityResult(requestCode, resultCode, data); fixme keep ?
+        if (resultCode == RESULT_OK && requestCode == 666) {
+            int position = data.getIntExtra("position", -1);
+            if (position > -1) {
+                Item item = data.getParcelableExtra("item");
+                mItems.set(position, item);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 
-	private void onDelete(Item item) {
-		Uri uri = Uri.parse(mType.uri + "/" + item.id);
-		getContentResolver().delete(uri, null, null);
-		Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG).show();
-		back();
-	}
+    // ************************************************************* \\
+    @Override
+    public void delete(final Item item) {
+        // Ask the user if they want to delete
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_warning_black)
+                .setTitle(R.string.delete_title)
+                .setMessage(R.string.delete_detail)
+                .setPositiveButton(R.string.positive_button_continue, (dialog, which) -> onDelete(item))
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
 
-	@Override
-	public void update(Item item) {
+    private void onDelete(Item item) {
+        Uri uri = Uri.parse(mType.uri + "/" + item.id);
+        getContentResolver().delete(uri, null, null);
+        Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG).show();
+        back();
+    }
 
-		Intent intent = new Intent(this, InputActivity.class);
-		intent.putExtra("type", mType);
-		intent.putExtra("item", item);
+    @Override
+    public void update(int position, Item item) {
+        Intent intent = new Intent(this, InputActivity.class);
+        intent.putExtra("type", mType);
+        intent.putExtra("position", position);
+        intent.putExtra("item", item);
 
-		startActivity(intent);
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-	}
+        startActivityForResult(intent, 666);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
-	@Override
-	public void setFavorite(Item item) {
-		final ContentValues values = new ContentValues();
-		values.put(DicoContract.FAVORITE, item.favorite);
+    @Override
+    public void setFavorite(Item item) {
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.FAVORITE, item.favorite);
 
-		updateItem(item, values);
-	}
+        updateItem(item, values);
+    }
 
-	@Override
-	public void setLearned(Item item) {
-		final ContentValues values = new ContentValues();
-		values.put(DicoContract.LEARNED, item.learned);
+    @Override
+    public void setLearned(Item item) {
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.LEARNED, item.learned);
 
-		updateItem(item, values);
-	}
+        updateItem(item, values);
+    }
 
-	private void updateItem(Item item, ContentValues values) {
-		final String where = DicoContract._ID + "=?";
-		final String[] selectionArgs = {item.id};
+    private void updateItem(Item item, ContentValues values) {
+        final String where = DicoContract._ID + "=?";
+        final String[] selectionArgs = {item.id};
 
-		getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
-	}
+        getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
+    }
 
-	// ************************************************************* \\
-	private class DetailsAdapter extends FragmentStatePagerAdapter {
+    // ************************************************************* \\
+    private class DetailsAdapter extends FragmentStatePagerAdapter {
 
-		private final int        mCount;
-		private final List<Item> mItems;
-		private final Type       mType;
+        private final int mCount;
 
-		private DetailsAdapter(FragmentManager fm, List<Item> items, Type type) {
-			super(fm);
-			mItems = items;
-			mCount = items.size();
-			mType = type;
-		}
+        private DetailsAdapter(FragmentManager fm) {
+            super(fm);
+            mCount = mItems.size();
+        }
 
-		@Override
-		public Fragment getItem(int position) {
-			Fragment fragment = new DetailsFragment();
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putSerializable("type", mType);
+            args.putInt("position", position);
+            args.putParcelable("item", mItems.get(position));
 
-			Bundle args = new Bundle();
-			args.putSerializable("type", mType);
-			args.putParcelable("item", mItems.get(position));
+            fragment.setArguments(args);
 
-			fragment.setArguments(args);
+            return fragment;
+        }
 
-			return fragment;
-		}
+        @Override
+        public int getCount() {
+            return mCount;
+        }
 
-		@Override
-		public int getCount() {
-			return mCount;
-		}
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "ITEM" + (position + 1);
+        }
 
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return "ITEM" + (position + 1);
-		}
-
-	}
+        public int getItemPosition(Object object) {
+            // Causes adapter to reload all Fragments when // notifyDataSetChanged is called
+            return POSITION_NONE;
+        }
+    }
 
 }

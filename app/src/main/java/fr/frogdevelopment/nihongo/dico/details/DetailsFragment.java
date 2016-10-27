@@ -32,7 +32,7 @@ public class DetailsFragment extends Fragment {
     private Unbinder unbinder;
 
     interface OnFragmentInteractionListener {
-        void update(Item item);
+        void update(int position, Item item);
 
         void delete(Item item);
 
@@ -68,6 +68,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.fab_learned)
     FloatingActionButton mFabLearned;
 
+    private int position;
     private Item mItem;
 
     @Override
@@ -115,7 +116,7 @@ public class DetailsFragment extends Fragment {
                 break;
 
             case R.id.action_update:
-                mListener.get().update(mItem);
+                mListener.get().update(position, mItem);
                 break;
 
             case R.id.details_help:
@@ -154,6 +155,7 @@ public class DetailsFragment extends Fragment {
     private void populateView() {
         Bundle args = getArguments();
 
+        position = args.getInt("position");
         mItem = args.getParcelable("item");
 
         if (mItem == null) {

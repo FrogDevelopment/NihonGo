@@ -13,13 +13,13 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 public class Item implements Row, Parcelable {
 
     public final String id;
-    public final String input;
-    public final String sort_letter;
-    public final String kanji;
-    public final String kana;
-    public final String tags;
-    public final String details;
-    public final String example;
+    public String input;
+    public String sort_letter;
+    public String kanji;
+    public String kana;
+    public String tags;
+    public String details;
+    public String example;
     public String favorite;
     public String learned;
     public int success;
