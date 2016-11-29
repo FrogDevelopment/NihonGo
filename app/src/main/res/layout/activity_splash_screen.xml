@@ -13,6 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/frog_development"
-        android:src="@drawable/frog_development"/>
+        android:padding="50dp"
+        android:src="@drawable/ic_frog_development"/>
 
 </RelativeLayout>
