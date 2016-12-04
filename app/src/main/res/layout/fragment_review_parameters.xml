@@ -8,7 +8,7 @@
               android:layout_height="match_parent"
               android:gravity="top"
               android:orientation="vertical"
-              android:padding="2dp">
+              android:padding="10dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:padding="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:text="@string/param_reviewed"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
@@ -36,7 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:padding="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:text="@string/param_exclude_learned"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
@@ -47,130 +49,87 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:padding="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:text="@string/param_only_favorite"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
                 android:textOn="@string/yes"/>
 
             <LinearLayout
-                android:id="@+id/review_param_sort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingEnd="10dp"
-                android:paddingStart="0dp">
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/review_param_sort_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/param_sort"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black"/>
-
-                    <TextView
-                        android:id="@+id/review_param_sort_selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/param_sort_selection"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"
-                        android:textStyle="italic"/>
-                </LinearLayout>
-
-                <ImageView
+                <TextView
+                    android:id="@+id/review_param_sort_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/arrow_touch"/>
+                    android:text="@string/param_sort"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/black"/>
+
+                <Spinner
+                    android:id="@+id/review_param_sort_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/param_sorts"
+                    android:prompt="@string/param_sort_selection"
+                    android:spinnerMode="dialog"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/review_param_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingEnd="10dp">
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/review_param_quantity_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/param_quantity"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black"/>
-
-                    <TextView
-                        android:id="@+id/review_param_quantity_selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/param_quantity_selection"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"
-                        android:textStyle="italic"/>
-                </LinearLayout>
-
-                <ImageView
+                <TextView
+                    android:id="@+id/review_param_quantity_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/arrow_touch"/>
+                    android:text="@string/param_quantity"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/black"/>
+
+                <Spinner
+                    android:id="@+id/review_param_quantity_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/param_quantities"
+                    android:prompt="@string/param_quantity_selection"
+                    android:spinnerMode="dialog"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/review_param_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingEnd="10dp">
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/review_param_tag_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/param_tag_title"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black"/>
-
-                    <TextView
-                        android:id="@+id/review_param_tag_selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/param_tag_selection"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"
-                        android:textStyle="italic"/>
-
-                </LinearLayout>
-
-                <ImageView
+                <TextView
+                    android:id="@+id/review_param_tag_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/arrow_touch"/>
+                    android:text="@string/param_tag_title"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/black"/>
 
+                <Spinner
+                    android:id="@+id/review_param_tag_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/param_tag_selection"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    android:id="@+id/review_param_tag_selection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
 
@@ -182,7 +141,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="false"
-        android:padding="10dp"
         android:text="@string/param_keep_config"
         android:textOff="@string/no"
         android:textOn="@string/yes"/>

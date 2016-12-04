@@ -141,7 +141,16 @@
         <item>aléatoire</item>
     </string-array>
 
-    <string name="param_quantity_all">Tout</string>
+    <string-array name="param_quantities">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>40</item>
+        <item>50</item>
+        <item>100</item>
+        <item>150</item>
+        <item>Tous</item>
+    </string-array>
 
     <!-- ******* -->
     <!-- REVIEW  -->
