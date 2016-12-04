@@ -162,7 +162,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         dicoAdapter.swapCursor(data, isSortByLetter);
-        getLoaderManager().destroyLoader(0);
+        getLoaderManager().destroyLoader(loader.getId());
 
         if (loader.getId() == LOADER_DICO_ID && dicoAdapter.getCount() == 0) {
             new AlertDialog.Builder(getActivity())
