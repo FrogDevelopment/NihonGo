@@ -210,6 +210,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private void reviewAgain() {
+        mFabAgain.hide();
         adapter.clear();
         viewPager.setAdapter(adapter);
         getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
