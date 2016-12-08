@@ -120,27 +120,4 @@
                 android:textSize="20sp"/>
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="end|bottom">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_learned"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_bookmark_off"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_favorite"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_favorite_off"/>
-    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

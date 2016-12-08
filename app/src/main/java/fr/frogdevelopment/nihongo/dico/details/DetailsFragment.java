@@ -7,7 +7,6 @@ package fr.frogdevelopment.nihongo.dico.details;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,12 +25,7 @@ public class DetailsFragment extends Fragment {
 
     interface OnFragmentInteractionListener {
         void update(int position, Item item);
-
         void delete(Item item);
-
-        void setFavorite(Item item);
-
-        void setLearned(Item item);
     }
 
     private OnFragmentInteractionListener mListener;
@@ -48,27 +42,7 @@ public class DetailsFragment extends Fragment {
 
         populateView(rootView);
 
-        initFabs(rootView);
-
         return rootView;
-    }
-
-    private void initFabs(View rootView) {
-        FloatingActionButton mFabFavorite = (FloatingActionButton) rootView.findViewById(R.id.fab_favorite);
-        mFabFavorite.setOnClickListener(view -> {
-            mItem.switchFavorite();
-            mListener.setFavorite(mItem);
-            mFabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-        });
-        mFabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-
-        FloatingActionButton mFabLearned = (FloatingActionButton) rootView.findViewById(R.id.fab_learned);
-        mFabLearned.setOnClickListener(view -> {
-            mItem.switchLearned();
-            mListener.setLearned(mItem);
-            mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
-        });
-        mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
     }
 
     @Override

@@ -14,7 +14,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -70,6 +69,15 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
         setContentView(R.layout.activity_review);
 
+        mFabAgain = (FloatingActionButton) findViewById(R.id.fab_again);
+        mFabAgain.setOnClickListener(view -> reviewAgain());
+
+        mFabFavorite = (FloatingActionButton) findViewById(R.id.fab_favorite);
+        mFabFavorite.setOnClickListener(view -> onItemFavorite());
+
+        mFabLearned = (FloatingActionButton) findViewById(R.id.fab_learned);
+        mFabLearned.setOnClickListener(view -> onItemLearned());
+
         final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean(ReviewParametersFragment.REVIEW_IS_JAPANESE);
 
         adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
@@ -78,7 +86,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d("","ici");
             }
 
             @Override
@@ -100,7 +107,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.d("","ici");
             }
         });
 
@@ -110,16 +116,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         if (!doNotShow) {
             HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
         }
-
-
-        mFabAgain = (FloatingActionButton) findViewById(R.id.fab_again);
-        mFabAgain.setOnClickListener(view -> reviewAgain());
-
-        mFabFavorite = (FloatingActionButton) findViewById(R.id.fab_favorite);
-        mFabFavorite.setOnClickListener(view -> onItemFavorite());
-
-        mFabLearned = (FloatingActionButton) findViewById(R.id.fab_learned);
-        mFabLearned.setOnClickListener(view -> onItemLearned());
     }
 
     @Override

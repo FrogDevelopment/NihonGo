@@ -11,6 +11,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -36,6 +37,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     private List<Item> mItems;
     private Type mType;
     private DetailsAdapter mAdapter;
+    private Item mCurrentItem;
+    private FloatingActionButton mFabFavorite;
+    private FloatingActionButton mFabLearned;
 
     @Override
     public void onBackPressed() {
@@ -53,15 +57,37 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
         setContentView(R.layout.activity_details);
 
+        mFabFavorite = (FloatingActionButton) findViewById(R.id.fab_favorite);
+        mFabFavorite.setOnClickListener(view -> setFavorite());
+
+        mFabLearned = (FloatingActionButton) findViewById(R.id.fab_learned);
+        mFabLearned.setOnClickListener(view -> setLearned());
+
         Bundle args = getIntent().getExtras();
         mType = (Type) args.getSerializable("type");
         mItems = args.getParcelableArrayList("items");
 
         mAdapter = new DetailsAdapter(getFragmentManager());
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.details_viewpager);
-        mViewPager.setAdapter(mAdapter);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.details_viewpager);
+        viewPager.setAdapter(mAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentItem = mItems.get(position);
+                mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         int position = args.getInt("position");
-        mViewPager.setCurrentItem(position);
+        viewPager.setCurrentItem(position);
 
         boolean doNotShow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
         if (!doNotShow) {
@@ -88,7 +114,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == RC_UPDATE_ITEM) {
+        if (requestCode == RC_UPDATE_ITEM && resultCode == RESULT_OK) {
             int position = data.getIntExtra("position", -1);
             if (position > -1) {
                 Item item = data.getParcelableExtra("item");
@@ -129,25 +155,27 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    @Override
-    public void setFavorite(Item item) {
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.FAVORITE, item.favorite);
+    private void setFavorite() {
+        mCurrentItem.switchFavorite();
+        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
 
-        updateItem(item, values);
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.FAVORITE, mCurrentItem.favorite);
+        updateItem(values);
     }
 
-    @Override
-    public void setLearned(Item item) {
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.LEARNED, item.learned);
+    public void setLearned() {
+        mCurrentItem.switchLearned();
+        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
 
-        updateItem(item, values);
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.LEARNED, mCurrentItem.learned);
+        updateItem(values);
     }
 
-    private void updateItem(Item item, ContentValues values) {
+    private void updateItem(ContentValues values) {
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {item.id};
+        final String[] selectionArgs = {mCurrentItem.id};
 
         getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
     }
