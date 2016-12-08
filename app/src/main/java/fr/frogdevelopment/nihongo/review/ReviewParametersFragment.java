@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -37,12 +38,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemSelected;
-import butterknife.OnTouch;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -51,218 +46,224 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
-	private static final int LOADER_ID = 700;
-	public static final String REVIEW_IS_JAPANESE = "review_isJapanese";
-	public static final String REVIEW_EXCLUDE_LEARNED = "review_excludeLearned";
-	public static final String REVIEW_ONLY_FAVORITE = "onlyFavorite";
-	public static final String REVIEW_SELECTED_SORT = "selected_sort";
-	public static final String REVIEW_SELECTED_QUANTITY = "selected_quantity";
-	public static final String REVIEW_TAGS = "review_tags";
-	public static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
+    private static final int LOADER_ID = 700;
+    public static final String REVIEW_IS_JAPANESE = "review_isJapanese";
+    public static final String REVIEW_EXCLUDE_LEARNED = "review_excludeLearned";
+    public static final String REVIEW_ONLY_FAVORITE = "onlyFavorite";
+    public static final String REVIEW_SELECTED_SORT = "selected_sort";
+    public static final String REVIEW_SELECTED_QUANTITY = "selected_quantity";
+    public static final String REVIEW_TAGS = "review_tags";
+    public static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
 
-	@BindView(R.id.review_switch_language)
-	Switch   mSwitchLanguageView;
-	@BindView(R.id.review_switch_learned)
-	Switch   mSwitchLearned;
-	@BindView(R.id.review_switch_favorite)
-	Switch   mSwitchFavorite;
-	@BindView(R.id.review_param_sort_spinner)
-	Spinner  mSortSpinner;
-	@BindView(R.id.review_param_quantity_spinner)
-	Spinner  mQuantitySpinner;
-	@BindView(R.id.review_param_tag_selection)
-	TextView mTagSelection;
-	@BindView(R.id.review_button_start)
-	Button   startButton;
+    private Switch mSwitchLanguageView;
+    private Switch mSwitchLearned;
+    private Switch mSwitchFavorite;
+    private TextView mTagSelection;
+    private Button mStartButton;
+    private Switch mSwitchKeepView;
 
-	@BindView(R.id.review_switch_keep)
-	Switch mSwitchKeepView;
+    private int selectedSort = -1;
+    private int selectedQuantity = -1;
+    private ArrayList<Integer> mSelectedItems;
+    private String[] mSelectedTags;
+    private List<CharSequence> items;
 
-	private int selectedSort = -1;
-	private int selectedQuantity = -1;
-	private ArrayList<Integer> mSelectedItems;
-	private String[]           mSelectedTags;
-	private List<CharSequence> items;
-	private Unbinder           unbinder;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
+        mSwitchLanguageView = (Switch) rootView.findViewById(R.id.review_switch_language);
+        mSwitchLearned = (Switch) rootView.findViewById(R.id.review_switch_learned);
+        mSwitchFavorite = (Switch) rootView.findViewById(R.id.review_switch_favorite);
+        Spinner mSortSpinner = (Spinner) rootView.findViewById(R.id.review_param_sort_spinner);
+        mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                selectedSort = position;
+                checkStartButtonEnabled();
+            }
 
-		unbinder = ButterKnife.bind(this, rootView);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-		getLoaderManager().initLoader(LOADER_ID, null, this);
+            }
+        });
+        Spinner mQuantitySpinner = (Spinner) rootView.findViewById(R.id.review_param_quantity_spinner);
+        mQuantitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                selectedQuantity = position;
+                checkStartButtonEnabled();
+            }
 
-		if (savedInstanceState != null) {
-			mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE));
-			mSwitchLearned.setChecked(savedInstanceState.getBoolean(REVIEW_EXCLUDE_LEARNED));
-			mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE));
-			selectedSort = savedInstanceState.getInt(REVIEW_SELECTED_SORT);
-			mSortSpinner.setSelection(selectedSort);
-			selectedQuantity = savedInstanceState.getInt(REVIEW_SELECTED_QUANTITY);
-			mQuantitySpinner.setSelection(selectedQuantity);
-			mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
-			mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-			checkStartButtonEnabled();
-		} else {
-			PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
-			if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
-				mSwitchKeepView.setChecked(true);
-				mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
-				mSwitchLearned.setChecked(preferencesHelper.getBoolean(REVIEW_EXCLUDE_LEARNED));
-				mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
-				selectedSort = preferencesHelper.getInt(REVIEW_SELECTED_SORT);
-				mSortSpinner.setSelection(selectedSort);
-				selectedQuantity = preferencesHelper.getInt(REVIEW_SELECTED_QUANTITY);
-				mQuantitySpinner.setSelection(selectedQuantity);
-				String test_tags = preferencesHelper.getString(REVIEW_TAGS);
-				mSelectedTags = test_tags.split(", ");
-				mTagSelection.setText(test_tags);
+            }
+        });
+        Spinner mTagSpinner = (Spinner) rootView.findViewById(R.id.review_param_tag_spinner);
+        mTagSpinner.setOnTouchListener((view, motionEvent) -> onClickTags(motionEvent));
+        mTagSelection = (TextView) rootView.findViewById(R.id.review_param_tag_selection);
+        mStartButton = (Button) rootView.findViewById(R.id.review_button_start);
+        mStartButton.setOnClickListener(view -> onClickButtonStart());
+        mSwitchKeepView = (Switch) rootView.findViewById(R.id.review_switch_keep);
 
-				checkStartButtonEnabled();
-			}
-		}
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
-		return rootView;
-	}
+        if (savedInstanceState != null) {
+            mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE));
+            mSwitchLearned.setChecked(savedInstanceState.getBoolean(REVIEW_EXCLUDE_LEARNED));
+            mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE));
+            selectedSort = savedInstanceState.getInt(REVIEW_SELECTED_SORT);
+            mSortSpinner.setSelection(selectedSort);
+            selectedQuantity = savedInstanceState.getInt(REVIEW_SELECTED_QUANTITY);
+            mQuantitySpinner.setSelection(selectedQuantity);
+            mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
+            mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
+        } else {
+            PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
+            if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
+                mSwitchKeepView.setChecked(true);
+                mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
+                mSwitchLearned.setChecked(preferencesHelper.getBoolean(REVIEW_EXCLUDE_LEARNED));
+                mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
+                selectedSort = preferencesHelper.getInt(REVIEW_SELECTED_SORT);
+                mSortSpinner.setSelection(selectedSort);
+                selectedQuantity = preferencesHelper.getInt(REVIEW_SELECTED_QUANTITY);
+                mQuantitySpinner.setSelection(selectedQuantity);
+                String test_tags = preferencesHelper.getString(REVIEW_TAGS);
+                mSelectedTags = test_tags.split(", ");
+                mTagSelection.setText(test_tags);
 
-	@Override
-	public void onDestroyView() {
-		saveConfigIfNeed();
+            }
+        }
 
-		unbinder.unbind();
-		super.onDestroyView();
-	}
+        checkStartButtonEnabled();
 
-	private void saveConfigIfNeed() {
-		PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
-		if (mSwitchKeepView.isChecked()) {
-			preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, true);
-			preferencesHelper.saveBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
-			preferencesHelper.saveBoolean(REVIEW_EXCLUDE_LEARNED, mSwitchLearned.isChecked());
-			preferencesHelper.saveBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
-			preferencesHelper.saveInt(REVIEW_SELECTED_SORT, selectedSort);
-			preferencesHelper.saveInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
-			preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
-		} else {
-			preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, false);
-			preferencesHelper.remove(REVIEW_IS_JAPANESE);
-			preferencesHelper.remove(REVIEW_EXCLUDE_LEARNED);
-			preferencesHelper.remove(REVIEW_ONLY_FAVORITE);
-			preferencesHelper.remove(REVIEW_SELECTED_SORT);
-			preferencesHelper.remove(REVIEW_SELECTED_QUANTITY);
-			preferencesHelper.remove(REVIEW_TAGS);
-		}
-	}
+        return rootView;
+    }
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
-		return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
-	}
+    @Override
+    public void onDestroyView() {
+        saveConfigIfNeed();
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		NumberFormat percentInstance = NumberFormat.getPercentInstance();
-		Set<CharSequence> uniqueItems = new HashSet<>();
-		while (data.moveToNext()) {
-			String row = data.getString(0);
-			double count = data.getDouble(1);
-			double sum = data.getDouble(2);
-			String percent = " - " + String.valueOf(percentInstance.format(count / sum));
-			String[] tags = row.split(",");
-			for (String tag : Arrays.asList(tags)) {
-				String text = tag + percent;
-				int start = tag.length();
-				int end = text.length();
-				SpannableStringBuilder str = new SpannableStringBuilder(text);
-				str.setSpan(new StyleSpan(Typeface.ITALIC), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        super.onDestroyView();
+    }
 
-				uniqueItems.add(str);
-			}
-		}
+    private void saveConfigIfNeed() {
+        PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
+        if (mSwitchKeepView.isChecked()) {
+            preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, true);
+            preferencesHelper.saveBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
+            preferencesHelper.saveBoolean(REVIEW_EXCLUDE_LEARNED, mSwitchLearned.isChecked());
+            preferencesHelper.saveBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
+            preferencesHelper.saveInt(REVIEW_SELECTED_SORT, selectedSort);
+            preferencesHelper.saveInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
+            preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
+        } else {
+            preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, false);
+            preferencesHelper.remove(REVIEW_IS_JAPANESE);
+            preferencesHelper.remove(REVIEW_EXCLUDE_LEARNED);
+            preferencesHelper.remove(REVIEW_ONLY_FAVORITE);
+            preferencesHelper.remove(REVIEW_SELECTED_SORT);
+            preferencesHelper.remove(REVIEW_SELECTED_QUANTITY);
+            preferencesHelper.remove(REVIEW_TAGS);
+        }
+    }
 
-		items = new ArrayList<>(uniqueItems);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
+        return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
+    }
 
-		Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        NumberFormat percentInstance = NumberFormat.getPercentInstance();
+        Set<CharSequence> uniqueItems = new HashSet<>();
+        while (data.moveToNext()) {
+            String row = data.getString(0);
+            double count = data.getDouble(1);
+            double sum = data.getDouble(2);
+            String percent = " - " + String.valueOf(percentInstance.format(count / sum));
+            String[] tags = row.split(",");
+            for (String tag : Arrays.asList(tags)) {
+                String text = tag + percent;
+                int start = tag.length();
+                int end = text.length();
+                SpannableStringBuilder str = new SpannableStringBuilder(text);
+                str.setSpan(new StyleSpan(Typeface.ITALIC), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                str.setSpan(new RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-		data.close();
-	}
+                uniqueItems.add(str);
+            }
+        }
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-	}
+        items = new ArrayList<>(uniqueItems);
 
-	@OnItemSelected(R.id.review_param_sort_spinner)
-	public void onSortSelected(int position) {
-		selectedSort = position;
-		checkStartButtonEnabled();
-	}
+        Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
 
-	private void checkStartButtonEnabled() {
-		startButton.setEnabled(selectedSort > -1 && selectedQuantity > -1);
-	}
+        data.close();
+    }
 
-	@OnItemSelected(R.id.review_param_quantity_spinner)
-	public void onQuantitySelected(int position) {
-		selectedQuantity = position;
-		checkStartButtonEnabled();
-	}
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 
-	@OnTouch(R.id.review_param_tag_spinner)
-	public boolean onClickTags(MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
-			return true;
-		}
+    private void checkStartButtonEnabled() {
+        mStartButton.setEnabled(selectedSort > -1 && selectedQuantity > -1);
+    }
 
-		return false;
-	}
+    private boolean onClickTags(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
+            return true;
+        }
 
-	@Override
-	public void onReturnValue(ArrayList<Integer> selectedItems) {
-		mSelectedItems = selectedItems;
-		mSelectedTags = null;
+        return false;
+    }
 
-		for (Integer selectedIndex : mSelectedItems) {
-			CharSequence selectedTag = items.get(selectedIndex);
-			mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag.toString().split(" - ")[0]);
-		}
+    @Override
+    public void onReturnValue(ArrayList<Integer> selectedItems) {
+        mSelectedItems = selectedItems;
+        mSelectedTags = null;
 
-		mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
-	}
+        for (Integer selectedIndex : mSelectedItems) {
+            CharSequence selectedTag = items.get(selectedIndex);
+            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag.toString().split(" - ")[0]);
+        }
 
-	@OnClick(R.id.review_button_start)
-	void onClickButtonStart() {
-		Bundle options = new Bundle();
-		populateUiSelection(options);
+        mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
+    }
 
-		Intent intent = new Intent(getActivity(), ReviewActivity.class);
-		intent.putExtras(options);
+    private void onClickButtonStart() {
+        Bundle options = new Bundle();
+        populateUiSelection(options);
 
-		startActivity(intent);
-		getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-	}
+        Intent intent = new Intent(getActivity(), ReviewActivity.class);
+        intent.putExtras(options);
 
-	private void populateUiSelection(Bundle options) {
-		options.putBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
-		options.putBoolean(REVIEW_EXCLUDE_LEARNED, mSwitchLearned.isChecked());
-		options.putBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
-		options.putInt(REVIEW_SELECTED_SORT, selectedSort);
-		options.putInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
-		options.putStringArray(REVIEW_TAGS, mSelectedTags);
+        startActivity(intent);
+        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
-		saveConfigIfNeed();
-	}
+    private void populateUiSelection(Bundle options) {
+        options.putBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
+        options.putBoolean(REVIEW_EXCLUDE_LEARNED, mSwitchLearned.isChecked());
+        options.putBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
+        options.putInt(REVIEW_SELECTED_SORT, selectedSort);
+        options.putInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
+        options.putStringArray(REVIEW_TAGS, mSelectedTags);
 
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		// Store UI state to the savedInstanceState.
-		populateUiSelection(savedInstanceState);
+        saveConfigIfNeed();
+    }
 
-		super.onSaveInstanceState(savedInstanceState);
-	}
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Store UI state to the savedInstanceState.
+        populateUiSelection(savedInstanceState);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
 }
