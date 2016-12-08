@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -105,110 +103,107 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
     }
 
     static class LetterViewHolder {
-	    @BindView(R.id.row_header)
-	    TextView textView;
+        TextView textView;
 
-	    public LetterViewHolder(View view) {
-		    ButterKnife.bind(this, view);
-	    }
+        LetterViewHolder(View view) {
+            textView = (TextView) view.findViewById(R.id.row_header);
+        }
     }
 
-	private View getDataView(int position, View convertView, ViewGroup parent) {
-		View view;
-		ViewHolder holder;
-		if (convertView == null) {
-			view = mInflater.inflate(mResource, parent, false);
-			holder = new ViewHolder(view);
-			view.setTag(holder);
-		} else {
-			view = convertView;
-			holder = (ViewHolder) view.getTag();
-		}
+    private View getDataView(int position, View convertView, ViewGroup parent) {
+        View view;
+        ViewHolder holder;
+        if (convertView == null) {
+            view = mInflater.inflate(mResource, parent, false);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
+        } else {
+            view = convertView;
+            holder = (ViewHolder) view.getTag();
+        }
 
-		Item item = (Item) getItem(position);
-		holder.mInputView.setText(item.input);
-		holder.switcher.setDisplayedChild(0);
-		if (StringUtils.isNoneBlank(item.kanji)) {
-			holder.switchable = true;
-			holder.switcherKanji.setText(item.kanji);
-			holder.switcherKana.setText(item.kana);
-		} else {
-			holder.switchable = false;
-			holder.switcherKanji.setText(item.kana);
-		}
+        Item item = (Item) getItem(position);
+        holder.mInputView.setText(item.input);
+        holder.switcher.setDisplayedChild(0);
+        if (StringUtils.isNoneBlank(item.kanji)) {
+            holder.switchable = true;
+            holder.switcherKanji.setText(item.kanji);
+            holder.switcherKana.setText(item.kana);
+        } else {
+            holder.switchable = false;
+            holder.switcherKanji.setText(item.kana);
+        }
 
-		return view;
-	}
+        return view;
+    }
 
-	static class ViewHolder {
-		@BindView(R.id.dico_input)
-		TextView mInputView;
+    static class ViewHolder {
+        TextView mInputView;
+        TextSwitcher switcher;
+        TextView switcherKanji;
+        TextView switcherKana;
 
-		@BindView(R.id.dico_switcher)
-		TextSwitcher switcher;
-		@BindView(R.id.dico_switcher_kanji)
-		TextView     switcherKanji;
-		@BindView(R.id.dico_switcher_kana)
-		TextView     switcherKana;
+        private boolean switchable;
+        private boolean tmp;
 
-		private boolean switchable;
-		private boolean tmp;
+        ViewHolder(View view) {
+            mInputView = (TextView) view.findViewById(R.id.dico_input);
+            switcher = (TextSwitcher) view.findViewById(R.id.dico_switcher);
+            switcherKanji = (TextView) view.findViewById(R.id.dico_switcher_kanji);
+            switcherKana = (TextView) view.findViewById(R.id.dico_switcher_kana);
+        }
 
-		public ViewHolder(View view) {
-			ButterKnife.bind(this, view);
-		}
+        void switchKanjiKana() {
+            if (!switchable) {
+                return;
+            }
 
-		void switchKanjiKana() {
-			if (!switchable) {
-				return;
-			}
+            if (tmp)
+                switcher.showNext();
+            else
+                switcher.showPrevious();
 
-			if (tmp)
-				switcher.showNext();
-			else
-				switcher.showPrevious();
+            tmp = !tmp;
+        }
+    }
 
-			tmp = !tmp;
-		}
-	}
+    private static final Pattern PATTERN_NUMBER = Pattern.compile("[0-9]");
 
-	private static final Pattern PATTERN_NUMBER = Pattern.compile("[0-9]");
+    private String[] sections;
+    private final List<Row> rows;
+    private final HashMap<String, Integer> mapPositionByLetter = new LinkedHashMap<>();
+    private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
 
-	private       String[]  sections;
-	private final List<Row> rows;
-	private final HashMap<String, Integer>  mapPositionByLetter  = new LinkedHashMap<>();
-	private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
+    Cursor swapCursor(Cursor cursor, boolean isSortByLetter) {
+        super.swapCursor(cursor);
 
-	public Cursor swapCursor(Cursor cursor, boolean isSortByLetter) {
-		super.swapCursor(cursor);
+        rows.clear();
+        mapPositionByLetter.clear();
+        mapSectionByPosition.clear();
 
-		rows.clear();
-		mapPositionByLetter.clear();
-		mapSectionByPosition.clear();
-
-		if (cursor == null) {
+        if (cursor == null) {
             notifyDataSetChanged();
-			return null;
-		}
+            return null;
+        }
 
-		Item item;
-		String header;
-		int position = 0;
-		int section = -1;
-		while (cursor.moveToNext()) {
-			item = new Item(cursor);
+        Item item;
+        String header;
+        int position = 0;
+        int section = -1;
+        while (cursor.moveToNext()) {
+            item = new Item(cursor);
 
-			header = isSortByLetter ? item.sort_letter : item.tags;
+            header = isSortByLetter ? item.sort_letter : item.tags;
 
-			// Group numbers together in the scroller
-			if (PATTERN_NUMBER.matcher(header).matches()) {
-				header = "#";
-			}
+            // Group numbers together in the scroller
+            if (PATTERN_NUMBER.matcher(header).matches()) {
+                header = "#";
+            }
 
-			// Check if we need to add a header row
-			if (!mapPositionByLetter.containsKey(header)) {
-				rows.add(new Letter(header));
-				mapPositionByLetter.put(header, position);
+            // Check if we need to add a header row
+            if (!mapPositionByLetter.containsKey(header)) {
+                rows.add(new Letter(header));
+                mapPositionByLetter.put(header, position);
                 section++;
                 mapSectionByPosition.put(position, section);
                 position++;
@@ -244,7 +239,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
         return mapSectionByPosition.get(position);
     }
 
-    public List<Item> getItems() {
+    List<Item> getItems() {
         List<Item> items = new ArrayList<>();
         for (Row row : rows) {
             if (row instanceof Item) {
