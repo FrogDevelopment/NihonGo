@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -19,8 +17,6 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -28,32 +24,18 @@ import fr.frogdevelopment.nihongo.data.Type;
 
 public class InputActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.wrapper_kanji)
-    TextInputLayout mKanjiWrapper;
-    @BindView(R.id.input_kanji)
-    EditText mKanjiText;
-    @BindView(R.id.wrapper_kana)
-    TextInputLayout mKanaWrapper;
-    @BindView(R.id.input_kana)
-    EditText mKanaText;
-    @BindView(R.id.wrapper_input)
-    TextInputLayout mInputWrapper;
-    @BindView(R.id.input_input)
-    EditText mInputText;
-    @BindView(R.id.wrapper_tags)
-    TextInputLayout mTagsWrapper;
-    @BindView(R.id.input_tags)
-    EditText mTagsText;
-    @BindView(R.id.wrapper_details)
-    TextInputLayout mDetailsWrapper;
-    @BindView(R.id.input_details)
-    EditText mDetailsText;
-    @BindView(R.id.wrapper_example)
-    TextInputLayout mExampleWrapper;
-    @BindView(R.id.input_example)
-    EditText mExampleText;
+    private TextInputLayout mKanjiWrapper;
+    private EditText mKanjiText;
+    private TextInputLayout mKanaWrapper;
+    private EditText mKanaText;
+    private TextInputLayout mInputWrapper;
+    private EditText mInputText;
+    private TextInputLayout mTagsWrapper;
+    private EditText mTagsText;
+    private TextInputLayout mDetailsWrapper;
+    private EditText mDetailsText;
+    private TextInputLayout mExampleWrapper;
+    private EditText mExampleText;
 
     // Initial Data
     private Item itemUpdate;
@@ -66,7 +48,18 @@ public class InputActivity extends AppCompatActivity {
         mType = (Type) getIntent().getSerializableExtra("type");
         setContentView(R.layout.activity_input);
 
-        ButterKnife.bind(this);
+        mKanjiWrapper = (TextInputLayout) findViewById(R.id.wrapper_kanji);
+        mKanjiText = (EditText) findViewById(R.id.input_kanji);
+        mKanaWrapper = (TextInputLayout) findViewById(R.id.wrapper_kana);
+        mKanaText = (EditText) findViewById(R.id.input_kana);
+        mInputWrapper = (TextInputLayout) findViewById(R.id.wrapper_input);
+        mInputText = (EditText) findViewById(R.id.input_input);
+        mTagsWrapper = (TextInputLayout) findViewById(R.id.wrapper_tags);
+        mTagsText = (EditText) findViewById(R.id.input_tags);
+        mDetailsWrapper = (TextInputLayout) findViewById(R.id.wrapper_details);
+        mDetailsText = (EditText) findViewById(R.id.input_details);
+        mExampleWrapper = (TextInputLayout) findViewById(R.id.wrapper_example);
+        mExampleText = (EditText) findViewById(R.id.input_example);
 
         switch (mType) {
             case WORD:
@@ -85,18 +78,6 @@ public class InputActivity extends AppCompatActivity {
         itemUpdate = getIntent().getParcelableExtra("item");
 
         initData();
-
-        initToolbar();
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
     }
 
     @Override

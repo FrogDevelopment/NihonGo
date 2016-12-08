@@ -5,7 +5,6 @@
 <android.support.design.widget.CoordinatorLayout
     android:id="@+id/content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,31 +12,13 @@
     android:orientation="vertical"
     tools:context=".dico.input.InputActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
-
-    </android.support.design.widget.AppBarLayout>
-
     <!-- The main content view -->
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="?attr/actionBarSize"
                 android:orientation="vertical"
-                android:padding="5dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"

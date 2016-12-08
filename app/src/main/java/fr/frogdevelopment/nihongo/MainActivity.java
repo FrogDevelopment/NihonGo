@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private InputMethodManager mInputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initIME() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         boolean isNoJapanIME = true;
-        List<InputMethodInfo> inputMethodInfos = imm.getInputMethodList();
+        List<InputMethodInfo> inputMethodInfos = mInputMethodManager.getInputMethodList();
         for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
             for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
                 String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
@@ -98,14 +100,14 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close)/* {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				// Close the soft-keyboard
-				imm.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
+				mInputMethodManager.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
 			}
-		}*/;
+		};
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerToggle.syncState();

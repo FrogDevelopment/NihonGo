@@ -15,15 +15,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -36,12 +32,7 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.details_viewpager)
-    ViewPager mViewPager;
-
+    public static final int RC_UPDATE_ITEM = 666;
     private List<Item> mItems;
     private Type mType;
     private DetailsAdapter mAdapter;
@@ -62,18 +53,15 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
         setContentView(R.layout.activity_details);
 
-        ButterKnife.bind(this);
-
         Bundle args = getIntent().getExtras();
         mType = (Type) args.getSerializable("type");
         mItems = args.getParcelableArrayList("items");
 
         mAdapter = new DetailsAdapter(getFragmentManager());
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.details_viewpager);
         mViewPager.setAdapter(mAdapter);
         int position = args.getInt("position");
         mViewPager.setCurrentItem(position);
-
-        initToolbar();
 
         boolean doNotShow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
         if (!doNotShow) {
@@ -84,16 +72,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
     }
 
     @Override
@@ -110,8 +88,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		super.onActivityResult(requestCode, resultCode, data); fixme keep ?
-        if (resultCode == RESULT_OK && requestCode == 666) {
+        if (resultCode == RESULT_OK && requestCode == RC_UPDATE_ITEM) {
             int position = data.getIntExtra("position", -1);
             if (position > -1) {
                 Item item = data.getParcelableExtra("item");
@@ -148,7 +125,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         intent.putExtra("position", position);
         intent.putExtra("item", item);
 
-        startActivityForResult(intent, 666);
+        startActivityForResult(intent, RC_UPDATE_ITEM);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 

@@ -20,8 +20,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -35,8 +33,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
     private static final int LOADER_ID = 710;
     private ReviewAdapter adapter;
 
-    @BindView(R.id.review_viewpager)
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -66,15 +63,11 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
         setContentView(R.layout.activity_review);
 
-        ButterKnife.bind(this);
-
-        initToolbar();
-
         final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean(ReviewParametersFragment.REVIEW_IS_JAPANESE);
 
         adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
+        viewPager = (ViewPager) findViewById(R.id.review_viewpager);
         viewPager.setAdapter(adapter);
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -109,15 +102,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         }
     }
 
-
-    private void initToolbar() {
-//        final ActionBar actionBar = getSupportActionBar();
-//
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setHomeButtonEnabled(true);
-//        }
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

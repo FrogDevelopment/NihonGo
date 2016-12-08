@@ -18,27 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 
 public class KanaViewPage extends Fragment {
 
-	@BindView(R.id.help_imageView)
-	ImageView imageView;
-
-	private Unbinder unbinder;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		View rootView = inflater.inflate(R.layout.fragment_kana, container, false);
-		unbinder = ButterKnife.bind(this, rootView);
 
-		final Bundle arguments = getArguments();
-		imageView.setImageResource(arguments.getInt("imageSource"));
+		ImageView imageView = (ImageView) rootView.findViewById(R.id.help_imageView);
+		imageView.setImageResource(getArguments().getInt("imageSource"));
 
 		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -51,7 +43,6 @@ public class KanaViewPage extends Fragment {
 	@Override
 	public void onDestroyView() {
 		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-		unbinder.unbind();
 		super.onDestroyView();
 	}
 

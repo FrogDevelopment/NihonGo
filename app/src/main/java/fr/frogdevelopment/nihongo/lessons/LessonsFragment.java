@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -56,8 +55,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import fr.frogdevelopment.nihongo.MainActivity;
@@ -82,9 +79,6 @@ public class LessonsFragment extends ListFragment {
     private static final String[] LANGUAGES = {"fr_FR", "en_US"};
     private static final String DEFAULT_LANGUAGE = "en_US";
 
-    @BindView(R.id.lesson_no_connection_test)
-    TextView noConnection;
-
     private boolean hasInternet = false;
 
     private LessonAdapter adapter;
@@ -104,8 +98,6 @@ public class LessonsFragment extends ListFragment {
 
         RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_lessons, container, false);
 
-        unbinder = ButterKnife.bind(this, rootView);
-
         myLocale = Locale.getDefault().toString();
         if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
             myLocale = DEFAULT_LANGUAGE;
@@ -122,7 +114,7 @@ public class LessonsFragment extends ListFragment {
                 getOffLineLessons();
             }
 
-            noConnection.setVisibility(result ? View.GONE : View.VISIBLE);
+            rootView.findViewById(R.id.lesson_no_connection_test).setVisibility(result ? View.GONE : View.VISIBLE);
 
             hasInternet = result;
         }).execute();
