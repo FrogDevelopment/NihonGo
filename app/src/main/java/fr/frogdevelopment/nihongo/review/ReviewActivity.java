@@ -12,9 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -34,187 +32,183 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ReviewFragment.OnFragmentInteractionListener {
 
-	private static final int LOADER_ID = 710;
-	private ReviewAdapter adapter;
+    private static final int LOADER_ID = 710;
+    private ReviewAdapter adapter;
 
-	@BindView(R.id.toolbar)
-	Toolbar toolbar;
+    @BindView(R.id.review_viewpager)
+    ViewPager viewPager;
 
-	@BindView(R.id.review_viewpager)
-	ViewPager viewPager;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                back();
+                return true;
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				back();
-				return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
+    @Override
+    public void onBackPressed() {
+        back();
+    }
 
-	@Override
-	public void onBackPressed() {
-		back();
-	}
+    private void back() {
+        NavUtils.navigateUpFromSameTask(this);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
-	private void back() {
-		NavUtils.navigateUpFromSameTask(this);
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_review);
 
-		setContentView(R.layout.activity_review);
+        ButterKnife.bind(this);
 
-		ButterKnife.bind(this);
+        initToolbar();
 
-		initToolbar();
+        final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean(ReviewParametersFragment.REVIEW_IS_JAPANESE);
 
-		final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean("review_isJapanese");
+        adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
+        viewPager.setAdapter(adapter);
 
-		adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
-		viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
-			}
+            @Override
+            public void onPageSelected(int position) {
+                ReviewFragment fragment = adapter.getItemAt(position);
+                if (position + 1 == adapter.getCount()) {
+                    if (fragment.mFabAgain.getVisibility() == View.GONE) {
+                        fragment.mFabAgain.show();
+                    }
+                } else {
+                    if (fragment.mFabAgain.getVisibility() == View.VISIBLE) {
+                        fragment.mFabAgain.hide();
+                    }
+                }
+            }
 
-			@Override
-			public void onPageSelected(int position) {
-				ReviewFragment fragment = adapter.getItemAt(position);
-				if (position + 1 == adapter.getCount()) {
-					if (fragment.mFabAgain.getVisibility() == View.GONE) {
-						fragment.mFabAgain.show();
-					}
-				} else {
-					if (fragment.mFabAgain.getVisibility() == View.VISIBLE) {
-						fragment.mFabAgain.hide();
-					}
-				}
-			}
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-			@Override
-			public void onPageScrollStateChanged(int state) {
+            }
+        });
 
-			}
-		});
+        getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
 
-		getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
-
-		boolean doNotShow = PreferencesHelper.getInstance(getApplicationContext()).getBoolean(Preferences.HELP_REVIEW);
-		if (!doNotShow) {
-			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
-		}
-	}
+        boolean doNotShow = PreferencesHelper.getInstance(getApplicationContext()).getBoolean(Preferences.HELP_REVIEW);
+        if (!doNotShow) {
+            HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
+        }
+    }
 
 
-	private void initToolbar() {
-		setSupportActionBar(toolbar);
-		final ActionBar actionBar = getSupportActionBar();
+    private void initToolbar() {
+//        final ActionBar actionBar = getSupportActionBar();
+//
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setHomeButtonEnabled(true);
+//        }
+    }
 
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setHomeButtonEnabled(true);
-		}
-	}
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        final int selectedQuantity = args.getInt(ReviewParametersFragment.REVIEW_SELECTED_QUANTITY);
+        String count = getResources().getStringArray(R.array.param_quantities)[selectedQuantity];
+        String limit = "";
+        if (NumberUtils.isNumber(count)) {
+            limit = " LIMIT " + Integer.parseInt(count);
+        }
+        final String[] tags = args.getStringArray(ReviewParametersFragment.REVIEW_TAGS);
 
-		final int selectedQuantity = args.getInt("review_count");
-		String count = getResources().getStringArray(R.array.param_quantities)[selectedQuantity];
-		String limit = "";
-		if (NumberUtils.isNumber(count)) {
-			limit = " LIMIT " + Integer.parseInt(count);
-		}
-		final String[] tags = args.getStringArray("review_tags");
+        String selection = "1 = 1";
+        String[] likes = null;
+        if (ArrayUtils.isNotEmpty(tags)) {
+            for (String tag : tags) {
+                likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
+            }
+            selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
+        }
 
-		String selection = "1 = 1";
-		String[] likes = null;
-		if (ArrayUtils.isNotEmpty(tags)) {
-			for (String tag : tags) {
-				likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
-			}
-			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
-		}
+        final boolean excludeLearned = args.getBoolean(ReviewParametersFragment.REVIEW_EXCLUDE_LEARNED);
+        if (excludeLearned) {
+            selection += " AND LEARNED = '0'";
+        }
 
-		final boolean excludeLearned = args.getBoolean("review_excludeLearned");
-		if (excludeLearned) {
-			selection += " AND LEARNED = '0'";
-		}
+        final boolean onlyFavorite = args.getBoolean(ReviewParametersFragment.REVIEW_ONLY_FAVORITE);
+        if (onlyFavorite) {
+            selection += " AND FAVORITE = '1'";
+        }
 
-		final boolean onlyFavorite = args.getBoolean("review_onlyFavorite");
-		if (onlyFavorite) {
-			selection += " AND FAVORITE = '1'";
-		}
+        String sortOrder;
+        final int selectedSort = args.getInt(ReviewParametersFragment.REVIEW_SELECTED_SORT);
 
-		String sortOrder;
-		final int sort = args.getInt("review_sort");
+        switch (selectedSort) {
+            case 0: // new -> old
+                sortOrder = "_id ASC" + limit;
+                break;
+            case 1: // old -> new
+                sortOrder = "_id DESC" + limit;
+                break;
+            case 2: // random
+                sortOrder = "RANDOM()" + limit;
+                break;
+            default:
+                sortOrder = "";
+                break;
+        }
 
-		switch (sort) {
-			case 0: // new -> old
-				sortOrder = "_id ASC" + limit;
-				break;
-			case 1: // old -> new
-				sortOrder = "_id DESC" + limit;
-				break;
-			case 2: // random
-				sortOrder = "RANDOM()" + limit;
-				break;
-			default:
-				sortOrder = "";
-				break;
-		}
+        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
+    }
 
-		return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
-	}
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.setData(data);
+        data.close();
+    }
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		adapter.setData(data);
-		data.close();
-	}
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // TODO Auto-generated method stub
+    }
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public void setFavorite(Item item) {
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.FAVORITE, item.favorite);
 
-	@Override
-	public void setFavorite(Item item) {
-		final ContentValues values = new ContentValues();
-		values.put(DicoContract.FAVORITE, item.favorite);
+        updateItem(item, values);
+    }
 
-		updateItem(item, values);
-	}
+    @Override
+    public void setLearned(Item item) {
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.LEARNED, item.learned);
 
-	@Override
-	public void setLearned(Item item) {
-		final ContentValues values = new ContentValues();
-		values.put(DicoContract.LEARNED, item.learned);
+        updateItem(item, values);
+    }
 
-		updateItem(item, values);
-	}
+    private void updateItem(Item item, ContentValues values) {
+        final String where = DicoContract._ID + "=?";
+        final String[] selectionArgs = {item.id};
 
-	private void updateItem(Item item, ContentValues values) {
-		final String where = DicoContract._ID + "=?";
-		final String[] selectionArgs = {item.id};
+        getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
+    }
 
-		getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
-	}
-
-	@Override
-	public void reviewAgain() {
-		adapter.clear();
-		viewPager.setAdapter(adapter);
-		getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
-	}
+    @Override
+    public void reviewAgain() {
+        adapter.clear();
+        viewPager.setAdapter(adapter);
+        getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
+    }
 
 }

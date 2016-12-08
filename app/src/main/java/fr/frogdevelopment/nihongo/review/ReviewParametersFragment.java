@@ -52,6 +52,13 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 public class ReviewParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
 	private static final int LOADER_ID = 700;
+	public static final String REVIEW_IS_JAPANESE = "review_isJapanese";
+	public static final String REVIEW_EXCLUDE_LEARNED = "review_excludeLearned";
+	public static final String REVIEW_ONLY_FAVORITE = "onlyFavorite";
+	public static final String REVIEW_SELECTED_SORT = "selected_sort";
+	public static final String REVIEW_SELECTED_QUANTITY = "selected_quantity";
+	public static final String REVIEW_TAGS = "review_tags";
+	public static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
 
 	@BindView(R.id.review_switch_language)
 	Switch   mSwitchLanguageView;
@@ -87,29 +94,29 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 
 		if (savedInstanceState != null) {
-			mSwitchLanguageView.setChecked(savedInstanceState.getBoolean("review_isJapanese"));
-			mSwitchLearned.setChecked(savedInstanceState.getBoolean("review_excludeLearned"));
-			mSwitchFavorite.setChecked(savedInstanceState.getBoolean("onlyFavorite"));
-			selectedSort = savedInstanceState.getInt("review_sort");
+			mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE));
+			mSwitchLearned.setChecked(savedInstanceState.getBoolean(REVIEW_EXCLUDE_LEARNED));
+			mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE));
+			selectedSort = savedInstanceState.getInt(REVIEW_SELECTED_SORT);
 			mSortSpinner.setSelection(selectedSort);
-			selectedQuantity = savedInstanceState.getInt("review_count");
+			selectedQuantity = savedInstanceState.getInt(REVIEW_SELECTED_QUANTITY);
 			mQuantitySpinner.setSelection(selectedQuantity);
-			mSelectedTags = savedInstanceState.getStringArray("review_tags");
+			mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
 			mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
 
 			checkStartButtonEnabled();
 		} else {
 			PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
-			if (preferencesHelper.getBoolean("review_keepConfig")) {
+			if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
 				mSwitchKeepView.setChecked(true);
-				mSwitchLanguageView.setChecked(preferencesHelper.getBoolean("review_isJapanese"));
-				mSwitchLearned.setChecked(preferencesHelper.getBoolean("review_excludeLearned"));
-				mSwitchFavorite.setChecked(preferencesHelper.getBoolean("review_onlyFavorite"));
-				selectedSort = preferencesHelper.getInt("review_sort");
+				mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
+				mSwitchLearned.setChecked(preferencesHelper.getBoolean(REVIEW_EXCLUDE_LEARNED));
+				mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
+				selectedSort = preferencesHelper.getInt(REVIEW_SELECTED_SORT);
 				mSortSpinner.setSelection(selectedSort);
-				selectedQuantity = preferencesHelper.getInt("review_count");
+				selectedQuantity = preferencesHelper.getInt(REVIEW_SELECTED_QUANTITY);
 				mQuantitySpinner.setSelection(selectedQuantity);
-				String test_tags = preferencesHelper.getString("review_tags");
+				String test_tags = preferencesHelper.getString(REVIEW_TAGS);
 				mSelectedTags = test_tags.split(", ");
 				mTagSelection.setText(test_tags);
 
@@ -131,21 +138,21 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 	private void saveConfigIfNeed() {
 		PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
 		if (mSwitchKeepView.isChecked()) {
-			preferencesHelper.saveBoolean("review_keepConfig", true);
-			preferencesHelper.saveBoolean("review_isJapanese", mSwitchLanguageView.isChecked());
-			preferencesHelper.saveBoolean("review_excludeLearned", mSwitchLearned.isChecked());
-			preferencesHelper.saveBoolean("review_onlyFavorite", mSwitchFavorite.isChecked());
-			preferencesHelper.saveInt("review_sort", selectedSort);
-			preferencesHelper.saveInt("review_count", selectedQuantity);
-			preferencesHelper.saveString("review_tags", StringUtils.join(mSelectedTags, ", "));
+			preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, true);
+			preferencesHelper.saveBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
+			preferencesHelper.saveBoolean(REVIEW_EXCLUDE_LEARNED, mSwitchLearned.isChecked());
+			preferencesHelper.saveBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
+			preferencesHelper.saveInt(REVIEW_SELECTED_SORT, selectedSort);
+			preferencesHelper.saveInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
+			preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
 		} else {
-			preferencesHelper.saveBoolean("review_keepConfig", false);
-			preferencesHelper.remove("review_isJapanese");
-			preferencesHelper.remove("review_excludeLearned");
-			preferencesHelper.remove("review_onlyFavorite");
-			preferencesHelper.remove("review_sort");
-			preferencesHelper.remove("review_count");
-			preferencesHelper.remove("review_tags");
+			preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, false);
+			preferencesHelper.remove(REVIEW_IS_JAPANESE);
+			preferencesHelper.remove(REVIEW_EXCLUDE_LEARNED);
+			preferencesHelper.remove(REVIEW_ONLY_FAVORITE);
+			preferencesHelper.remove(REVIEW_SELECTED_SORT);
+			preferencesHelper.remove(REVIEW_SELECTED_QUANTITY);
+			preferencesHelper.remove(REVIEW_TAGS);
 		}
 	}
 
@@ -240,21 +247,20 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 	}
 
 	private void populateUiSelection(Bundle options) {
-		options.putBoolean("review_isJapanese", mSwitchLanguageView.isChecked());
-		options.putBoolean("review_excludeLearned", mSwitchLearned.isChecked());
-		options.putBoolean("review_onlyFavorite", mSwitchFavorite.isChecked());
-		options.putInt("review_sort", selectedSort);
-		options.putInt("review_count", selectedQuantity);
-		options.putStringArray("review_tags", mSelectedTags);
+		options.putBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
+		options.putBoolean(REVIEW_EXCLUDE_LEARNED, mSwitchLearned.isChecked());
+		options.putBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
+		options.putInt(REVIEW_SELECTED_SORT, selectedSort);
+		options.putInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
+		options.putStringArray(REVIEW_TAGS, mSelectedTags);
+
+		saveConfigIfNeed();
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-
 		// Store UI state to the savedInstanceState.
 		populateUiSelection(savedInstanceState);
-
-		saveConfigIfNeed();
 
 		super.onSaveInstanceState(savedInstanceState);
 	}

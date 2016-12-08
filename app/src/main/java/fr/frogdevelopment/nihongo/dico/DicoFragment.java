@@ -37,9 +37,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -67,24 +64,27 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
 
     private DicoAdapter dicoAdapter;
 
-    @BindView(R.id.fab_add)
-    FloatingActionButton mFabAdd;
-
     private Type mType;
-    private Unbinder unbinder;
     private int currentQuery;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        Bundle arguments = getArguments();
-
-        mType = (Type) arguments.getSerializable("type");
-
         View rootView = inflater.inflate(R.layout.fragment_dico, container, false);
 
-        unbinder = ButterKnife.bind(this, rootView);
+        FloatingActionButton mFabAdd = (FloatingActionButton) rootView.findViewById(R.id.fab_add);
+        mFabAdd.setOnClickListener(view -> {
+            Intent intent;
+            intent = new Intent(getActivity(), InputActivity.class);
+            intent.putExtra("type", mType);
+
+            startActivity(intent);
+            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        });
+
+
+        Bundle arguments = getArguments();
+        mType = (Type) arguments.getSerializable("type");
 
         currentQuery = arguments.containsKey("query") ? LOADER_FILTER_ID : LOADER_DICO_ID;
         getLoaderManager().initLoader(currentQuery, arguments, this);
@@ -106,7 +106,6 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         setListAdapter(dicoAdapter);
 
         setHasOptionsMenu(true);
-        initFabAdd();
 
         return rootView;
     }
@@ -118,23 +117,6 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         if (!doNotShow) {
             HelpDialog.show(getFragmentManager(), R.layout.dialog_help_dico, true);
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    private void initFabAdd() {
-        mFabAdd.setOnClickListener(view -> {
-            Intent intent;
-            intent = new Intent(getActivity(), InputActivity.class);
-            intent.putExtra("type", mType);
-
-            startActivity(intent);
-            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        });
     }
 
     @Override

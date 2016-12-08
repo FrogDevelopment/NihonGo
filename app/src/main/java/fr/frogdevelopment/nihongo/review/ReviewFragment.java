@@ -19,19 +19,14 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.ref.WeakReference;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
+import static fr.frogdevelopment.nihongo.R.id.review_count;
+
 public class ReviewFragment extends Fragment {
 
-    private Unbinder unbinder;
 
     interface OnFragmentInteractionListener {
         void setFavorite(Item item);
@@ -41,52 +36,21 @@ public class ReviewFragment extends Fragment {
         void reviewAgain();
     }
 
-    private WeakReference<OnFragmentInteractionListener> mListener;
-
-    @BindView(R.id.review_count)
-    TextView mCount;
-    @BindView(R.id.review_reviewed)
-    TextView mReviewed;
-    @BindView(R.id.review_textSwitcher_kana)
-    TextSwitcher mKana;
-    @BindView(R.id.review_textSwitcher_test)
-    TextSwitcher mTest;
-    @BindView(R.id.review_info_title)
-    TextView mInfoTitle;
-    @BindView(R.id.review_info)
-    TextView mInfo;
-    @BindView(R.id.review_example_title)
-    TextView mExampleTitle;
-    @BindView(R.id.review_example)
-    TextView mExample;
-    @BindView(R.id.review_tags_title)
-    TextView mTagsTitle;
-    @BindView(R.id.review_tags)
-    TextView mTags;
-    @BindView(R.id.review_tags_ratio)
-    TextView mRatio;
-    @BindView(R.id.fab_again)
-    FloatingActionButton mFabAgain;
-    @BindView(R.id.fab_favorite)
-    FloatingActionButton mFabFavorite;
-    @BindView(R.id.fab_learned)
-    FloatingActionButton mFabLearned;
-
     private Item mItem;
     private String test;
+    private OnFragmentInteractionListener mListener;
+
+    FloatingActionButton mFabAgain; // fixme pas très propre
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // The last two arguments ensure LayoutParams are inflated properly.
         View rootView = inflater.inflate(R.layout.fragment_review, container, false);
 
-        unbinder = ButterKnife.bind(this, rootView);
-
         setHasOptionsMenu(true);
 
-        populateView();
-
-        initFabs();
+        populateView(rootView);
+        initFabs(rootView);
 
         return rootView;
     }
@@ -112,36 +76,12 @@ public class ReviewFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    private void initFabs() {
-        mFabAgain.setOnClickListener(view -> mListener.get().reviewAgain());
-
-        mFabFavorite.setOnClickListener(view -> {
-            mItem.switchFavorite();
-            mListener.get().setFavorite(mItem);
-            mFabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-        });
-        mFabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-
-        mFabLearned.setOnClickListener(view -> {
-            mItem.switchLearned();
-            mListener.get().setLearned(mItem);
-            mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
-        });
-        mFabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = new WeakReference<>((OnFragmentInteractionListener) context);
+            mListener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(context.toString() + " must implement " + OnFragmentInteractionListener.class.getSimpleName());
         }
     }
 
@@ -151,7 +91,50 @@ public class ReviewFragment extends Fragment {
         mListener = null;
     }
 
-    private void populateView() {
+    private void initFabs(View rootView) {
+        mFabAgain = (FloatingActionButton) rootView.findViewById(R.id.fab_again);
+        mFabAgain.setOnClickListener(view -> mListener.reviewAgain());
+
+        FloatingActionButton fabFavorite = (FloatingActionButton) rootView.findViewById(R.id.fab_favorite);
+        fabFavorite.setOnClickListener(view -> {
+            mItem.switchFavorite();
+            mListener.setFavorite(mItem);
+            fabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+        });
+        fabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+
+        FloatingActionButton fabLearned = (FloatingActionButton) rootView.findViewById(R.id.fab_learned);
+        fabLearned.setOnClickListener(view -> {
+            mItem.switchLearned();
+            mListener.setLearned(mItem);
+            fabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+        });
+        fabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+    }
+
+    private void populateView(View rootView) {
+        TextView mCount = (TextView) rootView.findViewById(review_count);
+        TextView mReviewed = (TextView) rootView.findViewById(R.id.review_reviewed);
+        TextView mInfoTitle = (TextView) rootView.findViewById(R.id.review_info_title);
+        TextView mInfo = (TextView) rootView.findViewById(R.id.review_info);
+        TextView mExampleTitle = (TextView) rootView.findViewById(R.id.review_example_title);
+        TextView mExample = (TextView) rootView.findViewById(R.id.review_example);
+        TextView mTagsTitle = (TextView) rootView.findViewById(R.id.review_tags_title);
+        TextView mTags = (TextView) rootView.findViewById(R.id.review_tags);
+        TextView mRatio = (TextView) rootView.findViewById(R.id.review_tags_ratio);
+        TextSwitcher mKana = (TextSwitcher) rootView.findViewById(R.id.review_textSwitcher_kana);
+        mKana.setOnClickListener(view -> {
+            mKana.setText(mItem.kana);
+            mKana.setClickable(false);
+
+        });
+        TextSwitcher mTest = (TextSwitcher) rootView.findViewById(R.id.review_textSwitcher_test);
+        mTest.setOnClickListener(view -> {
+            mTest.setText(test);
+            mTest.setClickable(false);
+
+        });
+
         Bundle args = getArguments();
 
         String count = args.getString("count");
@@ -226,18 +209,6 @@ public class ReviewFragment extends Fragment {
         }
 
         mRatio.setText(mItem.success + "/" + mItem.failed);
-    }
-
-    @OnClick(R.id.review_textSwitcher_kana)
-    void onClickKana() {
-        mKana.setText(mItem.kana);
-        mKana.setClickable(false);
-    }
-
-    @OnClick(R.id.review_textSwitcher_test)
-    void onClickTest() {
-        mTest.setText(test);
-        mTest.setClickable(false);
     }
 
 }
