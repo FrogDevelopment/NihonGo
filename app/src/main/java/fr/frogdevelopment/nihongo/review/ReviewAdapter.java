@@ -20,7 +20,7 @@ import fr.frogdevelopment.nihongo.data.Item;
 class ReviewAdapter extends FragmentStatePagerAdapter {
 
 	private int mCount = 0;
-	private       List<Item> items;
+	private       List<Item> mItems;
 	private final boolean    isJapaneseReviewed;
 	private final SparseArray<ReviewFragment> mapFragments         = new SparseArray<>();
 
@@ -32,7 +32,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		ReviewFragment fragment = new ReviewFragment();
-		Item item = items.get(position);
+		Item item = mItems.get(position);
 
 		Bundle args = new Bundle();
 		args.putParcelable("item", item);
@@ -64,21 +64,21 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 
 	public void setData(Cursor cursor) {
 		mCount = cursor.getCount();
-		items = new ArrayList<>(mCount);
+		mItems = new ArrayList<>(mCount);
 
 		while (cursor.moveToNext()) {
-			items.add(new Item(cursor));
+			mItems.add(new Item(cursor));
 		}
 
 		notifyDataSetChanged();
 	}
 
-	public ReviewFragment getItemAt(int position) {
-		return mapFragments.get(position);
+	Item getItemAt(int position) {
+		return mItems.get(position);
 	}
 
-	public void clear() {
-		items.clear();
+	void clear() {
+		mItems.clear();
 		mCount = 0;
 		mapFragments.clear();
 		notifyDataSetChanged();

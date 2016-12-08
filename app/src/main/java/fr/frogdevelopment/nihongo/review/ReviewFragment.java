@@ -5,9 +5,7 @@
 package fr.frogdevelopment.nihongo.review;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,20 +25,8 @@ import static fr.frogdevelopment.nihongo.R.id.review_count;
 
 public class ReviewFragment extends Fragment {
 
-
-    interface OnFragmentInteractionListener {
-        void setFavorite(Item item);
-
-        void setLearned(Item item);
-
-        void reviewAgain();
-    }
-
     private Item mItem;
     private String test;
-    private OnFragmentInteractionListener mListener;
-
-    FloatingActionButton mFabAgain; // fixme pas très propre
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +36,6 @@ public class ReviewFragment extends Fragment {
         setHasOptionsMenu(true);
 
         populateView(rootView);
-        initFabs(rootView);
 
         return rootView;
     }
@@ -73,43 +58,6 @@ public class ReviewFragment extends Fragment {
         }
 
         return true;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (OnFragmentInteractionListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + OnFragmentInteractionListener.class.getSimpleName());
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    private void initFabs(View rootView) {
-        mFabAgain = (FloatingActionButton) rootView.findViewById(R.id.fab_again);
-        mFabAgain.setOnClickListener(view -> mListener.reviewAgain());
-
-        FloatingActionButton fabFavorite = (FloatingActionButton) rootView.findViewById(R.id.fab_favorite);
-        fabFavorite.setOnClickListener(view -> {
-            mItem.switchFavorite();
-            mListener.setFavorite(mItem);
-            fabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-        });
-        fabFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-
-        FloatingActionButton fabLearned = (FloatingActionButton) rootView.findViewById(R.id.fab_learned);
-        fabLearned.setOnClickListener(view -> {
-            mItem.switchLearned();
-            mListener.setLearned(mItem);
-            fabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
-        });
-        fabLearned.setImageResource(mItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
     }
 
     private void populateView(View rootView) {
@@ -136,10 +84,8 @@ public class ReviewFragment extends Fragment {
         });
 
         Bundle args = getArguments();
-
         String count = args.getString("count");
         mCount.setText(count);
-
         mItem = args.getParcelable("item");
 
         boolean isJapaneseReviewed = args.getBoolean("isJapaneseReviewed");

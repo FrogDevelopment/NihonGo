@@ -10,9 +10,11 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -28,12 +30,17 @@ import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ReviewFragment.OnFragmentInteractionListener {
+public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 710;
-    private ReviewAdapter adapter;
 
     private ViewPager viewPager;
+    private ReviewAdapter adapter;
+
+    private Item mCurrentItem;
+    private FloatingActionButton mFabAgain;
+    private FloatingActionButton mFabLearned;
+    private FloatingActionButton mFabFavorite;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -71,26 +78,29 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                Log.d("","ici");
             }
 
             @Override
             public void onPageSelected(int position) {
-                ReviewFragment fragment = adapter.getItemAt(position);
+                mCurrentItem = adapter.getItemAt(position);
                 if (position + 1 == adapter.getCount()) {
-                    if (fragment.mFabAgain.getVisibility() == View.GONE) {
-                        fragment.mFabAgain.show();
+                    if (mFabAgain.getVisibility() == View.GONE) {
+                        mFabAgain.show();
                     }
                 } else {
-                    if (fragment.mFabAgain.getVisibility() == View.VISIBLE) {
-                        fragment.mFabAgain.hide();
+                    if (mFabAgain.getVisibility() == View.VISIBLE) {
+                        mFabAgain.hide();
                     }
                 }
+
+                mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                Log.d("","ici");
             }
         });
 
@@ -100,8 +110,17 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         if (!doNotShow) {
             HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
         }
-    }
 
+
+        mFabAgain = (FloatingActionButton) findViewById(R.id.fab_again);
+        mFabAgain.setOnClickListener(view -> reviewAgain());
+
+        mFabFavorite = (FloatingActionButton) findViewById(R.id.fab_favorite);
+        mFabFavorite.setOnClickListener(view -> onItemFavorite());
+
+        mFabLearned = (FloatingActionButton) findViewById(R.id.fab_learned);
+        mFabLearned.setOnClickListener(view -> onItemLearned());
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -158,6 +177,10 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.setData(data);
         data.close();
+
+        mCurrentItem = adapter.getItemAt(0);
+        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
     }
 
     @Override
@@ -165,31 +188,32 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         // TODO Auto-generated method stub
     }
 
-    @Override
-    public void setFavorite(Item item) {
+    private void onItemFavorite() {
+        mCurrentItem.switchFavorite();
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.FAVORITE, item.favorite);
+        values.put(DicoContract.FAVORITE, mCurrentItem.favorite);
 
-        updateItem(item, values);
+        updateItem(values);
+        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
     }
 
-    @Override
-    public void setLearned(Item item) {
+    private void onItemLearned() {
+        mCurrentItem.switchLearned();
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.LEARNED, item.learned);
+        values.put(DicoContract.LEARNED, mCurrentItem.learned);
 
-        updateItem(item, values);
+        updateItem(values);
+        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
     }
 
-    private void updateItem(Item item, ContentValues values) {
+    private void updateItem(ContentValues values) {
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {item.id};
+        final String[] selectionArgs = {mCurrentItem.id};
 
         getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
     }
 
-    @Override
-    public void reviewAgain() {
+    private void reviewAgain() {
         adapter.clear();
         viewPager.setAdapter(adapter);
         getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
