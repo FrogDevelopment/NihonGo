@@ -150,7 +150,7 @@
 
     <Switch
         android:id="@+id/test_param_kanji"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"

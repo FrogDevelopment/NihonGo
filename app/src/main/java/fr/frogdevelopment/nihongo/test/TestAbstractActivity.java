@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -51,7 +50,6 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     protected ArrayList<Result> results;
 
     private final int mLayout;
-    private View mView;
 
     protected TestAbstractActivity(int mLayout) {
         this.mLayout = mLayout;
@@ -61,14 +59,11 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(mLayout);
+
         mCount = (TextView) findViewById(R.id.test_count);
         mInfoTitle = (TextView) findViewById(R.id.test_info_title);
         mInfo = (TextView) findViewById(R.id.test_info);
-
-        setContentView(R.layout.activity_test);
-        ViewStub stub = (ViewStub) findViewById(R.id.test_layout_stub);
-        stub.setLayoutResource(mLayout);
-        mView = stub.inflate();
 
         Bundle bundle = getIntent().getExtras();
         int tmp = bundle.getInt(TestParametersFragment.TEST_SELECTED_QUANTITY);
@@ -158,8 +153,9 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
     @Override
     public void onBackPressed() {
+        View view = findViewById(R.id.test_container);
         Snackbar
-                .make(mView, R.string.test_back_message, Snackbar.LENGTH_LONG)
+                .make(view, R.string.test_back_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.positive_button_continue, v -> {
                     results.remove(currentItemIndex);
                     finishTest();

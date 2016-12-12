@@ -3,29 +3,30 @@
   ~ Copyright (c) Frog Development 2015.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/test_container"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
               tools:context=".test.TestSelectActivity">
 
     <TextView
         android:id="@+id/test_count"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:textSize="15sp"/>
 
     <ScrollView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <TextView
             android:id="@+id/test_select_to_find"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="40sp"/>
@@ -33,13 +34,13 @@
     </ScrollView>
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@android:color/darker_gray"/>
 
     <LinearLayout
         android:id="@+id/test_select_answers"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
     </LinearLayout>
