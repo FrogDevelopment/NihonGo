@@ -47,13 +47,13 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 public class ReviewParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
     private static final int LOADER_ID = 700;
-    public static final String REVIEW_IS_JAPANESE = "review_isJapanese";
-    public static final String REVIEW_EXCLUDE_LEARNED = "review_excludeLearned";
-    public static final String REVIEW_ONLY_FAVORITE = "onlyFavorite";
-    public static final String REVIEW_SELECTED_SORT = "selected_sort";
-    public static final String REVIEW_SELECTED_QUANTITY = "selected_quantity";
-    public static final String REVIEW_TAGS = "review_tags";
-    public static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
+    static final String REVIEW_IS_JAPANESE = "review_is_japanese";
+    static final String REVIEW_EXCLUDE_LEARNED = "review_exclude_learned";
+    static final String REVIEW_ONLY_FAVORITE = "review_only_favorite";
+    static final String REVIEW_SELECTED_SORT = "review_selected_sort";
+    static final String REVIEW_SELECTED_QUANTITY = "review_selected_quantity";
+    static final String REVIEW_TAGS = "review_tags";
+    static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
 
     private Switch mSwitchLanguageView;
     private Switch mSwitchLearned;

@@ -11,14 +11,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,36 +27,19 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
 import fr.frogdevelopment.nihongo.R;
 
 public class TestResultActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.test_result_quantity)
-    TextView mQuantity;
-
-    @BindView(R.id.test_result_list)
-    ListView mListView;
+    private ListView mListView;
 
     private ResultAdapter adapter;
 
-    @OnClick(R.id.test_result_ok)
-    void back() {
+    @Override
+    public void onBackPressed() {
         NavUtils.navigateUpFromSameTask(this);
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
-    @Override
-    public void onBackPressed() {
-        back();
     }
 
     @Override
@@ -64,14 +48,12 @@ public class TestResultActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_test_result);
 
-        ButterKnife.bind(this);
+        Switch quantitySwitch = (Switch) findViewById(R.id.test_result_quantity_switch);
+        quantitySwitch.setOnCheckedChangeListener((compoundButton, b) -> adapter.getFilter().filter(Boolean.toString(b)));
 
-        // Show the Up button in the action bar.
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setTitle(R.string.test_results_title);
-        }
+        TextView mQuantity = (TextView) findViewById(R.id.test_result_quantity);
+        mListView = (ListView) findViewById(R.id.test_result_list);
+        mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
 
         List<Result> results = getIntent().getParcelableArrayListExtra("results");
         adapter = new ResultAdapter(this, results);
@@ -80,15 +62,12 @@ public class TestResultActivity extends AppCompatActivity {
         int successCounter = getIntent().getIntExtra("successCounter", 0);
         int quantity = getIntent().getIntExtra("quantity", 0);
         mQuantity.setText(successCounter + "/" + quantity);
+
+        Button buttonOK = (Button) findViewById(R.id.test_result_ok);
+        buttonOK.setOnClickListener(v -> onBackPressed());
     }
 
-    @OnCheckedChanged(R.id.test_result_quantity_switch)
-    void onChecked(boolean checked) {
-        adapter.getFilter().filter(Boolean.toString(checked));
-    }
-
-    @OnItemClick(R.id.test_result_list)
-    void onItemClick(int position) {
+    private void onItemClick(int position) {
         mListView.setItemChecked(position, true);
         Result item = adapter.getItem(position);
         new AlertDialog.Builder(this)
@@ -98,7 +77,7 @@ public class TestResultActivity extends AppCompatActivity {
                 .show();
     }
 
-    class ResultAdapter extends ArrayAdapter<Result> implements Filterable {
+    private class ResultAdapter extends ArrayAdapter<Result> implements Filterable {
 
         private final Filter mFilter = new SuccessFilter();
 
@@ -149,16 +128,15 @@ public class TestResultActivity extends AppCompatActivity {
             return view;
         }
 
-        class ResultHolder {
-            @BindView(R.id.dico_test_test)
-            TextView test;
-            @BindView(R.id.dico_test_answer)
-            TextView answer;
-            @BindView(R.id.dico_test_ratio)
-            TextView ratio;
+        private class ResultHolder {
+            private final TextView test;
+            private final TextView answer;
+            private final TextView ratio;
 
-            public ResultHolder(View view) {
-                ButterKnife.bind(this, view);
+            private ResultHolder(View view) {
+                test = (TextView) view.findViewById(R.id.dico_test_test);
+                answer = (TextView) view.findViewById(R.id.dico_test_answer);
+                ratio = (TextView) view.findViewById(R.id.dico_test_ratio);
             }
         }
 

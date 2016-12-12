@@ -55,7 +55,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
@@ -87,7 +86,6 @@ public class LessonsFragment extends ListFragment {
 
     private Set<String> lessonsDownloaded;
     final private Map<String, Lesson> selectedLessons = new HashMap<>();
-    private Unbinder unbinder;
 
     public LessonsFragment() {
     }
@@ -121,13 +119,6 @@ public class LessonsFragment extends ListFragment {
 
         return rootView;
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

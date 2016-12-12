@@ -48,11 +48,15 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
     private static final int LOADER_ID = 700;
 
-    static final String TYPE_TEST = "test_isJapanese";
-    static final String QUANTITY = "test_count";
-    static final String NB_ANSWER = "test_nbAnswer";
-    static final String ONLY_LEARNED = "test_onlyLearned";
-    static final String DISPLAY_KANJI = "test_isDisplayKanji";
+    static final String TEST_IS_JAPANESE = "test_is_japanese";
+    static final String TEST_TYPE = "test_type";
+    static final String TEST_SELECTED_QUANTITY = "test_count";
+    static final String TEST_SELECTED_NB_ANSWER = "test_nbAnswer";
+    static final String TEST_ONLY_LEARNED = "test_only_learned";
+    static final String TEST_DISPLAY_KANJI = "test_display_kanji";
+    static final String TEST_TAGS = "test_tags";
+    private static final String TEST_METHOD = "test_method";
+    private static final String TEST_KEEP_CONFIG = "test_keep_config";
 
     private View mNbAnswers;
     private Spinner mNbAnswersSpinner;
@@ -142,35 +146,35 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         if (savedInstanceState != null) {
-            mKanjiSwitch.setChecked(savedInstanceState.getBoolean("test_isJapanese"));
-            mLearnedSwitch.setChecked(savedInstanceState.getBoolean("test_excludeLearned"));
-            selectedType = savedInstanceState.getInt("test_type");
+            mKanjiSwitch.setChecked(savedInstanceState.getBoolean(TEST_IS_JAPANESE));
+            mLearnedSwitch.setChecked(savedInstanceState.getBoolean(TEST_ONLY_LEARNED));
+            selectedType = savedInstanceState.getInt(TEST_TYPE);
             mTypeSpinner.setSelection(selectedType);
-            selectedQuantity = savedInstanceState.getInt("test_quantity");
+            selectedQuantity = savedInstanceState.getInt(TEST_SELECTED_QUANTITY);
             mQuantitySpinner.setSelection(selectedQuantity);
-            selectedMethod = savedInstanceState.getInt("test_method");
+            selectedMethod = savedInstanceState.getInt(TEST_METHOD);
             mMethodSpinner.setSelection(selectedMethod);
-            selectedNbAnswers = savedInstanceState.getInt("test_nbAnswers");
+            selectedNbAnswers = savedInstanceState.getInt(TEST_SELECTED_NB_ANSWER);
             mNbAnswersSpinner.setSelection(selectedNbAnswers);
-            mSelectedTags = savedInstanceState.getStringArray("test_tags");
+            mSelectedTags = savedInstanceState.getStringArray(TEST_TAGS);
             mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
 
             checkStartButtonEnabled();
         } else {
             PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
-            if (preferencesHelper.getBoolean("test_keepConfig")) {
+            if (preferencesHelper.getBoolean(TEST_KEEP_CONFIG)) {
                 mSwitchKeepView.setChecked(true);
-                mKanjiSwitch.setChecked(preferencesHelper.getBoolean("test_isJapanese"));
-                mLearnedSwitch.setChecked(preferencesHelper.getBoolean("test_excludeLearned"));
-                selectedType = preferencesHelper.getInt("test_type");
+                mKanjiSwitch.setChecked(preferencesHelper.getBoolean(TEST_IS_JAPANESE));
+                mLearnedSwitch.setChecked(preferencesHelper.getBoolean(TEST_ONLY_LEARNED));
+                selectedType = preferencesHelper.getInt(TEST_TYPE);
                 mTypeSpinner.setSelection(selectedType);
-                selectedQuantity = preferencesHelper.getInt("test_quantity");
+                selectedQuantity = preferencesHelper.getInt(TEST_SELECTED_QUANTITY);
                 mQuantitySpinner.setSelection(selectedQuantity);
-                selectedMethod = preferencesHelper.getInt("test_method");
+                selectedMethod = preferencesHelper.getInt(TEST_METHOD);
                 mMethodSpinner.setSelection(selectedMethod);
-                selectedNbAnswers = preferencesHelper.getInt("test_nbAnswers");
+                selectedNbAnswers = preferencesHelper.getInt(TEST_SELECTED_NB_ANSWER);
                 mNbAnswersSpinner.setSelection(selectedNbAnswers);
-                String test_tags = preferencesHelper.getString("test_tags");
+                String test_tags = preferencesHelper.getString(TEST_TAGS);
                 mSelectedTags = test_tags.split(", ");
                 mTagSelection.setText(test_tags);
 
@@ -191,23 +195,23 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     private void saveConfigIfNeed() {
         PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
         if (mSwitchKeepView.isChecked()) {
-            preferencesHelper.saveBoolean("test_keepConfig", true);
-            preferencesHelper.saveBoolean("test_isJapanese", mKanjiSwitch.isChecked());
-            preferencesHelper.saveBoolean("test_excludeLearned", mLearnedSwitch.isChecked());
-            preferencesHelper.saveInt("test_type", selectedType);
-            preferencesHelper.saveInt("test_quantity", selectedQuantity);
-            preferencesHelper.saveInt("test_method", selectedMethod);
-            preferencesHelper.saveInt("test_nbAnswers", selectedNbAnswers);
-            preferencesHelper.saveString("test_tags", StringUtils.join(mSelectedTags, ", "));
+            preferencesHelper.saveBoolean(TEST_KEEP_CONFIG, true);
+            preferencesHelper.saveBoolean(TEST_IS_JAPANESE, mKanjiSwitch.isChecked());
+            preferencesHelper.saveBoolean(TEST_ONLY_LEARNED, mLearnedSwitch.isChecked());
+            preferencesHelper.saveInt(TEST_TYPE, selectedType);
+            preferencesHelper.saveInt(TEST_SELECTED_QUANTITY, selectedQuantity);
+            preferencesHelper.saveInt(TEST_METHOD, selectedMethod);
+            preferencesHelper.saveInt(TEST_SELECTED_NB_ANSWER, selectedNbAnswers);
+            preferencesHelper.saveString(TEST_TAGS, StringUtils.join(mSelectedTags, ", "));
         } else {
-            preferencesHelper.saveBoolean("test_keepConfig", false);
-            preferencesHelper.remove("test_isJapanese");
-            preferencesHelper.remove("test_excludeLearned");
-            preferencesHelper.remove("test_type");
-            preferencesHelper.remove("test_quantity");
-            preferencesHelper.remove("test_method");
-            preferencesHelper.remove("test_nbAnswers");
-            preferencesHelper.remove("test_tags");
+            preferencesHelper.saveBoolean(TEST_KEEP_CONFIG, false);
+            preferencesHelper.remove(TEST_IS_JAPANESE);
+            preferencesHelper.remove(TEST_ONLY_LEARNED);
+            preferencesHelper.remove(TEST_TYPE);
+            preferencesHelper.remove(TEST_SELECTED_QUANTITY);
+            preferencesHelper.remove(TEST_METHOD);
+            preferencesHelper.remove(TEST_SELECTED_NB_ANSWER);
+            preferencesHelper.remove(TEST_TAGS);
         }
     }
 
@@ -310,13 +314,13 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     }
 
     private void populateUiSelection(Bundle options) {
-        options.putInt(TYPE_TEST, selectedType);
-        options.putInt(QUANTITY, selectedQuantity);
-        options.putInt(NB_ANSWER, selectedNbAnswers);
-        options.putBoolean(ONLY_LEARNED, mLearnedSwitch.isChecked());
-        options.putBoolean(DISPLAY_KANJI, mKanjiSwitch.isChecked());
-        options.putStringArray("test_tags", mSelectedTags);
-        options.putInt("test_method", selectedMethod);
+        options.putInt(TEST_IS_JAPANESE, selectedType);
+        options.putInt(TEST_SELECTED_QUANTITY, selectedQuantity);
+        options.putInt(TEST_SELECTED_NB_ANSWER, selectedNbAnswers);
+        options.putBoolean(TEST_ONLY_LEARNED, mLearnedSwitch.isChecked());
+        options.putBoolean(TEST_DISPLAY_KANJI, mKanjiSwitch.isChecked());
+        options.putStringArray(TEST_TAGS, mSelectedTags);
+        options.putInt(TEST_METHOD, selectedMethod);
 
         saveConfigIfNeed();
     }

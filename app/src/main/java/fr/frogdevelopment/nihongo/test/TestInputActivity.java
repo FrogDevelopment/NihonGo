@@ -5,9 +5,11 @@
 package fr.frogdevelopment.nihongo.test;
 
 import android.app.AlertDialog;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -16,28 +18,31 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Random;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 
 public class TestInputActivity extends TestAbstractActivity {
 
-    @BindView(R.id.test_input_scroll)
-    ScrollView mScrollView;
-
-    @BindView(R.id.test_input_to_find)
-    TextView toFindView;
-
-    @BindView(R.id.test_input_answer)
-    EditText answerView;
+    private ScrollView mScrollView;
+    private TextView toFindView;
+    private EditText answerView;
 
     public TestInputActivity() {
         super(R.layout.activity_test_input);
     }
 
-    @OnClick(R.id.test_input_validate_button)
-    void onClickValidate(View v) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mScrollView = (ScrollView) findViewById(R.id.test_input_scroll);
+        toFindView = (TextView) findViewById(R.id.test_input_to_find);
+        answerView = (EditText) findViewById(R.id.test_input_answer);
+        Button validateButton = (Button) findViewById(R.id.test_input_validate_button);
+        validateButton.setOnClickListener(this::onClickValidate);
+    }
+
+    private void onClickValidate(View v) {
         Editable answer = answerView.getText();
         if (TextUtils.isEmpty(answer)) {
             new AlertDialog.Builder(this)
