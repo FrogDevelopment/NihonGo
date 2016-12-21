@@ -2,53 +2,45 @@
 <!--
   ~ Copyright (c) Frog Development 2015.
   -->
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
     android:id="@+id/content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".dico.details.DetailsActivity">
 
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/test_result_quantity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:text="10/15"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <TextView
-            android:id="@+id/test_result_quantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="10/15"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <Switch
+        android:id="@+id/test_result_quantity_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:padding="10dp"
+        android:text="Show only failed"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textOff="@string/no"
+        android:textOn="@string/yes"/>
 
-        <Switch
-            android:id="@+id/test_result_quantity_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:padding="10dp"
-            android:text="Show only failed"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textOff="@string/no"
-            android:textOn="@string/yes"/>
+    <ListView
+        android:id="@+id/test_result_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:choiceMode="singleChoice"/>
 
-        <ListView
-            android:id="@+id/test_result_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:choiceMode="singleChoice"/>
+    <Button
+        android:id="@+id/test_result_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0dp"
+        android:text="@android:string/ok"/>
 
-        <Button
-            android:id="@+id/test_result_ok"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="0dp"
-            android:text="@android:string/ok"/>
-
-    </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>
