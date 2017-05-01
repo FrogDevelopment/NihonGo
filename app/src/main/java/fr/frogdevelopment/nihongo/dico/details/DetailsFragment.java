@@ -23,123 +23,106 @@ import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class DetailsFragment extends Fragment {
 
-    interface OnFragmentInteractionListener {
-        void update(int position, Item item);
-        void delete(Item item);
-    }
+	interface OnFragmentInteractionListener {
+//		void update(int position, Item item);
+	}
 
-    private OnFragmentInteractionListener mListener;
+	private OnFragmentInteractionListener mListener;
 
-    private int position;
-    private Item mItem;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// The last two arguments ensure LayoutParams are inflated properly.
+		View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated properly.
-        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+		setHasOptionsMenu(true);
 
-        setHasOptionsMenu(true);
+		populateView(rootView);
 
-        populateView(rootView);
+		return rootView;
+	}
 
-        return rootView;
-    }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.details, menu);
+	}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.details, menu);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.details_help) {
+			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_delete:
-                mListener.delete(mItem);
-                break;
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		try {
+			mListener = (OnFragmentInteractionListener) context;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(context.toString() + " must implement " + OnFragmentInteractionListener.class.getSimpleName());
+		}
+	}
 
-            case R.id.action_update:
-                mListener.update(position, mItem);
-                break;
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
+	}
 
-            case R.id.details_help:
-                HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
-                break;
+	private void populateView(View rootView) {
+		TextView mInputView = (TextView) rootView.findViewById(R.id.details_word_input);
+		TextView mKanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
+		TextView mKanaView = (TextView) rootView.findViewById(R.id.details_word_kana);
+		TextView mDetailsTitleView = (TextView) rootView.findViewById(R.id.details_word_info_title);
+		TextView mDetailsView = (TextView) rootView.findViewById(R.id.details_word_info);
+		TextView mExampleTitleView = (TextView) rootView.findViewById(R.id.details_word_example_title);
+		TextView mExampleView = (TextView) rootView.findViewById(R.id.details_word_example);
+		TextView mTagsView = (TextView) rootView.findViewById(R.id.details_word_tags);
+		TextView mRatio = (TextView) rootView.findViewById(R.id.details_word_ratio);
 
-            default:
-                return false;
-        }
+		Bundle args = getArguments();
 
-        return true;
-    }
+		Item item = args.getParcelable("item");
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (OnFragmentInteractionListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + OnFragmentInteractionListener.class.getSimpleName());
-        }
-    }
+		if (item == null) {
+			return;
+		}
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+		mInputView.setText(item.input);
 
-    private void populateView(View rootView) {
-        TextView mInputView = (TextView) rootView.findViewById(R.id.details_word_input);
-        TextView mKanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
-        TextView mKanaView = (TextView) rootView.findViewById(R.id.details_word_kana);
-        TextView mDetailsTitleView = (TextView) rootView.findViewById(R.id.details_word_info_title);
-        TextView mDetailsView = (TextView) rootView.findViewById(R.id.details_word_info);
-        TextView mExampleTitleView = (TextView) rootView.findViewById(R.id.details_word_example_title);
-        TextView mExampleView = (TextView) rootView.findViewById(R.id.details_word_example);
-        TextView mTagsView = (TextView) rootView.findViewById(R.id.details_word_tags);
-        TextView mRatio = (TextView) rootView.findViewById(R.id.details_word_ratio);
+		if (StringUtils.isNoneEmpty(item.kanji)) {
+			mKanjiView.setText(item.kanji);
+			mKanjiView.setVisibility(View.VISIBLE);
+		}
 
-        Bundle args = getArguments();
+		if (StringUtils.isNoneEmpty(item.kana)) {
+			mKanaView.setText(item.kana);
+			mKanaView.setVisibility(View.VISIBLE);
+		}
 
-        position = args.getInt("position");
-        mItem = args.getParcelable("item");
+		mDetailsView.setText(item.details);
+		if (StringUtils.isNoneEmpty(item.details)) {
+			mDetailsView.setText(item.details);
+			mDetailsView.setVisibility(View.VISIBLE);
+			mDetailsTitleView.setVisibility(View.VISIBLE);
+		}
 
-        if (mItem == null) {
-            return;
-        }
+		mExampleView.setText(item.example);
+		if (StringUtils.isNoneEmpty(item.example)) {
+			mExampleView.setText(item.example);
+			mExampleView.setVisibility(View.VISIBLE);
+			mExampleTitleView.setVisibility(View.VISIBLE);
+		}
 
-        mInputView.setText(mItem.input);
+		if (StringUtils.isNoneEmpty(item.tags)) {
+			mTagsView.setText(item.tags);
+			mTagsView.setVisibility(View.VISIBLE);
+		}
 
-        if (StringUtils.isNoneEmpty(mItem.kanji)) {
-            mKanjiView.setText(mItem.kanji);
-            mKanjiView.setVisibility(View.VISIBLE);
-        }
-
-        if (StringUtils.isNoneEmpty(mItem.kana)) {
-            mKanaView.setText(mItem.kana);
-            mKanaView.setVisibility(View.VISIBLE);
-        }
-
-        mDetailsView.setText(mItem.details);
-        if (StringUtils.isNoneEmpty(mItem.details)) {
-            mDetailsView.setText(mItem.details);
-            mDetailsView.setVisibility(View.VISIBLE);
-            mDetailsTitleView.setVisibility(View.VISIBLE);
-        }
-
-        mExampleView.setText(mItem.example);
-        if (StringUtils.isNoneEmpty(mItem.example)) {
-            mExampleView.setText(mItem.example);
-            mExampleView.setVisibility(View.VISIBLE);
-            mExampleTitleView.setVisibility(View.VISIBLE);
-        }
-
-        if (StringUtils.isNoneEmpty(mItem.tags)) {
-            mTagsView.setText(mItem.tags);
-            mTagsView.setVisibility(View.VISIBLE);
-        }
-
-        mRatio.setText(mItem.success + "/" + mItem.failed);
-    }
+		mRatio.setText(item.success + "/" + item.failed);
+	}
 
 }
