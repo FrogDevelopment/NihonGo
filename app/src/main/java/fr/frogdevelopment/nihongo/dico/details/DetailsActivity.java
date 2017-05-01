@@ -16,10 +16,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener {
+public class DetailsActivity extends AppCompatActivity {
 
 	public static final int RC_NEW_ITEM    = 777;
 	public static final int RC_UPDATE_ITEM = 666;
@@ -57,6 +57,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
 		setContentView(R.layout.activity_details);
 
+		FloatingActionMenu fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
+
 		Bundle args = getIntent().getExtras();
 		mType = (Type) args.getSerializable("type");
 		mItems = args.getParcelableArrayList("items");
@@ -72,12 +74,11 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 			@Override
 			public void onPageSelected(int position) {
 				mCurrentPosition = position;
-//                mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-//                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
 			}
 
 			@Override
 			public void onPageScrollStateChanged(int state) {
+				fam.close(true);
 			}
 		});
 		final int position = args.getInt("position");
@@ -98,12 +99,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		fabNew.setOnClickListener(v -> newItem());
 
 		FloatingActionButton fabDuplicate = (FloatingActionButton) findViewById(R.id.fab_duplicate);
-		fabDuplicate.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-			}
-		});
+		fabDuplicate.setOnClickListener(v -> duplicate());
 
 		FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fab_delete);
 		fabDelete.setOnClickListener(v -> delete());
@@ -159,11 +155,11 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 	}
 
 	private void newItem() {
-		Intent intent = new Intent(this, InputActivity.class);
-		intent.putExtra("position", mCurrentPosition);
-
-		startActivityForResult(intent, RC_NEW_ITEM);
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//		Intent intent = new Intent(this, InputActivity.class);
+//		intent.putExtra("position", mCurrentPosition);
+//
+//		startActivityForResult(intent, RC_NEW_ITEM);
+//		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
 	private void update() {
@@ -176,30 +172,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
-//    private void setFavorite() {
-//        mCurrentItem.switchFavorite();
-//        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-//
-//        final ContentValues values = new ContentValues();
-//        values.put(DicoContract.FAVORITE, mCurrentItem.favorite);
-//        updateItem(values);
-//    }
+	private void duplicate() {
 
-//    public void setLearned() {
-//        mCurrentItem.switchLearned();
-//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
-//
-//        final ContentValues values = new ContentValues();
-//        values.put(DicoContract.LEARNED, mCurrentItem.learned);
-//        updateItem(values);
-//    }
-
-//	private void updateItem(ContentValues values) {
-//		final String where = DicoContract._ID + "=?";
-//		final String[] selectionArgs = {mCurrentItem.id};
-//
-//		getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
-//	}
+	}
 
 	// ************************************************************* \\
 	private class DetailsAdapter extends FragmentStatePagerAdapter {

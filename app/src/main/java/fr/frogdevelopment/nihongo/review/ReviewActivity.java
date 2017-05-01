@@ -101,8 +101,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
                     }
                 }
 
-                mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+//                mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+//                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
             }
 
             @Override
@@ -175,8 +175,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         data.close();
 
         mCurrentItem = adapter.getItemAt(0);
-        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+//        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
     }
 
     @Override
@@ -194,12 +194,12 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private void onItemLearned() {
-        mCurrentItem.switchLearned();
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.LEARNED, mCurrentItem.learned);
-
-        updateItem(values);
-        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+//        mCurrentItem.switchLearned();
+//        final ContentValues values = new ContentValues();
+//        values.put(DicoContract.LEARNED, mCurrentItem.learned);
+//
+//        updateItem(values);
+//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
     }
 
     private void updateItem(ContentValues values) {

@@ -5,7 +5,7 @@
 package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.Fragment;
-import android.content.Context;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,26 +13,40 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
+import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class DetailsFragment extends Fragment {
 
-	interface OnFragmentInteractionListener {
-//		void update(int position, Item item);
-	}
+	private Item mItem;
 
-	private OnFragmentInteractionListener mListener;
+	private ImageView mFavorite;
+	private ImageView mRate0;
+	private ImageView mRate1;
+	private ImageView mRate2;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// The last two arguments ensure LayoutParams are inflated properly.
 		View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+
+		mRate0 = (ImageView) rootView.findViewById(R.id.rate_0);
+		mRate0.setOnClickListener(v -> setRate(0));
+		mRate1 = (ImageView) rootView.findViewById(R.id.rate_1);
+		mRate1.setOnClickListener(v -> setRate(1));
+		mRate2 = (ImageView) rootView.findViewById(R.id.rate_2);
+		mRate2.setOnClickListener(v -> setRate(2));
+
+		mFavorite = (ImageView) rootView.findViewById(R.id.details_favorite);
+		mFavorite.setOnClickListener(v -> setFavorite());
 
 		setHasOptionsMenu(true);
 
@@ -56,22 +70,6 @@ public class DetailsFragment extends Fragment {
 		}
 	}
 
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		try {
-			mListener = (OnFragmentInteractionListener) context;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(context.toString() + " must implement " + OnFragmentInteractionListener.class.getSimpleName());
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mListener = null;
-	}
-
 	private void populateView(View rootView) {
 		TextView mInputView = (TextView) rootView.findViewById(R.id.details_word_input);
 		TextView mKanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
@@ -85,44 +83,103 @@ public class DetailsFragment extends Fragment {
 
 		Bundle args = getArguments();
 
-		Item item = args.getParcelable("item");
+		mItem = args.getParcelable("item");
 
-		if (item == null) {
+		if (mItem == null) {
 			return;
 		}
 
-		mInputView.setText(item.input);
+		mInputView.setText(mItem.input);
 
-		if (StringUtils.isNoneEmpty(item.kanji)) {
-			mKanjiView.setText(item.kanji);
+		if (StringUtils.isNoneEmpty(mItem.kanji)) {
+			mKanjiView.setText(mItem.kanji);
 			mKanjiView.setVisibility(View.VISIBLE);
 		}
 
-		if (StringUtils.isNoneEmpty(item.kana)) {
-			mKanaView.setText(item.kana);
+		if (StringUtils.isNoneEmpty(mItem.kana)) {
+			mKanaView.setText(mItem.kana);
 			mKanaView.setVisibility(View.VISIBLE);
 		}
 
-		mDetailsView.setText(item.details);
-		if (StringUtils.isNoneEmpty(item.details)) {
-			mDetailsView.setText(item.details);
+		mDetailsView.setText(mItem.details);
+		if (StringUtils.isNoneEmpty(mItem.details)) {
+			mDetailsView.setText(mItem.details);
 			mDetailsView.setVisibility(View.VISIBLE);
 			mDetailsTitleView.setVisibility(View.VISIBLE);
 		}
 
-		mExampleView.setText(item.example);
-		if (StringUtils.isNoneEmpty(item.example)) {
-			mExampleView.setText(item.example);
+		mExampleView.setText(mItem.example);
+		if (StringUtils.isNoneEmpty(mItem.example)) {
+			mExampleView.setText(mItem.example);
 			mExampleView.setVisibility(View.VISIBLE);
 			mExampleTitleView.setVisibility(View.VISIBLE);
 		}
 
-		if (StringUtils.isNoneEmpty(item.tags)) {
-			mTagsView.setText(item.tags);
+		if (StringUtils.isNoneEmpty(mItem.tags)) {
+			mTagsView.setText(mItem.tags);
 			mTagsView.setVisibility(View.VISIBLE);
 		}
 
-		mRatio.setText(item.success + "/" + item.failed);
+		int total = mItem.success + mItem.failed;
+		mRatio.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
+
+		handleRate(mItem.learned);
+		handleFavorite();
+	}
+
+	private void handleFavorite() {
+		mFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+	}
+
+	private void handleRate(int rate) {
+		switch (rate) {
+
+			case 1:
+				mRate0.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate1.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
+
+				break;
+			case 2:
+				mRate0.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate1.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate2.setImageResource(R.drawable.ic_star_black_48dp);
+
+				break;
+
+			default:
+			case 0:
+				mRate0.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate1.setImageResource(R.drawable.ic_star_border_black_24dp);
+				mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
+
+				break;
+		}
+	}
+
+	private void setRate(int rate) {
+		mItem.learned = rate;
+		handleRate(rate);
+
+		final ContentValues values = new ContentValues();
+		values.put(DicoContract.LEARNED, mItem.learned);
+		updateItem(values);
+	}
+
+	private void setFavorite() {
+		mItem.switchFavorite();
+		handleFavorite();
+
+		final ContentValues values = new ContentValues();
+		values.put(DicoContract.FAVORITE, mItem.favorite);
+		updateItem(values);
+	}
+
+	private void updateItem(ContentValues values) {
+		final String where = DicoContract._ID + "=?";
+		final String[] selectionArgs = {mItem.id};
+
+		getActivity().getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
 	}
 
 }

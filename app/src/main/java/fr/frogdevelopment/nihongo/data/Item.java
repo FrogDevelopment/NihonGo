@@ -12,107 +12,99 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 
 public class Item implements Row, Parcelable {
 
-    public final String id;
-    public String input;
-    public String sort_letter;
-    public String kanji;
-    public String kana;
-    public String tags;
-    public String details;
-    public String example;
-    public String favorite;
-    public String learned;
-    public int success;
-    public int failed;
+	public final String id;
+	public       String input;
+	public       String sort_letter;
+	public       String kanji;
+	public       String kana;
+	public       String tags;
+	public       String details;
+	public       String example;
+	public       String favorite;
+	public       int    learned;
+	public       int    success;
+	public       int    failed;
 
-    public boolean isFavorite() {
-        return "1".equals(favorite);
-    }
+	public boolean isFavorite() {
+		return "1".equals(favorite);
+	}
 
-    public void switchFavorite() {
-        favorite = isFavorite() ? "0" : "1";
-    }
+	public void switchFavorite() {
+		favorite = isFavorite() ? "0" : "1";
+	}
 
-    public boolean isLearned() {
-        return "1".equals(learned);
-    }
+	public Item(Cursor cursor) {
+		id = cursor.getString(DicoContract.INDEX_ID);
+		input = cursor.getString(DicoContract.INDEX_INPUT);
+		sort_letter = cursor.getString(DicoContract.INDEX_SORT_LETTER);
+		kanji = cursor.getString(DicoContract.INDEX_KANJI);
+		kana = cursor.getString(DicoContract.INDEX_KANA);
+		tags = cursor.getString(DicoContract.INDEX_TAGS);
+		details = cursor.getString(DicoContract.INDEX_DETAILS);
+		example = cursor.getString(DicoContract.INDEX_EXAMPLE);
+		favorite = cursor.getString(DicoContract.INDEX_FAVORITE);
+		learned = cursor.getInt(DicoContract.INDEX_LEARNED);
+		success = cursor.getInt(DicoContract.INDEX_SUCCESS);
+		failed = cursor.getInt(DicoContract.INDEX_FAILED);
+	}
 
-    public void switchLearned() {
-        learned = isLearned() ? "0" : "1";
-    }
+	public int describeContents() {
+		return 0;
+	}
 
-    public Item(Cursor cursor) {
-        id = cursor.getString(DicoContract.INDEX_ID);
-        input = cursor.getString(DicoContract.INDEX_INPUT);
-        sort_letter = cursor.getString(DicoContract.INDEX_SORT_LETTER);
-        kanji = cursor.getString(DicoContract.INDEX_KANJI);
-        kana = cursor.getString(DicoContract.INDEX_KANA);
-        tags = cursor.getString(DicoContract.INDEX_TAGS);
-        details = cursor.getString(DicoContract.INDEX_DETAILS);
-        example = cursor.getString(DicoContract.INDEX_EXAMPLE);
-        favorite = cursor.getString(DicoContract.INDEX_FAVORITE);
-        learned = cursor.getString(DicoContract.INDEX_LEARNED);
-        success = cursor.getInt(DicoContract.INDEX_SUCCESS);
-        failed = cursor.getInt(DicoContract.INDEX_FAILED);
-    }
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(id);
+		out.writeString(input);
+		out.writeString(sort_letter);
+		out.writeString(kanji);
+		out.writeString(kana);
+		out.writeString(details);
+		out.writeString(example);
+		out.writeString(tags);
+		out.writeString(favorite);
+		out.writeInt(learned);
+		out.writeInt(success);
+		out.writeInt(failed);
+	}
 
-    public int describeContents() {
-        return 0;
-    }
+	public static final Creator<Item> CREATOR = new Creator<Item>() {
+		public Item createFromParcel(Parcel in) {
+			return new Item(in);
+		}
 
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(id);
-        out.writeString(input);
-        out.writeString(sort_letter);
-        out.writeString(kanji);
-        out.writeString(kana);
-        out.writeString(details);
-        out.writeString(example);
-        out.writeString(tags);
-        out.writeString(favorite);
-        out.writeString(learned);
-        out.writeInt(success);
-        out.writeInt(failed);
-    }
+		public Item[] newArray(int size) {
+			return new Item[size];
+		}
+	};
 
-    public static final Creator<Item> CREATOR = new Creator<Item>() {
-        public Item createFromParcel(Parcel in) {
-            return new Item(in);
-        }
+	private Item(Parcel in) {
+		id = in.readString();
+		input = in.readString();
+		sort_letter = in.readString();
+		kanji = in.readString();
+		kana = in.readString();
+		details = in.readString();
+		example = in.readString();
+		tags = in.readString();
+		favorite = in.readString();
+		learned = in.readInt();
+		success = in.readInt();
+		failed = in.readInt();
+	}
 
-        public Item[] newArray(int size) {
-            return new Item[size];
-        }
-    };
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-    private Item(Parcel in) {
-        id = in.readString();
-        input = in.readString();
-        sort_letter = in.readString();
-        kanji = in.readString();
-        kana = in.readString();
-        details = in.readString();
-        example = in.readString();
-        tags = in.readString();
-        favorite = in.readString();
-        learned = in.readString();
-        success = in.readInt();
-        failed = in.readInt();
-    }
+		Item item = (Item) o;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+		return id.equals(item.id);
+	}
 
-        Item item = (Item) o;
-
-        return id.equals(item.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 
 }
