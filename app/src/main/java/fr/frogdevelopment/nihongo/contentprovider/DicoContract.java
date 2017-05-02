@@ -19,7 +19,7 @@ public class DicoContract implements BaseColumns {
     public static final String EXAMPLE = "EXAMPLE";
     public static final String TYPE = "TYPE";
     public static final String TAGS = "TAGS";
-    public static final String FAVORITE = "FAVORITE";
+    public static final String BOOKMARK = "FAVORITE";
     public static final String LEARNED = "LEARNED";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILED = "FAILED";
@@ -32,17 +32,17 @@ public class DicoContract implements BaseColumns {
     public static final int INDEX_TAGS = 5;
     public static final int INDEX_DETAILS = 6;
     public static final int INDEX_EXAMPLE = 7;
-    public static final int INDEX_FAVORITE = 8;
+    public static final int INDEX_BOOKMARK = 8;
     public static final int INDEX_LEARNED = 9;
     public static final int INDEX_SUCCESS = 10;
     public static final int INDEX_FAILED = 11;
 
-    public static final String[] COLUMNS = {_ID, INPUT, SORT_LETTER, KANJI, KANA, TAGS, DETAILS, EXAMPLE, FAVORITE, LEARNED, SUCCESS, FAILED};
+    public static final String[] COLUMNS = {_ID, INPUT, SORT_LETTER, KANJI, KANA, TAGS, DETAILS, EXAMPLE, BOOKMARK, LEARNED, SUCCESS, FAILED};
 
     // Queries
     private static final String SQL_CREATE = String.format(
             "CREATE TABLE %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT NOT NULL, %s TEXT, %s INTEGER NOT NULL DEFAULT 0, %s INTEGER NOT NULL DEFAULT 0, %s INTEGER NOT NULL DEFAULT 0, %s INTEGER NOT NULL DEFAULT 0);",
-            TABLE_NAME, _ID, INPUT, SORT_LETTER, KANJI, KANA, DETAILS, EXAMPLE, TYPE, TAGS, FAVORITE, LEARNED, SUCCESS, FAILED);
+            TABLE_NAME, _ID, INPUT, SORT_LETTER, KANJI, KANA, DETAILS, EXAMPLE, TYPE, TAGS, BOOKMARK, LEARNED, SUCCESS, FAILED);
 
     private static final String SQL_DELETE = String.format("DROP TABLE IF EXISTS %s;", TABLE_NAME);
 

@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:src="@drawable/fab_bookmark_off"
+            android:src="@drawable/ic_bookmark_off"
             app:fabSize="mini"/>
 
         <android.support.design.widget.FloatingActionButton
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:src="@drawable/fab_bookmark_on"
+            android:src="@drawable/ic_bookmark_on"
             app:fabSize="mini"/>
 
         <TextView

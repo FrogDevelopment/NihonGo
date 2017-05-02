@@ -28,7 +28,6 @@ public class DetailsFragment extends Fragment {
 
 	private Item mItem;
 
-	private ImageView mFavorite;
 	private ImageView mRate0;
 	private ImageView mRate1;
 	private ImageView mRate2;
@@ -45,12 +44,10 @@ public class DetailsFragment extends Fragment {
 		mRate2 = (ImageView) rootView.findViewById(R.id.rate_2);
 		mRate2.setOnClickListener(v -> setRate(2));
 
-		mFavorite = (ImageView) rootView.findViewById(R.id.details_favorite);
-		mFavorite.setOnClickListener(v -> setFavorite());
-
-		setHasOptionsMenu(true);
-
 		populateView(rootView);
+
+		// after populateView() as we need to check mItem.isBookmarked()
+		setHasOptionsMenu(true);
 
 		return rootView;
 	}
@@ -58,28 +55,37 @@ public class DetailsFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.details, menu);
+
+		MenuItem bookmarkItem = menu.findItem(R.id.details_menu_bookmark);
+		bookmarkItem.setIcon(mItem.isBookmarked() ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.details_help) {
-			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
-			return true;
-		} else {
-			return false;
+		switch (item.getItemId()) {
+			case R.id.details_menu_bookmark:
+				bookmarkItem();
+				return true;
+
+			case R.id.details_menu_help:
+				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
+				return true;
+
+			default:
+				return false;
 		}
 	}
 
 	private void populateView(View rootView) {
-		TextView mInputView = (TextView) rootView.findViewById(R.id.details_word_input);
-		TextView mKanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
-		TextView mKanaView = (TextView) rootView.findViewById(R.id.details_word_kana);
-		TextView mDetailsTitleView = (TextView) rootView.findViewById(R.id.details_word_info_title);
-		TextView mDetailsView = (TextView) rootView.findViewById(R.id.details_word_info);
-		TextView mExampleTitleView = (TextView) rootView.findViewById(R.id.details_word_example_title);
-		TextView mExampleView = (TextView) rootView.findViewById(R.id.details_word_example);
-		TextView mTagsView = (TextView) rootView.findViewById(R.id.details_word_tags);
-		TextView mRatio = (TextView) rootView.findViewById(R.id.details_word_ratio);
+		TextView inputView = (TextView) rootView.findViewById(R.id.details_word_input);
+		TextView kanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
+		TextView kanaView = (TextView) rootView.findViewById(R.id.details_word_kana);
+		TextView detailsTitleView = (TextView) rootView.findViewById(R.id.details_word_info_title);
+		TextView detailsView = (TextView) rootView.findViewById(R.id.details_word_info);
+		TextView exampleTitleView = (TextView) rootView.findViewById(R.id.details_word_example_title);
+		TextView exampleView = (TextView) rootView.findViewById(R.id.details_word_example);
+		TextView tagsView = (TextView) rootView.findViewById(R.id.details_word_tags);
+		TextView successView = (TextView) rootView.findViewById(R.id.details_word_success);
 
 		Bundle args = getArguments();
 
@@ -89,67 +95,61 @@ public class DetailsFragment extends Fragment {
 			return;
 		}
 
-		mInputView.setText(mItem.input);
+		inputView.setText(mItem.input);
 
-		if (StringUtils.isNoneEmpty(mItem.kanji)) {
-			mKanjiView.setText(mItem.kanji);
-			mKanjiView.setVisibility(View.VISIBLE);
+		if (StringUtils.isNotEmpty(mItem.kanji)) {
+			kanjiView.setText(mItem.kanji);
+			kanjiView.setVisibility(View.VISIBLE);
 		}
 
-		if (StringUtils.isNoneEmpty(mItem.kana)) {
-			mKanaView.setText(mItem.kana);
-			mKanaView.setVisibility(View.VISIBLE);
+		if (StringUtils.isNotEmpty(mItem.kana)) {
+			kanaView.setText(mItem.kana);
 		}
 
-		mDetailsView.setText(mItem.details);
-		if (StringUtils.isNoneEmpty(mItem.details)) {
-			mDetailsView.setText(mItem.details);
-			mDetailsView.setVisibility(View.VISIBLE);
-			mDetailsTitleView.setVisibility(View.VISIBLE);
+		detailsView.setText(mItem.details);
+		if (StringUtils.isNotEmpty(mItem.details)) {
+			detailsView.setText(mItem.details);
+			detailsView.setVisibility(View.VISIBLE);
+			detailsTitleView.setVisibility(View.VISIBLE);
 		}
 
-		mExampleView.setText(mItem.example);
-		if (StringUtils.isNoneEmpty(mItem.example)) {
-			mExampleView.setText(mItem.example);
-			mExampleView.setVisibility(View.VISIBLE);
-			mExampleTitleView.setVisibility(View.VISIBLE);
+		exampleView.setText(mItem.example);
+		if (StringUtils.isNotEmpty(mItem.example)) {
+			exampleView.setText(mItem.example);
+			exampleView.setVisibility(View.VISIBLE);
+			exampleTitleView.setVisibility(View.VISIBLE);
 		}
 
-		if (StringUtils.isNoneEmpty(mItem.tags)) {
-			mTagsView.setText(mItem.tags);
-			mTagsView.setVisibility(View.VISIBLE);
+		if (StringUtils.isNotEmpty(mItem.tags)) {
+			tagsView.setText(getString(R.string.details_tags, mItem.tags));
+			tagsView.setVisibility(View.VISIBLE);
 		}
 
 		int total = mItem.success + mItem.failed;
-		mRatio.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
+		successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
 		handleRate(mItem.learned);
-		handleFavorite();
-	}
-
-	private void handleFavorite() {
-		mFavorite.setImageResource(mItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
 	}
 
 	private void handleRate(int rate) {
 		switch (rate) {
 
 			case 1:
-				mRate0.setImageResource(R.drawable.ic_star_black_48dp);
-				mRate1.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate0.setImageResource(R.drawable.ic_star_black_24dp);
+				mRate1.setImageResource(R.drawable.ic_star_black_24dp);
 				mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
 
 				break;
 			case 2:
-				mRate0.setImageResource(R.drawable.ic_star_black_48dp);
-				mRate1.setImageResource(R.drawable.ic_star_black_48dp);
-				mRate2.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate0.setImageResource(R.drawable.ic_star_black_24dp);
+				mRate1.setImageResource(R.drawable.ic_star_black_24dp);
+				mRate2.setImageResource(R.drawable.ic_star_black_24dp);
 
 				break;
 
 			default:
 			case 0:
-				mRate0.setImageResource(R.drawable.ic_star_black_48dp);
+				mRate0.setImageResource(R.drawable.ic_star_black_24dp);
 				mRate1.setImageResource(R.drawable.ic_star_border_black_24dp);
 				mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
 
@@ -166,12 +166,12 @@ public class DetailsFragment extends Fragment {
 		updateItem(values);
 	}
 
-	private void setFavorite() {
-		mItem.switchFavorite();
-		handleFavorite();
+	private void bookmarkItem() {
+		mItem.switchBookmark();
+		getActivity().invalidateOptionsMenu();
 
 		final ContentValues values = new ContentValues();
-		values.put(DicoContract.FAVORITE, mItem.favorite);
+		values.put(DicoContract.BOOKMARK, mItem.bookmark);
 		updateItem(values);
 	}
 

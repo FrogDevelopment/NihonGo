@@ -101,8 +101,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
                     }
                 }
 
-//                mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-//                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+//                mFabFavorite.setImageResource(mCurrentItem.isBookmarked() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+//                mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
             }
 
             @Override
@@ -145,7 +145,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
         final boolean onlyFavorite = args.getBoolean(ReviewParametersFragment.REVIEW_ONLY_FAVORITE);
         if (onlyFavorite) {
-            selection += " AND FAVORITE = '1'";
+            selection += " AND BOOKMARK = '1'";
         }
 
         String sortOrder;
@@ -175,8 +175,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         data.close();
 
         mCurrentItem = adapter.getItemAt(0);
-//        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
-//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+//        mFabFavorite.setImageResource(mCurrentItem.isBookmarked() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
     }
 
     @Override
@@ -185,12 +185,12 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private void onItemFavorite() {
-        mCurrentItem.switchFavorite();
+        mCurrentItem.switchBookmark();
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.FAVORITE, mCurrentItem.favorite);
+        values.put(DicoContract.BOOKMARK, mCurrentItem.bookmark);
 
         updateItem(values);
-        mFabFavorite.setImageResource(mCurrentItem.isFavorite() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
+        mFabFavorite.setImageResource(mCurrentItem.isBookmarked() ? R.drawable.fab_favorite_on : R.drawable.fab_favorite_off);
     }
 
     private void onItemLearned() {
@@ -199,7 +199,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 //        values.put(DicoContract.LEARNED, mCurrentItem.learned);
 //
 //        updateItem(values);
-//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.fab_bookmark_on : R.drawable.fab_bookmark_off);
+//        mFabLearned.setImageResource(mCurrentItem.isLearned() ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
     }
 
     private void updateItem(ContentValues values) {

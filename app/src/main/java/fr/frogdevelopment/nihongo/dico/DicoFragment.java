@@ -133,7 +133,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
             sortOrder = DicoContract.SORT_LETTER + " ASC";
         } else {
             uri = mType.uri;
-            selection = isFilterByFavorite ? DicoContract.FAVORITE + "=1" : null;
+            selection = isFilterByFavorite ? DicoContract.BOOKMARK + "=1" : null;
             selectionArgs = null;
             sortOrder = (isSortByLetter ? "" : DicoContract.TAGS + ",") + DicoContract.SORT_LETTER + "," + DicoContract.INPUT + " ASC";
         }
