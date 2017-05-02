@@ -89,6 +89,7 @@
     <string name="input_error_kana">Uniquement des Kana (Hiragana ou Katakana) !</string>
     <string name="input_error_kanji">Pas de Kanji!</string>
     <string name="input_save_OK">Données enregistrées</string>
+    <string name="input_duplicated_OK">Données dupliquées</string>
     <string name="input_update_OK">Données mise à jour</string>
     <string name="action_validate">Valider</string>
     <string name="action_cancel">Annuler</string>

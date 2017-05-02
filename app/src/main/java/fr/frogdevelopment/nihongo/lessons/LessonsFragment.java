@@ -213,7 +213,7 @@ public class LessonsFragment extends ListFragment {
 
         if (onPresent) {
             new AlertDialog.Builder(getActivity())
-                    .setIcon(R.drawable.ic_warning_black)
+                    .setIcon(R.drawable.ic_warning)
                     .setTitle(R.string.lesson_already_present)
                     .setMessage(R.string.lesson_continue)
                     .setPositiveButton(getString(R.string.yes), (dialog, which) -> downloadLessons())

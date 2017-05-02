@@ -16,7 +16,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -32,6 +31,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -81,7 +82,6 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
             startActivity(intent);
             getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
-
 
         Bundle arguments = getArguments();
         mType = (Type) arguments.getSerializable("type");
@@ -253,7 +253,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         final int nbSelectedRows = selectedRows.size();
         // Ask the user if they want to delete
         new AlertDialog.Builder(getActivity())
-                .setIcon(R.drawable.ic_warning_black)
+                .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.delete_title)
                 .setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))
                 .setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {

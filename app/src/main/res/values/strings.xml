@@ -103,6 +103,7 @@
     <string name="input_error_kana">Only Kana (Hiragana or Katakana) !</string>
     <string name="input_error_kanji">No Kanji!</string>
     <string name="input_save_OK">Data saved</string>
+    <string name="input_duplicated_OK">Data duplicated</string>
     <string name="input_update_OK">Data updated</string>
     <string name="action_validate">Validate</string>
     <string name="action_cancel">Cancel</string>

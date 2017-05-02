@@ -25,4 +25,22 @@
         <item name="pressedTranslationZ">12dp</item>
         <item name="rippleColor">@android:color/white</item>
     </style>
+
+    <style name="FamStyle">
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="menu_colorNormal">@color/primary_dark</item>
+        <item name="menu_colorPressed">@color/accent_translucent</item>
+        <item name="menu_colorRipple">@color/primary</item>
+    </style>
+
+    <style name="NormalFabStyle">
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="fab_colorNormal">@color/primary_dark</item>
+        <item name="fab_colorPressed">@color/accent_translucent</item>
+        <item name="fab_colorRipple">@color/primary</item>
+    </style>
+
+    <style name="MiniFabStyle" parent="NormalFabStyle">
+        <item name="fab_size">mini</item>
+    </style>
 </resources>

@@ -12,7 +12,7 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 
 public class Item implements Row, Parcelable {
 
-	public final String id;
+	public String id;
 	public String input;
 	public String sort_letter;
 	public String kanji;

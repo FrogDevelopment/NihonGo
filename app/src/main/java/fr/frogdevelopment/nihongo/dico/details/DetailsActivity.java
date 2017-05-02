@@ -7,6 +7,8 @@ package fr.frogdevelopment.nihongo.dico.details;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
@@ -127,12 +130,20 @@ public class DetailsActivity extends AppCompatActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RC_UPDATE_ITEM && resultCode == RESULT_OK) {
+		if (resultCode == RESULT_OK) {
 			int position = data.getIntExtra("position", -1);
 			if (position > -1) {
 				Item item = data.getParcelableExtra("item");
-				mItems.set(position, item);
-				mAdapter.notifyDataSetChanged();
+				switch (requestCode) {
+					case RC_NEW_ITEM:
+						mItems.add(position, item);
+						mAdapter.notifyDataSetChanged();
+						break;
+					case RC_UPDATE_ITEM:
+						mItems.set(position, item);
+						mAdapter.notifyDataSetChanged();
+						break;
+				}
 			}
 		}
 	}
@@ -141,7 +152,7 @@ public class DetailsActivity extends AppCompatActivity {
 	private void delete() {
 		// Ask the user if they want to delete
 		new AlertDialog.Builder(this)
-				.setIcon(R.drawable.ic_warning_black)
+				.setIcon(R.drawable.ic_warning)
 				.setTitle(R.string.delete_title)
 				.setMessage(R.string.delete_detail)
 				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {
@@ -155,11 +166,12 @@ public class DetailsActivity extends AppCompatActivity {
 	}
 
 	private void newItem() {
-//		Intent intent = new Intent(this, InputActivity.class);
-//		intent.putExtra("position", mCurrentPosition);
-//
-//		startActivityForResult(intent, RC_NEW_ITEM);
-//		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+		Intent intent = new Intent(this, InputActivity.class);
+		intent.putExtra("type", mType);
+		intent.putExtra("position", mCurrentPosition);
+
+		startActivityForResult(intent, RC_NEW_ITEM);
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
 	private void update() {
@@ -173,7 +185,26 @@ public class DetailsActivity extends AppCompatActivity {
 	}
 
 	private void duplicate() {
+		Item item = mItems.get(mCurrentPosition);
 
+		final ContentValues values = new ContentValues();
+		values.put(DicoContract.INPUT, item.input);
+		values.put(DicoContract.SORT_LETTER, item.sort_letter);
+		values.put(DicoContract.KANJI, item.kanji);
+		values.put(DicoContract.KANA, item.kana);
+		values.put(DicoContract.TAGS, item.tags);
+		values.put(DicoContract.DETAILS, item.details);
+		values.put(DicoContract.EXAMPLE, item.example);
+		values.put(DicoContract.TYPE, mType.code);
+
+		Uri insert = getContentResolver().insert(mType.uri, values);
+		item.id = String.valueOf(ContentUris.parseId(insert));
+
+		mItems.add(mCurrentPosition, item);
+		mAdapter.notifyDataSetChanged();
+
+		// TOAST
+		Snackbar.make(findViewById(R.id.details_content), R.string.input_duplicated_OK, Snackbar.LENGTH_LONG).show();
 	}
 
 	// ************************************************************* \\

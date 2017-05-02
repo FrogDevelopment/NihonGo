@@ -113,7 +113,6 @@ public class InputActivity extends AppCompatActivity {
         back();
     }
 
-
     @Override
     public void finish() {
         Intent data = new Intent();
@@ -124,7 +123,9 @@ public class InputActivity extends AppCompatActivity {
     }
 
     private void back() {
-        finish();
+        Intent data = new Intent();
+        setResult(RESULT_CANCELED, data);
+        super.finish();
     }
 
     private void initData() {
@@ -226,10 +227,10 @@ public class InputActivity extends AppCompatActivity {
 
         // TOAST
         Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_SHORT)
-                .setCallback(new Snackbar.Callback() {
+                .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
-                        back();
+                        finish();
                     }
                 })
                 .show();
@@ -251,7 +252,7 @@ public class InputActivity extends AppCompatActivity {
 
         // TOAST
         Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_SHORT)
-                .setCallback(new Snackbar.Callback() {
+                .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
                         initData();
