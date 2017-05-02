@@ -38,7 +38,6 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:gravity="center_horizontal"
-                android:text="input"
                 android:textSize="40sp"
                 android:textStyle="italic"/>
 
@@ -48,7 +47,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
-                android:text="kanji"
                 android:textSize="50sp"
                 android:visibility="gone"/>
 
@@ -58,7 +56,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
-                android:text="kana"
                 android:textSize="40sp"/>
 
             <TextView
@@ -69,7 +66,7 @@
                 android:gravity="start"
                 android:text="@string/details_info"
                 android:textSize="12sp"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/details_word_info"
@@ -77,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textSize="20sp"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/details_word_example_title"
@@ -87,7 +84,7 @@
                 android:gravity="start"
                 android:text="@string/details_example"
                 android:textSize="12sp"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/details_word_example"
@@ -96,7 +93,7 @@
                 android:gravity="start"
                 android:textSize="20sp"
                 android:textStyle="italic"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 

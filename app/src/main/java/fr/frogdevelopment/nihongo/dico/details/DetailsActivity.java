@@ -82,6 +82,15 @@ public class DetailsActivity extends AppCompatActivity {
 			@Override
 			public void onPageScrollStateChanged(int state) {
 				fam.close(true);
+				switch (state) {
+					case ViewPager.SCROLL_STATE_DRAGGING:
+						fam.hideMenu(false);
+						break;
+
+					default:
+						fam.showMenu(false);
+						break;
+				}
 			}
 		});
 		final int position = args.getInt("position");
