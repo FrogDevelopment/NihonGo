@@ -264,4 +264,7 @@
     <string name="help_review_favorite">Tagger comme favoris</string>
 
     <string name="help_dico_start">Bienvenue dans Nihon Go !\n\nIl semblerait que vous n\'avez pas encore de vocabulaire.\n\nVoulez-vous en télécharger ?</string>
+
+    <string name="copy.kanji">Kanji copié dans le presse-papier</string>
+    <string name="copy.kana">Kana copié dans le presse-papier</string>
 </resources>

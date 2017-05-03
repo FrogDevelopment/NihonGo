@@ -140,7 +140,7 @@ public class DetailsFragment extends Fragment {
 			ClipData clip = ClipData.newPlainText("kanji", kanjiView.getText());
 			clipboard.setPrimaryClip(clip);
 
-			Toast.makeText(getActivity(), "Kanji copied to clipboard", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), R.string.copy_kanji, Toast.LENGTH_LONG).show();
 			return true;
 		});
 
@@ -149,7 +149,7 @@ public class DetailsFragment extends Fragment {
 			ClipData clip = ClipData.newPlainText("kana", kanaView.getText());
 			clipboard.setPrimaryClip(clip);
 
-			Toast.makeText(getActivity(), "Kana copied to clipboard", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), R.string.copy_kana, Toast.LENGTH_LONG).show();
 			return true;
 		});
 	}
