@@ -84,11 +84,11 @@ public class DetailsActivity extends AppCompatActivity {
 				fam.close(true);
 				switch (state) {
 					case ViewPager.SCROLL_STATE_DRAGGING:
-						fam.hideMenu(false);
+						fam.hideMenu(true);
 						break;
 
 					default:
-						fam.showMenu(false);
+						fam.showMenu(true);
 						break;
 				}
 			}
