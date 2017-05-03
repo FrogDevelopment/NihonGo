@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 		for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
 			for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
 				String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
-				if (Locale.JAPAN.toString().equals(locale)) {
+				if (Locale.JAPAN.toString().equals(locale) || Locale.JAPANESE.toString().equals(locale)) {
 					isNoJapanIME = false;
 					break;
 				}
