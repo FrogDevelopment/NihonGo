@@ -36,12 +36,13 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class DetailsActivity extends AppCompatActivity {
 
-	public static final int RC_NEW_ITEM    = 777;
+	public static final int RC_NEW_ITEM = 777;
 	public static final int RC_UPDATE_ITEM = 666;
-	private List<Item>     mItems;
-	private Type           mType;
+	private List<Item> mItems;
+	private Type mType;
 	private DetailsAdapter mAdapter;
-	private int            mCurrentPosition;
+	private int mCurrentPosition;
+	private ViewPager mViewPager;
 
 
 	@Override
@@ -67,9 +68,9 @@ public class DetailsActivity extends AppCompatActivity {
 		mItems = args.getParcelableArrayList("items");
 
 		mAdapter = new DetailsAdapter(getFragmentManager());
-		ViewPager viewPager = (ViewPager) findViewById(R.id.details_viewpager);
-		viewPager.setAdapter(mAdapter);
-		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		mViewPager = (ViewPager) findViewById(R.id.details_viewpager);
+		mViewPager.setAdapter(mAdapter);
+		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 			}
@@ -94,7 +95,7 @@ public class DetailsActivity extends AppCompatActivity {
 			}
 		});
 		final int position = args.getInt("position");
-		viewPager.setCurrentItem(position);
+		mViewPager.setCurrentItem(position);
 
 		boolean doNotShow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
 		if (!doNotShow) {
@@ -103,9 +104,9 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
-		swapLeft.setOnClickListener(v -> viewPager.setCurrentItem(--mCurrentPosition));
+		swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
 		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
-		swapRight.setOnClickListener(v -> viewPager.setCurrentItem(++mCurrentPosition));
+		swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
 
 		FloatingActionButton fabNew = (FloatingActionButton) findViewById(R.id.fab_new);
 		fabNew.setOnClickListener(v -> newItem());
@@ -165,10 +166,30 @@ public class DetailsActivity extends AppCompatActivity {
 				.setTitle(R.string.delete_title)
 				.setMessage(R.string.delete_detail)
 				.setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {
-					Uri uri = Uri.parse(mType.uri + "/" + mItems.get(mCurrentPosition).id);
-					getContentResolver().delete(uri, null, null);
-					Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG).show();
-					back();
+
+					// delete only on UI
+					final Item itemToDelete = mItems.get(mCurrentPosition);
+					mItems.remove(mCurrentPosition);
+					mAdapter.notifyDataSetChanged();
+
+					Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG)
+							.setAction(R.string.action_cancel, v -> {
+								// keep empty action to display action ...
+							})
+							.addCallback(new Snackbar.Callback() {
+								@Override
+								public void onDismissed(Snackbar transientBottomBar, int event) {
+									if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
+										// if canceled, un-delete on UI
+										mItems.add(mCurrentPosition, itemToDelete);
+										mAdapter.notifyDataSetChanged();
+									} else {
+										// or delete on base if not canceled
+										getContentResolver().delete(Uri.parse(mType.uri + "/" + itemToDelete.id), null, null);
+									}
+								}
+							})
+							.show();
 				})
 				.setNegativeButton(android.R.string.no, null)
 				.show();
