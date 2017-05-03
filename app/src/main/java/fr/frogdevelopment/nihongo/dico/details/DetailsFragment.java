@@ -5,7 +5,10 @@
 package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -129,6 +133,25 @@ public class DetailsFragment extends Fragment {
 		successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
 		handleRate(mItem.learned);
+
+
+		kanjiView.setOnLongClickListener(v -> {
+			ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+			ClipData clip = ClipData.newPlainText("kanji", kanjiView.getText());
+			clipboard.setPrimaryClip(clip);
+
+			Toast.makeText(getActivity(), "Kanji copied to clipboard", Toast.LENGTH_LONG).show();
+			return true;
+		});
+
+		kanaView.setOnLongClickListener(v -> {
+			ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+			ClipData clip = ClipData.newPlainText("kana", kanaView.getText());
+			clipboard.setPrimaryClip(clip);
+
+			Toast.makeText(getActivity(), "Kana copied to clipboard", Toast.LENGTH_LONG).show();
+			return true;
+		});
 	}
 
 	private void handleRate(int rate) {
