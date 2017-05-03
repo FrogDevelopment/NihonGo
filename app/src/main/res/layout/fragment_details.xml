@@ -48,7 +48,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:textSize="50sp"
-                android:visibility="gone"/>
+                android:visibility="invisible"/>
 
             <TextView
                 android:id="@+id/details_word_kana"
