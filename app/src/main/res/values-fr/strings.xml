@@ -42,6 +42,14 @@
     <string name="details_tags">Tags : %1$s</string>
     <string name="details_ratio">Réussite : %1$d%%</string>
 
+    <string name="rate_done">« %1$s » évalué comme « %2$s »</string>
+    <string name="rate_0">Nouveau</string>
+    <string name="rate_1">Vu</string>
+    <string name="rate_2">Connu</string>
+
+    <string name="bookmark_add">Favori ajouté</string>
+    <string name="bookmark_remove">Favori supprimé</string>
+
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favori</string>
     <string name="action_dico_update">Mettre à jour</string>
@@ -255,14 +263,6 @@
     <string name="help_dico_press_and_hold_description">Presser et maintenir</string>
     <string name="help_dico_press_and_hold">Presser et maintenir pour sélectionner la ligne</string>
     <string name="help_dico_add">Ajouter une nouvelle entrée</string>
-
-    <string name="help_details_intro">Voici quelques aides pour la vue détaillée</string>
-    <string name="help_details_swap">Swap gauche et droite pour naviguer</string>
-
-    <string name="help_review_intro">Voici quelques aides pour la vue de révision</string>
-    <string name="help_review_learned">Tagger comme appris</string>
-    <string name="help_review_favorite">Tagger comme favoris</string>
-
     <string name="help_dico_start">Bienvenue dans Nihon Go !\n\nIl semblerait que vous n\'avez pas encore de vocabulaire.\n\nVoulez-vous en télécharger ?</string>
 
     <string name="copy.kanji">Kanji copié dans le presse-papier</string>

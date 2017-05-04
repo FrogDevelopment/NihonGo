@@ -7,9 +7,6 @@ package fr.frogdevelopment.nihongo.review;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextSwitcher;
@@ -19,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 import static fr.frogdevelopment.nihongo.R.id.review_count;
 
@@ -33,31 +29,9 @@ public class ReviewFragment extends Fragment {
         // The last two arguments ensure LayoutParams are inflated properly.
         View rootView = inflater.inflate(R.layout.fragment_review, container, false);
 
-        setHasOptionsMenu(true);
-
         populateView(rootView);
 
         return rootView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.review, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.review_help:
-                HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review);
-                break;
-
-            default:
-                return false;
-        }
-
-        return true;
     }
 
     private void populateView(View rootView) {

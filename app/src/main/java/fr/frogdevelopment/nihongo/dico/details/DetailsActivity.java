@@ -29,10 +29,7 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
-import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
-import fr.frogdevelopment.nihongo.preferences.Preferences;
-import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -96,12 +93,6 @@ public class DetailsActivity extends AppCompatActivity {
 		});
 		final int position = args.getInt("position");
 		mViewPager.setCurrentItem(position);
-
-		boolean doNotShow = PreferencesHelper.getInstance(this).getBoolean(Preferences.HELP_DETAILS);
-		if (!doNotShow) {
-			HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details, true);
-		}
-
 
 		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
 		swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));

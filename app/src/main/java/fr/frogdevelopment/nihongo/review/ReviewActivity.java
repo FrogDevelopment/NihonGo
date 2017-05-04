@@ -25,9 +25,6 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.dialog.HelpDialog;
-import fr.frogdevelopment.nihongo.preferences.Preferences;
-import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -111,11 +108,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
         });
 
         getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
-
-        boolean doNotShow = PreferencesHelper.getInstance(getApplicationContext()).getBoolean(Preferences.HELP_REVIEW);
-        if (!doNotShow) {
-            HelpDialog.show(getFragmentManager(), R.layout.dialog_help_review, true);
-        }
     }
 
     @Override

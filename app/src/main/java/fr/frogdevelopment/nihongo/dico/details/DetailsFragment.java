@@ -11,9 +11,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,7 +23,6 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 
 public class DetailsFragment extends Fragment {
 
@@ -35,11 +31,15 @@ public class DetailsFragment extends Fragment {
 	private ImageView mRate0;
 	private ImageView mRate1;
 	private ImageView mRate2;
+	private ImageView mBookmark;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// The last two arguments ensure LayoutParams are inflated properly.
 		View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+
+		mBookmark = (ImageView) rootView.findViewById(R.id.details_bookmark);
+		mBookmark.setOnClickListener(v -> bookmarkItem());
 
 		mRate0 = (ImageView) rootView.findViewById(R.id.rate_0);
 		mRate0.setOnClickListener(v -> setRate(0));
@@ -50,34 +50,7 @@ public class DetailsFragment extends Fragment {
 
 		populateView(rootView);
 
-		// after populateView() as we need to check mItem.isBookmarked()
-		setHasOptionsMenu(true);
-
 		return rootView;
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.details, menu);
-
-		MenuItem bookmarkItem = menu.findItem(R.id.details_menu_bookmark);
-		bookmarkItem.setIcon(mItem.isBookmarked() ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.details_menu_bookmark:
-				bookmarkItem();
-				return true;
-
-			case R.id.details_menu_help:
-				HelpDialog.show(getFragmentManager(), R.layout.dialog_help_details);
-				return true;
-
-			default:
-				return false;
-		}
 	}
 
 	private void populateView(View rootView) {
@@ -132,8 +105,8 @@ public class DetailsFragment extends Fragment {
 		int total = mItem.success + mItem.failed;
 		successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
+		hanldeBookmark();
 		handleRate(mItem.learned);
-
 
 		kanjiView.setOnLongClickListener(v -> {
 			ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -170,14 +143,18 @@ public class DetailsFragment extends Fragment {
 
 				break;
 
-			default:
 			case 0:
+			default:
 				mRate0.setImageResource(R.drawable.ic_star_black_24dp);
 				mRate1.setImageResource(R.drawable.ic_star_border_black_24dp);
 				mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
 
 				break;
 		}
+	}
+
+	private void hanldeBookmark() {
+		mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
 	}
 
 	private void setRate(int rate) {
@@ -187,15 +164,35 @@ public class DetailsFragment extends Fragment {
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.LEARNED, mItem.learned);
 		updateItem(values);
+
+		String data = StringUtils.isNotEmpty(mItem.kanji) ? mItem.kanji : mItem.kana;
+
+		int rateName;
+		switch (rate) {
+			case 1:
+				rateName = R.string.rate_1;
+				break;
+			case 2:
+				rateName = R.string.rate_2;
+				break;
+			case 0:
+			default:
+				rateName = R.string.rate_0;
+				break;
+		}
+
+		Toast.makeText(getActivity(), getString(R.string.rate_done, data, getString(rateName)), Toast.LENGTH_SHORT).show();
 	}
 
 	private void bookmarkItem() {
 		mItem.switchBookmark();
-		getActivity().invalidateOptionsMenu();
+		hanldeBookmark();
 
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.BOOKMARK, mItem.bookmark);
 		updateItem(values);
+
+		Toast.makeText(getActivity(), getString(mItem.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
 	}
 
 	private void updateItem(ContentValues values) {

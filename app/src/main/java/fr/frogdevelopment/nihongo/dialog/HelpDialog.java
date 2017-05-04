@@ -62,14 +62,8 @@ public class HelpDialog extends DialogFragment {
 					if (showRemember) {
 						Preferences preferences;
 						switch (resId) {
-							case R.layout.dialog_help_details:
-								preferences = Preferences.HELP_DETAILS;
-								break;
 							case R.layout.dialog_help_dico:
 								preferences = Preferences.HELP_DICO;
-								break;
-							case R.layout.dialog_help_review:
-								preferences = Preferences.HELP_REVIEW;
 								break;
 							default:
 								throw new IllegalStateException("Unknow resId " + resId);
