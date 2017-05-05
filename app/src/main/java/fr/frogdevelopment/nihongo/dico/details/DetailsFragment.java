@@ -105,7 +105,7 @@ public class DetailsFragment extends Fragment {
 		int total = mItem.success + mItem.failed;
 		successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
-		hanldeBookmark();
+		handleBookmark();
 		handleRate(mItem.learned);
 
 		kanjiView.setOnLongClickListener(v -> {
@@ -153,7 +153,7 @@ public class DetailsFragment extends Fragment {
 		}
 	}
 
-	private void hanldeBookmark() {
+	private void handleBookmark() {
 		mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
 	}
 
@@ -164,8 +164,6 @@ public class DetailsFragment extends Fragment {
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.LEARNED, mItem.learned);
 		updateItem(values);
-
-		String data = StringUtils.isNotEmpty(mItem.kanji) ? mItem.kanji : mItem.kana;
 
 		int rateName;
 		switch (rate) {
@@ -181,12 +179,12 @@ public class DetailsFragment extends Fragment {
 				break;
 		}
 
-		Toast.makeText(getActivity(), getString(R.string.rate_done, data, getString(rateName)), Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), getString(R.string.rate_done, getString(rateName)), Toast.LENGTH_SHORT).show();
 	}
 
 	private void bookmarkItem() {
 		mItem.switchBookmark();
-		hanldeBookmark();
+		handleBookmark();
 
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.BOOKMARK, mItem.bookmark);

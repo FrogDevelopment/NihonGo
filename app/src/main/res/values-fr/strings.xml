@@ -42,7 +42,7 @@
     <string name="details_tags">Tags : %1$s</string>
     <string name="details_ratio">Réussite : %1$d%%</string>
 
-    <string name="rate_done">« %1$s » évalué comme « %2$s »</string>
+    <string name="rate_done">Évalué comme «%1$s»</string>
     <string name="rate_0">Nouveau</string>
     <string name="rate_1">Vu</string>
     <string name="rate_2">Connu</string>

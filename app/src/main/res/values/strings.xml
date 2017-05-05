@@ -53,7 +53,7 @@
     <string name="details_tags">Tags : %1$s</string>
     <string name="details_ratio">Success : %1$d%%</string>
 
-    <string name="rate_done">« %1$s » rate as « %2$s »</string>
+    <string name="rate_done">Rate as « %1$s »</string>
     <string name="rate_0">New</string>
     <string name="rate_1">See</string>
     <string name="rate_2">Learned</string>
