@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
 <android.support.design.widget.CoordinatorLayout
     android:id="@+id/details_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,7 +32,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-            android:tint="@android:color/darker_gray"/>
+            android:tint="@android:color/darker_gray"
+            android:contentDescription="swap_left"/>
 
         <ImageView
             android:id="@+id/swap_right"
@@ -46,7 +44,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-            android:tint="@android:color/darker_gray"/>
+            android:tint="@android:color/darker_gray"
+            android:contentDescription="swap_right"/>
 
     </RelativeLayout>
 

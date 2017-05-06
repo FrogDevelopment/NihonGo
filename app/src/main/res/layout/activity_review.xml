@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
 <android.support.design.widget.CoordinatorLayout
     android:id="@+id/content"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,46 +8,54 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".dico.details.DetailsActivity">
+    tools:context=".review.ReviewActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/review_viewpager"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
 
-    <LinearLayout
+        <!-- The main content view -->
+        <android.support.v4.view.ViewPager
+            android:id="@+id/review_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="fill_vertical"/>
+
+        <ImageView
+            android:id="@+id/swap_left"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+            android:tint="@android:color/darker_gray"
+            android:contentDescription="swap_left"/>
+
+        <ImageView
+            android:id="@+id/swap_right"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:tint="@android:color/darker_gray"
+            android:contentDescription="swap_right"/>
+
+    </RelativeLayout>
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_again"
+        style="@style/NormalFabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:orientation="horizontal">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_again"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_again_white_24dp"
-            android:visibility="gone"
-            app:layout_anchor="@id/review_viewpager"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_learned"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_bookmark_off"
-            app:layout_anchor="@id/review_viewpager"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_favorite"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_favorite_off"
-            app:layout_anchor="@id/review_viewpager"/>
-    </LinearLayout>
+        android:src="@drawable/ic_again_white_24dp"
+        android:visibility="invisible"
+        app:layout_anchor="@id/review_viewpager"
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

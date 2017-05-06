@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingEnd="20dp"
-    android:paddingTop="10dp"
-    android:paddingStart="20dp">
+    android:paddingEnd="22dp"
+    android:paddingStart="22dp"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/details_word_tags"
@@ -14,11 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/bookmark"
         android:text="@string/details_tags"
         android:textSize="12sp"/>
 
     <ImageView
-        android:id="@+id/details_bookmark"
+        android:id="@id/bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -31,8 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/details_word_success"
-        android:layout_below="@id/details_word_tags"
-        android:layout_marginTop="15dp"
+        android:layout_below="@id/bookmark"
         android:fadeScrollbars="false"
         android:scrollbarStyle="outsideOverlay">
 

@@ -10,6 +10,7 @@ import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,32 +29,18 @@ public class DetailsFragment extends Fragment {
 
 	private Item mItem;
 
+	private ImageView mBookmark;
 	private ImageView mRate0;
 	private ImageView mRate1;
 	private ImageView mRate2;
-	private ImageView mBookmark;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// The last two arguments ensure LayoutParams are inflated properly.
-		View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-
-		mBookmark = (ImageView) rootView.findViewById(R.id.details_bookmark);
-		mBookmark.setOnClickListener(v -> bookmarkItem());
-
-		mRate0 = (ImageView) rootView.findViewById(R.id.rate_0);
-		mRate0.setOnClickListener(v -> setRate(0));
-		mRate1 = (ImageView) rootView.findViewById(R.id.rate_1);
-		mRate1.setOnClickListener(v -> setRate(1));
-		mRate2 = (ImageView) rootView.findViewById(R.id.rate_2);
-		mRate2.setOnClickListener(v -> setRate(2));
-
-		populateView(rootView);
-
-		return rootView;
+		return inflater.inflate(R.layout.fragment_details, container, false);
 	}
 
-	private void populateView(View rootView) {
+	@Override
+	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
 		TextView inputView = (TextView) rootView.findViewById(R.id.details_word_input);
 		TextView kanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
 		TextView kanaView = (TextView) rootView.findViewById(R.id.details_word_kana);
@@ -105,9 +92,6 @@ public class DetailsFragment extends Fragment {
 		int total = mItem.success + mItem.failed;
 		successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
-		handleBookmark();
-		handleRate(mItem.learned);
-
 		kanjiView.setOnLongClickListener(v -> {
 			ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 			ClipData clip = ClipData.newPlainText("kanji", kanjiView.getText());
@@ -125,17 +109,30 @@ public class DetailsFragment extends Fragment {
 			Toast.makeText(getActivity(), R.string.copy_kana, Toast.LENGTH_LONG).show();
 			return true;
 		});
+
+		mBookmark = (ImageView) rootView.findViewById(R.id.bookmark);
+		mBookmark.setOnClickListener(v -> bookmarkItem());
+		handleBookmark();
+
+		mRate0 = (ImageView) rootView.findViewById(R.id.rate_0);
+		mRate0.setOnClickListener(v -> setRate(0));
+		mRate1 = (ImageView) rootView.findViewById(R.id.rate_1);
+		mRate1.setOnClickListener(v -> setRate(1));
+		mRate2 = (ImageView) rootView.findViewById(R.id.rate_2);
+		mRate2.setOnClickListener(v -> setRate(2));
+
+		handleRate();
 	}
 
-	private void handleRate(int rate) {
-		switch (rate) {
-
+	private void handleRate() {
+		switch (mItem.learned) {
 			case 1:
 				mRate0.setImageResource(R.drawable.ic_star_black_24dp);
 				mRate1.setImageResource(R.drawable.ic_star_black_24dp);
 				mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
 
 				break;
+
 			case 2:
 				mRate0.setImageResource(R.drawable.ic_star_black_24dp);
 				mRate1.setImageResource(R.drawable.ic_star_black_24dp);
@@ -159,7 +156,7 @@ public class DetailsFragment extends Fragment {
 
 	private void setRate(int rate) {
 		mItem.learned = rate;
-		handleRate(rate);
+		handleRate();
 
 		final ContentValues values = new ContentValues();
 		values.put(DicoContract.LEARNED, mItem.learned);
