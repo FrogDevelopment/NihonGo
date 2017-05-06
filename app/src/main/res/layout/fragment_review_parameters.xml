@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -28,18 +24,6 @@
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/param_reviewed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textOff="@string/no"
-                android:textOn="@string/yes"/>
-
-            <Switch
-                android:id="@+id/review_switch_learned"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:text="@string/param_exclude_learned"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
                 android:textOn="@string/yes"/>
@@ -101,6 +85,30 @@
                     android:layout_height="wrap_content"
                     android:entries="@array/param_quantities"
                     android:prompt="@string/param_quantity_selection"
+                    android:spinnerMode="dialog"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/review_param_learned_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/param_learned"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/black"/>
+
+                <Spinner
+                    android:id="@+id/review_param_learned_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/param_learned"
+                    android:prompt="@string/param_learned_selection"
                     android:spinnerMode="dialog"/>
             </LinearLayout>
 

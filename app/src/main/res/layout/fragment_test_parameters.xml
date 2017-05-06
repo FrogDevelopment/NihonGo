@@ -113,17 +113,29 @@
                 android:spinnerMode="dialog"/>
         </LinearLayout>
 
-        <Switch
-            android:id="@+id/test_switch_learned"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:orientation="vertical"
             android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/param_only_learned"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textOff="@string/no"
-            android:textOn="@string/yes"/>
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/test_param_learned_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/param_learned"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_learned_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/param_learned"
+                android:prompt="@string/param_learned_selection"
+                android:spinnerMode="dialog"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

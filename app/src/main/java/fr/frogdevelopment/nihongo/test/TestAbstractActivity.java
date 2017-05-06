@@ -44,7 +44,6 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     protected int currentItemIndex = 0;
     protected String[] tags;
     protected int nbAnswer;
-    private boolean onlyLearned;
 
     protected List<Item> itemsToFind = new ArrayList<>();
     protected ArrayList<Result> results;
@@ -68,7 +67,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         Bundle bundle = getIntent().getExtras();
         int tmp = bundle.getInt(TestParametersFragment.TEST_SELECTED_QUANTITY);
         String count = getResources().getStringArray(R.array.param_quantities)[tmp];
-        if (NumberUtils.isNumber(count)) {
+        if (NumberUtils.isCreatable(count)) {
             quantityMax = Integer.parseInt(count);
         }
         typeTest = bundle.getInt(TestParametersFragment.TEST_TYPE);
@@ -80,7 +79,6 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         } else {
             nbAnswer = Integer.parseInt(getResources().getStringArray(R.array.param_quantities_answers)[tmp]);
         }
-        onlyLearned = bundle.getBoolean(TestParametersFragment.TEST_ONLY_LEARNED);
 
         getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
     }
@@ -114,8 +112,13 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
                 break;
         }
 
-        if (onlyLearned) {
-            selection += " AND LEARNED = '1'";
+        int learnedRate = options.getInt(TestParametersFragment.TEST_SELECTED_RATE);
+        switch (learnedRate) {
+            case 0:
+            case 1:
+            case 2:
+                selection += String.format(" AND LEARNED <= '%s'", learnedRate);
+                break;
         }
 
         String[] likes = null;

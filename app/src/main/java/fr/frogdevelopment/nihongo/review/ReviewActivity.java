@@ -26,6 +26,13 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_IS_JAPANESE;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_ONLY_FAVORITE;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SELECTED_QUANTITY;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SELECTED_RATE;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SELECTED_SORT;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_TAGS;
+
 public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_ID = 710;
@@ -66,7 +73,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		mFabAgain = (FloatingActionButton) findViewById(R.id.fab_again);
 		mFabAgain.setOnClickListener(view -> reviewAgain());
 
-		final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean(ReviewParametersFragment.REVIEW_IS_JAPANESE);
+		final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean(REVIEW_IS_JAPANESE);
 
 		adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
 		ViewPager viewPager = (ViewPager) findViewById(R.id.review_viewpager);
@@ -106,13 +113,13 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		final int selectedQuantity = args.getInt(ReviewParametersFragment.REVIEW_SELECTED_QUANTITY);
+		final int selectedQuantity = args.getInt(REVIEW_SELECTED_QUANTITY);
 		String count = getResources().getStringArray(R.array.param_quantities)[selectedQuantity];
 		String limit = "";
 		if (NumberUtils.isCreatable(count)) {
 			limit = " LIMIT " + Integer.parseInt(count);
 		}
-		final String[] tags = args.getStringArray(ReviewParametersFragment.REVIEW_TAGS);
+		final String[] tags = args.getStringArray(REVIEW_TAGS);
 
 		String selection = "1 = 1";
 		String[] likes = null;
@@ -123,18 +130,22 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 			selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
 		}
 
-		final boolean excludeLearned = args.getBoolean(ReviewParametersFragment.REVIEW_EXCLUDE_LEARNED);
-		if (excludeLearned) {
-			selection += " AND LEARNED = '0'";
-		}
-
-		final boolean onlyFavorite = args.getBoolean(ReviewParametersFragment.REVIEW_ONLY_FAVORITE);
+		final boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
 		if (onlyFavorite) {
 			selection += " AND BOOKMARK = '1'";
 		}
 
+		int learnedRate = args.getInt(REVIEW_SELECTED_RATE);
+		switch (learnedRate) {
+			case 0:
+			case 1:
+			case 2:
+				selection += String.format(" AND LEARNED <= '%s'", learnedRate);
+				break;
+		}
+
 		String sortOrder;
-		final int selectedSort = args.getInt(ReviewParametersFragment.REVIEW_SELECTED_SORT);
+		final int selectedSort = args.getInt(REVIEW_SELECTED_SORT);
 
 		switch (selectedSort) {
 			case 0: // new -> old

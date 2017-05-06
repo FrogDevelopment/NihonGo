@@ -111,7 +111,6 @@
     <string name="param_test">Paramétrage du test</string>
     <string name="param_review">Paramétrage de la révision</string>
     <string name="param_reviewed">Révision en japonais ?</string>
-    <string name="param_exclude_learned">Exclure les appris ?</string>
     <string name="param_only_favorite">Seulement les favoris ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Sélectionner le type du test</string>
@@ -119,6 +118,8 @@
     <string name="param_method_selection">Sélectionner la méthode du test</string>
     <string name="param_nb_answers">Nb réponses</string>
     <string name="param_nb_answers_selection">Sélectionner le nombre de réponse</string>
+    <string name="param_learned">Niveau apprentissage</string>
+    <string name="param_learned_selection">Sélectionner le niveau</string>
     <string name="param_sort">Ordre</string>
     <string name="param_sort_selection">Sélectionner l\'ordre de tri</string>
     <string name="param_quantity">Quantité</string>
@@ -142,6 +143,13 @@
     <string-array name="param_methods">
         <item>QCM</item>
         <item>Saisie</item>
+    </string-array>
+
+    <string-array name="param_learned">
+        <item>@string/rate_0</item>
+        <item>@string/rate_1</item>
+        <item>@string/rate_2</item>
+        <item>Tous</item>
     </string-array>
 
     <string-array name="param_sorts">

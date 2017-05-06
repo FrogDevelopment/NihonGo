@@ -125,7 +125,6 @@
     <string name="param_test">Test\'s parameters</string>
     <string name="param_review">Review\'s parameters</string>
     <string name="param_reviewed">Reviews on japanese ?</string>
-    <string name="param_exclude_learned">Exclude learned ?</string>
     <string name="param_only_favorite">Only Favorites ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Select the type of test</string>
@@ -133,6 +132,8 @@
     <string name="param_method_selection">Select the method for test</string>
     <string name="param_nb_answers">Nb answers</string>
     <string name="param_nb_answers_selection">Select the number of answers</string>
+    <string name="param_learned">Learn rate</string>
+    <string name="param_learned_selection">Select the rate</string>
     <string name="param_sort">Sort</string>
     <string name="param_sort_selection">Select the sort order</string>
     <string name="param_quantity">Quantity</string>
@@ -156,6 +157,13 @@
     <string-array name="param_methods">
         <item>MCQ</item>
         <item>Write</item>
+    </string-array>
+
+    <string-array name="param_learned">
+        <item>@string/rate_0</item>
+        <item>@string/rate_1</item>
+        <item>@string/rate_2</item>
+        <item>All</item>
     </string-array>
 
     <string-array name="param_sorts">

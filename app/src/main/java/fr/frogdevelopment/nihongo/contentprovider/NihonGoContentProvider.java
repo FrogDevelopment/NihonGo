@@ -144,7 +144,6 @@ public class NihonGoContentProvider extends ContentProvider {
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
 				break;
 			case WORDS_GROUP_BY_TAG:
-				projection = new String[]{DicoContract.TAGS, "sum(LEARNED)", "count(LEARNED)"};
 				queryBuilder.setTables(DicoContract.TABLE_NAME);
 				queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
 				groupBy = DicoContract.TAGS;
