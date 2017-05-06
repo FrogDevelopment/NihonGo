@@ -140,7 +140,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 			case 0:
 			case 1:
 			case 2:
-				selection += String.format(" AND LEARNED <= '%s'", learnedRate);
+				selection += String.format(" AND LEARNED = '%s'", learnedRate);
 				break;
 		}
 

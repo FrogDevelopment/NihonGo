@@ -117,7 +117,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
             case 0:
             case 1:
             case 2:
-                selection += String.format(" AND LEARNED <= '%s'", learnedRate);
+                selection += String.format(" AND LEARNED = '%s'", learnedRate);
                 break;
         }
 
