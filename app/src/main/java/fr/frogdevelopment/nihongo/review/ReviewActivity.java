@@ -33,7 +33,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 	private ReviewAdapter adapter;
 
 	private FloatingActionButton mFabAgain;
-	private int mCurrentPosition;
+	private int                  mCurrentPosition;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -71,6 +71,9 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
 		ViewPager viewPager = (ViewPager) findViewById(R.id.review_viewpager);
 		viewPager.setAdapter(adapter);
+		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
+		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
+
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -79,14 +82,13 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 			@Override
 			public void onPageSelected(int position) {
 				mCurrentPosition = position;
-				if (position + 1 == adapter.getCount()) {
-					if (mFabAgain.getVisibility() == View.INVISIBLE) {
-						mFabAgain.show(true);
-					}
+				swapLeft.setVisibility(position == 0 ? View.INVISIBLE : View.VISIBLE);
+				boolean lastPosition = position + 1 == adapter.getCount();
+				swapRight.setVisibility(lastPosition ? View.INVISIBLE : View.VISIBLE);
+				if (lastPosition) {
+					mFabAgain.show(true);
 				} else {
-					if (mFabAgain.getVisibility() == View.VISIBLE) {
-						mFabAgain.hide(true);
-					}
+					mFabAgain.hide(true);
 				}
 			}
 
@@ -95,9 +97,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 			}
 		});
 
-		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
 		swapLeft.setOnClickListener(v -> viewPager.setCurrentItem(--mCurrentPosition));
-		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
 		swapRight.setOnClickListener(v -> viewPager.setCurrentItem(++mCurrentPosition));
 
 		getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);

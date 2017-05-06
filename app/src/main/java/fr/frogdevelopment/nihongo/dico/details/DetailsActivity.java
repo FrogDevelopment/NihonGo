@@ -18,6 +18,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -33,13 +34,13 @@ import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
 public class DetailsActivity extends AppCompatActivity {
 
-	public static final int RC_NEW_ITEM = 777;
+	public static final int RC_NEW_ITEM    = 777;
 	public static final int RC_UPDATE_ITEM = 666;
-	private List<Item> mItems;
-	private Type mType;
+	private List<Item>     mItems;
+	private Type           mType;
 	private DetailsAdapter mAdapter;
-	private int mCurrentPosition;
-	private ViewPager mViewPager;
+	private int            mCurrentPosition;
+	private ViewPager      mViewPager;
 
 
 	@Override
@@ -60,6 +61,9 @@ public class DetailsActivity extends AppCompatActivity {
 
 		FloatingActionMenu fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
 
+		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
+		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
+
 		Bundle args = getIntent().getExtras();
 		mType = (Type) args.getSerializable("type");
 		mItems = args.getParcelableArrayList("items");
@@ -75,6 +79,8 @@ public class DetailsActivity extends AppCompatActivity {
 			@Override
 			public void onPageSelected(int position) {
 				mCurrentPosition = position;
+				swapLeft.setVisibility(position == 0 ? View.INVISIBLE : View.VISIBLE);
+				swapRight.setVisibility(position + 1 == mAdapter.getCount() ? View.INVISIBLE : View.VISIBLE);
 			}
 
 			@Override
@@ -94,9 +100,7 @@ public class DetailsActivity extends AppCompatActivity {
 		final int position = args.getInt("position");
 		mViewPager.setCurrentItem(position);
 
-		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
 		swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
-		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
 		swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
 
 		FloatingActionButton fabNew = (FloatingActionButton) findViewById(R.id.fab_new);
