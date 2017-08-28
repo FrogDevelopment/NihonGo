@@ -41,6 +41,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
 	private FloatingActionButton mFabAgain;
 	private int                  mCurrentPosition;
+	private Bundle extras;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -70,16 +71,18 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
 		setContentView(R.layout.activity_review);
 
-		mFabAgain = (FloatingActionButton) findViewById(R.id.fab_again);
+		mFabAgain = findViewById(R.id.fab_again);
 		mFabAgain.setOnClickListener(view -> reviewAgain());
 
-		final boolean isJapaneseReviewed = getIntent().getExtras().getBoolean(REVIEW_IS_JAPANESE);
+		extras = getIntent().getExtras();
+
+		final boolean isJapaneseReviewed = extras.getBoolean(REVIEW_IS_JAPANESE);
 
 		adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
-		ViewPager viewPager = (ViewPager) findViewById(R.id.review_viewpager);
+		ViewPager viewPager = findViewById(R.id.review_viewpager);
 		viewPager.setAdapter(adapter);
-		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
-		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
+		ImageView swapLeft = findViewById(R.id.swap_left);
+		ImageView swapRight = findViewById(R.id.swap_right);
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
@@ -107,7 +110,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		swapLeft.setOnClickListener(v -> viewPager.setCurrentItem(--mCurrentPosition));
 		swapRight.setOnClickListener(v -> viewPager.setCurrentItem(++mCurrentPosition));
 
-		getLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
+		getLoaderManager().initLoader(LOADER_ID, extras, this);
 	}
 
 	@Override
@@ -183,7 +186,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		adapter.clear();
 		adapter.notifyDataSetChanged();
 
-		getLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
+		getLoaderManager().restartLoader(LOADER_ID, extras, this);
 	}
 
 }
