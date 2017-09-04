@@ -304,6 +304,8 @@
     <!-- ******* -->
     <string name="about_hiragana_link" translatable="false">About the Hiragana table : <a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
     <string name="about_katakana_link" translatable="false">About the Katakana table : <a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
+    <string name="about_version">Version : %1$s</string>
+
     <string name="copy.kanji">Kanji copied to clipboard</string>
     <string name="copy.kana">Kana copied to clipboard</string>
 
