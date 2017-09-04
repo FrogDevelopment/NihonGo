@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
 			actionBar.setHomeButtonEnabled(true);
 		}
 
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerLayout = findViewById(R.id.drawer_layout);
 
-		NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+		NavigationView navigationView = findViewById(R.id.navigation_view);
 		navigationView.setNavigationItemSelectedListener(menuItem -> {
 			menuItem.setChecked(true);
 			mDrawerLayout.closeDrawers();

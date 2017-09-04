@@ -70,9 +70,9 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
 	@Override
 	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
-		mSwitchLanguageView = (Switch) rootView.findViewById(R.id.review_switch_language);
-		mSwitchFavorite = (Switch) rootView.findViewById(R.id.review_switch_favorite);
-		Spinner rateSpinner = (Spinner) rootView.findViewById(R.id.review_param_learned_spinner);
+		mSwitchLanguageView = rootView.findViewById(R.id.review_switch_language);
+		mSwitchFavorite = rootView.findViewById(R.id.review_switch_favorite);
+		Spinner rateSpinner = rootView.findViewById(R.id.review_param_learned_spinner);
 		rateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -85,7 +85,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
 			}
 		});
-		Spinner sortSpinner = (Spinner) rootView.findViewById(R.id.review_param_sort_spinner);
+		Spinner sortSpinner = rootView.findViewById(R.id.review_param_sort_spinner);
 		sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -98,7 +98,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
 			}
 		});
-		Spinner quantitySpinner = (Spinner) rootView.findViewById(R.id.review_param_quantity_spinner);
+		Spinner quantitySpinner = rootView.findViewById(R.id.review_param_quantity_spinner);
 		quantitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -111,12 +111,12 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 
 			}
 		});
-		Spinner mTagSpinner = (Spinner) rootView.findViewById(R.id.review_param_tag_spinner);
+		Spinner mTagSpinner = rootView.findViewById(R.id.review_param_tag_spinner);
 		mTagSpinner.setOnTouchListener((view, motionEvent) -> onClickTags(motionEvent));
-		mTagSelection = (TextView) rootView.findViewById(R.id.review_param_tag_selection);
-		mStartButton = (Button) rootView.findViewById(R.id.review_button_start);
+		mTagSelection = rootView.findViewById(R.id.review_param_tag_selection);
+		mStartButton = rootView.findViewById(R.id.review_button_start);
 		mStartButton.setOnClickListener(view -> onClickButtonStart());
-		mSwitchKeepView = (Switch) rootView.findViewById(R.id.review_switch_keep);
+		mSwitchKeepView = rootView.findViewById(R.id.review_switch_keep);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 

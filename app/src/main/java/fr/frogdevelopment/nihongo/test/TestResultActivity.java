@@ -48,11 +48,11 @@ public class TestResultActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_test_result);
 
-        Switch quantitySwitch = (Switch) findViewById(R.id.test_result_quantity_switch);
+        Switch quantitySwitch = findViewById(R.id.test_result_quantity_switch);
         quantitySwitch.setOnCheckedChangeListener((compoundButton, b) -> adapter.getFilter().filter(Boolean.toString(b)));
 
-        TextView mQuantity = (TextView) findViewById(R.id.test_result_quantity);
-        mListView = (ListView) findViewById(R.id.test_result_list);
+        TextView mQuantity = findViewById(R.id.test_result_quantity);
+        mListView = findViewById(R.id.test_result_list);
         mListView.setOnItemClickListener((adapterView, view, i, l) -> onItemClick(i));
 
         List<Result> results = getIntent().getParcelableArrayListExtra("results");
@@ -63,7 +63,7 @@ public class TestResultActivity extends AppCompatActivity {
         int quantity = getIntent().getIntExtra("quantity", 0);
         mQuantity.setText(successCounter + "/" + quantity);
 
-        Button buttonOK = (Button) findViewById(R.id.test_result_ok);
+        Button buttonOK = findViewById(R.id.test_result_ok);
         buttonOK.setOnClickListener(v -> onBackPressed());
     }
 
@@ -134,9 +134,9 @@ public class TestResultActivity extends AppCompatActivity {
             private final TextView ratio;
 
             private ResultHolder(View view) {
-                test = (TextView) view.findViewById(R.id.dico_test_test);
-                answer = (TextView) view.findViewById(R.id.dico_test_answer);
-                ratio = (TextView) view.findViewById(R.id.dico_test_ratio);
+                test = view.findViewById(R.id.dico_test_test);
+                answer = view.findViewById(R.id.dico_test_answer);
+                ratio = view.findViewById(R.id.dico_test_ratio);
             }
         }
 

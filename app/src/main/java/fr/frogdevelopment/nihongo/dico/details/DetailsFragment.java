@@ -41,15 +41,15 @@ public class DetailsFragment extends Fragment {
 
 	@Override
 	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
-		TextView inputView = (TextView) rootView.findViewById(R.id.details_word_input);
-		TextView kanjiView = (TextView) rootView.findViewById(R.id.details_word_kanji);
-		TextView kanaView = (TextView) rootView.findViewById(R.id.details_word_kana);
-		TextView detailsTitleView = (TextView) rootView.findViewById(R.id.details_word_info_title);
-		TextView detailsView = (TextView) rootView.findViewById(R.id.details_word_info);
-		TextView exampleTitleView = (TextView) rootView.findViewById(R.id.details_word_example_title);
-		TextView exampleView = (TextView) rootView.findViewById(R.id.details_word_example);
-		TextView tagsView = (TextView) rootView.findViewById(R.id.details_word_tags);
-		TextView successView = (TextView) rootView.findViewById(R.id.details_word_success);
+		TextView inputView = rootView.findViewById(R.id.details_word_input);
+		TextView kanjiView = rootView.findViewById(R.id.details_word_kanji);
+		TextView kanaView = rootView.findViewById(R.id.details_word_kana);
+		TextView detailsTitleView = rootView.findViewById(R.id.details_word_info_title);
+		TextView detailsView = rootView.findViewById(R.id.details_word_info);
+		TextView exampleTitleView = rootView.findViewById(R.id.details_word_example_title);
+		TextView exampleView = rootView.findViewById(R.id.details_word_example);
+		TextView tagsView = rootView.findViewById(R.id.details_word_tags);
+		TextView successView = rootView.findViewById(R.id.details_word_success);
 
 		Bundle args = getArguments();
 
@@ -110,15 +110,15 @@ public class DetailsFragment extends Fragment {
 			return true;
 		});
 
-		mBookmark = (ImageView) rootView.findViewById(R.id.bookmark);
+		mBookmark = rootView.findViewById(R.id.bookmark);
 		mBookmark.setOnClickListener(v -> bookmarkItem());
 		handleBookmark();
 
-		mRate0 = (ImageView) rootView.findViewById(R.id.rate_0);
+		mRate0 = rootView.findViewById(R.id.rate_0);
 		mRate0.setOnClickListener(v -> setRate(0));
-		mRate1 = (ImageView) rootView.findViewById(R.id.rate_1);
+		mRate1 = rootView.findViewById(R.id.rate_1);
 		mRate1.setOnClickListener(v -> setRate(1));
-		mRate2 = (ImageView) rootView.findViewById(R.id.rate_2);
+		mRate2 = rootView.findViewById(R.id.rate_2);
 		mRate2.setOnClickListener(v -> setRate(2));
 
 		handleRate();

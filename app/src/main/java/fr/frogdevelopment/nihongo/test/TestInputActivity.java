@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -35,14 +34,14 @@ public class TestInputActivity extends TestAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mScrollView = (ScrollView) findViewById(R.id.test_input_scroll);
-        toFindView = (TextView) findViewById(R.id.test_input_to_find);
-        answerView = (EditText) findViewById(R.id.test_input_answer);
-        Button validateButton = (Button) findViewById(R.id.test_input_validate_button);
-        validateButton.setOnClickListener(this::onClickValidate);
+        mScrollView = findViewById(R.id.test_input_scroll);
+        toFindView = findViewById(R.id.test_input_to_find);
+        answerView = findViewById(R.id.test_input_answer);
+        Button validateButton = findViewById(R.id.test_input_validate_button);
+        validateButton.setOnClickListener(v -> onClickValidate());
     }
 
-    private void onClickValidate(View v) {
+    private void onClickValidate() {
         Editable answer = answerView.getText();
         if (TextUtils.isEmpty(answer)) {
             new AlertDialog.Builder(this)

@@ -48,18 +48,18 @@ public class InputActivity extends AppCompatActivity {
         mType = (Type) getIntent().getSerializableExtra("type");
         setContentView(R.layout.activity_input);
 
-        mKanjiWrapper = (TextInputLayout) findViewById(R.id.wrapper_kanji);
-        mKanjiText = (EditText) findViewById(R.id.input_kanji);
-        mKanaWrapper = (TextInputLayout) findViewById(R.id.wrapper_kana);
-        mKanaText = (EditText) findViewById(R.id.input_kana);
-        mInputWrapper = (TextInputLayout) findViewById(R.id.wrapper_input);
-        mInputText = (EditText) findViewById(R.id.input_input);
-        mTagsWrapper = (TextInputLayout) findViewById(R.id.wrapper_tags);
-        mTagsText = (EditText) findViewById(R.id.input_tags);
-        mDetailsWrapper = (TextInputLayout) findViewById(R.id.wrapper_details);
-        mDetailsText = (EditText) findViewById(R.id.input_details);
-        mExampleWrapper = (TextInputLayout) findViewById(R.id.wrapper_example);
-        mExampleText = (EditText) findViewById(R.id.input_example);
+        mKanjiWrapper = findViewById(R.id.wrapper_kanji);
+        mKanjiText = findViewById(R.id.input_kanji);
+        mKanaWrapper = findViewById(R.id.wrapper_kana);
+        mKanaText = findViewById(R.id.input_kana);
+        mInputWrapper = findViewById(R.id.wrapper_input);
+        mInputText = findViewById(R.id.input_input);
+        mTagsWrapper = findViewById(R.id.wrapper_tags);
+        mTagsText = findViewById(R.id.input_tags);
+        mDetailsWrapper = findViewById(R.id.wrapper_details);
+        mDetailsText = findViewById(R.id.input_details);
+        mExampleWrapper = findViewById(R.id.wrapper_example);
+        mExampleText = findViewById(R.id.input_example);
 
         switch (mType) {
             case WORD:

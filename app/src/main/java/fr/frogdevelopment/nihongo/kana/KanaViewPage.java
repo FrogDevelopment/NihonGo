@@ -29,7 +29,7 @@ public class KanaViewPage extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_kana, container, false);
 
-		ImageView imageView = (ImageView) rootView.findViewById(R.id.help_imageView);
+		ImageView imageView = rootView.findViewById(R.id.help_imageView);
 		imageView.setImageResource(getArguments().getInt("imageSource"));
 
 		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

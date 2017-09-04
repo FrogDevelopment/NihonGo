@@ -75,7 +75,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
 		super.onCreateView(inflater, container, savedInstanceState);
 		View rootView = inflater.inflate(R.layout.fragment_dico, container, false);
 
-		mFabAdd = (FloatingActionButton) rootView.findViewById(R.id.fab_add);
+		mFabAdd = rootView.findViewById(R.id.fab_add);
 		mFabAdd.setOnClickListener(view -> {
 			Intent intent;
 			intent = new Intent(getActivity(), InputActivity.class);

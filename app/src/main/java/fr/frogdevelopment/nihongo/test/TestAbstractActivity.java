@@ -60,9 +60,9 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
 
         setContentView(mLayout);
 
-        mCount = (TextView) findViewById(R.id.test_count);
-        mInfoTitle = (TextView) findViewById(R.id.test_info_title);
-        mInfo = (TextView) findViewById(R.id.test_info);
+        mCount = findViewById(R.id.test_count);
+        mInfoTitle = findViewById(R.id.test_info_title);
+        mInfo = findViewById(R.id.test_info);
 
         Bundle bundle = getIntent().getExtras();
         int tmp = bundle.getInt(TestParametersFragment.TEST_SELECTED_QUANTITY);

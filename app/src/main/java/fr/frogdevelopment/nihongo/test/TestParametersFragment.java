@@ -75,7 +75,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
 	@Override
 	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
-		Spinner mTypeSpinner = (Spinner) rootView.findViewById(R.id.test_param_type_spinner);
+		Spinner mTypeSpinner = rootView.findViewById(R.id.test_param_type_spinner);
 		mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -88,7 +88,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
 			}
 		});
-		Spinner mMethodSpinner = (Spinner) rootView.findViewById(R.id.test_param_method_spinner);
+		Spinner mMethodSpinner = rootView.findViewById(R.id.test_param_method_spinner);
 		mMethodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -106,7 +106,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 			}
 		});
 		mNbAnswers = rootView.findViewById(R.id.test_param_nb_answers);
-		mNbAnswersSpinner = (Spinner) rootView.findViewById(R.id.test_param_nb_answers_spinner);
+		mNbAnswersSpinner = rootView.findViewById(R.id.test_param_nb_answers_spinner);
 		mNbAnswersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -118,7 +118,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
 			}
 		});
-		Spinner mQuantitySpinner = (Spinner) rootView.findViewById(R.id.test_param_quantity_spinner);
+		Spinner mQuantitySpinner = rootView.findViewById(R.id.test_param_quantity_spinner);
 		mQuantitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -132,7 +132,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 			}
 		});
 
-		Spinner rateSpinner = (Spinner) rootView.findViewById(R.id.test_param_learned_spinner);
+		Spinner rateSpinner = rootView.findViewById(R.id.test_param_learned_spinner);
 		rateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -146,13 +146,13 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 			}
 		});
 
-		Spinner mTagSpinner = (Spinner) rootView.findViewById(R.id.test_param_tag_spinner);
+		Spinner mTagSpinner = rootView.findViewById(R.id.test_param_tag_spinner);
 		mTagSpinner.setOnTouchListener((view, motionEvent) -> onClickTags(motionEvent));
-		mKanjiSwitch = (Switch) rootView.findViewById(R.id.test_param_kanji);
-		mTagSelection = (TextView) rootView.findViewById(R.id.test_param_tag_selection);
-		mStartButton = (Button) rootView.findViewById(R.id.test_button_start);
+		mKanjiSwitch = rootView.findViewById(R.id.test_param_kanji);
+		mTagSelection = rootView.findViewById(R.id.test_param_tag_selection);
+		mStartButton = rootView.findViewById(R.id.test_button_start);
 		mStartButton.setOnClickListener(view -> onClickButtonStart());
-		mSwitchKeepView = (Switch) rootView.findViewById(R.id.test_switch_keep);
+		mSwitchKeepView = rootView.findViewById(R.id.test_switch_keep);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 

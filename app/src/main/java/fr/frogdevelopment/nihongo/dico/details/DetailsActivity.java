@@ -59,17 +59,17 @@ public class DetailsActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_details);
 
-		FloatingActionMenu fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
+		FloatingActionMenu fam = findViewById(R.id.fab_menu);
 
-		ImageView swapLeft = (ImageView) findViewById(R.id.swap_left);
-		ImageView swapRight = (ImageView) findViewById(R.id.swap_right);
+		ImageView swapLeft = findViewById(R.id.swap_left);
+		ImageView swapRight = findViewById(R.id.swap_right);
 
 		Bundle args = getIntent().getExtras();
 		mType = (Type) args.getSerializable("type");
 		mItems = args.getParcelableArrayList("items");
 
 		mAdapter = new DetailsAdapter(getFragmentManager());
-		mViewPager = (ViewPager) findViewById(R.id.details_viewpager);
+		mViewPager = findViewById(R.id.details_viewpager);
 		mViewPager.setAdapter(mAdapter);
 		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
@@ -103,16 +103,16 @@ public class DetailsActivity extends AppCompatActivity {
 		swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
 		swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
 
-		FloatingActionButton fabNew = (FloatingActionButton) findViewById(R.id.fab_new);
+		FloatingActionButton fabNew = findViewById(R.id.fab_new);
 		fabNew.setOnClickListener(v -> newItem());
 
-		FloatingActionButton fabDuplicate = (FloatingActionButton) findViewById(R.id.fab_duplicate);
+		FloatingActionButton fabDuplicate = findViewById(R.id.fab_duplicate);
 		fabDuplicate.setOnClickListener(v -> duplicate());
 
-		FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fab_delete);
+		FloatingActionButton fabDelete = findViewById(R.id.fab_delete);
 		fabDelete.setOnClickListener(v -> delete());
 
-		FloatingActionButton mFabEdit = (FloatingActionButton) findViewById(R.id.fab_edit);
+		FloatingActionButton mFabEdit = findViewById(R.id.fab_edit);
 		mFabEdit.setOnClickListener(v -> update());
 	}
 

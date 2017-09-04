@@ -44,7 +44,7 @@ public class HelpDialog extends DialogFragment {
 		int resId = getArguments().getInt("resId");
 		View view = inflater.inflate(resId, null);
 
-		final CheckBox remember = (CheckBox) view.findViewById(R.id.cb_remember);
+		final CheckBox remember = view.findViewById(R.id.cb_remember);
 		boolean showRemember = getArguments().getBoolean("showRemember");
 		remember.setVisibility(showRemember ? View.VISIBLE : View.GONE);
 

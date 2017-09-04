@@ -20,22 +20,21 @@ public class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
 		void onResult(boolean result);
 	}
 
-	private final Context                                 context;
+	private final ConnectivityManager connectivityManager;
 	private final OnTestConnectionListener reference;
 
 	public TestConnectionTask(Context context, OnTestConnectionListener listener) {
-		this.context = context;
+		this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		this.reference = listener;
 	}
 
 	@Override
 	protected Boolean doInBackground(String... params) {
-		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (cm == null) {
+		if (connectivityManager == null) {
 			return false;
 		}
 
-		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 		boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
 		if (isConnected) {

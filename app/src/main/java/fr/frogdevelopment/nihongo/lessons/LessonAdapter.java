@@ -6,6 +6,7 @@ package fr.frogdevelopment.nihongo.lessons;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,9 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         return enabled;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
@@ -72,7 +74,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         private final TextView text;
 
         private ViewHolder(View view) {
-            text = (TextView) view.findViewById(R.id.lesson_row);
+            text = view.findViewById(R.id.lesson_row);
         }
     }
 }

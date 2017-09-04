@@ -106,7 +106,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
         TextView textView;
 
         LetterViewHolder(View view) {
-            textView = (TextView) view.findViewById(R.id.row_header);
+            textView = view.findViewById(R.id.row_header);
         }
     }
 
@@ -147,10 +147,10 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
         private boolean tmp;
 
         ViewHolder(View view) {
-            mInputView = (TextView) view.findViewById(R.id.dico_input);
-            switcher = (TextSwitcher) view.findViewById(R.id.dico_switcher);
-            switcherKanji = (TextView) view.findViewById(R.id.dico_switcher_kanji);
-            switcherKana = (TextView) view.findViewById(R.id.dico_switcher_kana);
+            mInputView = view.findViewById(R.id.dico_input);
+            switcher = view.findViewById(R.id.dico_switcher);
+            switcherKanji = view.findViewById(R.id.dico_switcher_kanji);
+            switcherKana = view.findViewById(R.id.dico_switcher_kana);
         }
 
         void switchKanjiKana() {

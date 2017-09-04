@@ -40,8 +40,8 @@ public class TestSelectActivity extends TestAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mToFindView = (TextView) findViewById(R.id.test_select_to_find);
-        answers = (LinearLayout) findViewById(R.id.test_select_answers);
+        mToFindView = findViewById(R.id.test_select_to_find);
+        answers = findViewById(R.id.test_select_answers);
 
         for (int i = 0; i < nbAnswer; i++) {
             Button button = new Button(this);
