@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo;
+package fr.frogdevelopment.nihongo.lessons;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -9,6 +9,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
 
@@ -45,7 +47,7 @@ public class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
 				urlConnection.setConnectTimeout(1500);
 				urlConnection.connect();
 
-				return urlConnection.getResponseCode() == 200;
+				return urlConnection.getResponseCode() == HttpsURLConnection.HTTP_OK;
 			} catch (IOException e) {
 				Log.e(LOG_TAG, "Error during checking internet connection", e);
 			}
