@@ -298,6 +298,7 @@
     <string name="help_dico_press_and_hold">Press and hold to select the line</string>
     <string name="help_dico_add">Add new input</string>
     <string name="help_dico_start">Welcome to Nihon Go !\n\nLooks like you didn\'t have yet vocabulary.\n\nWould you like to get some ?</string>
+    <string name="version">version :</string>
 
     <!-- ******* -->
     <!--  ABOUT  -->
