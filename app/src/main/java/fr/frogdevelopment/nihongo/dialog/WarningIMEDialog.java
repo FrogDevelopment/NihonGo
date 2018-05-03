@@ -27,14 +27,14 @@ public class WarningIMEDialog extends DialogFragment {
 
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setIcon(R.drawable.ic_warning_black);
+		builder.setIcon(R.drawable.ic_warning);
 		builder.setTitle(R.string.warning_ime_title);
 		final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_warning_ime, null);
 		builder.setView(dialogView);
 
 		// Set the action buttons
 		builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-			final CheckBox remember = (CheckBox) dialogView.findViewById(R.id.warningCB);
+			final CheckBox remember = dialogView.findViewById(R.id.warningCB);
 
 			PreferencesHelper.getInstance(getActivity()).saveBoolean(Preferences.REMEMBER_WARNING_IME, remember.isChecked());
 

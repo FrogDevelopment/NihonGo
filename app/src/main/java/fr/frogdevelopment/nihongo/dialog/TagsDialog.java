@@ -26,7 +26,7 @@ public class TagsDialog extends DialogFragment {
 
 	private WeakReference<TagDialogListener> listener;
 
-	public static void show(FragmentManager fragmentManager, TagDialogListener listener, List<String> items, ArrayList<Integer> selectedItems) {
+	public static void show(FragmentManager fragmentManager, TagDialogListener listener, List<CharSequence> items, ArrayList<Integer> selectedItems) {
 		TagsDialog dialog = new TagsDialog();
 		dialog.listener = new WeakReference<>(listener);
 

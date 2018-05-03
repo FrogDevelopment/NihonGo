@@ -6,4 +6,9 @@
 <resources>
     <color name="apptheme_color">#DA4A38</color>
     <color name="white">#fff</color>
+    <color name="primary">#DA4A38</color>
+    <color name="primary_dark">#842013</color>
+    <color name="accent">#DA4A38</color>
+    <color name="accent_translucent">#abc22b19</color>
+    <color name="accent_bright">#f1aca3</color>
 </resources>

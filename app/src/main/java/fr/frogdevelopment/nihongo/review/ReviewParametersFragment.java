@@ -4,7 +4,6 @@
 
 package fr.frogdevelopment.nihongo.review;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -13,10 +12,14 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -30,10 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
@@ -42,207 +41,226 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
-    private static final int LOADER_ID = 700;
+	private static final int    LOADER_ID                = 700;
+	static final         String REVIEW_IS_JAPANESE       = "review_is_japanese";
+	static final         String REVIEW_ONLY_FAVORITE     = "review_only_favorite";
+	static final         String REVIEW_SELECTED_RATE     = "review_selected_rate";
+	static final         String REVIEW_SELECTED_SORT     = "review_selected_sort";
+	static final         String REVIEW_SELECTED_QUANTITY = "review_selected_quantity";
+	static final         String REVIEW_TAGS              = "review_tags";
+	static final         String REVIEW_KEEP_CONFIG       = "review_keepConfig";
 
-    @BindView(R.id.review_switch_language)
-    Switch mSwitchLanguageView;
-    @BindView(R.id.review_param_sort_selection)
-    TextView mSortSelected;
-    @BindView(R.id.review_switch_learned)
-    Switch mSwitchLearned;
-    @BindView(R.id.review_switch_favorite)
-    Switch mSwitchFavorite;
-    @BindView(R.id.review_param_quantity_selection)
-    TextView mQuantitySelected;
-    @BindView(R.id.review_param_tag_selection)
-    TextView mTagSelected;
-    @BindView(R.id.review_button_start)
-    Button startButton;
+	private Switch   mSwitchLanguageView;
+	private Switch   mSwitchFavorite;
+	private TextView mTagSelection;
+	private Button   mStartButton;
+	private Switch   mSwitchKeepView;
 
-    @BindView(R.id.review_switch_keep)
-    Switch mSwitchKeepView;
+	private int selectedRate     = -1;
+	private int selectedSort     = -1;
+	private int selectedQuantity = -1;
+	private ArrayList<Integer> mSelectedItems;
+	private String[]           mSelectedTags;
+	private List<CharSequence> items;
 
-    private int selectedSort = -1;
-    private String[] quantities;
-    private String selectedQuantity = null;
-    private ArrayList<Integer> mSelectedItems;
-    private String[] mSelectedTags;
-    private List<String> items;
-    private Unbinder unbinder;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_review_parameters, container, false);
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_review_parameters, container, false);
+	@Override
+	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
+		mSwitchLanguageView = rootView.findViewById(R.id.review_switch_language);
+		mSwitchFavorite = rootView.findViewById(R.id.review_switch_favorite);
+		Spinner rateSpinner = rootView.findViewById(R.id.review_param_learned_spinner);
+		rateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+				selectedRate = position;
+				checkStartButtonEnabled();
+			}
 
-        unbinder = ButterKnife.bind(this, rootView);
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+			}
+		});
+		Spinner sortSpinner = rootView.findViewById(R.id.review_param_sort_spinner);
+		sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+				selectedSort = position;
+				checkStartButtonEnabled();
+			}
 
-        quantities = getResources().getStringArray(R.array.param_quantities);
-        quantities = ArrayUtils.add(quantities, getResources().getString(R.string.param_quantity_all));
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
 
-        if (savedInstanceState != null) {
-            mSwitchLanguageView.setChecked(savedInstanceState.getBoolean("isJapaneseReviewed"));
-            mSwitchLearned.setChecked(savedInstanceState.getBoolean("excludeLearned"));
-            mSwitchFavorite.setChecked(savedInstanceState.getBoolean("onlyFavorite"));
-            selectedSort = savedInstanceState.getInt("sort");
-            mSortSelected.setText(getResources().getStringArray(R.array.param_sorts)[selectedSort]);
-            selectedQuantity = savedInstanceState.getString("count");
-            mQuantitySelected.setText(selectedQuantity);
-            mSelectedTags = savedInstanceState.getStringArray("tags");
-            mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
+			}
+		});
+		Spinner quantitySpinner = rootView.findViewById(R.id.review_param_quantity_spinner);
+		quantitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+				selectedQuantity = position;
+				checkStartButtonEnabled();
+			}
 
-            checkStartButtonEnabled();
-        } else {
-            if (PreferencesHelper.getInstance(getActivity()).getBoolean("keepReviewConfig")) {
-                mSwitchKeepView.setChecked(true);
-                mSwitchLanguageView.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("isJapaneseReviewed"));
-                mSwitchLearned.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("excludeLearned"));
-                mSwitchFavorite.setChecked(PreferencesHelper.getInstance(getActivity()).getBoolean("onlyFavorite"));
-                selectedSort = PreferencesHelper.getInstance(getActivity()).getInt("sort");
-                mSortSelected.setText(getResources().getStringArray(R.array.param_sorts)[selectedSort]);
-                selectedQuantity = PreferencesHelper.getInstance(getActivity()).getString("count");
-                mQuantitySelected.setText(selectedQuantity);
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
 
-                checkStartButtonEnabled();
-            }
-        }
+			}
+		});
+		Spinner mTagSpinner = rootView.findViewById(R.id.review_param_tag_spinner);
+		mTagSpinner.setOnTouchListener((view, motionEvent) -> onClickTags(motionEvent));
+		mTagSelection = rootView.findViewById(R.id.review_param_tag_selection);
+		mStartButton = rootView.findViewById(R.id.review_button_start);
+		mStartButton.setOnClickListener(view -> onClickButtonStart());
+		mSwitchKeepView = rootView.findViewById(R.id.review_switch_keep);
 
-        return rootView;
-    }
+		getLoaderManager().initLoader(LOADER_ID, null, this);
 
-    @Override
-    public void onDestroyView() {
-        saveConfigIfNeed();
+		if (savedInstanceState != null) {
+			mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE));
+			mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE));
+			selectedRate = savedInstanceState.getInt(REVIEW_SELECTED_RATE);
+			rateSpinner.setSelection(selectedRate);
+			selectedSort = savedInstanceState.getInt(REVIEW_SELECTED_SORT);
+			sortSpinner.setSelection(selectedSort);
+			selectedQuantity = savedInstanceState.getInt(REVIEW_SELECTED_QUANTITY);
+			quantitySpinner.setSelection(selectedQuantity);
+			mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
+			mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
+		} else {
+			PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
+			if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
+				mSwitchKeepView.setChecked(true);
+				mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
+				mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
+				selectedRate = preferencesHelper.getInt(REVIEW_SELECTED_RATE);
+				rateSpinner.setSelection(selectedRate);
+				selectedSort = preferencesHelper.getInt(REVIEW_SELECTED_SORT);
+				sortSpinner.setSelection(selectedSort);
+				selectedQuantity = preferencesHelper.getInt(REVIEW_SELECTED_QUANTITY);
+				quantitySpinner.setSelection(selectedQuantity);
+				String test_tags = preferencesHelper.getString(REVIEW_TAGS);
+				mSelectedTags = test_tags.split(", ");
+				mTagSelection.setText(test_tags);
 
-        unbinder.unbind();
-        super.onDestroyView();
-    }
+			}
+		}
 
-    private void saveConfigIfNeed() {
-        if (mSwitchKeepView.isChecked()) {
-            PreferencesHelper.getInstance(getActivity()).saveBoolean("keepReviewConfig", true);
-            PreferencesHelper.getInstance(getActivity()).saveBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
-            PreferencesHelper.getInstance(getActivity()).saveBoolean("excludeLearned", mSwitchLearned.isChecked());
-            PreferencesHelper.getInstance(getActivity()).saveBoolean("onlyFavorite", mSwitchFavorite.isChecked());
-            PreferencesHelper.getInstance(getActivity()).saveInt("sort", selectedSort);
-            PreferencesHelper.getInstance(getActivity()).saveString("count", selectedQuantity);
-        } else {
-            PreferencesHelper.getInstance(getActivity()).saveBoolean("keepReviewConfig", false);
-            PreferencesHelper.getInstance(getActivity()).remove("isJapaneseReviewed");
-            PreferencesHelper.getInstance(getActivity()).remove("excludeLearned");
-            PreferencesHelper.getInstance(getActivity()).remove("onlyFavorite");
-            PreferencesHelper.getInstance(getActivity()).remove("sort");
-            PreferencesHelper.getInstance(getActivity()).remove("count");
-        }
-    }
+		checkStartButtonEnabled();
+	}
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
-        return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
-    }
+	@Override
+	public void onDestroyView() {
+		saveConfigIfNeed();
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Set<String> uniqueItems = new HashSet<>();
-        while (data.moveToNext()) {
-            String row = data.getString(0);
-            String[] tags = row.split(",");
-            uniqueItems.addAll(Arrays.asList(tags));
-        }
+		super.onDestroyView();
+	}
 
-        items = new ArrayList<>(uniqueItems);
+	private void saveConfigIfNeed() {
+		PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
+		if (mSwitchKeepView.isChecked()) {
+			preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, true);
+			preferencesHelper.saveBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
+			preferencesHelper.saveBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
+			preferencesHelper.saveInt(REVIEW_SELECTED_RATE, selectedRate);
+			preferencesHelper.saveInt(REVIEW_SELECTED_SORT, selectedSort);
+			preferencesHelper.saveInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
+			preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
+		} else {
+			preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, false);
+			preferencesHelper.remove(REVIEW_IS_JAPANESE);
+			preferencesHelper.remove(REVIEW_ONLY_FAVORITE);
+			preferencesHelper.remove(REVIEW_SELECTED_RATE);
+			preferencesHelper.remove(REVIEW_SELECTED_SORT);
+			preferencesHelper.remove(REVIEW_SELECTED_QUANTITY);
+			preferencesHelper.remove(REVIEW_TAGS);
+		}
+	}
 
-        Collections.sort(items);
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
+		return new CursorLoader(getActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
+	}
 
-        data.close();
-    }
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		Set<CharSequence> uniqueItems = new HashSet<>();
+		while (data.moveToNext()) {
+			String row = data.getString(0);
+			String[] tags = row.split(",");
+			uniqueItems.addAll(Arrays.asList(tags));
+		}
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
+		items = new ArrayList<>(uniqueItems);
 
-    @OnClick(R.id.review_param_sort)
-    public void onClickType(View v) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.param_type_selection)
-                .setItems(R.array.param_sorts, (dialog, which) -> {
-                    selectedSort = which;
-                    mSortSelected.setText(getResources().getStringArray(R.array.param_sorts)[which]);
+		Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
 
-                    checkStartButtonEnabled();
-                })
-                .create()
-                .show();
-    }
+		data.close();
+	}
 
-    private void checkStartButtonEnabled() {
-        startButton.setEnabled(selectedSort > -1 && selectedQuantity != null);
-    }
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+	}
 
-    @OnClick(R.id.review_param_quantity)
-    void onClickQuantity(View v) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.param_sort_selection)
-                .setItems(quantities, (dialog, which) -> {
-                    selectedQuantity = quantities[which];
-                    mQuantitySelected.setText(selectedQuantity);
+	private void checkStartButtonEnabled() {
+		mStartButton.setEnabled(selectedSort > -1 && selectedQuantity > -1);
+	}
 
-                    checkStartButtonEnabled();
-                })
-                .create()
-                .show();
-    }
+	private boolean onClickTags(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
+			return true;
+		}
 
-    @OnClick(R.id.review_param_tag)
-    void onClickTag() {
-        TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
-    }
+		return false;
+	}
 
-    @Override
-    public void onReturnValue(ArrayList<Integer> selectedItems) {
-        mSelectedItems = selectedItems;
-        mSelectedTags = null;
+	@Override
+	public void onReturnValue(ArrayList<Integer> selectedItems) {
+		mSelectedItems = selectedItems;
+		mSelectedTags = null;
 
-        for (Integer selectedIndex : mSelectedItems) {
-            String selectedTag = items.get(selectedIndex);
-            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag);
-        }
+		for (Integer selectedIndex : mSelectedItems) {
+			CharSequence selectedTag = items.get(selectedIndex);
+			mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag.toString().split(" - ")[0]);
+		}
 
-        mTagSelected.setText(StringUtils.join(mSelectedTags, ", "));
-    }
+		mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
+	}
 
-    @OnClick(R.id.review_button_start)
-    void onClickButtonStart() {
-        Bundle options = new Bundle();
-        populateUiSelection(options);
+	private void onClickButtonStart() {
+		Bundle options = new Bundle();
+		populateUiSelection(options);
 
-        Intent intent = new Intent(getActivity(), ReviewActivity.class);
-        intent.putExtras(options);
+		Intent intent = new Intent(getActivity(), ReviewActivity.class);
+		intent.putExtras(options);
 
-        startActivity(intent);
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+		startActivity(intent);
+		getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+	}
 
-    private void populateUiSelection(Bundle options) {
-        options.putBoolean("isJapaneseReviewed", mSwitchLanguageView.isChecked());
-        options.putBoolean("excludeLearned", mSwitchLearned.isChecked());
-        options.putBoolean("onlyFavorite", mSwitchFavorite.isChecked());
-        options.putInt("sort", selectedSort);
-        options.putString("count", selectedQuantity);
-        options.putStringArray("tags", mSelectedTags);
-    }
+	private void populateUiSelection(Bundle options) {
+		options.putBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
+		options.putBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
+		options.putInt(REVIEW_SELECTED_RATE, selectedRate);
+		options.putInt(REVIEW_SELECTED_SORT, selectedSort);
+		options.putInt(REVIEW_SELECTED_QUANTITY, selectedQuantity);
+		options.putStringArray(REVIEW_TAGS, mSelectedTags);
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+		saveConfigIfNeed();
+	}
 
-        // Store UI state to the savedInstanceState.
-        populateUiSelection(savedInstanceState);
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		// Store UI state to the savedInstanceState.
+		populateUiSelection(savedInstanceState);
 
-        saveConfigIfNeed();
-
-        super.onSaveInstanceState(savedInstanceState);
-    }
+		super.onSaveInstanceState(savedInstanceState);
+	}
 
 }

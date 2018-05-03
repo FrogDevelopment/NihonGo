@@ -5,12 +5,11 @@
 package fr.frogdevelopment.nihongo.dico.input;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -27,237 +24,240 @@ import fr.frogdevelopment.nihongo.data.Type;
 
 public class InputActivity extends AppCompatActivity {
 
-	@BindView(R.id.toolbar)
-	Toolbar         toolbar;
-	@BindView(R.id.wrapper_kanji)
-	TextInputLayout mKanjiWrapper;
-	@BindView(R.id.input_kanji)
-	EditText        mKanjiText;
-	@BindView(R.id.wrapper_kana)
-	TextInputLayout mKanaWrapper;
-	@BindView(R.id.input_kana)
-	EditText        mKanaText;
-	@BindView(R.id.wrapper_input)
-	TextInputLayout mInputWrapper;
-	@BindView(R.id.input_input)
-	EditText        mInputText;
-	@BindView(R.id.wrapper_tags)
-	TextInputLayout mTagsWrapper;
-	@BindView(R.id.input_tags)
-	EditText        mTagsText;
-	@BindView(R.id.wrapper_details)
-	TextInputLayout mDetailsWrapper;
-	@BindView(R.id.input_details)
-	EditText        mDetailsText;
-	@BindView(R.id.wrapper_example)
-	TextInputLayout mExampleWrapper;
-	@BindView(R.id.input_example)
-	EditText        mExampleText;
+    private TextInputLayout mKanjiWrapper;
+    private EditText mKanjiText;
+    private TextInputLayout mKanaWrapper;
+    private EditText mKanaText;
+    private TextInputLayout mInputWrapper;
+    private EditText mInputText;
+    private TextInputLayout mTagsWrapper;
+    private EditText mTagsText;
+    private TextInputLayout mDetailsWrapper;
+    private EditText mDetailsText;
+    private TextInputLayout mExampleWrapper;
+    private EditText mExampleText;
 
-	// Initial Data
-	private Item itemUpdate;
-	private Type mType;
+    // Initial Data
+    private Item itemUpdate;
+    private Type mType;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		mType = (Type) getIntent().getSerializableExtra("type");
-		setContentView(R.layout.activity_input);
+        mType = (Type) getIntent().getSerializableExtra("type");
+        setContentView(R.layout.activity_input);
 
-		ButterKnife.bind(this);
+        mKanjiWrapper = findViewById(R.id.wrapper_kanji);
+        mKanjiText = findViewById(R.id.input_kanji);
+        mKanaWrapper = findViewById(R.id.wrapper_kana);
+        mKanaText = findViewById(R.id.input_kana);
+        mInputWrapper = findViewById(R.id.wrapper_input);
+        mInputText = findViewById(R.id.input_input);
+        mTagsWrapper = findViewById(R.id.wrapper_tags);
+        mTagsText = findViewById(R.id.input_tags);
+        mDetailsWrapper = findViewById(R.id.wrapper_details);
+        mDetailsText = findViewById(R.id.input_details);
+        mExampleWrapper = findViewById(R.id.wrapper_example);
+        mExampleText = findViewById(R.id.input_example);
 
-		switch (mType) {
-			case WORD:
-				setTitle(R.string.drawer_item_word);
-				break;
+        switch (mType) {
+            case WORD:
+                setTitle(R.string.drawer_item_word);
+                break;
 
-			case EXPRESSION:
-				setTitle(R.string.drawer_item_expression);
-				break;
+            case EXPRESSION:
+                setTitle(R.string.drawer_item_expression);
+                break;
 
-			default:
-				setTitle("");
-				break;
-		}
+            default:
+                setTitle("");
+                break;
+        }
 
-		itemUpdate = getIntent().getParcelableExtra("item");
+        itemUpdate = getIntent().getParcelableExtra("item");
 
-		initData();
+        initData();
+    }
 
-		initToolbar();
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.input, menu);
 
-	private void initToolbar() {
-		setSupportActionBar(toolbar);
-		final ActionBar actionBar = getSupportActionBar();
+        return true;
+    }
 
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setHomeButtonEnabled(true);
-		}
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_validate:
+                validate();
+                return true;
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.input, menu);
+            case R.id.action_cancel:
+                initData();
+                return true;
 
-		return true;
-	}
+            case android.R.id.home:
+                back();
+                return true;
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
-		switch (item.getItemId()) {
-			case R.id.action_validate:
-				validate();
-				return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-			case R.id.action_cancel:
-				initData();
-				return true;
+    @Override
+    public void onBackPressed() {
+        back();
+    }
 
-			case android.R.id.home:
-				back();
-				return true;
+    @Override
+    public void finish() {
+        Intent data = new Intent();
+        data.putExtra("position", getIntent().getIntExtra("position", -1));
+        data.putExtra("item", itemUpdate);
+        setResult(RESULT_OK, data);
+        super.finish();
+    }
 
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
+    private void back() {
+        Intent data = new Intent();
+        setResult(RESULT_CANCELED, data);
+        super.finish();
+    }
 
-	@Override
-	public void onBackPressed() {
-		back();
-	}
+    private void initData() {
+        mKanjiText.requestFocus();
+        mKanjiText.setText(itemUpdate == null ? "" : itemUpdate.kanji);
+        mKanjiWrapper.setError(null);
 
+        mKanaText.setText(itemUpdate == null ? "" : itemUpdate.kana);
+        mKanaWrapper.setError(null);
 
-	private void back() {
-		finish();
-	}
+        mInputText.setText(itemUpdate == null ? "" : itemUpdate.input);
+        mInputWrapper.setError(null);
 
-	private void initData() {
-		mKanjiText.requestFocus();
-		mKanjiText.setText(itemUpdate == null ? "" : itemUpdate.kanji);
-		mKanjiWrapper.setError(null);
+        mDetailsText.setText(itemUpdate == null ? "" : itemUpdate.details);
+        mDetailsWrapper.setError(null);
 
-		mKanaText.setText(itemUpdate == null ? "" : itemUpdate.kana);
-		mKanaWrapper.setError(null);
+        mExampleText.setText(itemUpdate == null ? "" : itemUpdate.example);
+        mExampleWrapper.setError(null);
 
-		mInputText.setText(itemUpdate == null ? "" : itemUpdate.input);
-		mInputWrapper.setError(null);
+        mTagsText.setText(itemUpdate == null ? "" : itemUpdate.tags);
+        mTagsWrapper.setError(null);
+    }
 
-		mDetailsText.setText(itemUpdate == null ? "" : itemUpdate.details);
-		mDetailsWrapper.setError(null);
+    private void validate() {
+        boolean isNoError = true;
 
-		mExampleText.setText(itemUpdate == null ? "" : itemUpdate.example);
-		mExampleWrapper.setError(null);
+        String inputText = mInputText.getText().toString();
+        if (inputText.isEmpty()) {
+            isNoError = false;
+            mInputWrapper.setError(getResources().getString(R.string.input_error_empty));
+        } else if (InputUtils.containsJapanese(inputText)) {
+            isNoError = false;
+            mInputWrapper.setError(getResources().getString(R.string.input_error_input));
+        } else {
+            mInputWrapper.setError(null);
+        }
 
-		mTagsText.setText(itemUpdate == null ? "" : itemUpdate.tags);
-		mTagsWrapper.setError(null);
-	}
+        String kanjiText = mKanjiText.getText().toString();
+        String kanaText = mKanaText.getText().toString();
 
-	private void validate() {
-		boolean isNoError = true;
+        if (kanjiText.isEmpty() && kanaText.isEmpty()) {
+            isNoError = false;
+            mKanjiWrapper.setError(getResources().getString(R.string.input_error_all_empty));
+            mKanaWrapper.setError(getResources().getString(R.string.input_error_all_empty));
+        } else {
+            if (InputUtils.isOnlyJapanese(kanjiText)) {
+                mKanjiWrapper.setError(null);
+            } else {
+                isNoError = false;
+                mKanjiWrapper.setError(getResources().getString(R.string.input_error_japanese));
+            }
 
-		String inputText = mInputText.getText().toString();
-		if (inputText.isEmpty()) {
-			isNoError = false;
-			mInputWrapper.setError(getResources().getString(R.string.input_error_empty));
-		} else if (InputUtils.containsJapanese(inputText)) {
-			isNoError = false;
-			mInputWrapper.setError(getResources().getString(R.string.input_error_input));
-		} else {
-			mInputWrapper.setError(null);
-		}
+            if (InputUtils.isOnlyKana(kanaText)) {
+                mKanaWrapper.setError(null);
+            } else {
+                isNoError = false;
+                mKanaWrapper.setError(getResources().getString(R.string.input_error_kana));
+            }
+        }
 
-		String kanjiText = mKanjiText.getText().toString();
-		String kanaText = mKanaText.getText().toString();
+        if (isNoError) {
+            saveOrUpdate();
+        } else {
+            Toast.makeText(this, R.string.input_error_fields, Toast.LENGTH_LONG).show();
+        }
+    }
 
-		if (kanjiText.isEmpty() && kanaText.isEmpty()) {
-			isNoError = false;
-			mKanjiWrapper.setError(getResources().getString(R.string.input_error_all_empty));
-			mKanaWrapper.setError(getResources().getString(R.string.input_error_all_empty));
-		} else {
-			if (InputUtils.isOnlyJapanese(kanjiText)) {
-				mKanjiWrapper.setError(null);
-			} else {
-				isNoError = false;
-				mKanjiWrapper.setError(getResources().getString(R.string.input_error_japanese));
-			}
+    private void saveOrUpdate() {
+        if (itemUpdate != null) {
+            update();
+        } else {
+            insert();
+        }
+    }
 
-			if (InputUtils.isOnlyKana(kanaText)) {
-				mKanaWrapper.setError(null);
-			} else {
-				isNoError = false;
-				mKanaWrapper.setError(getResources().getString(R.string.input_error_kana));
-			}
-		}
+    private void update() {
 
-		if (isNoError) {
-			saveOrUpdate();
-		} else {
-			Toast.makeText(this, R.string.input_error_fields, Toast.LENGTH_LONG).show();
-		}
-	}
+        itemUpdate.input = StringUtils.capitalize(mInputText.getText().toString());
+        itemUpdate.sort_letter = itemUpdate.input.substring(0, 1);
+        itemUpdate.kanji = mKanjiText.getText().toString();
+        itemUpdate.kana = mKanaText.getText().toString();
+        itemUpdate.tags = mTagsText.getText().toString();
+        itemUpdate.details = mDetailsText.getText().toString();
+        itemUpdate.example = mExampleText.getText().toString();
 
-	private void saveOrUpdate() {
-		if (itemUpdate != null) {
-			update();
-		} else {
-			insert();
-		}
-	}
+        final String where = DicoContract._ID + "=?";
+        final String[] selectionArgs = {itemUpdate.id};
 
-	private void update() {
-		final String where = DicoContract._ID + "=?";
-		final String[] selectionArgs = {itemUpdate.id};
+        final ContentValues values = new ContentValues();
+        values.put(DicoContract.INPUT, itemUpdate.input);
+        values.put(DicoContract.SORT_LETTER, itemUpdate.sort_letter);
+        values.put(DicoContract.KANJI, itemUpdate.kanji);
+        values.put(DicoContract.KANA, itemUpdate.kana);
+        values.put(DicoContract.TAGS, itemUpdate.tags);
+        values.put(DicoContract.DETAILS, itemUpdate.details);
+        values.put(DicoContract.EXAMPLE, itemUpdate.example);
 
-		final ContentValues values = new ContentValues();
-		final String inputData = StringUtils.capitalize(mInputText.getText().toString());
-		values.put(DicoContract.INPUT, inputData);
-		values.put(DicoContract.SORT_LETTER, inputData.substring(0, 1));
-		values.put(DicoContract.KANJI, mKanjiText.getText().toString());
-		values.put(DicoContract.KANA, mKanaText.getText().toString());
-		values.put(DicoContract.TAGS, mTagsText.getText().toString());
-		values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
-		values.put(DicoContract.EXAMPLE, mExampleText.getText().toString());
+        getContentResolver().update(mType.uri, values, where, selectionArgs);
 
-		getContentResolver().update(mType.uri, values, where, selectionArgs);
+        // TOAST
+        Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_SHORT)
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        finish();
+                    }
+                })
+                .show();
+    }
 
-		// TOAST
-		Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_SHORT)
-				.setCallback(new Snackbar.Callback() {
-					@Override
-					public void onDismissed(Snackbar snackbar, int event) {
-						back();
-					}
-				})
-				.show();
-	}
+    private void insert() {
+        final ContentValues values = new ContentValues();
+        final String inputData = StringUtils.capitalize(mInputText.getText().toString());
+        values.put(DicoContract.INPUT, inputData);
+        values.put(DicoContract.SORT_LETTER, inputData.substring(0, 1));
+        values.put(DicoContract.KANJI, mKanjiText.getText().toString());
+        values.put(DicoContract.KANA, mKanaText.getText().toString());
+        values.put(DicoContract.TAGS, mTagsText.getText().toString());
+        values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
+        values.put(DicoContract.EXAMPLE, mExampleText.getText().toString());
+        values.put(DicoContract.TYPE, mType.code);
 
-	private void insert() {
-		final ContentValues values = new ContentValues();
-		final String inputData = StringUtils.capitalize(mInputText.getText().toString());
-		values.put(DicoContract.INPUT, inputData);
-		values.put(DicoContract.SORT_LETTER, inputData.substring(0, 1));
-		values.put(DicoContract.KANJI, mKanjiText.getText().toString());
-		values.put(DicoContract.KANA, mKanaText.getText().toString());
-		values.put(DicoContract.TAGS, mTagsText.getText().toString());
-		values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
-		values.put(DicoContract.EXAMPLE, mExampleText.getText().toString());
-		values.put(DicoContract.TYPE, mType.code);
+        getContentResolver().insert(mType.uri, values);
 
-		getContentResolver().insert(mType.uri, values);
-
-		// TOAST
-		Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_SHORT)
-				.setCallback(new Snackbar.Callback() {
-					@Override
-					public void onDismissed(Snackbar snackbar, int event) {
-						initData();
-					}
-				})
-				.show();
-	}
+        // TOAST
+        Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_SHORT)
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        initData();
+                    }
+                })
+                .show();
+    }
 }

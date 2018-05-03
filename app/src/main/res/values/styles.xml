@@ -4,16 +4,16 @@
 
 <resources>
 
-    <style name="AppTheme" parent="BaseTheme"/>
-
-    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="NihonGoTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@android:color/darker_gray</item> 
+        <!--<item name="colorPrimary">@color/primary</item> -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorControlHighlight">@color/accent_translucent</item> 
         <item name="colorAccent">@color/accent</item>
         <item name="selectableItemBackground">@drawable/selectable_item_background</item>
         <item name="android:selectableItemBackground">@drawable/selectable_item_background</item>
         <!-- to hide toolbar when action bar is showing -->
-        <item name="windowActionModeOverlay">true</item>
+        <!--<item name="windowActionModeOverlay">true</item>-->
     </style>
 
     <style name="FabStyle">
@@ -26,10 +26,17 @@
         <item name="rippleColor">@android:color/white</item>
     </style>
 
-    <color name="primary">#DA4A38</color>
-    <color name="primary_dark">#842013</color>
-    <color name="accent">#DA4A38</color>
-    <color name="accent_translucent">#abc22b19</color>
-    <color name="accent_bright">#f1aca3</color>
+    <style name="FamStyle">
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="menu_fab_hide_animation">@anim/scale_down</item>
+        <item name="menu_fab_show_animation">@anim/scale_up</item>
+    </style>
 
+    <style name="NormalFabStyle">
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+    </style>
+
+    <style name="MiniFabStyle" parent="NormalFabStyle">
+        <item name="fab_size">mini</item>
+    </style>
 </resources>

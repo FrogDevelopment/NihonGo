@@ -12,7 +12,15 @@ public class InputUtils {
 
     public static final char TILD = 0xFF5E; // '~'
     public static final char WAVE_DASH = 0x301C; // '～'
-    public static final char TOTEN = 0x3001; // '、'
+    public static final char TOTEN = 0x3001; // '、' (virgule japonaise)
+
+    // fixme
+    private static final int FIXME_1_roman = 0xff3b;
+    private static final int FIXME_1_jp = 0x3010;
+    private static final int FIXME_1 = 0x005b;
+    private static final int FIXME_2_roman = 0xff3d;
+    private static final int FIXME_2_jp = 0x3011;
+    private static final int FIXME_2 = 0x005d;
 
     // Japanese-style punctuation ( 3000 - 303f)
     private static final int RANGE_PUNCTUATION_START = 0x3000;
@@ -75,6 +83,8 @@ public class InputUtils {
                 continue;
             } else if (ch == TILD || ch == WAVE_DASH) { // todo http://stackoverflow.com/questions/14450187/having-trouble-with-japanese-character-in-android
                 continue;
+            } else if (ch == FIXME_1 || ch == FIXME_2) { // fixme [ and ] not in japanese range with Swype + Dragon
+                continue;
             } else {
                 isOnlyJapanese = false;
                 break;
@@ -94,6 +104,10 @@ public class InputUtils {
             } else if (ch >= RANGE_HIRAGANA_START && ch <= RANGE_HIRAGANA_END) { // HIRAGANA
                 continue;
             } else if (ch >= RANGE_KATAKANA_START && ch <= RANGE_KATAKANA_END) { // KATAKANA
+                continue;
+            } else if (ch == TILD || ch == WAVE_DASH) { // todo http://stackoverflow.com/questions/14450187/having-trouble-with-japanese-character-in-android
+                continue;
+            } else if (ch == FIXME_1 || ch == FIXME_2) { // fixme [ and ] not in japanese range with Swype + Dragon
                 continue;
             } else {
                 isOnlyKana = false;

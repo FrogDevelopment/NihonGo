@@ -2,250 +2,194 @@
 <!--
   ~ Copyright (c) Frog Development 2015.
   -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="top"
-              android:orientation="vertical"
-              android:padding="5dp">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clickable="true"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <LinearLayout
-            android:id="@+id/test_param_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="10dp"
-            android:paddingStart="0dp">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/test_param_type_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_type"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/test_param_type_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_type_selection"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
-
-            <ImageView
+            <TextView
+                android:id="@+id/test_param_type_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/arrow_touch"/>
+                android:text="@string/param_type"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/param_types"
+                android:prompt="@string/param_type_selection"
+                android:spinnerMode="dialog"/>
         </LinearLayout>
+
 
         <LinearLayout
-            android:id="@+id/test_param_method"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="10dp"
-            android:paddingStart="0dp">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/test_param_method_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_method"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/test_param_method_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_method_selection"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
-
-            <ImageView
+            <TextView
+                android:id="@+id/test_param_method_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/arrow_touch"/>
+                android:text="@string/param_method"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_method_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/param_methods"
+                android:prompt="@string/param_method_selection"
+                android:spinnerMode="dialog"/>
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/test_param_nb_answers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="10dp"
-            android:paddingStart="0dp"
-            android:visibility="gone">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/test_param_nb_answers_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_nb_answers"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/test_param_nb_answers_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_nb_answers_selection"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
-
-            <ImageView
+            <TextView
+                android:id="@+id/test_param_nb_answers_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/arrow_touch"/>
+                android:text="@string/param_nb_answers"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_nb_answers_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/param_quantities_answers"
+                android:prompt="@string/param_nb_answers_selection"
+                android:spinnerMode="dialog"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/test_param_quantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="10dp"
-            android:paddingStart="0dp">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/test_param_quantity_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_quantity"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/test_param_quantity_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_quantity_selection"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
-
-            <ImageView
+            <TextView
+                android:id="@+id/test_param_quantity_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/arrow_touch"/>
+                android:text="@string/param_quantity"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_quantity_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/param_quantities"
+                android:prompt="@string/param_quantity_selection"
+                android:spinnerMode="dialog"/>
         </LinearLayout>
 
-        <Switch
-            android:id="@+id/test_switch_learned"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:padding="10dp"
-            android:text="@string/param_only_learned"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textOff="@string/no"
-            android:textOn="@string/yes"/>
-
         <LinearLayout
-            android:id="@+id/test_param_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="10dp"
-            android:paddingStart="0dp">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/test_param_tag_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_tag_title"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <TextView
-                    android:id="@+id/test_param_tag_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_tag_selection"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
-
-            <ImageView
+            <TextView
+                android:id="@+id/test_param_learned_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/arrow_touch"/>
+                android:text="@string/param_learned"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_learned_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/param_learned"
+                android:prompt="@string/param_learned_selection"
+                android:spinnerMode="dialog"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/test_param_tag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/param_tag_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+            <Spinner
+                android:id="@+id/test_param_tag_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/test_param_tag_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"/>
         </LinearLayout>
 
         <Switch
             android:id="@+id/test_param_kanji"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:text="@string/param_kanji_display"
             android:textOff="@string/no"
             android:textOn="@string/yes"
             android:visibility="invisible"/>
 
-    </LinearLayout>
+        <Switch
+            android:id="@+id/test_switch_keep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/param_keep_config"
+            android:textOff="@string/no"
+            android:textOn="@string/yes"/>
 
-    <Button
-        android:id="@+id/test_button_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:enabled="false"
-        android:text="@string/param_button_start"/>
-</LinearLayout>
+        <Button
+            android:id="@+id/test_button_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:enabled="false"
+            android:text="@string/param_button_start"/>
+    </LinearLayout>
+</ScrollView>

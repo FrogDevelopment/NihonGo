@@ -44,7 +44,7 @@ public class HelpDialog extends DialogFragment {
 		int resId = getArguments().getInt("resId");
 		View view = inflater.inflate(resId, null);
 
-		final CheckBox remember = (CheckBox) view.findViewById(R.id.cb_remember);
+		final CheckBox remember = view.findViewById(R.id.cb_remember);
 		boolean showRemember = getArguments().getBoolean("showRemember");
 		remember.setVisibility(showRemember ? View.VISIBLE : View.GONE);
 
@@ -62,14 +62,8 @@ public class HelpDialog extends DialogFragment {
 					if (showRemember) {
 						Preferences preferences;
 						switch (resId) {
-							case R.layout.dialog_help_details:
-								preferences = Preferences.HELP_DETAILS;
-								break;
 							case R.layout.dialog_help_dico:
 								preferences = Preferences.HELP_DICO;
-								break;
-							case R.layout.dialog_help_review:
-								preferences = Preferences.HELP_REVIEW;
 								break;
 							default:
 								throw new IllegalStateException("Unknow resId " + resId);

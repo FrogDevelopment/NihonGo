@@ -1,19 +1,9 @@
-/.gradle
 # Maven
 # =========================
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-
 # IntelliJ
 # =========================
 /local.properties
 *.iml
 .idea
-.gitattributes
 build
-libs
-gradle
+.gradle

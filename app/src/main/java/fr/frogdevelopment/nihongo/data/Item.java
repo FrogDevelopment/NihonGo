@@ -12,31 +12,25 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 
 public class Item implements Row, Parcelable {
 
-	public final String id;
-	public final String input;
-	public final String sort_letter;
-	public final String kanji;
-	public final String kana;
-	public final String tags;
-	public final String details;
-	public final String example;
-	public       String favorite;
-	public       String learned;
+	public String id;
+	public String input;
+	public String sort_letter;
+	public String kanji;
+	public String kana;
+	public String tags;
+	public String details;
+	public String example;
+	public boolean bookmark;
+	public int learned;
+	public int success;
+	public int failed;
 
-	public boolean isFavorite() {
-		return "1".equals(favorite);
+	public boolean isBookmarked() {
+		return bookmark;
 	}
 
-	public void switchFavorite() {
-		favorite = isFavorite() ? "0" : "1";
-	}
-
-	public boolean isLearned() {
-		return "1".equals(learned);
-	}
-
-	public void switchLearned() {
-		learned = isLearned() ? "0" : "1";
+	public void switchBookmark() {
+		bookmark = !bookmark;
 	}
 
 	public Item(Cursor cursor) {
@@ -48,8 +42,10 @@ public class Item implements Row, Parcelable {
 		tags = cursor.getString(DicoContract.INDEX_TAGS);
 		details = cursor.getString(DicoContract.INDEX_DETAILS);
 		example = cursor.getString(DicoContract.INDEX_EXAMPLE);
-		favorite = cursor.getString(DicoContract.INDEX_FAVORITE);
-		learned = cursor.getString(DicoContract.INDEX_LEARNED);
+		bookmark = cursor.getInt(DicoContract.INDEX_BOOKMARK) == 1;
+		learned = cursor.getInt(DicoContract.INDEX_LEARNED);
+		success = cursor.getInt(DicoContract.INDEX_SUCCESS);
+		failed = cursor.getInt(DicoContract.INDEX_FAILED);
 	}
 
 	public int describeContents() {
@@ -65,8 +61,10 @@ public class Item implements Row, Parcelable {
 		out.writeString(details);
 		out.writeString(example);
 		out.writeString(tags);
-		out.writeString(favorite);
-		out.writeString(learned);
+		out.writeInt(bookmark ? 1 : 0);
+		out.writeInt(learned);
+		out.writeInt(success);
+		out.writeInt(failed);
 	}
 
 	public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -88,8 +86,10 @@ public class Item implements Row, Parcelable {
 		details = in.readString();
 		example = in.readString();
 		tags = in.readString();
-		favorite = in.readString();
-		learned = in.readString();
+		bookmark = in.readInt() == 1;
+		learned = in.readInt();
+		success = in.readInt();
+		failed = in.readInt();
 	}
 
 	@Override

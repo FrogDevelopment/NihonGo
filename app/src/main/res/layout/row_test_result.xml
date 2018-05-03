@@ -16,7 +16,7 @@
         android:id="@+id/dico_test_test"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.50"
+        android:layout_weight="0.45"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
@@ -25,9 +25,18 @@
         android:id="@+id/dico_test_answer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.450"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:layout_weight="0.50"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/dico_test_ratio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 </LinearLayout>

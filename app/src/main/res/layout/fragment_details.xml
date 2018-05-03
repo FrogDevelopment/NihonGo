@@ -1,123 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingEnd="22dp"
+    android:paddingStart="22dp"
+    android:paddingTop="10dp">
 
-    <LinearLayout
-        android:id="@+id/details_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|top"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/details_word_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="40sp"
-            android:textStyle="italic"/>
-
-        <TextView
-            android:id="@+id/details_word_kanji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="30sp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_kana"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="30sp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_info_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textSize="12sp"
-            android:text="@string/details_info"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textSize="20sp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_example_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textSize="12sp"
-            android:text="@string/details_example"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_example"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textStyle="italic"
-            android:textSize="20sp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_tags_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textSize="12sp"
-            android:text="@string/details_tags"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/details_word_tags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textSize="20sp"
-            android:visibility="gone"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/details_word_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_anchor="@id/details_content"
-        app:layout_anchorGravity="bottom|right|end">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/bookmark"
+        android:text="@string/details_tags"
+        android:textSize="12sp"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_learned"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_bookmark_off"/>
+    <ImageView
+        android:id="@id/bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_bookmark_on"
+        android:tint="@android:color/darker_gray"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_favorite"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/details_word_success"
+        android:layout_below="@id/bookmark"
+        android:fadeScrollbars="false"
+        android:scrollbarStyle="outsideOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_favorite_off"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/details_word_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_horizontal"
+                android:textSize="40sp"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/details_word_kanji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:textSize="50sp"
+                android:visibility="invisible"/>
+
+            <TextView
+                android:id="@+id/details_word_kana"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:textSize="40sp"/>
+
+            <TextView
+                android:id="@+id/details_word_info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_info"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/details_word_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/details_word_example_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_example"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/details_word_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@id/details_word_success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/detail_rating"
+        android:layout_marginTop="10dp"
+        android:text="@string/details_ratio"
+        android:textSize="12sp"/>
+
+    <LinearLayout
+        android:id="@id/detail_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/rate_0"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star_black_24dp"
+            android:tint="@android:color/darker_gray"/>
+
+        <ImageView
+            android:id="@+id/rate_1"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star_black_24dp"
+            android:tint="@android:color/darker_gray"/>
+
+        <ImageView
+            android:id="@+id/rate_2"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star_black_24dp"
+            android:tint="@android:color/darker_gray"/>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
+        android:layout_marginStart="8dp"
         android:padding="2dp"
         android:text="@string/help_dico_intro"/>
 
@@ -27,14 +28,16 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/help_dico_one_press_description"
-            android:src="@drawable/ic_touch_app_black_36dp"/>
+            android:src="@drawable/ic_touch_app_black"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/help_dico_one_press_description"
-            android:src="@drawable/ic_1_time_black_36dp"/>
+            android:src="@drawable/ic_1_time_black"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,14 +58,16 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/help_dico_two_press_description"
-            android:src="@drawable/ic_touch_app_black_36dp"/>
+            android:src="@drawable/ic_touch_app_black"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/help_dico_two_press_description"
-            android:src="@drawable/ic_2_times_black_36dp"/>
+            android:src="@drawable/ic_2_times_black"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,20 +88,22 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/help_dico_two_press_description"
-            android:src="@drawable/ic_touch_app_black_36dp"/>
+            android:src="@drawable/ic_touch_app_black"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/help_dico_two_press_description"
-            android:src="@drawable/ic_hourglass_empty_black_36dp"/>
+            android:src="@drawable/ic_hourglass_empty_black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="22dp"
             android:text="@string/help_dico_press_and_hold"/>
 
     </LinearLayout>
