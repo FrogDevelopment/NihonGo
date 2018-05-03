@@ -5,22 +5,58 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo"
-        minSdkVersion 19
-        targetSdkVersion 26
+
+        minSdkVersion 21
+        targetSdkVersion 27
 
         versionCode 38
         versionName "1.0.0"
     }
 
+    signingConfigs {
+        Properties props = new Properties()
+        def propFile = new File(System.getenv("SIGNING_PROPERTIES"))
+        if (propFile.canRead()) {
+            props.load(new FileInputStream(propFile))
+            if (props == null || props.isEmpty()) {
+                println 'signing.properties found but entries are missing'
+                debug = null
+                release = null
+            } else {
+                debug {
+                    keyAlias props['ng_key_alias']
+                    keyPassword props['ng_key_password']
+                    storePassword props['store_password']
+                    storeFile file(props['store_file'])
+                }
+                release {
+                    keyAlias props['ng_key_alias']
+                    keyPassword props['ng_key_password']
+                    storePassword props['store_password']
+                    storeFile file(props['store_file'])
+                }
+            }
+        } else {
+            println 'signing.properties not found'
+        }
+    }
+
     buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
         release {
+            debuggable false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -40,22 +76,22 @@ android {
 
 dependencies {
 
-    compile 'com.android.support:support-v13:26.1.0'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
 
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'org.apache.commons:commons-lang3:3.6'
-    compile 'org.apache.commons:commons-csv:1.4'
-    compile 'commons-io:commons-io:2.5'
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.commons:commons-csv:1.4'
+    implementation 'commons-io:commons-io:2.5'
 
     // https://github.com/Clans/FloatingActionButton
-    compile 'com.github.clans:fab:1.6.4'
+    implementation 'com.github.clans:fab:1.6.4'
 
     // LOG https://github.com/tony19/logback-android
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'com.github.tony19:logback-android-core:1.1.1-6'
-    compile('com.github.tony19:logback-android-classic:1.1.1-6') {
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
+    implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
         // workaround issue #73
         exclude group: 'com.google.android', module: 'android'
     }
