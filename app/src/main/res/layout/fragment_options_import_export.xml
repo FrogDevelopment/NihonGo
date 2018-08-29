@@ -12,20 +12,20 @@
               tools:context="fr.frogdevelopment.nihongo.options.OptionsImportExportFragment">
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:text="Export de la base de données"/>
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -47,27 +47,27 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="or"/>
 
     <Button
         android:id="@+id/options_export_select"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select file"
         android:layout_marginBottom="30dp"/>
 
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:text="Récupération d'une base de données exportée"/>
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"

@@ -23,11 +23,6 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
-import butterknife.Unbinder;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
@@ -38,11 +33,10 @@ public class OptionsImportExportFragment extends Fragment {
     private static final int FLAG_EXPORT = 0;
     private static final int FLAG_IMPORT = 1;
 
-    @BindView(R.id.options_export_name)
+//    @BindView(R.id.options_export_name)
     EditText mNameExportView;
-    @BindView(R.id.options_export_select)
+//    @BindView(R.id.options_export_select)
     Button   mButtonExport;
-    private Unbinder unbinder;
 
     public OptionsImportExportFragment() {
         // Required empty public constructor
@@ -52,8 +46,6 @@ public class OptionsImportExportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_options_import_export, container, false);
-
-        unbinder = ButterKnife.bind(this, view);
 
         // First of all we check if the external storage of the device is available for writing.
         // Remember that the external storage is not necessarily the sd card. Very often it is the device storage.
@@ -66,13 +58,7 @@ public class OptionsImportExportFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @OnClick({R.id.options_import, R.id.options_export_select})
+//    @OnClick({R.id.options_import, R.id.options_export_select})
     void onClickSelect(View view) {
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -114,12 +100,12 @@ public class OptionsImportExportFragment extends Fragment {
         }
     }
 
-    @OnTextChanged(value = R.id.options_export_name, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+//    @OnTextChanged(value = R.id.options_export_name, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void onAfterTextChanged(Editable editable) {
         mButtonExport.setEnabled(editable.length() > 5);
     }
 
-    @OnClick(R.id.options_export)
+//    @OnClick(R.id.options_export)
     void onClickExport() {
         String fileName = mNameExportView.getText().toString();
 

@@ -4,12 +4,15 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/test_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".test.TestInputActivity">
 
     <TextView
         android:id="@+id/test_count"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:gravity="end"
@@ -17,14 +20,14 @@
 
     <ScrollView
         android:id="@+id/test_input_scroll"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/test_input_separator"
+        android:layout_above="@+id/test_info_title"
         android:layout_below="@id/test_count">
 
         <TextView
             android:id="@+id/test_input_to_find"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="40sp"/>
@@ -32,14 +35,14 @@
 
     <Button
         android:id="@+id/test_input_validate_button"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/test_next"/>
 
     <EditText
         android:id="@+id/test_input_answer"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/test_input_validate_button"
         android:inputType="text"
@@ -50,9 +53,27 @@
 
     <View
         android:id="@+id/test_input_separator"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_above="@id/test_input_answer"
         android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/test_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/test_input_separator"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/test_info_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/test_info"
+        android:layout_marginTop="20dp"
+        android:text="@string/details_info"
+        android:textSize="12sp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -50,7 +50,16 @@
 
     <string name="details_info">Information :</string>
     <string name="details_example">Example :</string>
-    <string name="details_tags">Tags :</string>
+    <string name="details_tags">Tags : %1$s</string>
+    <string name="details_ratio">Success : %1$d%%</string>
+
+    <string name="rate_done">Rate as « %1$s »</string>
+    <string name="rate_0">New</string>
+    <string name="rate_1">See</string>
+    <string name="rate_2">Learned</string>
+
+    <string name="bookmark_add">Add to bookmarks</string>
+    <string name="bookmark_remove">Remove from bookmarks</string>
 
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favorite</string>
@@ -102,6 +111,7 @@
     <string name="input_error_kana">Only Kana (Hiragana or Katakana) !</string>
     <string name="input_error_kanji">No Kanji!</string>
     <string name="input_save_OK">Data saved</string>
+    <string name="input_duplicated_OK">Data duplicated</string>
     <string name="input_update_OK">Data updated</string>
     <string name="action_validate">Validate</string>
     <string name="action_cancel">Cancel</string>
@@ -115,7 +125,6 @@
     <string name="param_test">Test\'s parameters</string>
     <string name="param_review">Review\'s parameters</string>
     <string name="param_reviewed">Reviews on japanese ?</string>
-    <string name="param_exclude_learned">Exclude learned ?</string>
     <string name="param_only_favorite">Only Favorites ?</string>
     <string name="param_type">Type</string>
     <string name="param_type_selection">Select the type of test</string>
@@ -123,6 +132,8 @@
     <string name="param_method_selection">Select the method for test</string>
     <string name="param_nb_answers">Nb answers</string>
     <string name="param_nb_answers_selection">Select the number of answers</string>
+    <string name="param_learned">Learn rate</string>
+    <string name="param_learned_selection">Select the rate</string>
     <string name="param_sort">Sort</string>
     <string name="param_sort_selection">Select the sort order</string>
     <string name="param_quantity">Quantity</string>
@@ -148,6 +159,13 @@
         <item>Write</item>
     </string-array>
 
+    <string-array name="param_learned">
+        <item>@string/rate_0</item>
+        <item>@string/rate_1</item>
+        <item>@string/rate_2</item>
+        <item>All</item>
+    </string-array>
+
     <string-array name="param_sorts">
         <item>new -> old</item>
         <item>old -> new</item>
@@ -162,7 +180,7 @@
         <item>6</item>
     </string-array>
 
-    <string-array name="param_quantities" translatable="false">
+    <string-array name="param_quantities">
         <item>10</item>
         <item>15</item>
         <item>20</item>
@@ -170,8 +188,8 @@
         <item>50</item>
         <item>100</item>
         <item>150</item>
+        <item>All</item>
     </string-array>
-    <string name="param_quantity_all">All</string>
 
     <!-- ******* -->
     <!-- REVIEW -->
@@ -191,6 +209,8 @@
     <string name="test_back_message">Warning ! You\'re going to leave the test.</string>
     <string name="test_next">Next</string>
     <string name="test_info">Information</string>
+
+    <string name="test_input_empty">No response given, continue ?</string>
 
     <string name="test_results_title">Results</string>
     <string name="test_results_details">Test : %1$s\nAnswer expected : %2$s\nAnswer given : %3$s</string>
@@ -277,14 +297,6 @@
     <string name="help_dico_press_and_hold_description">Press and hold</string>
     <string name="help_dico_press_and_hold">Press and hold to select the line</string>
     <string name="help_dico_add">Add new input</string>
-
-    <string name="help_details_intro">Here is some help for the details view</string>
-    <string name="help_details_swap">Swap left and right to navigate</string>
-
-    <string name="help_review_intro">Here is some help for the review view</string>
-    <string name="help_review_learned">Tag as learned</string>
-    <string name="help_review_favorite">Tag as favorite</string>
-
     <string name="help_dico_start">Welcome to Nihon Go !\n\nLooks like you didn\'t have yet vocabulary.\n\nWould you like to get some ?</string>
 
     <!-- ******* -->
@@ -292,6 +304,10 @@
     <!-- ******* -->
     <string name="about_hiragana_link" translatable="false">About the Hiragana table : <a href="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg">Source Hiragana table</a></string>
     <string name="about_katakana_link" translatable="false">About the Katakana table : <a href="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg">Source Katakana table</a></string>
+    <string name="about_version">Version : %1$s</string>
+
+    <string name="copy_kanji">Kanji copied to clipboard</string>
+    <string name="copy_kana">Kana copied to clipboard</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

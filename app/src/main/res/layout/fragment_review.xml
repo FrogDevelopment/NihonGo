@@ -1,96 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/main_content"
+<RelativeLayout
+    android:id="@+id/review_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingEnd="22dp"
+    android:paddingStart="22dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/review_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/bookmark"
+        android:text="@string/details_tags"
+        android:textSize="12sp"/>
+
+    <ImageView
+        android:id="@id/bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_bookmark_on"
+        android:tint="@android:color/darker_gray"/>
 
     <ScrollView
-        android:id="@+id/review_content"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/review_success"
+        android:layout_below="@id/bookmark"
+        android:fadeScrollbars="false"
+        android:scrollbarStyle="outsideOverlay">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_marginTop="15dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/review_count"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:textSize="20sp"/>
-
-            <TextView
                 android:id="@+id/review_reviewed"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="60sp"/>
 
             <TextSwitcher
                 android:id="@+id/review_textSwitcher_kana"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true">
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:textSize="60sp"/>
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="30sp"
                     android:textStyle="italic"/>
-
             </TextSwitcher>
 
             <TextSwitcher
                 android:id="@+id/review_textSwitcher_test"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true">
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:textSize="60sp"/>
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="30sp"
                     android:textStyle="italic"/>
-
             </TextSwitcher>
 
             <TextView
                 android:id="@+id/review_info_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="12sp"
-                android:text="@string/details_info"
                 android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_info"
+                android:textSize="12sp"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/review_info"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
@@ -101,73 +116,83 @@
                 android:id="@+id/review_example_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="12sp"
-                android:text="@string/details_example"
                 android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_example"
+                android:textSize="12sp"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/review_example"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
                 android:textStyle="italic"/>
-
-            <TextView
-                android:id="@+id/review_tags_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="12sp"
-                android:text="@string/details_tags"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/review_tags"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp"
-                android:textStyle="italic"/>
-
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <TextView
+        android:id="@id/review_success"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_anchor="@id/review_content"
-        app:layout_anchorGravity="bottom|right|end">
+        android:layout_above="@+id/review_rating"
+        android:layout_marginTop="10dp"
+        android:text="@string/details_ratio"
+        android:textSize="12sp"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_again"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_again_white_24dp"/>
+    <LinearLayout
+        android:id="@id/review_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_learned"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_bookmark_off"/>
+        <ImageView
+            android:id="@+id/rate_0"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star_black_24dp"
+            android:tint="@android:color/darker_gray"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_favorite"
-            style="@style/FabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/fab_favorite_off"/>
+        <ImageView
+            android:id="@+id/rate_1"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star_black_24dp"
+            android:tint="@android:color/darker_gray"/>
+
+        <ImageView
+            android:id="@+id/rate_2"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star_black_24dp"
+            android:tint="@android:color/darker_gray"/>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+
+    <TextView
+        android:id="@+id/review_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="end"
+        android:textSize="12sp"/>
+</RelativeLayout>

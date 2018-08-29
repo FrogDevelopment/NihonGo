@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -21,22 +20,21 @@ public class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
 		void onResult(boolean result);
 	}
 
-	private final Context                                 context;
-	private final WeakReference<OnTestConnectionListener> reference;
+	private final ConnectivityManager connectivityManager;
+	private final OnTestConnectionListener reference;
 
 	public TestConnectionTask(Context context, OnTestConnectionListener listener) {
-		this.context = context;
-		this.reference = new WeakReference<>(listener);
+		this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		this.reference = listener;
 	}
 
 	@Override
 	protected Boolean doInBackground(String... params) {
-		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (cm == null) {
+		if (connectivityManager == null) {
 			return false;
 		}
 
-		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 		boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
 		if (isConnected) {
@@ -58,6 +56,6 @@ public class TestConnectionTask extends AsyncTask<String, Void, Boolean> {
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		reference.get().onResult(result);
+		reference.onResult(result);
 	}
 }

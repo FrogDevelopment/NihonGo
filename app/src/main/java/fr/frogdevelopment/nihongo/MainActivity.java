@@ -4,31 +4,27 @@
 
 package fr.frogdevelopment.nihongo;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
 
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.frogdevelopment.nihongo.about.AboutFragment;
 import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
@@ -43,28 +39,16 @@ import fr.frogdevelopment.nihongo.test.TestParametersFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-	@BindView(R.id.drawer_layout)
-	DrawerLayout mDrawerLayout;
-
-	@BindView(R.id.toolbar)
-	Toolbar toolbar;
-
-	@BindView(R.id.progress_spinner)
-	ProgressBar progressBar;
-
+	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-
-	private InputMethodManager imm;
+	private InputMethodManager mInputMethodManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		ButterKnife.bind(this);
-
 		initIME();
-		initToolbar();
 		setupDrawerLayout();
 
 		if (savedInstanceState == null) {
@@ -75,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void initIME() {
-		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		boolean isNoJapanIME = true;
-		List<InputMethodInfo> inputMethodInfos = imm.getInputMethodList();
+		List<InputMethodInfo> inputMethodInfos = mInputMethodManager.getInputMethodList();
 		for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
 			for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
 				String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
-				if (Locale.JAPAN.toString().equals(locale)) {
+				if (Locale.JAPAN.toString().equals(locale) || Locale.JAPANESE.toString().equals(locale)) {
 					isNoJapanIME = false;
 					break;
 				}
@@ -97,55 +81,36 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private void initToolbar() {
-		setSupportActionBar(toolbar);
-		final ActionBar actionBar = getSupportActionBar();
-
+	private void setupDrawerLayout() {
+		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
-	}
 
-	private void setupDrawerLayout() {
-		NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
-		view.setNavigationItemSelectedListener(menuItem -> {
-            menuItem.setChecked(true);
-            mDrawerLayout.closeDrawers();
+		mDrawerLayout = findViewById(R.id.drawer_layout);
 
-            MainActivity.this.selectItemAtIndex(menuItem.getItemId());
+		NavigationView navigationView = findViewById(R.id.navigation_view);
+		navigationView.setNavigationItemSelectedListener(menuItem -> {
+			menuItem.setChecked(true);
+			mDrawerLayout.closeDrawers();
 
-            return true;
-        });
+			selectItemAtIndex(menuItem.getItemId());
+
+			return true;
+		});
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				// Close the soft-keyboard
-				imm.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
+				mInputMethodManager.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
 			}
 		};
 		mDrawerLayout.addDrawerListener(mDrawerToggle);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-			case android.R.id.home:
-				mDrawerLayout.openDrawer(GravityCompat.START);
-				return true;
-
-			default:
-				// The action bar home/up action should open or close the drawer.
-				// ActionBarDrawerToggle will take care of this.
-				if (mDrawerToggle.onOptionsItemSelected(item)) {
-					return true;
-				}
-		}
-
-		return super.onOptionsItemSelected(item);
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
+		mDrawerToggle.syncState();
 	}
 
 	private static int CURRENT_VIEW = -1;
@@ -225,19 +190,27 @@ public class MainActivity extends AppCompatActivity {
 		// Insert the fragment by replacing any existing fragment
 		getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-		mDrawerLayout.closeDrawers();
-
 		CURRENT_VIEW = id;
 		setTitle(mFragmentTitle);
 	}
 
-	/**
-	 * When using the ActionBarDrawerToggle, you must call it during onPostCreate() and onConfigurationChanged()...
-	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// The action bar home/up action should open or close the drawer.
+		// ActionBarDrawerToggle will take care of this.
+		return mDrawerToggle.onOptionsItemSelected(item);
+	}
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+		super.onPostCreate(savedInstanceState, persistentState);
 		mDrawerToggle.syncState();
 	}
 
@@ -254,9 +227,11 @@ public class MainActivity extends AppCompatActivity {
 			selectItemAtIndex(R.id.navigation_word);
 			onSearch = false;
 		} else {
-			Snackbar
-					.make(findViewById(R.id.dico_layout), R.string.closing_activity_message, Snackbar.LENGTH_LONG)
-					.setAction(R.string.yes, v -> finish())
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.closing_activity_title)
+					.setMessage(R.string.closing_activity_message)
+					.setPositiveButton(R.string.yes, (dialog, which) -> finish())
+					.setNegativeButton(R.string.no, null)
 					.show();
 		}
 	}
@@ -269,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void showLoading(boolean show) {
-		progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+//		progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
 	}
 
 	// ************************************************************ \\

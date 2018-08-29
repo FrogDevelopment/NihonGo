@@ -16,8 +16,8 @@
 
         <ListView
             android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fastScrollAlwaysVisible="true"
             android:fastScrollEnabled="true"
             android:scrollbarStyle="outsideOverlay"/>
@@ -25,27 +25,18 @@
         <TextView
             android:id="@android:id/empty"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/dico_no_data"/>
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/no_results"/>
-
-    <android.support.design.widget.FloatingActionButton
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_add"
-        style="@style/FabStyle"
+        style="@style/NormalFabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/fab_add"
         app:layout_anchor="@id/dico_content"
         app:layout_anchorGravity="bottom|right|end"/>
