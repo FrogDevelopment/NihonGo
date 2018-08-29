@@ -272,13 +272,12 @@
     <string name="help_dico_press_and_hold">Presser et maintenir pour sélectionner la ligne</string>
     <string name="help_dico_add">Ajouter une nouvelle entrée</string>
     <string name="help_dico_start">Bienvenue dans Nihon Go !\n\nIl semblerait que vous n\'avez pas encore de vocabulaire.\n\nVoulez-vous en télécharger ?</string>
-    <string name="version">version :</string>
 
     <!-- ******* -->
     <!--  ABOUT  -->
     <!-- ******* -->
     <string name="about_version">Version : %1$s</string>
 
-    <string name="copy.kanji">Kanji copié dans le presse-papier</string>
-    <string name="copy.kana">Kana copié dans le presse-papier</string>
+    <string name="copy_kanji">Kanji copié dans le presse-papier</string>
+    <string name="copy_kana">Kana copié dans le presse-papier</string>
 </resources>
