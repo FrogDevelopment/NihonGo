@@ -221,7 +221,7 @@
     <string name="menu_search">search</string>
     <string name="search_label">Search</string>
     <string name="search_hint">Search a word</string>
-    <string name="no_results">No values</string>
+    <string name="no_results">No results</string>
 
     <plurals name="search_results">
         <item quantity="one">%1$d result</item>
@@ -298,7 +298,6 @@
     <string name="help_dico_press_and_hold">Press and hold to select the line</string>
     <string name="help_dico_add">Add new input</string>
     <string name="help_dico_start">Welcome to Nihon Go !\n\nLooks like you didn\'t have yet vocabulary.\n\nWould you like to get some ?</string>
-    <string name="version">version :</string>
 
     <!-- ******* -->
     <!--  ABOUT  -->
