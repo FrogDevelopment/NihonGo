@@ -1,10 +1,9 @@
-/.gradle
-
+# Maven
+# =========================
 # IntelliJ
 # =========================
 /local.properties
 *.iml
 .idea
-.gitattributes
 build
-libs
+.gradle
