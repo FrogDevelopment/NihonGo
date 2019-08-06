@@ -6,7 +6,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo"
@@ -14,49 +14,49 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
 
-        versionCode 38
-        versionName "1.0.0"
+        versionCode 39
+        versionName "1.1.0"
     }
 
-    signingConfigs {
-        Properties props = new Properties()
-        def propFile = new File(System.getenv("SIGNING_PROPERTIES"))
-        if (propFile.canRead()) {
-            props.load(new FileInputStream(propFile))
-            if (props == null || props.isEmpty()) {
-                println 'signing.properties found but entries are missing'
-                debug = null
-                release = null
-            } else {
-                debug {
-                    keyAlias props['ng_key_alias']
-                    keyPassword props['ng_key_password']
-                    storePassword props['store_password']
-                    storeFile file(props['store_file'])
-                }
-                release {
-                    keyAlias props['ng_key_alias']
-                    keyPassword props['ng_key_password']
-                    storePassword props['store_password']
-                    storeFile file(props['store_file'])
-                }
-            }
-        } else {
-            println 'signing.properties not found'
-        }
-    }
+//    signingConfigs {
+//        Properties props = new Properties()
+//        def propFile = new File(System.getenv("SIGNING_PROPERTIES"))
+//        if (propFile.canRead()) {
+//            props.load(new FileInputStream(propFile))
+//            if (props == null || props.isEmpty()) {
+//                println 'signing.properties found but entries are missing'
+//                debug = null
+//                release = null
+//            } else {
+//                debug {
+//                    keyAlias props['ng_key_alias']
+//                    keyPassword props['ng_key_password']
+//                    storePassword props['store_password']
+//                    storeFile file(props['store_file'])
+//                }
+//                release {
+//                    keyAlias props['ng_key_alias']
+//                    keyPassword props['ng_key_password']
+//                    storePassword props['store_password']
+//                    storeFile file(props['store_file'])
+//                }
+//            }
+//        } else {
+//            println 'signing.properties not found'
+//        }
+//    }
 
     buildTypes {
         debug {
             debuggable true
             minifyEnabled false
-            signingConfig signingConfigs.debug
+//            signingConfig signingConfigs.debug
         }
         release {
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
 
@@ -76,23 +76,19 @@ android {
 
 dependencies {
 
-    implementation 'com.android.support:support-v13:28.0.0-rc01'
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
-    implementation 'com.android.support:design:28.0.0-rc01'
+    implementation 'com.android.support:support-v13:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
 
-    implementation 'com.loopj.android:android-async-http:1.4.9'
-    implementation 'org.apache.commons:commons-lang3:3.8'
-    implementation 'org.apache.commons:commons-csv:1.5'
+    implementation 'com.loopj.android:android-async-http:1.4.10'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.apache.commons:commons-csv:1.6'
     implementation 'commons-io:commons-io:2.6'
 
     // https://github.com/Clans/FloatingActionButton
     implementation 'com.github.clans:fab:1.6.4'
 
     // LOG https://github.com/tony19/logback-android
-    implementation 'org.slf4j:slf4j-api:1.7.25'
-    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
-    implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
-        // workaround issue #73
-        exclude group: 'com.google.android', module: 'android'
-    }
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'com.github.tony19:logback-android:2.0.0'
 }

@@ -393,7 +393,7 @@ public class LessonsFragment extends ListFragment {
 
 					// next lesson, save previous one and update UI
 					if (previousCode != null && !code.equals(previousCode)) {
-						getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+						getActivity().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
 						publishProgress(previousCode);
 						ops.clear();
 					}
@@ -425,7 +425,7 @@ public class LessonsFragment extends ListFragment {
 				}
 
 				// save last lesson and update UI
-				getContext().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
+				getActivity().getContentResolver().applyBatch(NihonGoContentProvider.AUTHORITY, ops);
 				publishProgress(previousCode);
 
 			} catch (RemoteException | OperationApplicationException | IOException e) {
@@ -438,7 +438,7 @@ public class LessonsFragment extends ListFragment {
 				lessonsDownloaded.add(lesson.code);
 			}
 
-			PreferencesHelper.getInstance(getContext()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
+			PreferencesHelper.getInstance(getActivity()).saveString(Preferences.LESSONS, StringUtils.join(lessonsDownloaded, ";"));
 
 			return true;
 		}
@@ -462,7 +462,7 @@ public class LessonsFragment extends ListFragment {
 			if (result) {
 				Snackbar.make(getActivity().findViewById(R.id.lessons_layout), getString(R.string.lesson_download_success), Snackbar.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(getContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
 			}
 
 			selectedLessons.clear();
