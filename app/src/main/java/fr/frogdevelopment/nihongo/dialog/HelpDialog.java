@@ -9,10 +9,11 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+
+import androidx.annotation.NonNull;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.preferences.Preferences;

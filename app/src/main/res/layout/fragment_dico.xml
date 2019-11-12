@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) Frog Development 2015.
   -->
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/dico_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,4 +41,4 @@
         app:layout_anchor="@id/dico_content"
         app:layout_anchorGravity="bottom|right|end"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

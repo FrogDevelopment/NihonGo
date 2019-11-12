@@ -8,9 +8,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v13.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+
+import androidx.legacy.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

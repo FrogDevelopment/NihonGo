@@ -13,8 +13,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
 import fr.frogdevelopment.nihongo.dico.input.InputUtils;

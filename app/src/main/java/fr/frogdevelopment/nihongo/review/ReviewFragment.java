@@ -7,7 +7,6 @@ package fr.frogdevelopment.nihongo.review;
 import android.app.Fragment;
 import android.content.ContentValues;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,22 +46,22 @@ public class ReviewFragment extends Fragment {
 	@Override
 	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(rootView, savedInstanceState);
-		TextView countView = (TextView) rootView.findViewById(review_count);
-		TextView reviewedView = (TextView) rootView.findViewById(R.id.review_reviewed);
-		TextView infoTitleView = (TextView) rootView.findViewById(R.id.review_info_title);
-		TextView infoView = (TextView) rootView.findViewById(R.id.review_info);
-		TextView exampleTitleView = (TextView) rootView.findViewById(R.id.review_example_title);
-		TextView exampleView = (TextView) rootView.findViewById(R.id.review_example);
-		TextView tagsView = (TextView) rootView.findViewById(R.id.review_tags);
-		TextView successView = (TextView) rootView.findViewById(R.id.review_success);
+        TextView countView = rootView.findViewById(review_count);
+        TextView reviewedView = rootView.findViewById(R.id.review_reviewed);
+        TextView infoTitleView = rootView.findViewById(R.id.review_info_title);
+        TextView infoView = rootView.findViewById(R.id.review_info);
+        TextView exampleTitleView = rootView.findViewById(R.id.review_example_title);
+        TextView exampleView = rootView.findViewById(R.id.review_example);
+        TextView tagsView = rootView.findViewById(R.id.review_tags);
+        TextView successView = rootView.findViewById(R.id.review_success);
 
-		mKanaSwitcher = (TextSwitcher) rootView.findViewById(R.id.review_textSwitcher_kana);
+        mKanaSwitcher = rootView.findViewById(R.id.review_textSwitcher_kana);
 		mKanaSwitcher.setOnClickListener(view -> {
 			mKanaSwitcher.setText(mItem.kana);
 			mKanaSwitcher.setClickable(false);
 
 		});
-		mTestSwitcher = (TextSwitcher) rootView.findViewById(R.id.review_textSwitcher_test);
+        mTestSwitcher = rootView.findViewById(R.id.review_textSwitcher_test);
 		mTestSwitcher.setOnClickListener(view -> {
 			mTestSwitcher.setText(test);
 			mTestSwitcher.setClickable(false);
@@ -139,15 +140,15 @@ public class ReviewFragment extends Fragment {
 		int total = mItem.success + mItem.failed;
 		successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
-		mBookmark = (ImageView) rootView.findViewById(R.id.bookmark);
+        mBookmark = rootView.findViewById(R.id.bookmark);
 		mBookmark.setOnClickListener(v -> bookmarkItem());
 		handleBookmark();
 
-		mRate0 = (ImageView) rootView.findViewById(R.id.rate_0);
+        mRate0 = rootView.findViewById(R.id.rate_0);
 		mRate0.setOnClickListener(v -> setRate(0));
-		mRate1 = (ImageView) rootView.findViewById(R.id.rate_1);
+        mRate1 = rootView.findViewById(R.id.rate_1);
 		mRate1.setOnClickListener(v -> setRate(1));
-		mRate2 = (ImageView) rootView.findViewById(R.id.rate_2);
+        mRate2 = rootView.findViewById(R.id.rate_2);
 		mRate2.setOnClickListener(v -> setRate(2));
 		handleRate();
 	}
