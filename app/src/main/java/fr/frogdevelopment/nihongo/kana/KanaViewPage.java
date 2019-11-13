@@ -25,9 +25,6 @@ public class KanaViewPage extends Fragment {
 
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // fixme to true when KanaTrainer is available
-        setHasOptionsMenu(false);
-
         return rootView;
     }
 
