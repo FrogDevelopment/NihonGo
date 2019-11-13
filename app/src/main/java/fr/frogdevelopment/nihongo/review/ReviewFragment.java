@@ -49,6 +49,7 @@ public class ReviewFragment extends Fragment {
         TextView infoView = rootView.findViewById(R.id.review_info);
         TextView exampleTitleView = rootView.findViewById(R.id.review_example_title);
         TextView exampleView = rootView.findViewById(R.id.review_example);
+        TextView tagsViewTitle = rootView.findViewById(R.id.review_tags_title);
         TextView tagsView = rootView.findViewById(R.id.review_tags);
         TextView successView = rootView.findViewById(R.id.review_success);
 
@@ -127,11 +128,13 @@ public class ReviewFragment extends Fragment {
 		}
 
 		if (StringUtils.isNotBlank(mItem.tags)) {
-			tagsView.setText(getString(R.string.details_tags, mItem.tags));
+            tagsView.setText(mItem.tags);
 			tagsView.setVisibility(View.VISIBLE);
+            tagsViewTitle.setVisibility(View.VISIBLE);
 		} else {
 			tagsView.setText(null);
 			tagsView.setVisibility(View.GONE);
+            tagsViewTitle.setVisibility(View.GONE);
 		}
 
 		int total = mItem.success + mItem.failed;

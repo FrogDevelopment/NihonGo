@@ -9,13 +9,12 @@
     android:paddingTop="10dp">
 
     <TextView
-        android:id="@+id/review_tags"
+        android:id="@+id/review_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/bookmark"
-        android:text="@string/details_tags"
         android:textSize="12sp"/>
 
     <ImageView
@@ -47,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="100dp"
                 android:textSize="60sp"/>
 
             <TextSwitcher
@@ -130,6 +130,25 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
                 android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/review_tags_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_tags"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/review_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
+                android:textStyle="italic" />
         </LinearLayout>
     </ScrollView>
 
@@ -185,14 +204,4 @@
             android:tint="@android:color/darker_gray"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/review_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="10dp"
-        android:gravity="end"
-        android:textSize="12sp"/>
 </RelativeLayout>

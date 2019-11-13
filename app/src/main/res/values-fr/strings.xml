@@ -39,7 +39,7 @@
 
     <string name="details_info">Informations :</string>
     <string name="details_example">Exemple :</string>
-    <string name="details_tags">Tags : %1$s</string>
+    <string name="details_tags">Tags :</string>
     <string name="details_ratio">Réussite : %1$d%%</string>
 
     <string name="rate_done">Évalué comme «%1$s»</string>
