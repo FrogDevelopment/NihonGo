@@ -22,6 +22,9 @@ import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.Item;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class DetailsFragment extends Fragment {
 
     private Item mItem;
@@ -45,6 +48,7 @@ public class DetailsFragment extends Fragment {
         TextView detailsView = rootView.findViewById(R.id.details_word_info);
         TextView exampleTitleView = rootView.findViewById(R.id.details_word_example_title);
         TextView exampleView = rootView.findViewById(R.id.details_word_example);
+        TextView tagsViewTitle = rootView.findViewById(R.id.details_word_tags_title);
         TextView tagsView = rootView.findViewById(R.id.details_word_tags);
         TextView successView = rootView.findViewById(R.id.details_word_success);
 
@@ -58,32 +62,37 @@ public class DetailsFragment extends Fragment {
 
         inputView.setText(mItem.input);
 
-        if (StringUtils.isNotEmpty(mItem.kanji)) {
+        if (StringUtils.isNotBlank(mItem.kanji)) {
             kanjiView.setText(mItem.kanji);
-            kanjiView.setVisibility(View.VISIBLE);
+            kanjiView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotEmpty(mItem.kana)) {
+        if (StringUtils.isNotBlank(mItem.kana)) {
             kanaView.setText(mItem.kana);
         }
 
         detailsView.setText(mItem.details);
-        if (StringUtils.isNotEmpty(mItem.details)) {
+        if (StringUtils.isNotBlank(mItem.details)) {
             detailsView.setText(mItem.details);
-            detailsView.setVisibility(View.VISIBLE);
-            detailsTitleView.setVisibility(View.VISIBLE);
+            detailsView.setVisibility(VISIBLE);
+            detailsTitleView.setVisibility(VISIBLE);
         }
 
         exampleView.setText(mItem.example);
-        if (StringUtils.isNotEmpty(mItem.example)) {
+        if (StringUtils.isNotBlank(mItem.example)) {
             exampleView.setText(mItem.example);
-            exampleView.setVisibility(View.VISIBLE);
-            exampleTitleView.setVisibility(View.VISIBLE);
+            exampleView.setVisibility(VISIBLE);
+            exampleTitleView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotEmpty(mItem.tags)) {
+        if (StringUtils.isNotBlank(mItem.tags)) {
             tagsView.setText(mItem.tags);
-            tagsView.setVisibility(View.VISIBLE);
+            tagsView.setVisibility(VISIBLE);
+            tagsViewTitle.setVisibility(VISIBLE);
+        } else {
+            tagsView.setText(null);
+            tagsView.setVisibility(GONE);
+            tagsViewTitle.setVisibility(GONE);
         }
 
         int total = mItem.success + mItem.failed;

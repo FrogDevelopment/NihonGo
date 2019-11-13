@@ -8,16 +8,6 @@
     android:paddingStart="22dp"
     android:paddingTop="10dp">
 
-    <TextView
-        android:id="@+id/details_word_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/bookmark"
-        android:text="@string/details_tags"
-        android:textSize="12sp"/>
-
     <ImageView
         android:id="@id/bookmark"
         android:layout_width="wrap_content"
@@ -30,7 +20,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/details_word_success"
         android:layout_below="@id/bookmark"
         android:fadeScrollbars="false"
@@ -39,6 +29,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:orientation="vertical">
 
             <TextView
@@ -104,6 +95,26 @@
                 android:textSize="20sp"
                 android:textStyle="italic"
                 android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/details_word_tags_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:text="@string/details_tags"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/details_word_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 
