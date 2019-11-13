@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -28,9 +30,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
@@ -61,6 +65,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     private ArrayList<Integer> mSelectedItems;
     private String[] mSelectedTags;
     private List<CharSequence> items;
+    private MultiAutoCompleteTextView mTagsDropdown;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,45 +76,36 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         mSwitchLanguageView = rootView.findViewById(R.id.review_switch_language);
         mSwitchFavorite = rootView.findViewById(R.id.review_switch_favorite);
-        Spinner rateSpinner = rootView.findViewById(R.id.review_param_learned_spinner);
-        rateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                selectedRate = position;
-                checkStartButtonEnabled();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+        AutoCompleteTextView sortDropdown = rootView.findViewById(R.id.review_param_sort_dropdown);
+        sortDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.param_sorts)));
+        sortDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            selectedSort = position;
+            checkStartButtonEnabled();
         });
-        Spinner sortSpinner = rootView.findViewById(R.id.review_param_sort_spinner);
-        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                selectedSort = position;
-                checkStartButtonEnabled();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+        AutoCompleteTextView quantityDropdown = rootView.findViewById(R.id.review_param_quantity_dropdown);
+        quantityDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.param_quantities)));
+        quantityDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            selectedQuantity = position;
+            checkStartButtonEnabled();
         });
-        Spinner quantitySpinner = rootView.findViewById(R.id.review_param_quantity_spinner);
-        quantitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                selectedQuantity = position;
-                checkStartButtonEnabled();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+        AutoCompleteTextView rateDropdown = rootView.findViewById(R.id.review_param_learned_dropdown);
+        rateDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.param_learned)));
+        rateDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            selectedRate = position;
+            checkStartButtonEnabled();
         });
+
+        mTagsDropdown = rootView.findViewById(R.id.review_param_tags_dropdown);
+//        mTagsDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.param_learned)));
+        mTagsDropdown.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+//        tagsDropdown.setOnItemClickListener((parent, view, position, id) -> {
+//            selectedRate = position;
+//            checkStartButtonEnabled();
+//        });
+
         Spinner mTagSpinner = rootView.findViewById(R.id.review_param_tag_spinner);
         mTagSpinner.setOnTouchListener(this::onClickTags);
         mTagSelection = rootView.findViewById(R.id.review_param_tag_selection);
@@ -120,31 +116,33 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
 
         if (savedInstanceState != null) {
+            selectedRate = savedInstanceState.getInt(REVIEW_SELECTED_RATE);
+            selectedSort = savedInstanceState.getInt(REVIEW_SELECTED_SORT);
+            selectedQuantity = savedInstanceState.getInt(REVIEW_SELECTED_QUANTITY);
+            mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
+
             mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE));
             mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE));
-            selectedRate = savedInstanceState.getInt(REVIEW_SELECTED_RATE);
-            rateSpinner.setSelection(selectedRate);
-            selectedSort = savedInstanceState.getInt(REVIEW_SELECTED_SORT);
-            sortSpinner.setSelection(selectedSort);
-            selectedQuantity = savedInstanceState.getInt(REVIEW_SELECTED_QUANTITY);
-            quantitySpinner.setSelection(selectedQuantity);
-            mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
+            sortDropdown.setText(sortDropdown.getAdapter().getItem(selectedSort).toString(), false);
+            quantityDropdown.setText(quantityDropdown.getAdapter().getItem(selectedQuantity).toString(), false);
+            rateDropdown.setText(rateDropdown.getAdapter().getItem(selectedRate).toString(), false);
             mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
         } else {
-            PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
+            PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(requireActivity());
             if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
-                mSwitchKeepView.setChecked(true);
-                mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
-                mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
                 selectedRate = preferencesHelper.getInt(REVIEW_SELECTED_RATE);
-                rateSpinner.setSelection(selectedRate);
                 selectedSort = preferencesHelper.getInt(REVIEW_SELECTED_SORT);
-                sortSpinner.setSelection(selectedSort);
                 selectedQuantity = preferencesHelper.getInt(REVIEW_SELECTED_QUANTITY);
-                quantitySpinner.setSelection(selectedQuantity);
                 String test_tags = preferencesHelper.getString(REVIEW_TAGS);
                 mSelectedTags = test_tags.split(", ");
+
+                mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
+                mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
+                sortDropdown.setText(sortDropdown.getAdapter().getItem(selectedSort).toString(), false);
+                quantityDropdown.setText(quantityDropdown.getAdapter().getItem(selectedQuantity).toString(), false);
+                rateDropdown.setText(rateDropdown.getAdapter().getItem(selectedRate).toString(), false);
                 mTagSelection.setText(test_tags);
+                mSwitchKeepView.setChecked(true);
             }
         }
 
@@ -194,12 +192,13 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
             String[] tags = row.split(",");
             uniqueItems.addAll(Arrays.asList(tags));
         }
+        data.close();
 
         items = new ArrayList<>(uniqueItems);
-
+//        items.sort(Comparator.comparing(CharSequence::toString));
         Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
 
-        data.close();
+        mTagsDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, items));
     }
 
     @Override

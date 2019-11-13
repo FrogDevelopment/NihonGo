@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="top"
-              android:orientation="vertical"
-              android:padding="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,103 +21,95 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:paddingBottom="10dp"
                 android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="@string/param_reviewed"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
-                android:textOn="@string/yes"/>
+                android:textOn="@string/yes" />
 
             <Switch
                 android:id="@+id/review_switch_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:paddingBottom="10dp"
                 android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="@string/param_only_favorite"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textOff="@string/no"
-                android:textOn="@string/yes"/>
+                android:textOn="@string/yes" />
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:layout_height="match_parent"
+                android:hint="@string/param_sort"
+                android:paddingBottom="10dp">
 
-                <TextView
-                    android:id="@+id/review_param_sort_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_sort"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <Spinner
-                    android:id="@+id/review_param_sort_spinner"
+                <AutoCompleteTextView
+                    android:id="@+id/review_param_sort_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/param_sorts"
-                    android:prompt="@string/param_sort_selection"
-                    android:spinnerMode="dialog"/>
-            </LinearLayout>
+                    android:editable="false"
+                    android:inputType="none" />
 
-            <LinearLayout
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:layout_height="match_parent"
+                android:hint="@string/param_quantity"
+                android:paddingBottom="10dp">
 
-                <TextView
-                    android:id="@+id/review_param_quantity_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_quantity"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <Spinner
-                    android:id="@+id/review_param_quantity_spinner"
+                <AutoCompleteTextView
+                    android:id="@+id/review_param_quantity_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/param_quantities"
-                    android:prompt="@string/param_quantity_selection"
-                    android:spinnerMode="dialog"/>
-            </LinearLayout>
+                    android:editable="false"
+                    android:inputType="none" />
 
-            <LinearLayout
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:layout_height="match_parent"
+                android:hint="@string/param_learned"
+                android:paddingBottom="10dp">
 
-                <TextView
-                    android:id="@+id/review_param_learned_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/param_learned"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
-
-                <Spinner
-                    android:id="@+id/review_param_learned_spinner"
+                <AutoCompleteTextView
+                    android:id="@+id/review_param_learned_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/param_learned"
-                    android:prompt="@string/param_learned_selection"
-                    android:spinnerMode="dialog"/>
-            </LinearLayout>
+                    android:editable="false"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/param_tag_title"
+                android:paddingBottom="10dp">
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/review_param_tags_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
 
                 <TextView
                     android:id="@+id/review_param_tag_title"
@@ -125,20 +117,20 @@
                     android:layout_height="wrap_content"
                     android:text="@string/param_tag_title"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black" />
 
                 <Spinner
                     android:id="@+id/review_param_tag_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:prompt="@string/param_tag_selection"
-                    android:spinnerMode="dialog"/>
+                    android:spinnerMode="dialog" />
 
                 <TextView
-                    android:layout_marginTop="-20dp"
                     android:id="@+id/review_param_tag_selection"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-20dp" />
             </LinearLayout>
 
 
@@ -152,7 +144,7 @@
         android:checked="false"
         android:text="@string/param_keep_config"
         android:textOff="@string/no"
-        android:textOn="@string/yes"/>
+        android:textOn="@string/yes" />
 
     <Button
         android:id="@+id/review_button_start"
@@ -160,6 +152,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:enabled="false"
-        android:text="@string/param_button_start"/>
+        android:text="@string/param_button_start" />
 
 </LinearLayout>
