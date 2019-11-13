@@ -1,14 +1,7 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.test;
 
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,7 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -82,21 +80,20 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
             nbAnswer = Integer.parseInt(getResources().getStringArray(R.array.param_quantities_answers)[tmp]);
         }
 
-        getLoaderManager().initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
+        LoaderManager.getInstance(this).initLoader(LOADER_ID_ITEMS_TO_FIND, bundle, this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle options) {
         String selection = "INPUT != '~'"; // fixme
@@ -137,7 +134,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         quantityMax = data.getCount();
         results = new ArrayList<>(quantityMax);
 
@@ -153,7 +150,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     }
 
     @Override

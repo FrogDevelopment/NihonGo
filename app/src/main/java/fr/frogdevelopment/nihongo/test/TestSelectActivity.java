@@ -1,16 +1,15 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.test;
 
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,6 +54,7 @@ public class TestSelectActivity extends TestAbstractActivity {
         }
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle options) {
 
@@ -125,7 +125,7 @@ public class TestSelectActivity extends TestAbstractActivity {
 
             data.close();
 
-            getLoaderManager().restartLoader(LOADER_ID_ITEMS_QCM, bundle, this);
+            LoaderManager.getInstance(this).restartLoader(LOADER_ID_ITEMS_QCM, bundle, this);
 
         } else {// QCM items
             while (data.moveToNext()) {

@@ -1,11 +1,8 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.test;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +75,7 @@ public class TestResultActivity extends AppCompatActivity {
                 .show();
     }
 
-    private class ResultAdapter extends ArrayAdapter<Result> implements Filterable {
+    private static class ResultAdapter extends ArrayAdapter<Result> implements Filterable {
 
         private final Filter mFilter = new SuccessFilter();
 
@@ -113,23 +110,25 @@ public class TestResultActivity extends AppCompatActivity {
             holder.answer.setText(result.answerExpected);
             holder.ratio.setText(result.nbSuccess + "/" + result.nbFailed);
 
+            Resources resources = getContext().getResources();
+            Resources.Theme theme = getContext().getTheme();
             if (result.success) {
-                holder.answer.setTextColor(getContext().getResources().getColor(android.R.color.holo_green_dark));
+                holder.answer.setTextColor(resources.getColor(android.R.color.holo_green_dark, theme));
 //                holder.answer.setCompoundDrawablesWithIntrinsicBounds(0,0,0,R.drawable.test_ok);
-                view.setBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+                view.setBackgroundColor(resources.getColor(android.R.color.white, theme));
             } else if (result.almost) {
-                holder.answer.setTextColor(getContext().getResources().getColor(android.R.color.holo_orange_dark));
+                holder.answer.setTextColor(resources.getColor(android.R.color.holo_orange_dark, theme));
             } else {
 //                holder.answer.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-//                holder.answer.setTextColor(getContext().getResources().getColor(android.R.color.holo_red_dark));
-                holder.answer.setTextColor(getContext().getResources().getColor(android.R.color.black));
-                view.setBackgroundColor(getContext().getResources().getColor(android.R.color.holo_red_dark));
+//                holder.answer.setTextColor(resources.getColor(android.R.color.holo_red_dark, theme));
+                holder.answer.setTextColor(resources.getColor(android.R.color.black, theme));
+                view.setBackgroundColor(resources.getColor(android.R.color.holo_red_dark, theme));
             }
 
             return view;
         }
 
-        private class ResultHolder {
+        private static class ResultHolder {
             private final TextView test;
             private final TextView answer;
             private final TextView ratio;
@@ -182,7 +181,7 @@ public class TestResultActivity extends AppCompatActivity {
                     results.values = list;
                     results.count = list.size();
                 } else {
-                    final boolean showOnlyFails = Boolean.valueOf(constraint.toString());
+                    final boolean showOnlyFails = Boolean.parseBoolean(constraint.toString());
 
                     final ArrayList<Result> values;
                     synchronized (mLock) {

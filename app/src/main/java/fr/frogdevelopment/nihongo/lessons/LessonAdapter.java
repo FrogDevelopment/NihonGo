@@ -22,7 +22,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
 
     private final LayoutInflater mInflater;
 
-    public LessonAdapter(Activity context, List<LessonsFragment.Lesson> objects) {
+    LessonAdapter(Activity context, List<LessonsFragment.Lesson> objects) {
         super(context, 0, objects);
 
         mInflater = context.getLayoutInflater();
@@ -70,7 +70,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
         return convertView;
     }
 
-    private class ViewHolder {
+    private static class ViewHolder {
 
         private final TextView text;
 

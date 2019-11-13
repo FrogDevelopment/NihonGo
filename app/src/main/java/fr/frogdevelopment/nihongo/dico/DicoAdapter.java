@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.dico;
 
 import android.app.Activity;
@@ -10,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SectionIndexer;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +31,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
     private final LayoutInflater mInflater;
     private final int mResource;
 
-    public DicoAdapter(Activity context, int resource) {
+    DicoAdapter(Activity context, int resource) {
         super(context, resource, null, DicoContract.COLUMNS, null, 0);
         rows = new ArrayList<>();
         mInflater = context.getLayoutInflater();
@@ -70,7 +67,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
         }
     }
 
-    public boolean isLetterHeader(int position) {
+    boolean isLetterHeader(int position) {
         return getItemViewType(position) == 1;
     }
 
@@ -174,7 +171,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
     private final HashMap<String, Integer> mapPositionByLetter = new LinkedHashMap<>();
     private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
 
-    Cursor swapCursor(Cursor cursor, boolean isSortByLetter) {
+    void swapCursor(Cursor cursor, boolean isSortByLetter) {
         super.swapCursor(cursor);
 
         rows.clear();
@@ -183,7 +180,7 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
 
         if (cursor == null) {
             notifyDataSetChanged();
-            return null;
+            return;
         }
 
         Item item;
@@ -219,9 +216,9 @@ public class DicoAdapter extends SimpleCursorAdapter implements SectionIndexer {
         sections = new String[sectionLetters.size()];
         sectionLetters.toArray(sections);
 
+        cursor.close();
         notifyDataSetChanged();
 
-        return cursor;
     }
 
     @Override

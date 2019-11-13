@@ -1,16 +1,12 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -45,10 +41,11 @@ public class TagsDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		CharSequence[] items = getArguments().getCharSequenceArray("items");
+        Bundle bundle = requireArguments();
+        CharSequence[] items = bundle.getCharSequenceArray("items");
 		mSelectedItems = new ArrayList<>();
 		int nbItems = items.length;
-		List<Integer> ll = getArguments().getIntegerArrayList("selectedItems");
+        List<Integer> ll = bundle.getIntegerArrayList("selectedItems");
 		boolean[] checkedItems = null;
 		if (ll != null) {
 			checkedItems = new boolean[nbItems];
