@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.review;
 
 import android.app.Fragment;
@@ -42,26 +38,26 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ReviewParametersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
 
-	private static final int    LOADER_ID                = 700;
-	static final         String REVIEW_IS_JAPANESE       = "review_is_japanese";
-	static final         String REVIEW_ONLY_FAVORITE     = "review_only_favorite";
-	static final         String REVIEW_SELECTED_RATE     = "review_selected_rate";
-	static final         String REVIEW_SELECTED_SORT     = "review_selected_sort";
-	static final         String REVIEW_SELECTED_QUANTITY = "review_selected_quantity";
-	static final         String REVIEW_TAGS              = "review_tags";
-	static final         String REVIEW_KEEP_CONFIG       = "review_keepConfig";
+	private static final int LOADER_ID = 700;
+	static final String REVIEW_IS_JAPANESE = "review_is_japanese";
+	static final String REVIEW_ONLY_FAVORITE = "review_only_favorite";
+	static final String REVIEW_SELECTED_RATE = "review_selected_rate";
+	static final String REVIEW_SELECTED_SORT = "review_selected_sort";
+	static final String REVIEW_SELECTED_QUANTITY = "review_selected_quantity";
+	static final String REVIEW_TAGS = "review_tags";
+	static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
 
-	private Switch   mSwitchLanguageView;
-	private Switch   mSwitchFavorite;
+	private Switch mSwitchLanguageView;
+	private Switch mSwitchFavorite;
 	private TextView mTagSelection;
-	private Button   mStartButton;
-	private Switch   mSwitchKeepView;
+	private Button mStartButton;
+	private Switch mSwitchKeepView;
 
-	private int selectedRate     = -1;
-	private int selectedSort     = -1;
+	private int selectedRate = -1;
+	private int selectedSort = -1;
 	private int selectedQuantity = -1;
 	private ArrayList<Integer> mSelectedItems;
-	private String[]           mSelectedTags;
+	private String[] mSelectedTags;
 	private List<CharSequence> items;
 
 	@Override
@@ -113,7 +109,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 			}
 		});
 		Spinner mTagSpinner = rootView.findViewById(R.id.review_param_tag_spinner);
-		mTagSpinner.setOnTouchListener((view, motionEvent) -> onClickTags(motionEvent));
+		mTagSpinner.setOnTouchListener(this::onClickTags);
 		mTagSelection = rootView.findViewById(R.id.review_param_tag_selection);
 		mStartButton = rootView.findViewById(R.id.review_button_start);
 		mStartButton.setOnClickListener(view -> onClickButtonStart());
@@ -147,7 +143,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 				String test_tags = preferencesHelper.getString(REVIEW_TAGS);
 				mSelectedTags = test_tags.split(", ");
 				mTagSelection.setText(test_tags);
-
 			}
 		}
 
@@ -212,7 +207,9 @@ public class ReviewParametersFragment extends Fragment implements LoaderManager.
 		mStartButton.setEnabled(selectedSort > -1 && selectedQuantity > -1);
 	}
 
-	private boolean onClickTags(MotionEvent event) {
+	private boolean onClickTags(View view, MotionEvent event) {
+		view.performClick();
+
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
 			return true;

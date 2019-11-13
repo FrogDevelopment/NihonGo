@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.review;
 
 import android.app.LoaderManager.LoaderCallbacks;
@@ -42,18 +38,15 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
 	private FloatingActionButton mFabAgain;
 	private int                  mCurrentPosition;
-	private Bundle extras;
+    private ViewPager mViewPager;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				back();
-				return true;
-
-			default:
-				return super.onOptionsItemSelected(item);
-		}
+        if (item.getItemId() == android.R.id.home) {
+            back();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -75,17 +68,17 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 		mFabAgain = findViewById(R.id.fab_again);
 		mFabAgain.setOnClickListener(view -> reviewAgain());
 
-		extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
 
 		final boolean isJapaneseReviewed = extras.getBoolean(REVIEW_IS_JAPANESE);
 
-		adapter = new ReviewAdapter(getFragmentManager(), isJapaneseReviewed);
-		ViewPager viewPager = findViewById(R.id.review_viewpager);
-		viewPager.setAdapter(adapter);
+        adapter = new ReviewAdapter(getSupportFragmentManager(), isJapaneseReviewed);
+        mViewPager = findViewById(R.id.review_viewpager);
+        mViewPager.setAdapter(adapter);
 		ImageView swapLeft = findViewById(R.id.swap_left);
 		ImageView swapRight = findViewById(R.id.swap_right);
 
-		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 			}
@@ -108,8 +101,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 			}
 		});
 
-		swapLeft.setOnClickListener(v -> viewPager.setCurrentItem(--mCurrentPosition));
-		swapRight.setOnClickListener(v -> viewPager.setCurrentItem(++mCurrentPosition));
+        swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
+        swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
 
 		getLoaderManager().initLoader(LOADER_ID, extras, this);
 	}
@@ -172,8 +165,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		adapter.setData(data);
-		data.close();
-
 		getLoaderManager().destroyLoader(loader.getId());
 	}
 
@@ -184,10 +175,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderCallbacks
 
 	private void reviewAgain() {
 		mFabAgain.hide(true);
-		adapter.clear();
-		adapter.notifyDataSetChanged();
-
-		getLoaderManager().restartLoader(LOADER_ID, extras, this);
+        mViewPager.setCurrentItem(0);
 	}
 
 }

@@ -1,10 +1,5 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.review;
 
-import android.app.Fragment;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +10,9 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,7 +41,7 @@ public class ReviewFragment extends Fragment {
 	}
 
 	@Override
-	public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
+	public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(rootView, savedInstanceState);
         TextView countView = rootView.findViewById(review_count);
         TextView reviewedView = rootView.findViewById(R.id.review_reviewed);
@@ -82,7 +79,7 @@ public class ReviewFragment extends Fragment {
 				reviewedView.setText(mItem.kanji);
 			} else {
 				test = mItem.kanji;
-				mTestSwitcher.setText(getActivity().getString(R.string.review_switch_kanji));
+				mTestSwitcher.setText(getString(R.string.review_switch_kanji));
 			}
 		}
 
@@ -92,11 +89,11 @@ public class ReviewFragment extends Fragment {
 					reviewedView.setText(mItem.kana);
 				} else {
 					test = mItem.kana;
-					mTestSwitcher.setText(getActivity().getString(R.string.review_switch_kana));
+					mTestSwitcher.setText(getString(R.string.review_switch_kana));
 				}
 				mKanaSwitcher.setVisibility(View.GONE);
 			} else {
-				mKanaSwitcher.setText(getActivity().getString(R.string.review_switch_kana));
+				mKanaSwitcher.setText(getString(R.string.review_switch_kana));
 			}
 		} else {
 			mKanaSwitcher.setVisibility(View.GONE);
@@ -104,7 +101,7 @@ public class ReviewFragment extends Fragment {
 
 		if (isJapaneseReviewed) {
 			test = mItem.input;
-			mTestSwitcher.setText(getActivity().getString(R.string.review_switch_input));
+			mTestSwitcher.setText(getString(R.string.review_switch_input));
 		} else {
 			reviewedView.setText(mItem.input);
 		}
