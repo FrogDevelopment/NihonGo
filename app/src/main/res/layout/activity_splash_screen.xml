@@ -1,11 +1,9 @@
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="fr.frogdevelopment.nihongo.SplashScreenActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="?android:attr/colorBackground"
+    tools:context="fr.frogdevelopment.nihongo.SplashScreenActivity">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -14,6 +12,6 @@
         android:layout_centerVertical="true"
         android:contentDescription="@string/frog_development"
         android:padding="50dp"
-        android:src="@drawable/ic_frog_development"/>
+        android:src="@drawable/ic_frog_development" />
 
 </RelativeLayout>

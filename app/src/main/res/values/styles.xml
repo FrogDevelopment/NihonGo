@@ -1,10 +1,6 @@
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-
 <resources>
 
-    <style name="NihonGoTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="NihonGoTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@android:color/darker_gray</item> 
         <!--<item name="colorPrimary">@color/primary</item> -->
         <item name="colorPrimaryDark">@color/primary_dark</item>

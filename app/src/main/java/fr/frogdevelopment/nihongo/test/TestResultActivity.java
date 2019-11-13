@@ -95,7 +95,6 @@ public class TestResultActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View view, @NonNull ViewGroup parent) {
             ResultHolder holder;
-            Result result = getItem(position);
 
             if (view == null) {
                 view = mInflater.inflate(R.layout.row_test_result, parent, false);
@@ -106,6 +105,7 @@ public class TestResultActivity extends AppCompatActivity {
                 holder = (ResultHolder) view.getTag();
             }
 
+            Result result = getItem(position);
             holder.test.setText(result.test);
             holder.answer.setText(result.answerExpected);
             holder.ratio.setText(result.nbSuccess + "/" + result.nbFailed);
