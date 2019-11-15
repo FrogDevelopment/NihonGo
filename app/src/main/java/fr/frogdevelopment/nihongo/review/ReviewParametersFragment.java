@@ -5,16 +5,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,25 +20,27 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
-import fr.frogdevelopment.nihongo.dialog.TagsDialog;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-public class ReviewParametersFragment extends Fragment implements LoaderCallbacks<Cursor>, TagsDialog.TagDialogListener {
+import static java.util.Arrays.asList;
+
+public class ReviewParametersFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 700;
     static final String REVIEW_IS_JAPANESE = "review_is_japanese";
@@ -55,7 +53,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 
     private Switch mSwitchLanguageView;
     private Switch mSwitchFavorite;
-    private TextView mTagSelection;
     private Button mStartButton;
     private Switch mSwitchKeepView;
 
@@ -64,8 +61,9 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     private int selectedQuantity = -1;
     private ArrayList<Integer> mSelectedItems;
     private String[] mSelectedTags;
-    private List<CharSequence> items;
-    private MultiAutoCompleteTextView mTagsDropdown;
+    private List<CharSequence> mTags;
+    private AutoCompleteTextView mTagsDropdown;
+    private ChipGroup mChipGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,16 +97,19 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         });
 
         mTagsDropdown = rootView.findViewById(R.id.review_param_tags_dropdown);
-//        mTagsDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, getResources().getStringArray(R.array.param_learned)));
-        mTagsDropdown.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-//        tagsDropdown.setOnItemClickListener((parent, view, position, id) -> {
-//            selectedRate = position;
-//            checkStartButtonEnabled();
-//        });
+        mTagsDropdown.setThreshold(2);
+        mTagsDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String tag = (String) parent.getItemAtPosition(position);
+            addChipToGroup(tag);
+            mSelectedTags = ArrayUtils.add(mSelectedTags, tag);
+            mTagsDropdown.setText(null);
 
-        Spinner mTagSpinner = rootView.findViewById(R.id.review_param_tag_spinner);
-        mTagSpinner.setOnTouchListener(this::onClickTags);
-        mTagSelection = rootView.findViewById(R.id.review_param_tag_selection);
+            mTags.remove(tag);
+            updateDropDownTags();
+        });
+
+        mChipGroup = rootView.findViewById(R.id.group_tags);
+
         mStartButton = rootView.findViewById(R.id.review_button_start);
         mStartButton.setOnClickListener(view -> onClickButtonStart());
         mSwitchKeepView = rootView.findViewById(R.id.review_switch_keep);
@@ -126,7 +127,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
             sortDropdown.setText(sortDropdown.getAdapter().getItem(selectedSort).toString(), false);
             quantityDropdown.setText(quantityDropdown.getAdapter().getItem(selectedQuantity).toString(), false);
             rateDropdown.setText(rateDropdown.getAdapter().getItem(selectedRate).toString(), false);
-            mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
+            Stream.of(mSelectedTags).forEach(this::addChipToGroup);
         } else {
             PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(requireActivity());
             if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
@@ -134,19 +135,43 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
                 selectedSort = preferencesHelper.getInt(REVIEW_SELECTED_SORT);
                 selectedQuantity = preferencesHelper.getInt(REVIEW_SELECTED_QUANTITY);
                 String test_tags = preferencesHelper.getString(REVIEW_TAGS);
-                mSelectedTags = test_tags.split(", ");
+                if (StringUtils.isNotBlank(test_tags)) {
+                    mSelectedTags = test_tags.split(", ");
+                } else {
+                    mSelectedTags = new String[0];
+                }
 
                 mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
                 mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
                 sortDropdown.setText(sortDropdown.getAdapter().getItem(selectedSort).toString(), false);
                 quantityDropdown.setText(quantityDropdown.getAdapter().getItem(selectedQuantity).toString(), false);
                 rateDropdown.setText(rateDropdown.getAdapter().getItem(selectedRate).toString(), false);
-                mTagSelection.setText(test_tags);
+                Stream.of(mSelectedTags).forEach(this::addChipToGroup);
                 mSwitchKeepView.setChecked(true);
             }
         }
 
         checkStartButtonEnabled();
+    }
+
+    private void addChipToGroup(String tag) {
+        Chip chip = new Chip(requireContext());
+        chip.setText(tag);
+        chip.setCloseIconVisible(true);
+        chip.setTextColor(getResources().getColor(R.color.white, requireActivity().getTheme()));
+        chip.setChipBackgroundColorResource(R.color.accent);
+        chip.setCloseIconTintResource(R.color.white);
+
+        // necessary to get single selection working
+        chip.setClickable(false);
+        chip.setCheckable(false);
+        chip.setOnCloseIconClickListener(v -> {
+            mChipGroup.removeView(chip);
+            mTags.add(tag);
+            mSelectedTags = ArrayUtils.removeAllOccurences(mSelectedTags, tag);
+            updateDropDownTags();
+        });
+        mChipGroup.addView(chip);
     }
 
     @Override
@@ -190,15 +215,18 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         while (data.moveToNext()) {
             String row = data.getString(0);
             String[] tags = row.split(",");
-            uniqueItems.addAll(Arrays.asList(tags));
+            uniqueItems.addAll(asList(tags));
         }
         data.close();
 
-        items = new ArrayList<>(uniqueItems);
-//        items.sort(Comparator.comparing(CharSequence::toString));
-        Collections.sort(items, (o1, o2) -> o1.toString().compareTo(o2.toString()));
+        mTags = new ArrayList<>(uniqueItems);
+        mTags.removeAll(asList(mSelectedTags));
+        updateDropDownTags();
+    }
 
-        mTagsDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, items));
+    private void updateDropDownTags() {
+        mTags.sort(Comparator.comparing(CharSequence::toString));
+        mTagsDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, mTags));
     }
 
     @Override
@@ -207,30 +235,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 
     private void checkStartButtonEnabled() {
         mStartButton.setEnabled(selectedSort > -1 && selectedQuantity > -1);
-    }
-
-    private boolean onClickTags(View view, MotionEvent event) {
-        view.performClick();
-
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            TagsDialog.show(getFragmentManager(), this, items, mSelectedItems);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onReturnValue(ArrayList<Integer> selectedItems) {
-        mSelectedItems = selectedItems;
-        mSelectedTags = null;
-
-        for (Integer selectedIndex : mSelectedItems) {
-            CharSequence selectedTag = items.get(selectedIndex);
-            mSelectedTags = ArrayUtils.add(mSelectedTags, selectedTag.toString().split(" - ")[0]);
-        }
-
-        mTagSelection.setText(StringUtils.join(mSelectedTags, ", "));
     }
 
     private void onClickButtonStart() {
