@@ -14,7 +14,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -25,6 +24,7 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -60,7 +60,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
 
     private Switch mSwitchLanguageView;
     private Switch mSwitchFavorite;
-    private Button mStartButton;
+    private MaterialButton mStartButton;
     private Switch mSwitchKeepView;
 
     private int mRate = -1;
@@ -219,7 +219,7 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     }
 
     private void saveConfigIfNeed() {
-        PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(getActivity());
+        PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(requireContext());
         if (mSwitchKeepView.isChecked()) {
             preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, true);
             preferencesHelper.saveBoolean(REVIEW_IS_JAPANESE, mSwitchLanguageView.isChecked());
