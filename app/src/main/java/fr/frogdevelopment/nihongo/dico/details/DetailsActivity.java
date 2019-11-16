@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dico.details;
 
-import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -20,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -149,7 +149,7 @@ public class DetailsActivity extends AppCompatActivity {
     // ************************************************************* \\
     private void delete() {
         // Ask the user if they want to delete
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.delete_title)
                 .setMessage(R.string.delete_detail)

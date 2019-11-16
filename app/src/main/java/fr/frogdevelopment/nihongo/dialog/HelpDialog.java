@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,8 @@ import android.widget.CheckBox;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
@@ -46,15 +47,9 @@ public class HelpDialog extends DialogFragment {
         boolean showRemember = bundle.getBoolean("showRemember");
         remember.setVisibility(showRemember ? View.VISIBLE : View.GONE);
 
-
-        // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.help_title)
-
-                // Inflate and set the layout for the dialog
-                // Pass null as the parent view because its going in the dialog layout
+        return new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.help_title)
                 .setView(view)
-
-                // Set the action buttons
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
 
                     if (showRemember) {
@@ -63,15 +58,14 @@ public class HelpDialog extends DialogFragment {
                             preferences = Preferences.HELP_DICO;
                         } else {
                             throw new IllegalStateException("Unknow resId " + resId);
-						}
+                        }
 
-                        PreferencesHelper.getInstance(getActivity()).saveBoolean(preferences, remember.isChecked());
+                        PreferencesHelper.getInstance(requireContext()).saveBoolean(preferences, remember.isChecked());
                     }
 
                     requireDialog().dismiss();
-                });
-
-        return builder.create();
+                })
+                .create();
     }
 
 }

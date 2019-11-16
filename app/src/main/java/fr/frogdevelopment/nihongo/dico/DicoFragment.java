@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.dico;
 
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -166,7 +166,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         LoaderManager.getInstance(this).destroyLoader(loader.getId());
 
         if (loader.getId() == LOADER_DICO_ID && dicoAdapter.getCount() == 0) {
-            new AlertDialog.Builder(getActivity())
+            new MaterialAlertDialogBuilder(requireContext())
                     .setMessage(R.string.help_dico_start)
                     .setPositiveButton(android.R.string.yes, (dialog, id) -> ((MainActivity) requireActivity()).selectItemAtIndex(R.id.navigation_lessons))
                     .setNegativeButton(android.R.string.no, null)
@@ -273,7 +273,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
     private void onDelete(final ActionMode actionMode, final Set<Integer> selectedRows) {
         final int nbSelectedRows = selectedRows.size();
         // Ask the user if they want to delete
-        new AlertDialog.Builder(getActivity())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.delete_title)
                 .setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))

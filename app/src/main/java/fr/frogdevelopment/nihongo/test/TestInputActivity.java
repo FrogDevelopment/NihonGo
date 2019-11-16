@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.test;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -8,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,7 +41,7 @@ public class TestInputActivity extends TestAbstractActivity {
     private void onClickValidate() {
         Editable answer = answerView.getText();
         if (TextUtils.isEmpty(answer)) {
-            new AlertDialog.Builder(this)
+            new MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.test_input_empty)
                     .setPositiveButton(android.R.string.yes, (dialog, id) -> validate(answer))
                     .setNegativeButton(android.R.string.no, null)

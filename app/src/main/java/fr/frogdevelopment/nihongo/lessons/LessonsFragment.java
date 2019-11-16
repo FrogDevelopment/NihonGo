@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.lessons;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentProviderOperation;
 import android.content.Context;
@@ -27,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.ListFragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -236,7 +236,7 @@ public class LessonsFragment extends ListFragment {
         }
 
         if (onPresent) {
-            new AlertDialog.Builder(getActivity())
+            new MaterialAlertDialogBuilder(requireContext())
                     .setIcon(R.drawable.ic_warning)
                     .setTitle(R.string.lesson_already_present)
                     .setMessage(R.string.lesson_continue)

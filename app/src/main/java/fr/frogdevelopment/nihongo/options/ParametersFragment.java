@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.options;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import fr.frogdevelopment.nihongo.R;
@@ -42,12 +42,12 @@ public class ParametersFragment extends Fragment {
     }
 
     private void onClickErase() {
-        new AlertDialog.Builder(getActivity())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.options_erase_data_confirmation)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     requireActivity().getContentResolver().delete(NihonGoContentProvider.URI_ERASE, null, null);
 
-                    PreferencesHelper.getInstance(getActivity()).saveString(Preferences.LESSONS, "");
+                    PreferencesHelper.getInstance(requireActivity()).saveString(Preferences.LESSONS, "");
 
                     Snackbar.make(requireActivity().findViewById(R.id.parameters_layout), R.string.options_erase_data_success, Snackbar.LENGTH_LONG).show();
                 })
@@ -57,7 +57,7 @@ public class ParametersFragment extends Fragment {
     }
 
     private void onClickResetFavorite() {
-        new AlertDialog.Builder(getActivity())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.options_reset_favorite_confirmation)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     final ContentValues values = new ContentValues();
@@ -72,7 +72,7 @@ public class ParametersFragment extends Fragment {
     }
 
     private void onClickResetLearned() {
-        new AlertDialog.Builder(getActivity())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.options_reset_learned_erase_confirmation)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     final ContentValues values = new ContentValues();

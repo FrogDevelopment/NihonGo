@@ -1,7 +1,6 @@
 package fr.frogdevelopment.nihongo.test;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,7 +69,7 @@ public class TestResultActivity extends AppCompatActivity {
     private void onItemClick(int position) {
         mListView.setItemChecked(position, true);
         Result item = adapter.getItem(position);
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.test_results_title))
                 .setMessage(String.format(getString(R.string.test_results_details), item.test, item.answerExpected, item.answerGiven))
                 .create()

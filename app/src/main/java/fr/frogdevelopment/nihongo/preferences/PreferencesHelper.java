@@ -3,11 +3,13 @@ package fr.frogdevelopment.nihongo.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
 public class PreferencesHelper {
 
     private static final String NAME = "NihonGoPref";
 
-    public static PreferencesHelper getInstance(Context ctx) {
+    public static PreferencesHelper getInstance(@NonNull Context ctx) {
         return new PreferencesHelper(ctx);
     }
 

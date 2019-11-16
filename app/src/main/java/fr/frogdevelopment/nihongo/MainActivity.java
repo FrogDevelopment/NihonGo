@@ -4,7 +4,6 @@
 
 package fr.frogdevelopment.nihongo;
 
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             selectItemAtIndex(R.id.navigation_word);
             onSearch = false;
         } else {
-            new AlertDialog.Builder(this)
+            new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.closing_activity_title)
                     .setMessage(R.string.closing_activity_message)
                     .setPositiveButton(R.string.yes, (dialog, which) -> finish())
