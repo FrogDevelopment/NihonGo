@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/review_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingEnd="22dp"
     android:paddingStart="22dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingEnd="22dp">
 
     <TextView
         android:id="@+id/review_count"
@@ -15,17 +14,17 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/bookmark"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@id/bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_bookmark_on"
-        android:tint="@android:color/darker_gray"/>
+        android:tint="@android:color/darker_gray" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -44,9 +43,9 @@
                 android:id="@+id/review_reviewed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="100dp"
                 android:gravity="center"
-                android:textSize="60sp"/>
+                android:paddingTop="100dp"
+                android:textSize="60sp" />
 
             <TextSwitcher
                 android:id="@+id/review_textSwitcher_kana"
@@ -59,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textSize="60sp"/>
+                    android:textSize="60sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -67,7 +66,7 @@
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="30sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
             </TextSwitcher>
 
             <TextSwitcher
@@ -81,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textSize="60sp"/>
+                    android:textSize="60sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -89,7 +88,7 @@
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="30sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
             </TextSwitcher>
 
             <TextView
@@ -100,7 +99,7 @@
                 android:gravity="start"
                 android:text="@string/details_info"
                 android:textSize="12sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/review_info"
@@ -109,7 +108,7 @@
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
-                android:textStyle="italic"/>
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/review_example_title"
@@ -119,7 +118,7 @@
                 android:gravity="start"
                 android:text="@string/details_example"
                 android:textSize="12sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/review_example"
@@ -128,7 +127,7 @@
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
-                android:textStyle="italic"/>
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/review_tags_title"
@@ -159,7 +158,7 @@
         android:layout_above="@+id/review_rating"
         android:layout_marginTop="10dp"
         android:text="@string/details_ratio"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <LinearLayout
         android:id="@id/review_rating"
@@ -174,34 +173,37 @@
             android:id="@+id/rate_0"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/rate_0"
             android:src="@drawable/ic_star_black_24dp"
-            android:tint="@android:color/darker_gray"/>
+            android:tint="@android:color/darker_gray" />
 
         <ImageView
             android:id="@+id/rate_1"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/rate_1"
             android:src="@drawable/ic_star_black_24dp"
-            android:tint="@android:color/darker_gray"/>
+            android:tint="@android:color/darker_gray" />
 
         <ImageView
             android:id="@+id/rate_2"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/rate_2"
             android:src="@drawable/ic_star_black_24dp"
-            android:tint="@android:color/darker_gray"/>
+            android:tint="@android:color/darker_gray" />
     </LinearLayout>
 
 </RelativeLayout>

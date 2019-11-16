@@ -42,7 +42,6 @@
     <string name="details_tags">Tags :</string>
     <string name="details_ratio">Réussite : %1$d%%</string>
 
-    <string name="rate_done">Évalué comme «%1$s»</string>
     <string name="rate_0">Nouveau</string>
     <string name="rate_1">Vu</string>
     <string name="rate_2">Connu</string>
@@ -123,13 +122,13 @@
     <string name="param_sort">Ordre</string>
     <string name="param_sort_selection">Sélectionner l\'ordre de tri</string>
     <string name="param_quantity">Quantité</string>
-    <string name="param_quantity_selection">Sélectionner la quantité</string>
+    <string name="param_quantity_selection">Saisir la quantité</string>
     <string name="param_only_learned">Seulement les appris ?</string>
     <string name="param_kanji_display">Afficher en Kanji</string>
     <string name="param_kanji_write">Saisir en Kanji</string>
     <string name="param_tag_title">Tag (Optionnel)</string>
-    <string name="param_tag_selection">Sélectionner un tag</string>
-    <string name="param.tags.dialog.title">Sélectionner un ou plusieurs tags</string>
+    <string name="param_tag_selection">Sélectionner un ou plusieurs tags (Optionnel)</string>
+    <string name="param_tags_dialog_title">Sélectionner un ou plusieurs tags</string>
     <string name="param_button_start">Démarrer</string>
     <string name="param_keep_config">Garder la configuration ?</string>
 
@@ -164,9 +163,6 @@
         <item>20</item>
         <item>40</item>
         <item>50</item>
-        <item>100</item>
-        <item>150</item>
-        <item>200</item>
     </string-array>
 
     <!-- ******* -->

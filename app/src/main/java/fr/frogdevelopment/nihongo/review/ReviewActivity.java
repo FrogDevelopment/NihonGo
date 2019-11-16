@@ -3,7 +3,6 @@ package fr.frogdevelopment.nihongo.review;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -18,17 +17,18 @@ import com.github.clans.fab.FloatingActionButton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_IS_JAPANESE;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_ONLY_FAVORITE;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SELECTED_QUANTITY;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SELECTED_RATE;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SELECTED_SORT;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_QUANTITY;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_RATE;
+import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SORT;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_TAGS;
 
 public class ReviewActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -37,7 +37,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
 
     private ReviewAdapter adapter;
 
-    private FloatingActionButton mFabAgain;
     private int mCurrentPosition;
     private ViewPager mViewPager;
 
@@ -66,19 +65,24 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
 
         setContentView(R.layout.activity_review);
 
-        mFabAgain = findViewById(R.id.fab_again);
-        mFabAgain.setOnClickListener(view -> reviewAgain());
+        ImageView swapLeft = findViewById(R.id.swap_left);
+        swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
+        ImageView swapRight = findViewById(R.id.swap_right);
+        swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
+
+        FloatingActionButton fabAgain = findViewById(R.id.fab_again);
+        fabAgain.setOnClickListener(view -> {
+            fabAgain.hide(true);
+            mViewPager.setCurrentItem(0);
+        });
 
         Bundle extras = getIntent().getExtras();
 
         final boolean isJapaneseReviewed = extras.getBoolean(REVIEW_IS_JAPANESE);
 
-        adapter = new ReviewAdapter(getSupportFragmentManager(), isJapaneseReviewed);
         mViewPager = findViewById(R.id.review_viewpager);
+        adapter = new ReviewAdapter(getSupportFragmentManager(), isJapaneseReviewed);
         mViewPager.setAdapter(adapter);
-        ImageView swapLeft = findViewById(R.id.swap_left);
-        ImageView swapRight = findViewById(R.id.swap_right);
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -87,13 +91,13 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onPageSelected(int position) {
                 mCurrentPosition = position;
-                swapLeft.setVisibility(position == 0 ? View.INVISIBLE : View.VISIBLE);
+                swapLeft.setVisibility(position == 0 ? INVISIBLE : VISIBLE);
                 boolean lastPosition = position + 1 == adapter.getCount();
-                swapRight.setVisibility(lastPosition ? View.INVISIBLE : View.VISIBLE);
+                swapRight.setVisibility(lastPosition ? INVISIBLE : VISIBLE);
                 if (lastPosition) {
-                    mFabAgain.show(true);
+                    fabAgain.show(true);
                 } else {
-                    mFabAgain.hide(true);
+                    fabAgain.hide(true);
                 }
             }
 
@@ -102,9 +106,6 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
-        swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
-        swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
-
         LoaderManager.getInstance(this).initLoader(LOADER_ID, extras, this);
     }
 
@@ -112,29 +113,25 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        final int selectedQuantity = args.getInt(REVIEW_SELECTED_QUANTITY);
-        String count = getResources().getStringArray(R.array.param_quantities)[selectedQuantity];
-        String limit = "";
-        if (NumberUtils.isCreatable(count)) {
-            limit = " LIMIT " + Integer.parseInt(count);
-        }
-        final String[] tags = args.getStringArray(REVIEW_TAGS);
+        String quantity = args.getString(REVIEW_QUANTITY);
+        String limit = " LIMIT " + quantity;
 
         String selection = "1 = 1";
         String[] likes = null;
-        if (ArrayUtils.isNotEmpty(tags)) {
+        String[] tags = args.getStringArray(REVIEW_TAGS);
+        if (tags != null && ArrayUtils.isNotEmpty(tags)) {
             for (String tag : tags) {
                 likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
             }
             selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
         }
 
-        final boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
+        boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
         if (onlyFavorite) {
             selection += " AND BOOKMARK = '1'";
         }
 
-        int learnedRate = args.getInt(REVIEW_SELECTED_RATE);
+        int learnedRate = args.getInt(REVIEW_RATE);
         switch (learnedRate) {
             case 0:
             case 1:
@@ -144,8 +141,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         String sortOrder;
-        final int selectedSort = args.getInt(REVIEW_SELECTED_SORT);
-
+        final int selectedSort = args.getInt(REVIEW_SORT);
         switch (selectedSort) {
             case 0: // new -> old
                 sortOrder = "_id ASC" + limit;
@@ -171,13 +167,8 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         // TODO Auto-generated method stub
-    }
-
-    private void reviewAgain() {
-        mFabAgain.hide(true);
-        mViewPager.setCurrentItem(0);
     }
 
 }

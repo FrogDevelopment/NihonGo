@@ -190,22 +190,6 @@ public class ReviewFragment extends Fragment {
         final ContentValues values = new ContentValues();
         values.put(DicoContract.LEARNED, mItem.learned);
         updateItem(values);
-
-        int rateName;
-        switch (rate) {
-            case 1:
-                rateName = R.string.rate_1;
-                break;
-            case 2:
-                rateName = R.string.rate_2;
-                break;
-            case 0:
-            default:
-                rateName = R.string.rate_0;
-                break;
-        }
-
-        Toast.makeText(requireActivity(), getString(R.string.rate_done, getString(rateName)), Toast.LENGTH_SHORT).show();
     }
 
     private void bookmarkItem() {
