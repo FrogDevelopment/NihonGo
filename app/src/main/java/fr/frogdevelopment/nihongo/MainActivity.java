@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         List<InputMethodInfo> inputMethodInfos = mInputMethodManager.getInputMethodList();
         for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
             for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
-                String languageTag = inputMethodInfo.getSubtypeAt(index).getLanguageTag();
-                if (Locale.JAPAN.toLanguageTag().equals(languageTag) || Locale.JAPANESE.toLanguageTag().equals(languageTag)) {
+                String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
+                if (Locale.JAPAN.toString().equals(locale) || Locale.JAPANESE.toString().equals(locale)) {
                     isNoJapanIME = false;
                     break;
                 }
