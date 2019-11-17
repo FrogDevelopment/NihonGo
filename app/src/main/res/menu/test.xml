@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_test_detail"
-        android:icon="@drawable/ic_info_white"
+        android:icon="@drawable/ic_baseline_info_24"
         app:showAsAction="ifRoom"
         android:title="@string/test_info"/>
 </menu>

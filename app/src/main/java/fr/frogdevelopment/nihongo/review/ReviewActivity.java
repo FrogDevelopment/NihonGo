@@ -19,11 +19,14 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.BOOKMARK;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.COLUMNS;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.LEARNED;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TAGS;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_IS_JAPANESE;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_ONLY_FAVORITE;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_QUANTITY;
@@ -121,14 +124,14 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
         String[] tags = args.getStringArray(REVIEW_TAGS);
         if (tags != null && ArrayUtils.isNotEmpty(tags)) {
             for (String tag : tags) {
-                likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
+                likes = ArrayUtils.add(likes, TAGS + " LIKE '%" + tag + "%'");
             }
             selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
         }
 
         boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
         if (onlyFavorite) {
-            selection += " AND BOOKMARK = '1'";
+            selection += String.format(" AND %s = '1'", BOOKMARK);
         }
 
         int learnedRate = args.getInt(REVIEW_RATE);
@@ -136,7 +139,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
             case 0:
             case 1:
             case 2:
-                selection += String.format(" AND LEARNED = '%s'", learnedRate);
+                selection += String.format(" AND %s = '%s'", LEARNED, learnedRate);
                 break;
         }
 
@@ -157,7 +160,7 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
                 break;
         }
 
-        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
+        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, COLUMNS, selection, null, sortOrder);
     }
 
     @Override

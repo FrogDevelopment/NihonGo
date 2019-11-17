@@ -54,7 +54,7 @@
         style="@style/NormalFabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_again_white_24dp"
+        android:src="@drawable/ic_baseline_replay_24"
         android:visibility="invisible"
         app:layout_anchor="@id/review_viewpager"
         app:layout_anchorGravity="bottom|right|end"/>
