@@ -31,7 +31,7 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+            android:src="@drawable/ic_baseline_arrow_left_24"
             android:tint="@android:color/darker_gray"
             android:contentDescription="swap_left"/>
 
@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:src="@drawable/ic_baseline_arrow_right_24"
             android:tint="@android:color/darker_gray"
             android:contentDescription="swap_right"/>
 

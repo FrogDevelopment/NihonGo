@@ -15,7 +15,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_bookmark_on"
+        android:src="@drawable/ic_baseline_bookmark_24"
         android:tint="@android:color/darker_gray"/>
 
     <ScrollView
@@ -144,7 +144,7 @@
             android:layout_marginStart="10dp"
             android:adjustViewBounds="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_star_black_24dp"
+            android:src="@drawable/ic_baseline_star_24"
             android:tint="@android:color/darker_gray"/>
 
         <ImageView
@@ -155,7 +155,7 @@
             android:layout_marginStart="10dp"
             android:adjustViewBounds="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_star_black_24dp"
+            android:src="@drawable/ic_baseline_star_24"
             android:tint="@android:color/darker_gray"/>
 
         <ImageView
@@ -166,7 +166,7 @@
             android:layout_marginStart="10dp"
             android:adjustViewBounds="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_star_black_24dp"
+            android:src="@drawable/ic_baseline_star_24"
             android:tint="@android:color/darker_gray"/>
     </LinearLayout>
 </RelativeLayout>

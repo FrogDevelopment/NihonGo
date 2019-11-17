@@ -64,7 +64,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
             holder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_black, 0);
         } else {
             holder.text.setTypeface(holder.text.getTypeface(), Typeface.BOLD);
-            holder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_file_download_black, 0);
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_file_download, 0);
         }
 
         return convertView;

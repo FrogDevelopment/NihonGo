@@ -12,7 +12,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="5dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/ic_star_black_24dp"
+        android:src="@drawable/ic_baseline_star_24"
         android:tint="@android:color/darker_gray" />
 
     <ImageView
@@ -22,7 +22,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/ic_star_black_24dp"
+        android:src="@drawable/ic_baseline_star_24"
         android:tint="@android:color/darker_gray" />
 
     <ImageView
@@ -32,7 +32,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/ic_star_black_24dp"
+        android:src="@drawable/ic_baseline_star_24"
         android:tint="@android:color/darker_gray" />
 
     <TextView

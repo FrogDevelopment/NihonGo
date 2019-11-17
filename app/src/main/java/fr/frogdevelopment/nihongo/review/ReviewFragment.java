@@ -156,31 +156,31 @@ public class ReviewFragment extends Fragment {
     private void handleRate() {
         switch (mItem.learned) {
             case 1:
-                mRate0.setImageResource(R.drawable.ic_star_black_24dp);
-                mRate1.setImageResource(R.drawable.ic_star_black_24dp);
-                mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
+                mRate0.setImageResource(R.drawable.ic_baseline_star_24);
+                mRate1.setImageResource(R.drawable.ic_baseline_star_24);
+                mRate2.setImageResource(R.drawable.ic_baseline_star_border_24);
 
                 break;
 
             case 2:
-                mRate0.setImageResource(R.drawable.ic_star_black_24dp);
-                mRate1.setImageResource(R.drawable.ic_star_black_24dp);
-                mRate2.setImageResource(R.drawable.ic_star_black_24dp);
+                mRate0.setImageResource(R.drawable.ic_baseline_star_24);
+                mRate1.setImageResource(R.drawable.ic_baseline_star_24);
+                mRate2.setImageResource(R.drawable.ic_baseline_star_24);
 
                 break;
 
             case 0:
             default:
-                mRate0.setImageResource(R.drawable.ic_star_black_24dp);
-                mRate1.setImageResource(R.drawable.ic_star_border_black_24dp);
-                mRate2.setImageResource(R.drawable.ic_star_border_black_24dp);
+                mRate0.setImageResource(R.drawable.ic_baseline_star_24);
+                mRate1.setImageResource(R.drawable.ic_baseline_star_border_24);
+                mRate2.setImageResource(R.drawable.ic_baseline_star_border_24);
 
                 break;
         }
     }
 
     private void handleBookmark() {
-        mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_bookmark_on : R.drawable.ic_bookmark_off);
+        mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
     }
 
     private void setRate(int rate) {

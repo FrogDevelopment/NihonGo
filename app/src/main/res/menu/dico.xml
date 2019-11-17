@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/dico_menu_search"
-        android:icon="@drawable/ic_search_white"
+        android:icon="@drawable/ic_baseline_search_24"
         android:title="@string/menu_search"
         android:visible="false"
         app:actionViewClass="androidx.appcompat.widget.SearchView"

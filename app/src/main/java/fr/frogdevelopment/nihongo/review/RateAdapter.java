@@ -49,19 +49,19 @@ public class RateAdapter extends ArrayAdapter<CharSequence> {
 
         switch (position) {
             case 0:
-                rate_0View.setImageResource(R.drawable.ic_star_black_24dp);
-                rate_1View.setImageResource(R.drawable.ic_star_border_black_24dp);
-                rate_2View.setImageResource(R.drawable.ic_star_border_black_24dp);
+                rate_0View.setImageResource(R.drawable.ic_baseline_star_24);
+                rate_1View.setImageResource(R.drawable.ic_baseline_star_border_24);
+                rate_2View.setImageResource(R.drawable.ic_baseline_star_border_24);
                 break;
             case 1:
-                rate_0View.setImageResource(R.drawable.ic_star_black_24dp);
-                rate_1View.setImageResource(R.drawable.ic_star_black_24dp);
-                rate_2View.setImageResource(R.drawable.ic_star_border_black_24dp);
+                rate_0View.setImageResource(R.drawable.ic_baseline_star_24);
+                rate_1View.setImageResource(R.drawable.ic_baseline_star_24);
+                rate_2View.setImageResource(R.drawable.ic_baseline_star_border_24);
                 break;
             case 2:
-                rate_0View.setImageResource(R.drawable.ic_star_black_24dp);
-                rate_1View.setImageResource(R.drawable.ic_star_black_24dp);
-                rate_2View.setImageResource(R.drawable.ic_star_black_24dp);
+                rate_0View.setImageResource(R.drawable.ic_baseline_star_24);
+                rate_1View.setImageResource(R.drawable.ic_baseline_star_24);
+                rate_2View.setImageResource(R.drawable.ic_baseline_star_24);
                 break;
             case 3:
                 rate_0View.setVisibility(INVISIBLE);
