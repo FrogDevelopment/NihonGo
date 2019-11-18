@@ -113,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="textCapSentences|textAutoComplete" />
+                    android:inputType="textAutoComplete" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

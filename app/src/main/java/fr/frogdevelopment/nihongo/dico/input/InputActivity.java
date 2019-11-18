@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +25,7 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
 
+import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.DETAILS;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.EXAMPLE;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.INPUT;
@@ -35,6 +35,7 @@ import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.SORT_LETTE
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TAGS;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TYPE;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract._ID;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class InputActivity extends AppCompatActivity {
 
@@ -78,9 +79,14 @@ public class InputActivity extends AppCompatActivity {
         mTagsWrapper = findViewById(R.id.wrapper_tags);
         mTagsText = findViewById(R.id.input_tags);
         mTagsText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                addChipToGroup(v.getText().toString());
+            if (actionId == IME_ACTION_DONE) {
+                Stream.of(v.getText().toString().split(","))
+                        .map(String::trim)
+                        .map(StringUtils::capitalize)
+                        .filter(StringUtils::isNotBlank)
+                        .forEach(this::addChipToGroup);
                 v.setText("");
+                v.clearFocus();
                 return true;
             }
             return false;
@@ -179,7 +185,7 @@ public class InputActivity extends AppCompatActivity {
     }
 
     private void addChipToGroup(String tag) {
-        mTags.add(tag);
+        mTags.add(capitalize(tag));
 
         Chip chip = new Chip(this);
         chip.setText(tag);
@@ -252,7 +258,7 @@ public class InputActivity extends AppCompatActivity {
 
     private void update() {
 
-        itemUpdate.input = StringUtils.capitalize(mInputText.getText().toString());
+        itemUpdate.input = capitalize(mInputText.getText().toString());
         itemUpdate.sort_letter = itemUpdate.input.substring(0, 1);
         itemUpdate.kanji = mKanjiText.getText().toString();
         itemUpdate.kana = mKanaText.getText().toString();
@@ -287,7 +293,7 @@ public class InputActivity extends AppCompatActivity {
 
     private void insert() {
         final ContentValues values = new ContentValues();
-        final String inputData = StringUtils.capitalize(mInputText.getText().toString());
+        final String inputData = capitalize(mInputText.getText().toString());
         values.put(INPUT, inputData);
         values.put(SORT_LETTER, inputData.substring(0, 1));
         values.put(KANJI, mKanjiText.getText().toString());
