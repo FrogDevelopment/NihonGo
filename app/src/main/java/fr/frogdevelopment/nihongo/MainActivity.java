@@ -8,11 +8,12 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.List;
 import java.util.Locale;
 
 import fr.frogdevelopment.nihongo.about.AboutFragment;
@@ -64,18 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private void initIME() {
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        boolean isNoJapanIME = true;
-        List<InputMethodInfo> inputMethodInfos = mInputMethodManager.getInputMethodList();
-        for (InputMethodInfo inputMethodInfo : inputMethodInfos) {
-            for (int index = 0, count = inputMethodInfo.getSubtypeCount(); index < count; index++) {
-                String locale = inputMethodInfo.getSubtypeAt(index).getLocale();
-                if (Locale.JAPAN.toString().equals(locale) || Locale.JAPANESE.toString().equals(locale)) {
-                    isNoJapanIME = false;
-                    break;
-                }
-            }
-        }
-
+        LocaleList locales = Resources.getSystem().getConfiguration().getLocales();
+        boolean isNoJapanIME = locales.indexOf(Locale.JAPAN) < 0;
         if (isNoJapanIME) {
             boolean rememberWarning = PreferencesHelper.getInstance(this).getBoolean(Preferences.REMEMBER_WARNING_IME);
             if (!rememberWarning) {
