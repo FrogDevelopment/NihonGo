@@ -5,35 +5,54 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Type;
+
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.DETAILS;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.EXAMPLE;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.INPUT;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.KANA;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.KANJI;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.SORT_LETTER;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TAGS;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TYPE;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract._ID;
 
 public class InputActivity extends AppCompatActivity {
 
     private TextInputLayout mKanjiWrapper;
-    private EditText mKanjiText;
+    private TextInputEditText mKanjiText;
     private TextInputLayout mKanaWrapper;
-    private EditText mKanaText;
+    private TextInputEditText mKanaText;
     private TextInputLayout mInputWrapper;
-    private EditText mInputText;
-    private TextInputLayout mTagsWrapper;
-    private EditText mTagsText;
+    private TextInputEditText mInputText;
     private TextInputLayout mDetailsWrapper;
-    private EditText mDetailsText;
+    private TextInputEditText mDetailsText;
     private TextInputLayout mExampleWrapper;
-    private EditText mExampleText;
+    private TextInputEditText mExampleText;
+    private TextInputLayout mTagsWrapper;
+    private TextInputEditText mTagsText;
+    private ChipGroup mChipGroup;
+
+    private Set<String> mTags = new HashSet<>();
 
     // Initial Data
     private Item itemUpdate;
@@ -52,12 +71,21 @@ public class InputActivity extends AppCompatActivity {
         mKanaText = findViewById(R.id.input_kana);
         mInputWrapper = findViewById(R.id.wrapper_input);
         mInputText = findViewById(R.id.input_input);
-        mTagsWrapper = findViewById(R.id.wrapper_tags);
-        mTagsText = findViewById(R.id.input_tags);
         mDetailsWrapper = findViewById(R.id.wrapper_details);
         mDetailsText = findViewById(R.id.input_details);
         mExampleWrapper = findViewById(R.id.wrapper_example);
         mExampleText = findViewById(R.id.input_example);
+        mTagsWrapper = findViewById(R.id.wrapper_tags);
+        mTagsText = findViewById(R.id.input_tags);
+        mTagsText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addChipToGroup(v.getText().toString());
+                v.setText("");
+                return true;
+            }
+            return false;
+        });
+        mChipGroup = findViewById(R.id.input_tags_group);
 
         switch (mType) {
             case WORD:
@@ -143,8 +171,31 @@ public class InputActivity extends AppCompatActivity {
         mExampleText.setText(itemUpdate == null ? "" : itemUpdate.example);
         mExampleWrapper.setError(null);
 
-        mTagsText.setText(itemUpdate == null ? "" : itemUpdate.tags);
-        mTagsWrapper.setError(null);
+        if (itemUpdate != null && itemUpdate.tags != null) {
+            mTagsText.setText("");
+            mTagsWrapper.setError(null);
+            Stream.of(itemUpdate.tags.split(",")).forEach(this::addChipToGroup);
+        }
+    }
+
+    private void addChipToGroup(String tag) {
+        mTags.add(tag);
+
+        Chip chip = new Chip(this);
+        chip.setText(tag);
+        chip.setCloseIconVisible(true);
+        chip.setTextColor(getResources().getColor(R.color.white, getTheme()));
+        chip.setChipBackgroundColorResource(R.color.accent);
+        chip.setCloseIconTintResource(R.color.white);
+
+        // necessary to get single selection working
+        chip.setClickable(false);
+        chip.setCheckable(false);
+        chip.setOnCloseIconClickListener(v -> {
+            mChipGroup.removeView(chip);
+            mTags.remove(tag);
+        });
+        mChipGroup.addView(chip);
     }
 
     private void validate() {
@@ -205,21 +256,21 @@ public class InputActivity extends AppCompatActivity {
         itemUpdate.sort_letter = itemUpdate.input.substring(0, 1);
         itemUpdate.kanji = mKanjiText.getText().toString();
         itemUpdate.kana = mKanaText.getText().toString();
-        itemUpdate.tags = mTagsText.getText().toString();
+        itemUpdate.tags = StringUtils.join(mTags, ",");
         itemUpdate.details = mDetailsText.getText().toString();
         itemUpdate.example = mExampleText.getText().toString();
 
-        final String where = DicoContract._ID + "=?";
+        final String where = _ID + "=?";
         final String[] selectionArgs = {itemUpdate.id};
 
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.INPUT, itemUpdate.input);
-        values.put(DicoContract.SORT_LETTER, itemUpdate.sort_letter);
-        values.put(DicoContract.KANJI, itemUpdate.kanji);
-        values.put(DicoContract.KANA, itemUpdate.kana);
-        values.put(DicoContract.TAGS, itemUpdate.tags);
-        values.put(DicoContract.DETAILS, itemUpdate.details);
-        values.put(DicoContract.EXAMPLE, itemUpdate.example);
+        values.put(INPUT, itemUpdate.input);
+        values.put(SORT_LETTER, itemUpdate.sort_letter);
+        values.put(KANJI, itemUpdate.kanji);
+        values.put(KANA, itemUpdate.kana);
+        values.put(TAGS, itemUpdate.tags);
+        values.put(DETAILS, itemUpdate.details);
+        values.put(EXAMPLE, itemUpdate.example);
 
         getContentResolver().update(mType.uri, values, where, selectionArgs);
 
@@ -237,14 +288,14 @@ public class InputActivity extends AppCompatActivity {
     private void insert() {
         final ContentValues values = new ContentValues();
         final String inputData = StringUtils.capitalize(mInputText.getText().toString());
-        values.put(DicoContract.INPUT, inputData);
-        values.put(DicoContract.SORT_LETTER, inputData.substring(0, 1));
-        values.put(DicoContract.KANJI, mKanjiText.getText().toString());
-        values.put(DicoContract.KANA, mKanaText.getText().toString());
-        values.put(DicoContract.TAGS, mTagsText.getText().toString());
-        values.put(DicoContract.DETAILS, mDetailsText.getText().toString());
-        values.put(DicoContract.EXAMPLE, mExampleText.getText().toString());
-        values.put(DicoContract.TYPE, mType.code);
+        values.put(INPUT, inputData);
+        values.put(SORT_LETTER, inputData.substring(0, 1));
+        values.put(KANJI, mKanjiText.getText().toString());
+        values.put(KANA, mKanaText.getText().toString());
+        values.put(TAGS, StringUtils.join(mTags, ","));
+        values.put(DETAILS, mDetailsText.getText().toString());
+        values.put(EXAMPLE, mExampleText.getText().toString());
+        values.put(TYPE, mType.code);
 
         getContentResolver().insert(mType.uri, values);
 
