@@ -28,5 +28,8 @@ allprojects {
         maven {
             url 'https://jitpack.io'
         }
+        maven {
+            url = "$repoUrl/libs-public"
+        }
     }
 }
