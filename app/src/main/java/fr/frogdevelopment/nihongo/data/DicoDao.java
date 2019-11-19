@@ -14,8 +14,11 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DicoDao {
 
-    @Query("SELECT * FROM dico")
-    LiveData<List<Item>> getAll();
+    @Query("SELECT * FROM dico WHERE type = :type ORDER BY sort_letter, input ASC")
+    LiveData<List<Item>> getAllByType(String type);
+
+    @Query("SELECT * FROM dico WHERE type = :type and favorite = 1 ORDER BY sort_letter, input ASC")
+    LiveData<List<Item>> getFavoritesByType(String type);
 
     @Insert(onConflict = REPLACE)
     void insert(Item item);
@@ -25,4 +28,7 @@ public interface DicoDao {
 
     @Delete
     void delete(Item item);
+
+    @Delete
+    void delete(Item... items);
 }

@@ -3,7 +3,6 @@ package fr.frogdevelopment.nihongo.dico;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -29,6 +28,8 @@ import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,12 +44,12 @@ import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
+import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
 import static fr.frogdevelopment.nihongo.dico.DicoAdapter.ViewHolder;
 
 public class DicoFragment extends ListFragment {
 
     private boolean isContextActionBar = false;
-    private boolean isSortByLetter = true;
     private boolean isFilterByFavorite = false;
 
     private DicoViewModel mDicoViewModel;
@@ -60,8 +61,20 @@ public class DicoFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle arguments = requireArguments();
+        mType = (Type) arguments.getSerializable("type");
+
+        if (mType == null) {
+            throw new IllegalStateException("Type required");
+        }
+
+        int resource = mType == Type.EXPRESSION ? R.layout.row_dico_expression : R.layout.row_dico_word;
+        dicoAdapter = new DicoAdapter(requireActivity(), resource);
+        setListAdapter(dicoAdapter);
+
         mDicoViewModel = new ViewModelProvider(this).get(DicoViewModel.class);
-        mDicoViewModel.getAllWords().observe(this, items -> dicoAdapter.setRows(items));
+        mDicoViewModel.getAllByType(mType, isFilterByFavorite).observe(this, rows -> dicoAdapter.setRows(rows));
     }
 
     @Override
@@ -79,24 +92,6 @@ public class DicoFragment extends ListFragment {
             requireActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
-        Bundle arguments = requireArguments();
-        mType = (Type) arguments.getSerializable("type");
-
-        int resource;
-        switch (mType) {
-            case WORD:
-                resource = R.layout.row_dico_word;
-                break;
-            case EXPRESSION:
-                resource = R.layout.row_dico_expression;
-                break;
-
-            default:
-                throw new IllegalStateException("Unknown Type : " + mType);
-        }
-
-        dicoAdapter = new DicoAdapter(requireActivity(), resource);
-        setListAdapter(dicoAdapter);
 
         setHasOptionsMenu(true);
 
@@ -169,10 +164,14 @@ public class DicoFragment extends ListFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         GestureDetector mGestureDetector = new GestureDetector(getActivity(), gestureListener);
-        getListView().setOnTouchListener((v, event) -> mGestureDetector.onTouchEvent(event));
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        getListView().setMultiChoiceModeListener(multiChoiceListener);
-        getListView().setOnItemLongClickListener((parent, view1, position, id) -> {
+        ListView listView = getListView();
+        listView.setOnTouchListener((v, event) -> {
+            v.performClick();
+            return mGestureDetector.onTouchEvent(event);
+        });
+        listView.setChoiceMode(CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(multiChoiceListener);
+        listView.setOnItemLongClickListener((parent, view1, position, id) -> {
             if (dicoAdapter.isLetterHeader(position)) {
                 return true;
             }
@@ -190,7 +189,6 @@ public class DicoFragment extends ListFragment {
         inflater.inflate(R.menu.dico, menu);
 
         MenuItem searchMenuItem = menu.findItem(R.id.dico_menu_search);
-
         searchMenuItem.setVisible(true);
         searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 
@@ -220,12 +218,6 @@ public class DicoFragment extends ListFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.dico_action_sort:
-                isSortByLetter = !isSortByLetter;
-//                LoaderManager.getInstance(this).restartLoader(currentQuery, getArguments(), this);
-                item.setTitle(isSortByLetter ? R.string.action_dico_sort_tag : R.string.action_dico_sort_letter);
-                break;
-
             case R.id.dico_action_filter_by_favorite:
                 isFilterByFavorite = !isFilterByFavorite;
                 item.setChecked(isFilterByFavorite);
@@ -233,7 +225,7 @@ public class DicoFragment extends ListFragment {
                 break;
 
             case R.id.dico_help:
-                HelpDialog.show(getFragmentManager(), R.layout.dialog_help_dico);
+                HelpDialog.show(getParentFragmentManager(), R.layout.dialog_help_dico);
                 break;
 
             default:
@@ -242,7 +234,6 @@ public class DicoFragment extends ListFragment {
 
         return true;
     }
-
 
     private void onUpdate(final int position) {
         final Item item = (Item) dicoAdapter.getItem(position);
@@ -262,30 +253,14 @@ public class DicoFragment extends ListFragment {
                 .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.delete_title)
                 .setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))
-                .setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {
-                    if (nbSelectedRows == 1) {
-                        final Item item = (Item) dicoAdapter.getItem(selectedRows.iterator().next());
-                        Uri uri = Uri.parse(mType.uri + "/" + item.id);
-                        requireActivity().getContentResolver().delete(uri, null, null);
-                    } else {
-                        StringBuilder inList = new StringBuilder(nbSelectedRows * 2);
-                        final String[] selectionArgs = new String[nbSelectedRows];
-                        int i = 0;
-                        Item item;
-                        for (Integer position : selectedRows) {
-                            if (i > 0) {
-                                inList.append(",");
-                            }
-                            inList.append("?");
-
-                            item = (Item) dicoAdapter.getItem(position);
-                            selectionArgs[i] = String.valueOf(item.id);
-                            i++;
-                        }
-
-                        final String selection = "_ID IN (" + inList.toString() + ")";
-                        requireActivity().getContentResolver().delete(mType.uri, selection, selectionArgs);
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                    Item item;
+                    Item[] items = null;
+                    for (Integer position : selectedRows) {
+                        item = (Item) dicoAdapter.getItem(position);
+                        items = ArrayUtils.add(items, item);
                     }
+                    mDicoViewModel.delete(items);
                     Snackbar.make(requireActivity().findViewById(R.id.dico_layout), R.string.delete_done, Snackbar.LENGTH_LONG).show();
                     actionMode.finish();
                 })

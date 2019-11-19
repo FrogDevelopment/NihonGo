@@ -12,13 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.Item;
@@ -162,17 +162,10 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         }
     }
 
-    private static final Pattern PATTERN_NUMBER = Pattern.compile("[0-9]");
-
     private String[] mSections;
-    private boolean mIsSortByLetter = true;
     private final List<Row> mRows;
     private final HashMap<String, Integer> mapPositionByLetter = new LinkedHashMap<>();
     private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
-
-    void setSortByLetter(boolean isSortByLetter) {
-        mIsSortByLetter = isSortByLetter;
-    }
 
     void setRows(@Nullable List<Item> items) {
         mRows.clear();
@@ -188,11 +181,16 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         int position = 0;
         int section = -1;
         for (Item item : items) {
-            header = mIsSortByLetter ? item.sort_letter : item.tags;
+            header = item.sort_letter;
 
             // Group numbers together in the scroller
-            if (PATTERN_NUMBER.matcher(header).matches()) {
+            if (NumberUtils.isParsable(header)) {
                 header = "#";
+            }
+
+            // Group non alpha
+            if (!StringUtils.isAlpha(header)) {
+                header = "@";
             }
 
             // Check if we need to add a header row
@@ -215,7 +213,6 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         sectionLetters.toArray(mSections);
 
         notifyDataSetChanged();
-
     }
 
     @Override

@@ -54,8 +54,6 @@
     <string name="action_dico_update">Mettre à jour</string>
     <string name="action_dico_delete">Supprimer</string>
     <string name="action_dico_favorite_only">Favoris uniquement</string>
-    <string name="action_dico_sort_letter">Trier par lettre</string>
-    <string name="action_dico_sort_tag">Trier par tag</string>
     <string name="action_dico_gesture">Draw</string>
 
     <plurals name="action_selection">
@@ -73,6 +71,7 @@
     </plurals>
 
     <string name="positive_button_continue">Continuer ?</string>
+    <string name="delete">Supprimer</string>
     <string name="delete_done">Suppression effectuée</string>
 
     <!-- UPDATE -->

@@ -11,11 +11,6 @@
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
-        android:id="@+id/dico_action_sort"
-        android:title="@string/action_dico_sort_tag"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/dico_action_filter_by_favorite"
         android:checkable="true"
         android:title="@string/action_dico_favorite_only"

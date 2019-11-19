@@ -8,21 +8,19 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.data.Type;
 
 public class DicoViewModel extends AndroidViewModel {
 
     private DicoRepository mRepository;
 
-    private LiveData<List<Item>> mAllWords;
-
     public DicoViewModel(Application application) {
         super(application);
         mRepository = new DicoRepository(application);
-        mAllWords = mRepository.getAll();
     }
 
-    LiveData<List<Item>> getAllWords() {
-        return mAllWords;
+    LiveData<List<Item>> getAllByType(Type type, boolean isFilterByFavorite) {
+        return mRepository.getAllByType(type, isFilterByFavorite);
     }
 
     public void insert(Item word) {
@@ -35,5 +33,9 @@ public class DicoViewModel extends AndroidViewModel {
 
     public void delete(Item word) {
         mRepository.delete(word);
+    }
+
+    public void delete(Item... items) {
+        mRepository.delete(items);
     }
 }
