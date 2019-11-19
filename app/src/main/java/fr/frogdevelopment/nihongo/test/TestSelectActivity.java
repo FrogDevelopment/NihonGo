@@ -115,9 +115,9 @@ public class TestSelectActivity extends TestAbstractActivity {
             ArrayList<String> idsToFind = new ArrayList<>();
             Item item;
             while (data.moveToNext()) {
-                item = new Item(data);
-                itemsToFind.add(item);
-                idsToFind.add(item.id);
+//                item = new Item(data);
+//                itemsToFind.add(item);
+//                idsToFind.add(item.id);
             }
 
             Bundle bundle = new Bundle();
@@ -129,7 +129,7 @@ public class TestSelectActivity extends TestAbstractActivity {
 
         } else {// QCM items
             while (data.moveToNext()) {
-                itemsQCM.add(new Item(data));
+//                itemsQCM.add(new Item(data));
             }
 
             data.close();

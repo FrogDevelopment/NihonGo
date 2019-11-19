@@ -3,7 +3,6 @@ package fr.frogdevelopment.nihongo.dico;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ActionMode;
@@ -24,9 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.ListFragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -36,9 +33,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import fr.frogdevelopment.nihongo.MainActivity;
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.data.Item;
 import fr.frogdevelopment.nihongo.data.Row;
 import fr.frogdevelopment.nihongo.data.Type;
@@ -48,24 +43,26 @@ import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.URI_SEARCH_EXPRESSION;
-import static fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider.URI_SEARCH_WORD;
 import static fr.frogdevelopment.nihongo.dico.DicoAdapter.ViewHolder;
 
-public class DicoFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int LOADER_DICO_ID = 100;
-    private static final int LOADER_FILTER_ID = 110;
+public class DicoFragment extends ListFragment {
 
     private boolean isContextActionBar = false;
     private boolean isSortByLetter = true;
     private boolean isFilterByFavorite = false;
 
+    private DicoViewModel mDicoViewModel;
     private DicoAdapter dicoAdapter;
 
     private Type mType;
-    private int currentQuery;
     private FloatingActionButton mFabAdd;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDicoViewModel = new ViewModelProvider(this).get(DicoViewModel.class);
+        mDicoViewModel.getAllWords().observe(this, items -> dicoAdapter.setRows(items));
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,9 +82,6 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         Bundle arguments = requireArguments();
         mType = (Type) arguments.getSerializable("type");
 
-        currentQuery = arguments.containsKey("query") ? LOADER_FILTER_ID : LOADER_DICO_ID;
-        LoaderManager.getInstance(this).initLoader(currentQuery, arguments, this);
-
         int resource;
         switch (mType) {
             case WORD:
@@ -101,7 +95,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
                 throw new IllegalStateException("Unknown Type : " + mType);
         }
 
-        dicoAdapter = new DicoAdapter(getActivity(), resource);
+        dicoAdapter = new DicoAdapter(requireActivity(), resource);
         setListAdapter(dicoAdapter);
 
         setHasOptionsMenu(true);
@@ -112,7 +106,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        boolean doNotShow = PreferencesHelper.getInstance(getActivity()).getBoolean(Preferences.HELP_DICO);
+        boolean doNotShow = PreferencesHelper.getInstance(requireContext()).getBoolean(Preferences.HELP_DICO);
         if (!doNotShow) {
             HelpDialog.show(getFragmentManager(), R.layout.dialog_help_dico, true);
         }
@@ -137,49 +131,40 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         });
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri;
-        String selection;
-        String[] selectionArgs;
-        String sortOrder;
-
-        if (id == LOADER_FILTER_ID && args != null) {
-            uri = mType == Type.WORD ? URI_SEARCH_WORD : URI_SEARCH_EXPRESSION;
-            selection = null;
-            selectionArgs = new String[]{args.getString("query")};
-            sortOrder = DicoContract.SORT_LETTER + " ASC";
-        } else {
-            uri = mType.uri;
-            selection = isFilterByFavorite ? DicoContract.BOOKMARK + "=1" : null;
-            selectionArgs = null;
-            sortOrder = (isSortByLetter ? "" : DicoContract.TAGS + ",") + DicoContract.SORT_LETTER + "," + DicoContract.INPUT + " ASC";
-        }
-
-        return new CursorLoader(requireActivity(), uri, DicoContract.COLUMNS, selection, selectionArgs, sortOrder);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        dicoAdapter.swapCursor(data, isSortByLetter);
-        LoaderManager.getInstance(this).destroyLoader(loader.getId());
-
-        if (loader.getId() == LOADER_DICO_ID && dicoAdapter.getCount() == 0) {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(R.string.help_dico_start)
-                    .setPositiveButton(android.R.string.yes, (dialog, id) -> ((MainActivity) requireActivity()).selectItemAtIndex(R.id.navigation_lessons))
-                    .setNegativeButton(android.R.string.no, null)
-                    .create()
-                    .show();
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        // data is not available anymore, delete reference
-        dicoAdapter.swapCursor(null);
-    }
+//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//        Uri uri;
+//        String selection;
+//        String[] selectionArgs;
+//        String sortOrder;
+//
+//        if (id == LOADER_FILTER_ID && args != null) {
+//            uri = mType == Type.WORD ? URI_SEARCH_WORD : URI_SEARCH_EXPRESSION;
+//            selection = null;
+//            selectionArgs = new String[]{args.getString("query")};
+//            sortOrder = DicoContract.SORT_LETTER + " ASC";
+//        } else {
+//            uri = mType.uri;
+//            selection = isFilterByFavorite ? DicoContract.BOOKMARK + "=1" : null;
+//            selectionArgs = null;
+//            sortOrder = (isSortByLetter ? "" : DicoContract.TAGS + ",") + DicoContract.SORT_LETTER + "," + DicoContract.INPUT + " ASC";
+//        }
+//
+//        return new CursorLoader(requireActivity(), uri, DicoContract.COLUMNS, selection, selectionArgs, sortOrder);
+//    }
+//
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        dicoAdapter.swapCursor(data, isSortByLetter);
+//        LoaderManager.getInstance(this).destroyLoader(loader.getId());
+//
+//        if (loader.getId() == LOADER_DICO_ID && dicoAdapter.getCount() == 0) {
+//            new MaterialAlertDialogBuilder(requireContext())
+//                    .setMessage(R.string.help_dico_start)
+//                    .setPositiveButton(android.R.string.yes, (dialog, id) -> ((MainActivity) requireActivity()).selectItemAtIndex(R.id.navigation_lessons))
+//                    .setNegativeButton(android.R.string.no, null)
+//                    .create()
+//                    .show();
+//        }
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -216,7 +201,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                LoaderManager.getInstance(DicoFragment.this).restartLoader(currentQuery, null, DicoFragment.this);
+//                LoaderManager.getInstance(DicoFragment.this).restartLoader(currentQuery, null, DicoFragment.this);
                 return true;
             }
         });
@@ -237,14 +222,14 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
         switch (item.getItemId()) {
             case R.id.dico_action_sort:
                 isSortByLetter = !isSortByLetter;
-                LoaderManager.getInstance(this).restartLoader(currentQuery, getArguments(), this);
+//                LoaderManager.getInstance(this).restartLoader(currentQuery, getArguments(), this);
                 item.setTitle(isSortByLetter ? R.string.action_dico_sort_tag : R.string.action_dico_sort_letter);
                 break;
 
             case R.id.dico_action_filter_by_favorite:
                 isFilterByFavorite = !isFilterByFavorite;
                 item.setChecked(isFilterByFavorite);
-                LoaderManager.getInstance(this).restartLoader(currentQuery, getArguments(), this);
+//                LoaderManager.getInstance(this).restartLoader(currentQuery, getArguments(), this);
                 break;
 
             case R.id.dico_help:
@@ -294,7 +279,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
                             inList.append("?");
 
                             item = (Item) dicoAdapter.getItem(position);
-                            selectionArgs[i] = item.id;
+                            selectionArgs[i] = String.valueOf(item.id);
                             i++;
                         }
 
@@ -428,7 +413,7 @@ public class DicoFragment extends ListFragment implements LoaderManager.LoaderCa
                     int i = items.indexOf(item);
 
                     Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                    intent.putParcelableArrayListExtra("items", items);
+//                    intent.putParcelableArrayListExtra("items", items);
                     intent.putExtra("position", i);
                     intent.putExtra("type", mType);
 

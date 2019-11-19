@@ -64,7 +64,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
         mType = (Type) args.getSerializable("type");
-        mItems = args.getParcelableArrayList("items");
+//        mItems = args.getParcelableArrayList("items");
 
         mAdapter = new DetailsAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.details_viewpager);
@@ -217,7 +217,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         Uri insert = getContentResolver().insert(mType.uri, values);
         if (insert != null) {
-            item.id = String.valueOf(ContentUris.parseId(insert));
+            item.id = Math.toIntExact(ContentUris.parseId(insert));
         }
 
         mItems.add(mCurrentPosition, item);
@@ -243,7 +243,7 @@ public class DetailsActivity extends AppCompatActivity {
             Fragment fragment = new DetailsFragment();
             Bundle args = new Bundle();
             args.putSerializable("type", mType);
-            args.putParcelable("item", mItems.get(position));
+//            args.putParcelable("item", mItems.get(position));
 
             fragment.setArguments(args);
 

@@ -141,7 +141,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         displayQuantity();
 
         while (data.moveToNext()) {
-            itemsToFind.add(new Item(data));
+//            itemsToFind.add(new Item(data));
         }
 
         data.close();
@@ -185,7 +185,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         result.nbFailed = item.failed;
 
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {item.id};
+        final String[] selectionArgs = {String.valueOf(item.id)};
 
         getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
 

@@ -205,7 +205,7 @@ public class ReviewFragment extends Fragment {
 
     private void updateItem(ContentValues values) {
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {mItem.id};
+        final String[] selectionArgs = {String.valueOf(mItem.id)};
 
         requireActivity().getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
     }

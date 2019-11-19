@@ -267,7 +267,7 @@ public class InputActivity extends AppCompatActivity {
         itemUpdate.example = mExampleText.getText().toString();
 
         final String where = _ID + "=?";
-        final String[] selectionArgs = {itemUpdate.id};
+        final String[] selectionArgs = {String.valueOf(itemUpdate.id)};
 
         final ContentValues values = new ContentValues();
         values.put(INPUT, itemUpdate.input);

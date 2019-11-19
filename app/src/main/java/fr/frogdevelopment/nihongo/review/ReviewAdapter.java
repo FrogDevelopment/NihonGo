@@ -34,7 +34,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
         Item item = mItems.get(position);
 
         Bundle args = new Bundle();
-        args.putParcelable("item", item);
+//        args.putParcelable("item", item);
         args.putBoolean("isJapaneseReviewed", isJapaneseReviewed);
         args.putString("count", (position + 1) + "/" + mCount);
 
@@ -66,7 +66,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
         mItems = new ArrayList<>(mCount);
 
         while (cursor.moveToNext()) {
-            mItems.add(new Item(cursor));
+//            mItems.add(new Item(cursor));
         }
 
         cursor.close();
