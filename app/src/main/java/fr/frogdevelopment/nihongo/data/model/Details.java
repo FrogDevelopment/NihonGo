@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.data;
+package fr.frogdevelopment.nihongo.data.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "dico")
-public class Item implements Row, Serializable {
+public class Details implements Serializable {
 
 	@PrimaryKey(autoGenerate = true)
 	@ColumnInfo(name = "_id")
@@ -56,20 +56,5 @@ public class Item implements Row, Serializable {
 	public void switchBookmark() {
 		bookmark = !bookmark;
 	}
-
-//	@Override
-//	public boolean equals(Object o) {
-//		if (this == o) return true;
-//		if (o == null || getClass() != o.getClass()) return false;
-//
-//		Item item = (Item) o;
-//
-//		return id== item.id;
-//	}
-
-//	@Override
-//	public int hashCode() {
-//		return id.hashCode();
-//	}
 
 }

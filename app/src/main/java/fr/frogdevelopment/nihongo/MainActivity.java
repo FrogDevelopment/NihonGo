@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo;
 
 import android.app.SearchManager;
@@ -29,7 +25,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Locale;
 
 import fr.frogdevelopment.nihongo.about.AboutFragment;
-import fr.frogdevelopment.nihongo.data.Type;
 import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
 import fr.frogdevelopment.nihongo.kana.KanaViewPage;
@@ -39,6 +34,9 @@ import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import fr.frogdevelopment.nihongo.review.ReviewParametersFragment;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
+
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.WORD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragmentTitle = R.string.drawer_item_word;
                 fragment = new DicoFragment();
                 args = new Bundle();
-                args.putSerializable("type", Type.WORD);
+                args.putSerializable("type", WORD);
                 fragment.setArguments(args);
                 break;
 
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragmentTitle = R.string.drawer_item_expression;
                 fragment = new DicoFragment();
                 args = new Bundle();
-                args.putSerializable("type", Type.EXPRESSION);
+                args.putSerializable("type", EXPRESSION);
                 fragment.setArguments(args);
                 break;
 
@@ -255,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             final String query = intent.getStringExtra(SearchManager.QUERY);
             Bundle args = new Bundle();
             args.putString("query", query);
-            args.putSerializable("type", CURRENT_VIEW == R.id.navigation_word ? Type.WORD : Type.EXPRESSION);
+            args.putSerializable("type", CURRENT_VIEW == R.id.navigation_word ? WORD : EXPRESSION);
 
             final DicoFragment fragment = new DicoFragment();
             fragment.setArguments(args);

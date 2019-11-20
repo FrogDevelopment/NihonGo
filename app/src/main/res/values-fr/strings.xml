@@ -92,6 +92,7 @@
     <string name="input_error_all_empty">Au moins une saisie est obligatoire !</string>
     <string name="input_error_input">Pas de japonais</string>
     <string name="input_error_japanese">Uniquement des Hiragana, Katakana et Kanji !</string>
+    <string name="input_error_kanji_field">Saisisser des Kanji dans ce champ</string>
     <string name="input_error_kana">Uniquement des Kana (Hiragana ou Katakana) !</string>
     <string name="input_error_kanji">Pas de Kanji!</string>
     <string name="input_save_OK">Données enregistrées</string>

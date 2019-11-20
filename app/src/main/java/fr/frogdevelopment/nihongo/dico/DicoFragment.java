@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -31,26 +30,27 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.data.Row;
-import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
+import fr.frogdevelopment.nihongo.data.model.Row;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
+import static android.R.anim.fade_in;
+import static android.R.anim.fade_out;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
 import static fr.frogdevelopment.nihongo.R.layout.dialog_help_dico;
 import static fr.frogdevelopment.nihongo.R.layout.fragment_dico;
 import static fr.frogdevelopment.nihongo.R.layout.row_dico_expression;
 import static fr.frogdevelopment.nihongo.R.layout.row_dico_word;
-import static fr.frogdevelopment.nihongo.data.Type.EXPRESSION;
+import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;
 import static fr.frogdevelopment.nihongo.dico.DicoAdapter.ViewHolder;
 
 public class DicoFragment extends ListFragment {
@@ -59,7 +59,7 @@ public class DicoFragment extends ListFragment {
 
     private Type mType;
     private DicoAdapter mDicoAdapter;
-    private DicoViewModel mDicoViewModel;
+    private RowViewModel mRowViewModel;
 
     private FloatingActionButton mFabAdd;
     private boolean mIsSearchQuery;
@@ -78,7 +78,7 @@ public class DicoFragment extends ListFragment {
         mDicoAdapter = new DicoAdapter(requireActivity(), mType == EXPRESSION ? row_dico_expression : row_dico_word);
         setListAdapter(mDicoAdapter);
 
-        mDicoViewModel = new ViewModelProvider(this).get(DicoViewModel.class);
+        mRowViewModel = new ViewModelProvider(this).get(RowViewModel.class);
 
         mIsSearchQuery = arguments.containsKey("query");
         if (mIsSearchQuery) {
@@ -117,7 +117,7 @@ public class DicoFragment extends ListFragment {
         listView.setChoiceMode(CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(multiChoiceListener);
         listView.setOnItemLongClickListener((parent, view1, position, id) -> {
-            if (mDicoAdapter.isLetterHeader(position)) {
+            if (mDicoAdapter.isHeader(position)) {
                 return true;
             }
 
@@ -153,7 +153,6 @@ public class DicoFragment extends ListFragment {
         menu.findItem(R.id.dico_action_filter_by_favorite).setVisible(!mIsSearchQuery);
 
         MenuItem searchMenuItem = menu.findItem(R.id.dico_menu_search);
-        searchMenuItem.setVisible(true);
         searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 
             @Override
@@ -182,7 +181,7 @@ public class DicoFragment extends ListFragment {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
         }
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        searchView.setImeOptions(IME_ACTION_SEARCH);
     }
 
     @Override
@@ -206,11 +205,11 @@ public class DicoFragment extends ListFragment {
     }
 
     private void fetchData(boolean isFilteredByFavorite) {
-        mDicoViewModel.getAllByType(mType, isFilteredByFavorite).observe(this, rows -> mDicoAdapter.setRows(rows));
+        mRowViewModel.getAllByType(mType, isFilteredByFavorite).observe(this, rows -> mDicoAdapter.setRows(rows));
     }
 
     private void searchData(String query) {
-        mDicoViewModel.search(mType, query).observe(this, rows -> {
+        mRowViewModel.search(mType, query).observe(this, rows -> {
             hideKeyboard();
             mDicoAdapter.setRows(rows);
         });
@@ -224,11 +223,11 @@ public class DicoFragment extends ListFragment {
     }
 
     private void onUpdate(final int position) {
-        final Item item = (Item) mDicoAdapter.getItem(position);
+        final Row row = mDicoAdapter.getItem(position);
 
         Intent intent = new Intent(getActivity(), InputActivity.class);
-        intent.putExtra("type", mType);
-        intent.putExtra("item", item);
+        intent.putExtra(InputActivity.TYPE, mType);
+        intent.putExtra(InputActivity.ITEM_ID, String.valueOf(row.id));
 
         startActivityFor(intent);
     }
@@ -236,23 +235,23 @@ public class DicoFragment extends ListFragment {
     private void onAddInput() {
         Intent intent;
         intent = new Intent(getActivity(), InputActivity.class);
-        intent.putExtra("type", mType);
+        intent.putExtra(InputActivity.TYPE, mType);
 
         startActivityFor(intent);
     }
 
     private void onShowDetails(int i) {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                    intent.putParcelableArrayListExtra("items", items);
+//        intent.putParcelableArrayListExtra("items", items);
         intent.putExtra("position", i);
         intent.putExtra("type", mType);
 
-        startActivityFor(intent);
+//        startActivityFor(intent);
     }
 
     private void startActivityFor(Intent intent) {
-//        startActivity(intent);
-//        requireActivity().overridePendingTransition(fade_in, fade_out);
+        startActivity(intent);
+        requireActivity().overridePendingTransition(fade_in, fade_out);
     }
 
     private void onDelete(final ActionMode actionMode, final Set<Integer> selectedRows) {
@@ -263,13 +262,13 @@ public class DicoFragment extends ListFragment {
                 .setTitle(R.string.delete_title)
                 .setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))
                 .setPositiveButton(R.string.delete, (dialog, which) -> {
-                    Item item;
-                    Item[] items = null;
+                    Row row;
+                    Integer[] ids = null;
                     for (Integer position : selectedRows) {
-                        item = (Item) mDicoAdapter.getItem(position);
-                        items = ArrayUtils.add(items, item);
+                        row = mDicoAdapter.getItem(position);
+                        ids = ArrayUtils.add(ids, row.id);
                     }
-                    mDicoViewModel.delete(items);
+                    mRowViewModel.delete(ids);
                     Snackbar.make(requireActivity().findViewById(R.id.dico_layout), R.string.delete_done, Snackbar.LENGTH_LONG).show();
                     actionMode.finish();
                 })
@@ -320,7 +319,7 @@ public class DicoFragment extends ListFragment {
 
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-            if (mDicoAdapter.isLetterHeader(position)) {
+            if (mDicoAdapter.isHeader(position)) {
                 return;
             }
 
@@ -351,7 +350,7 @@ public class DicoFragment extends ListFragment {
 
                 final Row row = mDicoAdapter.getItem(position);
 
-                if (row instanceof Item) {
+                if (row.id != null) {
                     View view = getViewByPosition(position, getListView());
                     if (view == null) {
                         return false;
@@ -391,11 +390,8 @@ public class DicoFragment extends ListFragment {
 
                 final Row row = mDicoAdapter.getItem(position);
 
-                if (row instanceof Item) {
-                    ArrayList<Item> items = new ArrayList<>(mDicoAdapter.getItems());
-                    Item item = (Item) row;
-                    int i = items.indexOf(item);
-
+                if (row.id != null) {
+                    int i = mDicoAdapter.getRows().indexOf(row);
                     onShowDetails(i);
 
                     return false;

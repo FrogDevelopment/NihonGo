@@ -28,7 +28,7 @@ import java.util.List;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
-import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.data.model.Details;
 
 public abstract class TestAbstractActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -45,7 +45,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     protected String[] tags;
     protected int nbAnswer;
 
-    protected List<Item> itemsToFind = new ArrayList<>();
+    protected List<Details> itemsToFind = new ArrayList<>();
     protected ArrayList<Result> results;
 
     private final int mLayout;
@@ -168,24 +168,24 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
     private int successCounter = 0;
 
     protected void validate(CharSequence testAnswer) {
-        Item item = itemsToFind.get(currentItemIndex);
+        Details row = itemsToFind.get(currentItemIndex);
         Result result = results.get(currentItemIndex);
 
         final ContentValues values = new ContentValues();
         if (result.setAnswerGiven(testAnswer)) {
             successCounter++;
             values.put(DicoContract.LEARNED, true);
-            values.put(DicoContract.SUCCESS, ++item.success);
+            values.put(DicoContract.SUCCESS, ++row.success);
         } else {
             values.put(DicoContract.LEARNED, false);
-            values.put(DicoContract.FAILED, ++item.failed);
+            values.put(DicoContract.FAILED, ++row.failed);
         }
 
-        result.nbSuccess = item.success;
-        result.nbFailed = item.failed;
+        result.nbSuccess = row.success;
+        result.nbFailed = row.failed;
 
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {String.valueOf(item.id)};
+        final String[] selectionArgs = {String.valueOf(row.id)};
 
         getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
 
@@ -195,17 +195,17 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
             finishTest();
         } else {
             displayQuantity();
-            Item nextItem = itemsToFind.get(currentItemIndex);
-            next(nextItem);
+            Details nextRow = itemsToFind.get(currentItemIndex);
+            next(nextRow);
 
-            if (TextUtils.isEmpty(nextItem.details)) {
+            if (TextUtils.isEmpty(nextRow.details)) {
                 mInfoTitle.setVisibility(View.GONE);
                 mInfo.setVisibility(View.GONE);
                 mInfo.setText(null);
             } else {
                 mInfoTitle.setVisibility(View.VISIBLE);
                 mInfo.setVisibility(View.VISIBLE);
-                mInfo.setText(nextItem.details);
+                mInfo.setText(nextRow.details);
             }
         }
     }
@@ -215,7 +215,7 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         mCount.setText(count);
     }
 
-    abstract protected void next(Item item);
+    abstract protected void next(Details row);
 
     private void finishTest() {
         finish();

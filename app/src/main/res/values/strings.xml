@@ -106,6 +106,7 @@
     <string name="input_error_all_empty">At least one input required !</string>
     <string name="input_error_input">No japanese</string>
     <string name="input_error_japanese">Only Hiragana, Katakana and Kanji !</string>
+    <string name="input_error_kanji_field">Please enter Kanji on this field</string>
     <string name="input_error_kana">Only Kana (Hiragana or Katakana) !</string>
     <string name="input_error_kanji">No Kanji!</string>
     <string name="input_save_OK">Data saved</string>

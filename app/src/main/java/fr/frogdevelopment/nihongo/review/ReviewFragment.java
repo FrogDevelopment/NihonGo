@@ -19,13 +19,13 @@ import org.apache.commons.lang3.StringUtils;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
-import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static fr.frogdevelopment.nihongo.R.id.review_count;
 
 public class ReviewFragment extends Fragment {
 
-    private Item mItem;
+    private Details mRow;
     private String test;
 
     private ImageView mBookmark;
@@ -55,7 +55,7 @@ public class ReviewFragment extends Fragment {
 
         mKanaSwitcher = rootView.findViewById(R.id.review_textSwitcher_kana);
         mKanaSwitcher.setOnClickListener(view -> {
-            mKanaSwitcher.setText(mItem.kana);
+            mKanaSwitcher.setText(mRow.kana);
             mKanaSwitcher.setClickable(false);
 
         });
@@ -69,27 +69,27 @@ public class ReviewFragment extends Fragment {
         Bundle args = requireArguments();
         String count = args.getString("count");
         countView.setText(count);
-        mItem = args.getParcelable("item");
+        mRow = args.getParcelable("item");
 
         boolean isJapaneseReviewed = args.getBoolean("isJapaneseReviewed");
 
         boolean kanjiPst = false;
-        if (StringUtils.isNoneBlank(mItem.kanji)) {
+        if (StringUtils.isNoneBlank(mRow.kanji)) {
             kanjiPst = true;
             if (isJapaneseReviewed) {
-                reviewedView.setText(mItem.kanji);
+                reviewedView.setText(mRow.kanji);
             } else {
-                test = mItem.kanji;
+                test = mRow.kanji;
                 mTestSwitcher.setText(getString(R.string.review_switch_kanji));
             }
         }
 
-        if (StringUtils.isNoneBlank(mItem.kana)) {
+        if (StringUtils.isNoneBlank(mRow.kana)) {
             if (!kanjiPst) {
                 if (isJapaneseReviewed) {
-                    reviewedView.setText(mItem.kana);
+                    reviewedView.setText(mRow.kana);
                 } else {
-                    test = mItem.kana;
+                    test = mRow.kana;
                     mTestSwitcher.setText(getString(R.string.review_switch_kana));
                 }
                 mKanaSwitcher.setVisibility(View.GONE);
@@ -101,14 +101,14 @@ public class ReviewFragment extends Fragment {
         }
 
         if (isJapaneseReviewed) {
-            test = mItem.input;
+            test = mRow.input;
             mTestSwitcher.setText(getString(R.string.review_switch_input));
         } else {
-            reviewedView.setText(mItem.input);
+            reviewedView.setText(mRow.input);
         }
 
-        if (StringUtils.isNotBlank(mItem.details)) {
-            infoView.setText(mItem.details);
+        if (StringUtils.isNotBlank(mRow.details)) {
+            infoView.setText(mRow.details);
             infoView.setVisibility(View.VISIBLE);
             infoTitleView.setVisibility(View.VISIBLE);
         } else {
@@ -117,8 +117,8 @@ public class ReviewFragment extends Fragment {
             infoTitleView.setVisibility(View.GONE);
         }
 
-        if (StringUtils.isNotBlank(mItem.example)) {
-            exampleView.setText(mItem.example);
+        if (StringUtils.isNotBlank(mRow.example)) {
+            exampleView.setText(mRow.example);
             exampleView.setVisibility(View.VISIBLE);
             exampleTitleView.setVisibility(View.VISIBLE);
         } else {
@@ -127,8 +127,8 @@ public class ReviewFragment extends Fragment {
             exampleTitleView.setVisibility(View.GONE);
         }
 
-        if (StringUtils.isNotBlank(mItem.tags)) {
-            tagsView.setText(mItem.tags);
+        if (StringUtils.isNotBlank(mRow.tags)) {
+            tagsView.setText(mRow.tags);
             tagsView.setVisibility(View.VISIBLE);
             tagsViewTitle.setVisibility(View.VISIBLE);
         } else {
@@ -137,8 +137,8 @@ public class ReviewFragment extends Fragment {
             tagsViewTitle.setVisibility(View.GONE);
         }
 
-        int total = mItem.success + mItem.failed;
-        successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
+        int total = mRow.success + mRow.failed;
+        successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mRow.success / total) * 100)));
 
         mBookmark = rootView.findViewById(R.id.bookmark);
         mBookmark.setOnClickListener(v -> bookmarkItem());
@@ -154,7 +154,7 @@ public class ReviewFragment extends Fragment {
     }
 
     private void handleRate() {
-        switch (mItem.learned) {
+        switch (mRow.learned) {
             case 1:
                 mRate0.setImageResource(R.drawable.ic_baseline_star_24);
                 mRate1.setImageResource(R.drawable.ic_baseline_star_24);
@@ -180,32 +180,32 @@ public class ReviewFragment extends Fragment {
     }
 
     private void handleBookmark() {
-        mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
+        mBookmark.setImageResource(mRow.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
     }
 
     private void setRate(int rate) {
-        mItem.learned = rate;
+        mRow.learned = rate;
         handleRate();
 
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.LEARNED, mItem.learned);
+        values.put(DicoContract.LEARNED, mRow.learned);
         updateItem(values);
     }
 
     private void bookmarkItem() {
-        mItem.switchBookmark();
+        mRow.switchBookmark();
         handleBookmark();
 
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.BOOKMARK, mItem.bookmark);
+        values.put(DicoContract.BOOKMARK, mRow.bookmark);
         updateItem(values);
 
-        Toast.makeText(requireActivity(), getString(mItem.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), getString(mRow.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
     }
 
     private void updateItem(ContentValues values) {
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {String.valueOf(mItem.id)};
+        final String[] selectionArgs = {String.valueOf(mRow.id)};
 
         requireActivity().getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
     }

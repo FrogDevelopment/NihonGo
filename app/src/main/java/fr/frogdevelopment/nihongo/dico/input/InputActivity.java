@@ -1,13 +1,14 @@
 package fr.frogdevelopment.nihongo.dico.input;
 
-import android.content.ContentValues;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -22,22 +23,32 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
+import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.DETAILS;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.EXAMPLE;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.INPUT;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.KANA;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.KANJI;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.SORT_LETTER;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TAGS;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TYPE;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract._ID;
+import static fr.frogdevelopment.nihongo.R.string.drawer_item_expression;
+import static fr.frogdevelopment.nihongo.R.string.drawer_item_word;
+import static fr.frogdevelopment.nihongo.R.string.input_error_all_empty;
+import static fr.frogdevelopment.nihongo.R.string.input_error_empty;
+import static fr.frogdevelopment.nihongo.R.string.input_error_fields;
+import static fr.frogdevelopment.nihongo.R.string.input_error_input;
+import static fr.frogdevelopment.nihongo.R.string.input_error_japanese;
+import static fr.frogdevelopment.nihongo.R.string.input_error_kana;
+import static fr.frogdevelopment.nihongo.R.string.input_error_kanji_field;
+import static fr.frogdevelopment.nihongo.R.string.input_save_OK;
+import static fr.frogdevelopment.nihongo.R.string.input_update_OK;
+import static fr.frogdevelopment.nihongo.dico.input.InputUtils.containsJapanese;
+import static fr.frogdevelopment.nihongo.dico.input.InputUtils.containsKanji;
+import static fr.frogdevelopment.nihongo.dico.input.InputUtils.isOnlyJapanese;
+import static fr.frogdevelopment.nihongo.dico.input.InputUtils.isOnlyKana;
 import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.join;
 
 public class InputActivity extends AppCompatActivity {
+
+    public static final String TYPE = "type";
+    public static final String ITEM_ID = "item_id";
 
     private TextInputLayout mKanjiWrapper;
     private TextInputEditText mKanjiText;
@@ -56,14 +67,16 @@ public class InputActivity extends AppCompatActivity {
     private Set<String> mTags = new HashSet<>();
 
     // Initial Data
-    private Item itemUpdate;
+    private InputViewModel mInputViewModel;
+    private Details mDetails;
     private Type mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mType = (Type) getIntent().getSerializableExtra("type");
+        mInputViewModel = new ViewModelProvider(this).get(InputViewModel.class);
+
         setContentView(R.layout.activity_input);
 
         mKanjiWrapper = findViewById(R.id.wrapper_kanji);
@@ -93,23 +106,18 @@ public class InputActivity extends AppCompatActivity {
         });
         mChipGroup = findViewById(R.id.input_tags_group);
 
-        switch (mType) {
-            case WORD:
-                setTitle(R.string.drawer_item_word);
-                break;
+        mType = (Type) getIntent().getSerializableExtra(TYPE);
+        setTitle(mType == Type.WORD ? drawer_item_word : drawer_item_expression);
 
-            case EXPRESSION:
-                setTitle(R.string.drawer_item_expression);
-                break;
-
-            default:
-                setTitle("");
-                break;
+        if (getIntent().hasExtra(ITEM_ID)) {
+            mInputViewModel.getById(getIntent().getStringExtra(ITEM_ID)).observe(this, item -> {
+                mDetails = item;
+                initData();
+            });
+        } else {
+            mDetails = new Details();
+            initData();
         }
-
-        itemUpdate = getIntent().getParcelableExtra("item");
-
-        initData();
     }
 
     @Override
@@ -121,7 +129,6 @@ public class InputActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_validate:
                 validate();
@@ -132,7 +139,8 @@ public class InputActivity extends AppCompatActivity {
                 return true;
 
             case android.R.id.home:
-                back();
+                onBackPressed();
+//                back();
                 return true;
 
             default:
@@ -140,47 +148,47 @@ public class InputActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        back();
-    }
-
-    @Override
-    public void finish() {
-        Intent data = new Intent();
-        data.putExtra("position", getIntent().getIntExtra("position", -1));
-        data.putExtra("item", itemUpdate);
-        setResult(RESULT_OK, data);
-        super.finish();
-    }
-
-    private void back() {
-        Intent data = new Intent();
-        setResult(RESULT_CANCELED, data);
-        super.finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        back();
+//    }
+//
+//    @Override
+//    public void finish() {
+//        Intent data = new Intent();
+//        data.putExtra("position", getIntent().getIntExtra("position", -1));
+//        data.putExtra("item", mDetails);
+//        setResult(RESULT_OK, data);
+//        super.finish();
+//    }
+//
+//    private void back() {
+//        Intent data = new Intent();
+//        setResult(RESULT_CANCELED, data);
+//        super.finish();
+//    }
 
     private void initData() {
         mKanjiText.requestFocus();
-        mKanjiText.setText(itemUpdate == null ? "" : itemUpdate.kanji);
+        mKanjiText.setText(mDetails == null ? "" : mDetails.kanji);
         mKanjiWrapper.setError(null);
 
-        mKanaText.setText(itemUpdate == null ? "" : itemUpdate.kana);
+        mKanaText.setText(mDetails == null ? "" : mDetails.kana);
         mKanaWrapper.setError(null);
 
-        mInputText.setText(itemUpdate == null ? "" : itemUpdate.input);
+        mInputText.setText(mDetails == null ? "" : mDetails.input);
         mInputWrapper.setError(null);
 
-        mDetailsText.setText(itemUpdate == null ? "" : itemUpdate.details);
+        mDetailsText.setText(mDetails == null ? "" : mDetails.details);
         mDetailsWrapper.setError(null);
 
-        mExampleText.setText(itemUpdate == null ? "" : itemUpdate.example);
+        mExampleText.setText(mDetails == null ? "" : mDetails.example);
         mExampleWrapper.setError(null);
 
-        if (itemUpdate != null && itemUpdate.tags != null) {
+        if (mDetails != null && mDetails.tags != null) {
             mTagsText.setText("");
             mTagsWrapper.setError(null);
-            Stream.of(itemUpdate.tags.split(",")).forEach(this::addChipToGroup);
+            Stream.of(mDetails.tags.split(",")).forEach(this::addChipToGroup);
         }
     }
 
@@ -207,81 +215,76 @@ public class InputActivity extends AppCompatActivity {
     private void validate() {
         boolean isNoError = true;
 
-        String inputText = mInputText.getText().toString();
-        if (inputText.isEmpty()) {
-            isNoError = false;
-            mInputWrapper.setError(getResources().getString(R.string.input_error_empty));
-        } else if (InputUtils.containsJapanese(inputText)) {
-            isNoError = false;
-            mInputWrapper.setError(getResources().getString(R.string.input_error_input));
-        } else {
-            mInputWrapper.setError(null);
-        }
-
         String kanjiText = mKanjiText.getText().toString();
         String kanaText = mKanaText.getText().toString();
-
         if (kanjiText.isEmpty() && kanaText.isEmpty()) {
             isNoError = false;
-            mKanjiWrapper.setError(getResources().getString(R.string.input_error_all_empty));
-            mKanaWrapper.setError(getResources().getString(R.string.input_error_all_empty));
+            mKanjiWrapper.setError(getResources().getString(input_error_all_empty));
+            mKanaWrapper.setError(getResources().getString(input_error_all_empty));
         } else {
-            if (InputUtils.isOnlyJapanese(kanjiText)) {
-                mKanjiWrapper.setError(null);
-            } else {
-                isNoError = false;
-                mKanjiWrapper.setError(getResources().getString(R.string.input_error_japanese));
+            if (!kanjiText.isEmpty()) {
+                if (isOnlyJapanese(kanjiText)) {
+                    if (containsKanji(kanjiText)) {
+                        mKanjiWrapper.setError(null);
+                    } else {
+                        isNoError = false;
+                        mKanjiWrapper.setError(getResources().getString(input_error_kanji_field));
+                    }
+                } else {
+                    isNoError = false;
+                    mKanjiWrapper.setError(getResources().getString(input_error_japanese));
+                }
             }
 
-            if (InputUtils.isOnlyKana(kanaText)) {
+            if (isOnlyKana(kanaText)) {
                 mKanaWrapper.setError(null);
             } else {
                 isNoError = false;
-                mKanaWrapper.setError(getResources().getString(R.string.input_error_kana));
+                mKanaWrapper.setError(getResources().getString(input_error_kana));
             }
+        }
+
+        String inputText = mInputText.getText().toString();
+        if (inputText.isEmpty()) {
+            isNoError = false;
+            mInputWrapper.setError(getResources().getString(input_error_empty));
+        } else if (containsJapanese(inputText)) {
+            isNoError = false;
+            mInputWrapper.setError(getResources().getString(input_error_input));
+        } else {
+            mInputWrapper.setError(null);
         }
 
         if (isNoError) {
             saveOrUpdate();
         } else {
-            Toast.makeText(this, R.string.input_error_fields, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, input_error_fields, Toast.LENGTH_LONG).show();
         }
     }
 
     private void saveOrUpdate() {
-        if (itemUpdate != null) {
+        mDetails.input = capitalize(mInputText.getText().toString());
+        mDetails.sort_letter = mDetails.input.substring(0, 1);
+        mDetails.kanji = mKanjiText.getText().toString();
+        mDetails.kana = mKanaText.getText().toString();
+        mDetails.tags = mTags.isEmpty() ? null : join(mTags, ",");
+        mDetails.details = mDetailsText.getText().toString();
+        mDetails.example = mExampleText.getText().toString();
+
+        hideKeyboard();
+        if (mDetails.id != null) {
             update();
         } else {
+            mDetails.type = mType.code;
             insert();
         }
     }
 
     private void update() {
-
-        itemUpdate.input = capitalize(mInputText.getText().toString());
-        itemUpdate.sort_letter = itemUpdate.input.substring(0, 1);
-        itemUpdate.kanji = mKanjiText.getText().toString();
-        itemUpdate.kana = mKanaText.getText().toString();
-        itemUpdate.tags = StringUtils.join(mTags, ",");
-        itemUpdate.details = mDetailsText.getText().toString();
-        itemUpdate.example = mExampleText.getText().toString();
-
-        final String where = _ID + "=?";
-        final String[] selectionArgs = {String.valueOf(itemUpdate.id)};
-
-        final ContentValues values = new ContentValues();
-        values.put(INPUT, itemUpdate.input);
-        values.put(SORT_LETTER, itemUpdate.sort_letter);
-        values.put(KANJI, itemUpdate.kanji);
-        values.put(KANA, itemUpdate.kana);
-        values.put(TAGS, itemUpdate.tags);
-        values.put(DETAILS, itemUpdate.details);
-        values.put(EXAMPLE, itemUpdate.example);
-
-        getContentResolver().update(mType.uri, values, where, selectionArgs);
+        mInputViewModel.update(mDetails);
 
         // TOAST
-        Snackbar.make(findViewById(R.id.input_layout), R.string.input_update_OK, Snackbar.LENGTH_SHORT)
+        Snackbar.make(findViewById(R.id.input_layout), input_update_OK, Snackbar.LENGTH_SHORT)
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
@@ -292,27 +295,24 @@ public class InputActivity extends AppCompatActivity {
     }
 
     private void insert() {
-        final ContentValues values = new ContentValues();
-        final String inputData = capitalize(mInputText.getText().toString());
-        values.put(INPUT, inputData);
-        values.put(SORT_LETTER, inputData.substring(0, 1));
-        values.put(KANJI, mKanjiText.getText().toString());
-        values.put(KANA, mKanaText.getText().toString());
-        values.put(TAGS, StringUtils.join(mTags, ","));
-        values.put(DETAILS, mDetailsText.getText().toString());
-        values.put(EXAMPLE, mExampleText.getText().toString());
-        values.put(TYPE, mType.code);
-
-        getContentResolver().insert(mType.uri, values);
+        mInputViewModel.insert(mDetails);
 
         // TOAST
-        Snackbar.make(findViewById(R.id.input_layout), R.string.input_save_OK, Snackbar.LENGTH_SHORT)
+        Snackbar.make(findViewById(R.id.input_layout), input_save_OK, Snackbar.LENGTH_SHORT)
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
+                        mDetails = new Details();
                         initData();
                     }
                 })
                 .show();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
     }
 }

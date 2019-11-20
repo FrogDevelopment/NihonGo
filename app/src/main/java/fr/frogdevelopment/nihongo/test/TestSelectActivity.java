@@ -20,7 +20,8 @@ import java.util.Random;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
-import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.data.model.Details;
+import fr.frogdevelopment.nihongo.data.model.Row;
 
 public class TestSelectActivity extends TestAbstractActivity {
 
@@ -29,7 +30,7 @@ public class TestSelectActivity extends TestAbstractActivity {
     private TextView mToFindView;
     private LinearLayout answers;
 
-    private List<Item> itemsQCM = new ArrayList<>();
+    private List<Details> itemsQCM = new ArrayList<>();
 
     public TestSelectActivity() {
         super(R.layout.activity_test_select);
@@ -113,7 +114,7 @@ public class TestSelectActivity extends TestAbstractActivity {
             displayQuantity();
 
             ArrayList<String> idsToFind = new ArrayList<>();
-            Item item;
+            Row row;
             while (data.moveToNext()) {
 //                item = new Item(data);
 //                itemsToFind.add(item);
@@ -138,7 +139,7 @@ public class TestSelectActivity extends TestAbstractActivity {
     }
 
     @Override
-    protected void next(Item item) {
+    protected void next(Details row) {
         int testIndex = new Random().nextInt(nbAnswer);
 
         Button mResponseView;
@@ -151,8 +152,8 @@ public class TestSelectActivity extends TestAbstractActivity {
             if (testIndex != index) { // QCM
                 answer = getButtonLabel(itemsQCM.remove(0));
             } else {// RESPONSE
-                answer = getButtonLabel(item);
-                toFind = getTestLabel(item);
+                answer = getButtonLabel(row);
+                toFind = getTestLabel(row);
 
                 mToFindView.setText(toFind);
 
@@ -163,36 +164,36 @@ public class TestSelectActivity extends TestAbstractActivity {
         }
     }
 
-    private String getButtonLabel(Item item) {
+    private String getButtonLabel(Details row) {
         String answer = null;
 
         switch (typeTest) {
 
             case 0: // Kanji -> Hiragana
-                answer = item.kana;
+                answer = row.kana;
                 break;
 
             case 1: // Hiragana -> Kanji
-                if (item.kanji.contains("、")) {
-                    String[] kanjis = item.kanji.split("、");
+                if (row.kanji.contains("、")) {
+                    String[] kanjis = row.kanji.split("、");
                     int i = 0;
                     while (i < 1) {
                         i = new Random().nextInt(2);
                     }
                     answer = kanjis[i - 1];
                 } else
-                    answer = item.kanji;
+                    answer = row.kanji;
                 break;
 
             case 2: // Japanese -> French
-                answer = item.input;
+                answer = row.input;
                 break;
 
             case 3: // French -> Japanese
-                if (isDisplayKanji && StringUtils.isNotBlank(item.kanji)) {
-                    answer = item.kanji;
+                if (isDisplayKanji && StringUtils.isNotBlank(row.kanji)) {
+                    answer = row.kanji;
                 } else {
-                    answer = item.kana;
+                    answer = row.kana;
                 }
                 break;
         }
@@ -200,37 +201,37 @@ public class TestSelectActivity extends TestAbstractActivity {
         return answer;
     }
 
-    private String getTestLabel(Item item) {
+    private String getTestLabel(Details row) {
         String toFind = null;
 
         switch (typeTest) {
             case 0: // Kanji -> Hiragana
-                if (item.kanji.contains("、")) {
-                    String[] kanjis = item.kanji.split("、");
+                if (row.kanji.contains("、")) {
+                    String[] kanjis = row.kanji.split("、");
                     int i = 0;
                     while (i < 1) {
                         i = new Random().nextInt(2);
                     }
                     toFind = kanjis[i - 1];
                 } else
-                    toFind = item.kanji;
+                    toFind = row.kanji;
                 break;
 
             case 1: // Hiragana -> Kanji
-                toFind = item.kana;
+                toFind = row.kana;
                 break;
 
             case 2: // Japanese -> French
 
-                if (isDisplayKanji && StringUtils.isNoneBlank(item.kanji)) {
-                    toFind = item.kanji;
+                if (isDisplayKanji && StringUtils.isNoneBlank(row.kanji)) {
+                    toFind = row.kanji;
                 } else {
-                    toFind = item.kana;
+                    toFind = row.kana;
                 }
                 break;
 
             case 3: // French -> Japanese
-                toFind = item.input;
+                toFind = row.input;
                 break;
         }
 

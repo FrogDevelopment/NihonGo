@@ -1,9 +1,6 @@
 package fr.frogdevelopment.nihongo.dico.details;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,16 +23,15 @@ import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.data.Type;
+import fr.frogdevelopment.nihongo.data.model.Row;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
 public class DetailsActivity extends AppCompatActivity {
 
     public static final int RC_NEW_ITEM = 777;
     public static final int RC_UPDATE_ITEM = 666;
-    private List<Item> mItems;
-    private Type mType;
+    private List<Row> mRows;
+    private DicoContract.Type mType;
     private DetailsAdapter mAdapter;
     private int mCurrentPosition;
     private ViewPager mViewPager;
@@ -63,7 +59,7 @@ public class DetailsActivity extends AppCompatActivity {
         ImageView swapRight = findViewById(R.id.swap_right);
 
         Bundle args = getIntent().getExtras();
-        mType = (Type) args.getSerializable("type");
+        mType = (DicoContract.Type) args.getSerializable("type");
 //        mItems = args.getParcelableArrayList("items");
 
         mAdapter = new DetailsAdapter(getSupportFragmentManager());
@@ -131,14 +127,14 @@ public class DetailsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             int position = data.getIntExtra("position", -1);
             if (position > -1) {
-                Item item = data.getParcelableExtra("item");
+                Row row = data.getParcelableExtra("item");
                 switch (requestCode) {
                     case RC_NEW_ITEM:
-                        mItems.add(position, item);
+                        mRows.add(position, row);
                         mAdapter.notifyDataSetChanged();
                         break;
                     case RC_UPDATE_ITEM:
-                        mItems.set(position, item);
+                        mRows.set(position, row);
                         mAdapter.notifyDataSetChanged();
                         break;
                 }
@@ -156,8 +152,8 @@ public class DetailsActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {
 
                     // delete only on UI
-                    final Item itemToDelete = mItems.get(mCurrentPosition);
-                    mItems.remove(mCurrentPosition);
+                    final Row rowToDelete = mRows.get(mCurrentPosition);
+                    mRows.remove(mCurrentPosition);
                     mAdapter.notifyDataSetChanged();
 
                     Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG)
@@ -169,11 +165,11 @@ public class DetailsActivity extends AppCompatActivity {
                                 public void onDismissed(Snackbar transientBottomBar, int event) {
                                     if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
                                         // if canceled, un-delete on UI
-                                        mItems.add(mCurrentPosition, itemToDelete);
+                                        mRows.add(mCurrentPosition, rowToDelete);
                                         mAdapter.notifyDataSetChanged();
                                     } else {
                                         // or delete on base if not canceled
-                                        getContentResolver().delete(Uri.parse(mType.uri + "/" + itemToDelete.id), null, null);
+//                                        getContentResolver().delete(Uri.parse(mType.uri + "/" + rowToDelete.id), null, null);
                                     }
                                 }
                             })
@@ -196,35 +192,35 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InputActivity.class);
         intent.putExtra("type", mType);
         intent.putExtra("position", mCurrentPosition);
-        intent.putExtra("item", mItems.get(mCurrentPosition));
+        intent.putExtra("item", mRows.get(mCurrentPosition));
 
         startActivityForResult(intent, RC_UPDATE_ITEM);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void duplicate() {
-        Item item = mItems.get(mCurrentPosition);
-
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.INPUT, item.input);
-        values.put(DicoContract.SORT_LETTER, item.sort_letter);
-        values.put(DicoContract.KANJI, item.kanji);
-        values.put(DicoContract.KANA, item.kana);
-        values.put(DicoContract.TAGS, item.tags);
-        values.put(DicoContract.DETAILS, item.details);
-        values.put(DicoContract.EXAMPLE, item.example);
-        values.put(DicoContract.TYPE, mType.code);
-
-        Uri insert = getContentResolver().insert(mType.uri, values);
-        if (insert != null) {
-            item.id = Math.toIntExact(ContentUris.parseId(insert));
-        }
-
-        mItems.add(mCurrentPosition, item);
-        mAdapter.notifyDataSetChanged();
-
-        // TOAST
-        Snackbar.make(findViewById(R.id.details_content), R.string.input_duplicated_OK, Snackbar.LENGTH_LONG).show();
+//        Row row = mRows.get(mCurrentPosition);
+//
+//        final ContentValues values = new ContentValues();
+//        values.put(DicoContract.INPUT, row.input);
+//        values.put(DicoContract.SORT_LETTER, row.sort_letter);
+//        values.put(DicoContract.KANJI, row.kanji);
+//        values.put(DicoContract.KANA, row.kana);
+//        values.put(DicoContract.TAGS, row.tags);
+//        values.put(DicoContract.DETAILS, row.details);
+//        values.put(DicoContract.EXAMPLE, row.example);
+//        values.put(DicoContract.TYPE, mType.code);
+//
+//        Uri insert = getContentResolver().insert(mType.uri, values);
+//        if (insert != null) {
+//            row.id = Math.toIntExact(ContentUris.parseId(insert));
+//        }
+//
+//        mRows.add(mCurrentPosition, row);
+//        mAdapter.notifyDataSetChanged();
+//
+//        // TOAST
+//        Snackbar.make(findViewById(R.id.details_content), R.string.input_duplicated_OK, Snackbar.LENGTH_LONG).show();
     }
 
     // ************************************************************* \\
@@ -234,7 +230,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         private DetailsAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-            mCount = mItems.size();
+            mCount = mRows.size();
         }
 
         @NonNull

@@ -19,11 +19,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.data.Item;
-import fr.frogdevelopment.nihongo.data.Letter;
-import fr.frogdevelopment.nihongo.data.Row;
+import fr.frogdevelopment.nihongo.data.model.Row;
 
 public class DicoAdapter extends BaseAdapter implements SectionIndexer {
 
@@ -58,14 +57,14 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position) instanceof Letter) {
+        if (getItem(position).id == null) {
             return 1;
         } else {
             return 0;
         }
     }
 
-    boolean isLetterHeader(int position) {
+    boolean isHeader(int position) {
         return getItemViewType(position) == 1;
     }
 
@@ -73,16 +72,16 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 
-        if (isLetterHeader(position)) { // Letter
-            view = getLetterView(position, convertView, parent, view);
-        } else { // Definiton
+        if (isHeader(position)) {
+            view = getHeaderView(position, convertView, parent, view);
+        } else {
             view = getDataView(position, convertView, parent);
         }
 
         return view;
     }
 
-    private View getLetterView(int position, View convertView, ViewGroup parent, View view) {
+    private View getHeaderView(int position, View convertView, ViewGroup parent, View view) {
         LetterViewHolder holder;
         if (view == null) {
             view = mInflater.inflate(R.layout.row_header, parent, false);
@@ -92,8 +91,8 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
             view = convertView;
             holder = (LetterViewHolder) view.getTag();
         }
-        Letter letter = (Letter) getItem(position);
-        holder.textView.setText(letter.text);
+        Row header = getItem(position);
+        holder.textView.setText(header.input);
         return view;
     }
 
@@ -117,16 +116,16 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
             holder = (ViewHolder) view.getTag();
         }
 
-        Item item = (Item) getItem(position);
-        holder.mInputView.setText(item.input);
+        Row row = (Row) getItem(position);
+        holder.mInputView.setText(row.input);
         holder.switcher.setDisplayedChild(0);
-        if (StringUtils.isNoneBlank(item.kanji)) {
+        if (StringUtils.isNoneBlank(row.kanji)) {
             holder.switchable = true;
-            holder.switcherKanji.setText(item.kanji);
-            holder.switcherKana.setText(item.kana);
+            holder.switcherKanji.setText(row.kanji);
+            holder.switcherKana.setText(row.kana);
         } else {
             holder.switchable = false;
-            holder.switcherKanji.setText(item.kana);
+            holder.switcherKanji.setText(row.kana);
         }
 
         return view;
@@ -167,43 +166,52 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
     private final HashMap<String, Integer> mapPositionByLetter = new LinkedHashMap<>();
     private final HashMap<Integer, Integer> mapSectionByPosition = new LinkedHashMap<>();
 
-    void setRows(@Nullable List<Item> items) {
+    List<Row> getRows() {
+        return mRows.stream()
+                .filter(row -> row.id != null)
+                .collect(Collectors.toList());
+    }
+
+    void setRows(@Nullable List<Row> rows) {
         mRows.clear();
         mapPositionByLetter.clear();
         mapSectionByPosition.clear();
 
-        if (items == null) {
+        if (rows == null) {
             notifyDataSetChanged();
             return;
         }
 
-        String header;
+        String sort_letter;
         int position = 0;
         int section = -1;
-        for (Item item : items) {
-            header = item.sort_letter;
+        for (Row row : rows) {
+            sort_letter = row.sort_letter;
 
             // Group numbers together in the scroller
-            if (NumberUtils.isParsable(header)) {
-                header = "#";
+            if (NumberUtils.isParsable(sort_letter)) {
+                sort_letter = "#";
             }
 
             // Group non alpha
-            if (!StringUtils.isAlpha(header)) {
-                header = "@";
+            if (!StringUtils.isAlpha(sort_letter)) {
+                sort_letter = "@";
             }
 
             // Check if we need to add a header row
-            if (!mapPositionByLetter.containsKey(header)) {
-                mRows.add(new Letter(header));
-                mapPositionByLetter.put(header, position);
+            if (!mapPositionByLetter.containsKey(sort_letter)) {
+                Row header = new Row();
+                header.id = null;
+                header.input = sort_letter;
+                mRows.add(header);
+                mapPositionByLetter.put(sort_letter, position);
                 section++;
                 mapSectionByPosition.put(position, section);
                 position++;
             }
 
             // Add the definition to the list
-            mRows.add(item);
+            mRows.add(row);
             mapSectionByPosition.put(position, section);
             position++;
         }
@@ -228,17 +236,6 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
     @Override
     public int getSectionForPosition(int position) {
         return mapSectionByPosition.get(position);
-    }
-
-    List<Item> getItems() {
-        List<Item> items = new ArrayList<>();
-        for (Row row : mRows) {
-            if (row instanceof Item) {
-                items.add((Item) row);
-            }
-        }
-
-        return items;
     }
 
 }

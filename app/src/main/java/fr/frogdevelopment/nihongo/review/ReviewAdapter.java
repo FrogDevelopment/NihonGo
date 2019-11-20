@@ -13,12 +13,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.data.model.Row;
 
 class ReviewAdapter extends FragmentStatePagerAdapter {
 
     private int mCount = 0;
-    private List<Item> mItems;
+    private List<Row> mRows;
     private final boolean isJapaneseReviewed;
     private final SparseArray<ReviewFragment> mapFragments = new SparseArray<>();
 
@@ -31,7 +31,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         ReviewFragment fragment = new ReviewFragment();
-        Item item = mItems.get(position);
+        Row row = mRows.get(position);
 
         Bundle args = new Bundle();
 //        args.putParcelable("item", item);
@@ -63,7 +63,7 @@ class ReviewAdapter extends FragmentStatePagerAdapter {
 
     public void setData(Cursor cursor) {
         mCount = cursor.getCount();
-        mItems = new ArrayList<>(mCount);
+        mRows = new ArrayList<>(mCount);
 
         while (cursor.moveToNext()) {
 //            mItems.add(new Item(cursor));

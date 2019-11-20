@@ -20,14 +20,14 @@ import org.apache.commons.lang3.StringUtils;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
-import fr.frogdevelopment.nihongo.data.Item;
+import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class DetailsFragment extends Fragment {
 
-    private Item mItem;
+    private Details mRow;
 
     private ImageView mBookmark;
     private ImageView mRate0;
@@ -54,39 +54,39 @@ public class DetailsFragment extends Fragment {
 
         Bundle args = requireArguments();
 
-        mItem = args.getParcelable("item");
+        mRow = args.getParcelable("item");
 
-        if (mItem == null) {
+        if (mRow == null) {
             return;
         }
 
-        inputView.setText(mItem.input);
+        inputView.setText(mRow.input);
 
-        if (StringUtils.isNotBlank(mItem.kanji)) {
-            kanjiView.setText(mItem.kanji);
+        if (StringUtils.isNotBlank(mRow.kanji)) {
+            kanjiView.setText(mRow.kanji);
             kanjiView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mItem.kana)) {
-            kanaView.setText(mItem.kana);
+        if (StringUtils.isNotBlank(mRow.kana)) {
+            kanaView.setText(mRow.kana);
         }
 
-        detailsView.setText(mItem.details);
-        if (StringUtils.isNotBlank(mItem.details)) {
-            detailsView.setText(mItem.details);
+        detailsView.setText(mRow.details);
+        if (StringUtils.isNotBlank(mRow.details)) {
+            detailsView.setText(mRow.details);
             detailsView.setVisibility(VISIBLE);
             detailsTitleView.setVisibility(VISIBLE);
         }
 
-        exampleView.setText(mItem.example);
-        if (StringUtils.isNotBlank(mItem.example)) {
-            exampleView.setText(mItem.example);
+        exampleView.setText(mRow.example);
+        if (StringUtils.isNotBlank(mRow.example)) {
+            exampleView.setText(mRow.example);
             exampleView.setVisibility(VISIBLE);
             exampleTitleView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mItem.tags)) {
-            tagsView.setText(mItem.tags);
+        if (StringUtils.isNotBlank(mRow.tags)) {
+            tagsView.setText(mRow.tags);
             tagsView.setVisibility(VISIBLE);
             tagsViewTitle.setVisibility(VISIBLE);
         } else {
@@ -95,8 +95,8 @@ public class DetailsFragment extends Fragment {
             tagsViewTitle.setVisibility(GONE);
         }
 
-        int total = mItem.success + mItem.failed;
-        successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
+        int total = mRow.success + mRow.failed;
+        successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mRow.success / total) * 100)));
 
         kanjiView.setOnLongClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -135,7 +135,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void handleRate() {
-        switch (mItem.learned) {
+        switch (mRow.learned) {
             case 1:
                 mRate0.setImageResource(R.drawable.ic_baseline_star_24);
                 mRate1.setImageResource(R.drawable.ic_baseline_star_24);
@@ -161,32 +161,32 @@ public class DetailsFragment extends Fragment {
     }
 
     private void handleBookmark() {
-        mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
+        mBookmark.setImageResource(mRow.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
     }
 
     private void setRate(int rate) {
-        mItem.learned = rate;
+        mRow.learned = rate;
         handleRate();
 
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.LEARNED, mItem.learned);
+        values.put(DicoContract.LEARNED, mRow.learned);
         updateItem(values);
     }
 
     private void bookmarkItem() {
-        mItem.switchBookmark();
+        mRow.switchBookmark();
         handleBookmark();
 
         final ContentValues values = new ContentValues();
-        values.put(DicoContract.BOOKMARK, mItem.bookmark);
+        values.put(DicoContract.BOOKMARK, mRow.bookmark);
         updateItem(values);
 
-        Toast.makeText(getActivity(), getString(mItem.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(mRow.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
     }
 
     private void updateItem(ContentValues values) {
         final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {String.valueOf(mItem.id)};
+        final String[] selectionArgs = {String.valueOf(mRow.id)};
 
         requireActivity().getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
     }
