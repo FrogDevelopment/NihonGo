@@ -20,6 +20,15 @@ public interface DicoDao {
     @Query("SELECT * FROM dico WHERE type = :type and favorite = 1 ORDER BY sort_letter, input ASC")
     LiveData<List<Item>> getFavoritesByType(String type);
 
+    @Query("SELECT * FROM dico WHERE type = :type and input like :search ORDER BY sort_letter, input ASC")
+    LiveData<List<Item>> searchByInput(String type, String search);
+
+    @Query("SELECT * FROM dico WHERE type = :type and kanji like :search ORDER BY sort_letter, input ASC")
+    LiveData<List<Item>> searchByKanji(String type, String search);
+
+    @Query("SELECT * FROM dico WHERE type = :type and kana like :search ORDER BY sort_letter, input ASC")
+    LiveData<List<Item>> searchByKana(String type, String search);
+
     @Insert(onConflict = REPLACE)
     void insert(Item item);
 

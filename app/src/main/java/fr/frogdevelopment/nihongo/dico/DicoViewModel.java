@@ -23,6 +23,10 @@ public class DicoViewModel extends AndroidViewModel {
         return mRepository.getAllByType(type, isFilterByFavorite);
     }
 
+    LiveData<List<Item>> search(Type type, String query) {
+        return mRepository.search(type, query);
+    }
+
     public void insert(Item word) {
         mRepository.insert(word);
     }

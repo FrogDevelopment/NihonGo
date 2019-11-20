@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/dico_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
