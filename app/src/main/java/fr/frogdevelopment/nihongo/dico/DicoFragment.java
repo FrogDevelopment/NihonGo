@@ -45,8 +45,6 @@ import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-import static android.R.anim.fade_in;
-import static android.R.anim.fade_out;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
 import static fr.frogdevelopment.nihongo.R.layout.dialog_help_dico;
 import static fr.frogdevelopment.nihongo.R.layout.fragment_dico;
@@ -97,7 +95,7 @@ public class DicoFragment extends ListFragment {
         View rootView = inflater.inflate(fragment_dico, container, false);
 
         mFabAdd = rootView.findViewById(R.id.fab_add);
-        mFabAdd.setOnClickListener(view -> onShowDetails());
+        mFabAdd.setOnClickListener(view -> onAddInput());
 
         return rootView;
     }
@@ -232,17 +230,29 @@ public class DicoFragment extends ListFragment {
         intent.putExtra("type", mType);
         intent.putExtra("item", item);
 
-        startActivity(intent);
-        requireActivity().overridePendingTransition(fade_in, fade_out);
+        startActivityFor(intent);
     }
 
-    private void onShowDetails() {
-//            Intent intent;
-//            intent = new Intent(getActivity(), InputActivity.class);
-//            intent.putExtra("type", mType);
-//
-//            startActivity(intent);
-//            requireActivity().overridePendingTransition(fade_in, fade_out);
+    private void onAddInput() {
+        Intent intent;
+        intent = new Intent(getActivity(), InputActivity.class);
+        intent.putExtra("type", mType);
+
+        startActivityFor(intent);
+    }
+
+    private void onShowDetails(int i) {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+//                    intent.putParcelableArrayListExtra("items", items);
+        intent.putExtra("position", i);
+        intent.putExtra("type", mType);
+
+        startActivityFor(intent);
+    }
+
+    private void startActivityFor(Intent intent) {
+//        startActivity(intent);
+//        requireActivity().overridePendingTransition(fade_in, fade_out);
     }
 
     private void onDelete(final ActionMode actionMode, final Set<Integer> selectedRows) {
@@ -386,13 +396,7 @@ public class DicoFragment extends ListFragment {
                     Item item = (Item) row;
                     int i = items.indexOf(item);
 
-                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                    intent.putParcelableArrayListExtra("items", items);
-                    intent.putExtra("position", i);
-                    intent.putExtra("type", mType);
-
-                    startActivity(intent);
-                    requireActivity().overridePendingTransition(fade_in, fade_out);
+                    onShowDetails(i);
 
                     return false;
                 }
