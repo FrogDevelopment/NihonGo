@@ -6,12 +6,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -62,7 +58,7 @@ public class DetailsActivity extends AppCompatActivity {
         mType = (DicoContract.Type) args.getSerializable("type");
 //        mItems = args.getParcelableArrayList("items");
 
-        mAdapter = new DetailsAdapter(getSupportFragmentManager());
+        mAdapter = new DetailsAdapter(getSupportFragmentManager(), mType);
         mViewPager = findViewById(R.id.details_viewpager);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -221,45 +217,6 @@ public class DetailsActivity extends AppCompatActivity {
 //
 //        // TOAST
 //        Snackbar.make(findViewById(R.id.details_content), R.string.input_duplicated_OK, Snackbar.LENGTH_LONG).show();
-    }
-
-    // ************************************************************* \\
-    private class DetailsAdapter extends FragmentStatePagerAdapter {
-
-        private final int mCount;
-
-        private DetailsAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-            mCount = mRows.size();
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = new DetailsFragment();
-            Bundle args = new Bundle();
-            args.putSerializable("type", mType);
-//            args.putParcelable("item", mItems.get(position));
-
-            fragment.setArguments(args);
-
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return mCount;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "ITEM" + (position + 1);
-        }
-
-        public int getItemPosition(@NonNull Object object) {
-            // Causes adapter to reload all Fragments when // notifyDataSetChanged is called
-            return POSITION_NONE;
-        }
     }
 
 }
