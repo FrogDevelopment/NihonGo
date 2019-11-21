@@ -30,8 +30,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
@@ -227,7 +229,7 @@ public class DicoFragment extends ListFragment {
 
         Intent intent = new Intent(getActivity(), InputActivity.class);
         intent.putExtra(InputActivity.TYPE, mType);
-        intent.putExtra(InputActivity.ITEM_ID, String.valueOf(row.id));
+        intent.putExtra(InputActivity.ITEM_ID, row.id);
 
         startActivityFor(intent);
     }
@@ -242,11 +244,11 @@ public class DicoFragment extends ListFragment {
 
     private void onShowDetails(int i) {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//        intent.putParcelableArrayListExtra("items", items);
+        intent.putIntegerArrayListExtra("item_ids", mDicoAdapter.getRows().stream().map(row -> row.id).collect(Collectors.toCollection(ArrayList::new)));
         intent.putExtra("position", i);
         intent.putExtra("type", mType);
 
-//        startActivityFor(intent);
+        startActivityFor(intent);
     }
 
     private void startActivityFor(Intent intent) {

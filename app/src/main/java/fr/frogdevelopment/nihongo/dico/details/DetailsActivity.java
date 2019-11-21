@@ -15,7 +15,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Collections;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
@@ -61,7 +60,7 @@ public class DetailsActivity extends AppCompatActivity {
         mType = (DicoContract.Type) args.getSerializable("type");
         mIds = args.getIntegerArrayList("item_ids");
 
-        mAdapter = new DetailsAdapter(this, Collections.emptyList());
+        mAdapter = new DetailsAdapter(this, mIds);
         mViewPager = findViewById(R.id.details_viewpager);
         mViewPager.setAdapter(mAdapter);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

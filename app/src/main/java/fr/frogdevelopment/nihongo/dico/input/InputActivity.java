@@ -110,7 +110,7 @@ public class InputActivity extends AppCompatActivity {
         setTitle(mType == Type.WORD ? drawer_item_word : drawer_item_expression);
 
         if (getIntent().hasExtra(ITEM_ID)) {
-            mInputViewModel.getById(getIntent().getStringExtra(ITEM_ID)).observe(this, item -> {
+            mInputViewModel.getById(getIntent().getIntExtra(ITEM_ID, -1)).observe(this, item -> {
                 mDetails = item;
                 initData();
             });

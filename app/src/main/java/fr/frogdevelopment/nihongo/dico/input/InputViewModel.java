@@ -8,11 +8,11 @@ import androidx.lifecycle.LiveData;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.data.repository.DetailsRepository;
 
-class InputViewModel extends AndroidViewModel {
+public class InputViewModel extends AndroidViewModel {
 
     private DetailsRepository mDetailsRepository;
 
-    InputViewModel(Application application) {
+    public InputViewModel(Application application) {
         super(application);
         mDetailsRepository = new DetailsRepository(application);
     }
