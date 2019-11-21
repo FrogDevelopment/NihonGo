@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.input;
+package fr.frogdevelopment.nihongo.dico.details;
 
 import android.app.Application;
 
@@ -8,21 +8,17 @@ import androidx.lifecycle.LiveData;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.data.repository.DetailsRepository;
 
-class InputViewModel extends AndroidViewModel {
+class DetailsViewModel extends AndroidViewModel {
 
     private DetailsRepository mDetailsRepository;
 
-    InputViewModel(Application application) {
+    DetailsViewModel(Application application) {
         super(application);
         mDetailsRepository = new DetailsRepository(application);
     }
 
     LiveData<Details> getById(Integer id) {
         return mDetailsRepository.getById(id);
-    }
-
-    void insert(Details details) {
-        mDetailsRepository.insert(details);
     }
 
     void update(Details details) {

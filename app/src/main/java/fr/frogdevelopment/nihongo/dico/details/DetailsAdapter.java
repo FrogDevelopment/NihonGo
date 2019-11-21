@@ -4,28 +4,28 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
+import java.util.List;
 
-class DetailsAdapter extends FragmentStatePagerAdapter {
+class DetailsAdapter extends FragmentStateAdapter {
 
-    private int mCount;
-    private DicoContract.Type mType;
+    private final int mCount;
+    private final List<Integer> mIds;
 
-    DetailsAdapter(FragmentManager fm, DicoContract.Type type) {
-        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mType = type;
+    DetailsAdapter(FragmentActivity fragmentActivity, List<Integer> ids) {
+        super(fragmentActivity);
+        mCount = ids.size();
+        mIds = ids;
     }
 
     @NonNull
     @Override
-    public Fragment getItem(int position) {
+    public Fragment createFragment(int position) {
         Fragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable("type", mType);
-//            args.putParcelable("item", mItems.get(position));
+        args.putInt("item_id", mIds.get(position));
 
         fragment.setArguments(args);
 
@@ -33,12 +33,7 @@ class DetailsAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return mCount;
-    }
-
-    public int getItemPosition(@NonNull Object object) {
-        // Causes adapter to reload all Fragments when // notifyDataSetChanged is called
-        return POSITION_NONE;
     }
 }

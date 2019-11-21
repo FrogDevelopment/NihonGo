@@ -15,7 +15,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 public interface DetailsDao {
 
     @Query("SELECT * FROM dico WHERE _id = :id")
-    LiveData<Details> getById(String id);
+    LiveData<Details> getById(Integer id);
 
     @Insert(onConflict = REPLACE)
     void insert(Details item);

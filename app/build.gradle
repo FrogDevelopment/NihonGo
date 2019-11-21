@@ -70,6 +70,7 @@ dependencies {
     // UI
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "com.google.android.material:material:${material_version}"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // 3th lib
     implementation "org.apache.commons:commons-lang3:$commons_lang_version"

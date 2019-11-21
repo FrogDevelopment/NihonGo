@@ -19,7 +19,7 @@ public class DetailsRepository {
         mDetailsDao = db.detailsDao();
     }
 
-    public LiveData<Details> getById(String id) {
+    public LiveData<Details> getById(Integer id) {
         return mDetailsDao.getById(id);
     }
 
