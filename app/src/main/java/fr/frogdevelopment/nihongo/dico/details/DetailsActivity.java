@@ -81,8 +81,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
-        final int position = args.getInt("position");
-        mViewPager.setCurrentItem(position);
+        mViewPager.setCurrentItem(args.getInt("position"));
 
         swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
         swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
