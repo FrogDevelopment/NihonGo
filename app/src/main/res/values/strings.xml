@@ -91,7 +91,7 @@
     <!-- ***** -->
     <!-- INPUT -->
     <!-- ***** -->
-    <string name="input_textView_input">Word</string>
+    <string name="input_textView_input">Entry</string>
     <string name="input_textView_kanji" translatable="false">Kanji</string>
     <string name="input_textView_kana" translatable="false">Kana</string>
     <string name="input_textView_info">Information</string>

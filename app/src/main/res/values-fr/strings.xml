@@ -80,7 +80,7 @@
     <!-- ***** -->
     <!-- INPUT -->
     <!-- ***** -->
-    <string name="input_textView_input">Mot</string>
+    <string name="input_textView_input">Texte</string>
     <string name="input_textView_info">Informations </string>
     <string name="input_textView_example">Exemple</string>
     <string name="input_button_validate">Valider</string>
