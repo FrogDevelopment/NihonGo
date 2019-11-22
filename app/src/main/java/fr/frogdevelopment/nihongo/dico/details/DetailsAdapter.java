@@ -36,4 +36,20 @@ class DetailsAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return mCount;
     }
+
+    Integer getId(int position) {
+        return mIds.get(position);
+    }
+
+    Integer remove(int position) {
+        Integer removedId = mIds.remove(position);
+        notifyDataSetChanged();
+        return removedId;
+    }
+
+    void add(int position, Integer id) {
+        mIds.add(position, id);
+        notifyDataSetChanged();
+    }
+
 }

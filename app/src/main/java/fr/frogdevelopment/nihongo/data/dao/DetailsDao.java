@@ -2,7 +2,6 @@ package fr.frogdevelopment.nihongo.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -23,7 +22,7 @@ public interface DetailsDao {
     @Update(onConflict = REPLACE)
     void update(Details item);
 
-    @Delete
-    void delete(Details... details);
+    @Query("DELETE FROM dico WHERE _id = :id")
+    void delete(Integer id);
 
 }

@@ -7,10 +7,10 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
 import fr.frogdevelopment.nihongo.dico.input.InputActivity;
 
 import static android.view.View.INVISIBLE;
@@ -28,12 +27,14 @@ public class DetailsActivity extends AppCompatActivity {
 
     public static final int RC_NEW_ITEM = 777;
     public static final int RC_UPDATE_ITEM = 666;
-    private List<Integer> mIds;
-    private DicoContract.Type mType;
+
+    private DetailsViewModel mDetailsViewModel;
+
     private DetailsAdapter mAdapter;
     private int mCurrentPosition;
     private ViewPager2 mViewPager;
-
+    private ImageView mSwapLeft;
+    private ImageView mSwapRight;
 
     @Override
     public void onBackPressed() {
@@ -49,26 +50,30 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mDetailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
+
         setContentView(R.layout.activity_details);
 
         FloatingActionMenu fam = findViewById(R.id.fab_menu);
 
-        ImageView swapLeft = findViewById(R.id.swap_left);
-        ImageView swapRight = findViewById(R.id.swap_right);
+        mSwapLeft = findViewById(R.id.swap_left);
+        mSwapRight = findViewById(R.id.swap_right);
 
         Bundle args = getIntent().getExtras();
-        mType = (DicoContract.Type) args.getSerializable("type");
-        mIds = args.getIntegerArrayList("item_ids");
-
+        List<Integer> mIds = args.getIntegerArrayList("item_ids");
         mAdapter = new DetailsAdapter(this, mIds);
+
+        mCurrentPosition = args.getInt("position");
+        handleSwapsVisibility();
+
         mViewPager = findViewById(R.id.details_viewpager);
         mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(mCurrentPosition, false);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 mCurrentPosition = position;
-                swapLeft.setVisibility(position == 0 ? INVISIBLE : VISIBLE);
-                swapRight.setVisibility(position + 1 == mAdapter.getItemCount() ? INVISIBLE : VISIBLE);
+                handleSwapsVisibility();
             }
 
             @Override
@@ -81,27 +86,18 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
-        mViewPager.setCurrentItem(args.getInt("position"));
 
-        swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
-        swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
+        mSwapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
+        mSwapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
 
-        FloatingActionButton fabNew = findViewById(R.id.fab_new);
-        fabNew.setOnClickListener(v -> newItem());
-
-        FloatingActionButton fabDuplicate = findViewById(R.id.fab_duplicate);
-        fabDuplicate.setOnClickListener(v -> duplicate());
-
-        FloatingActionButton fabDelete = findViewById(R.id.fab_delete);
-        fabDelete.setOnClickListener(v -> delete());
-
-        FloatingActionButton mFabEdit = findViewById(R.id.fab_edit);
-        mFabEdit.setOnClickListener(v -> update());
+        findViewById(R.id.fab_new).setOnClickListener(v -> newItem());
+        findViewById(R.id.fab_delete).setOnClickListener(v -> delete());
+        findViewById(R.id.fab_edit).setOnClickListener(v -> update());
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private void handleSwapsVisibility() {
+        mSwapLeft.setVisibility(mCurrentPosition == 0 ? INVISIBLE : VISIBLE);
+        mSwapRight.setVisibility(mCurrentPosition + 1 == mAdapter.getItemCount() ? INVISIBLE : VISIBLE);
     }
 
     @Override
@@ -123,8 +119,7 @@ public class DetailsActivity extends AppCompatActivity {
                 if (requestCode == RC_NEW_ITEM) {
                     int id = data.getIntExtra("item_id", -1);
                     if (id > 0) {
-                        mIds.add(position, id);
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.add(position, id);
                     }
                 }
             }
@@ -140,10 +135,6 @@ public class DetailsActivity extends AppCompatActivity {
                 .setMessage(R.string.delete_detail)
                 .setPositiveButton(R.string.positive_button_continue, (dialog, which) -> {
 
-                    // delete only on UI
-                    Integer id = mIds.remove(mCurrentPosition);
-                    mAdapter.notifyDataSetChanged();
-
                     Snackbar.make(findViewById(R.id.details_content), R.string.delete_done, Snackbar.LENGTH_LONG)
                             .setAction(R.string.action_cancel, v -> {
                                 // keep empty action to display action ...
@@ -151,13 +142,8 @@ public class DetailsActivity extends AppCompatActivity {
                             .addCallback(new Snackbar.Callback() {
                                 @Override
                                 public void onDismissed(Snackbar transientBottomBar, int event) {
-                                    if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                                        // if canceled, un-delete on UI
-                                        mIds.add(mCurrentPosition, id);
-                                        mAdapter.notifyDataSetChanged();
-                                    } else {
-                                        // or delete on base if not canceled
-//                                        getContentResolver().delete(Uri.parse(mType.uri + "/" + rowToDelete.id), null, null);
+                                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                                        mDetailsViewModel.delete(mAdapter.remove(mCurrentPosition));
                                     }
                                 }
                             })
@@ -169,7 +155,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void newItem() {
         Intent intent = new Intent(this, InputActivity.class);
-        intent.putExtra("type", mType);
         intent.putExtra("position", mCurrentPosition);
 
         startActivityForResult(intent, RC_NEW_ITEM);
@@ -178,37 +163,11 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void update() {
         Intent intent = new Intent(this, InputActivity.class);
-        intent.putExtra("type", mType);
         intent.putExtra("position", mCurrentPosition);
-        intent.putExtra("item_id", mIds.get(mCurrentPosition));
+        intent.putExtra("item_id", mAdapter.getId(mCurrentPosition));
 
         startActivityForResult(intent, RC_UPDATE_ITEM);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
-    private void duplicate() {
-//        Row row = mRows.get(mCurrentPosition);
-//
-//        final ContentValues values = new ContentValues();
-//        values.put(DicoContract.INPUT, row.input);
-//        values.put(DicoContract.SORT_LETTER, row.sort_letter);
-//        values.put(DicoContract.KANJI, row.kanji);
-//        values.put(DicoContract.KANA, row.kana);
-//        values.put(DicoContract.TAGS, row.tags);
-//        values.put(DicoContract.DETAILS, row.details);
-//        values.put(DicoContract.EXAMPLE, row.example);
-//        values.put(DicoContract.TYPE, mType.code);
-//
-//        Uri insert = getContentResolver().insert(mType.uri, values);
-//        if (insert != null) {
-//            row.id = Math.toIntExact(ContentUris.parseId(insert));
-//        }
-//
-//        mRows.add(mCurrentPosition, row);
-//        mAdapter.notifyDataSetChanged();
-//
-//        // TOAST
-//        Snackbar.make(findViewById(R.id.details_content), R.string.input_duplicated_OK, Snackbar.LENGTH_LONG).show();
     }
 
 }

@@ -31,7 +31,7 @@ public class DetailsRepository {
         databaseWriteExecutor.execute(() -> mDetailsDao.update(details));
     }
 
-    public void delete(Details details) {
-        databaseWriteExecutor.execute(() -> mDetailsDao.delete(details));
+    public void delete(Integer id) {
+        databaseWriteExecutor.execute(() -> mDetailsDao.delete(id));
     }
 }

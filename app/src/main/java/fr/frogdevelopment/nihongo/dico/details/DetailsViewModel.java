@@ -24,4 +24,8 @@ public class DetailsViewModel extends AndroidViewModel {
     void update(Details details) {
         mDetailsRepository.update(details);
     }
+
+    public void delete(Integer id) {
+        mDetailsRepository.delete(id);
+    }
 }
