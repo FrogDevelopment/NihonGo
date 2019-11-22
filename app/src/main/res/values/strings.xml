@@ -19,10 +19,9 @@
     <string name="cb_remember">Don\'t display anymore</string>
 
     <!-- DRAWER -->
-    <string name="drawer_item_word">Words</string>
-    <string name="drawer_item_expression">Expressions</string>
+    <string name="drawer_item_entries">Entries</string>
     <string name="drawer_item_kana" translatable="false">Kana</string>
-    <string name="drawer_item_review">Review</string>
+    <string name="drawer_item_training">Training</string>
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_lessons">Lessons</string>
     <string name="drawer_item_parameters">Parameters</string>
@@ -37,8 +36,7 @@
     <!-- SEARCH -->
     <!-- ***** -->
 
-    <string name="search_word">Search for words</string>
-    <string name="search_expression">Search for expressions</string>
+    <string name="search_word">Search for word or tag</string>
     <string name="search_current">Searching for \"%1$s\"</string>
 
     <!-- ***** -->

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerLayout();
 
         if (savedInstanceState == null) {
-            selectItemAtIndex(R.id.navigation_word);
+            selectItemAtIndex(R.id.navigation_entries);
         }
 
         handleIntent(getIntent());
@@ -117,20 +117,9 @@ public class MainActivity extends AppCompatActivity {
         int mFragmentTitle;
         switch (id) {
 
-            case R.id.navigation_word:
-                mFragmentTitle = R.string.drawer_item_word;
+            case R.id.navigation_entries:
+                mFragmentTitle = R.string.drawer_item_entries;
                 fragment = new DicoFragment();
-                args = new Bundle();
-                args.putSerializable("type", WORD);
-                fragment.setArguments(args);
-                break;
-
-            case R.id.navigation_expression:
-                mFragmentTitle = R.string.drawer_item_expression;
-                fragment = new DicoFragment();
-                args = new Bundle();
-                args.putSerializable("type", EXPRESSION);
-                fragment.setArguments(args);
                 break;
 
             case R.id.navigation_review:
@@ -214,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (onSearch || CURRENT_VIEW != R.id.navigation_word) {
-            selectItemAtIndex(R.id.navigation_word);
+        if (onSearch || CURRENT_VIEW != R.id.navigation_entries) {
+            selectItemAtIndex(R.id.navigation_entries);
             onSearch = false;
         } else {
             new MaterialAlertDialogBuilder(this)
@@ -253,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             final String query = intent.getStringExtra(SearchManager.QUERY);
             Bundle args = new Bundle();
             args.putString("query", query);
-            args.putSerializable("type", CURRENT_VIEW == R.id.navigation_word ? WORD : EXPRESSION);
+            args.putSerializable("type", CURRENT_VIEW == R.id.navigation_entries ? WORD : EXPRESSION);
 
             final DicoFragment fragment = new DicoFragment();
             fragment.setArguments(args);

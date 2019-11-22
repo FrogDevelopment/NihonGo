@@ -4,27 +4,22 @@
         android:id="@+id/group_dico"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_word"
-            android:icon="@drawable/ic_baseline_translate_24"
+            android:id="@+id/navigation_entries"
             android:checked="true"
-            android:title="@string/drawer_item_word"/>
-        <item
-            android:id="@+id/navigation_expression"
-            android:icon="@drawable/ic_baseline_comment_24"
-            android:title="@string/drawer_item_expression"/>
+            android:icon="@drawable/ic_baseline_translate_24"
+            android:title="@string/drawer_item_entries" />
     </group>
-
     <group
         android:id="@+id/group_todo"
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_review"
             android:icon="@drawable/ic_baseline_fitness_center_24"
-            android:title="@string/drawer_item_review"/>
+            android:title="@string/drawer_item_training" />
         <item
             android:id="@+id/navigation_test"
             android:icon="@drawable/ic_baseline_school_24"
-            android:title="@string/drawer_item_test"/>
+            android:title="@string/drawer_item_test" />
     </group>
 
     <group
@@ -33,11 +28,11 @@
         <item
             android:id="@+id/navigation_hiragana"
             android:icon="@drawable/ic_hiragana_white"
-            android:title="@string/global_hiragana"/>
+            android:title="@string/global_hiragana" />
         <item
             android:id="@+id/navigation_katakana"
             android:icon="@drawable/ic_katakana_white"
-            android:title="@string/global_katakana"/>
+            android:title="@string/global_katakana" />
     </group>
 
     <group
@@ -46,15 +41,15 @@
         <item
             android:id="@+id/navigation_lessons"
             android:icon="@drawable/ic_baseline_archive_24"
-            android:title="@string/drawer_item_lessons"/>
+            android:title="@string/drawer_item_lessons" />
         <item
             android:id="@+id/navigation_parameters"
             android:icon="@drawable/ic_baseline_settings_applications_24"
-            android:title="@string/drawer_item_parameters"/>
+            android:title="@string/drawer_item_parameters" />
         <item
             android:id="@+id/navigation_about"
             android:icon="@drawable/ic_baseline_info_24"
-            android:title="@string/drawer_item_about"/>
+            android:title="@string/drawer_item_about" />
     </group>
 
 </menu>

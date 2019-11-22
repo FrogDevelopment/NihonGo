@@ -24,15 +24,16 @@ import java.util.stream.Collectors;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Row;
 
+import static fr.frogdevelopment.nihongo.R.layout.row_entry;
+import static fr.frogdevelopment.nihongo.R.layout.row_header;
+
 public class DicoAdapter extends BaseAdapter implements SectionIndexer {
 
     private final LayoutInflater mInflater;
-    private final int mResource;
 
-    DicoAdapter(Activity context, int resource) {
+    DicoAdapter(Activity context) {
         mRows = new ArrayList<>();
         mInflater = LayoutInflater.from(context);
-        mResource = resource;
     }
 
     @Override
@@ -84,7 +85,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
     private View getHeaderView(int position, View convertView, ViewGroup parent, View view) {
         LetterViewHolder holder;
         if (view == null) {
-            view = mInflater.inflate(R.layout.row_header, parent, false);
+            view = mInflater.inflate(row_header, parent, false);
             holder = new LetterViewHolder(view);
             view.setTag(holder);
         } else {
@@ -108,7 +109,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         View view;
         ViewHolder holder;
         if (convertView == null) {
-            view = mInflater.inflate(mResource, parent, false);
+            view = mInflater.inflate(row_entry, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
@@ -116,7 +117,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
             holder = (ViewHolder) view.getTag();
         }
 
-        Row row = (Row) getItem(position);
+        Row row = getItem(position);
         holder.mInputView.setText(row.input);
         holder.switcher.setDisplayedChild(0);
         if (StringUtils.isNoneBlank(row.kanji)) {

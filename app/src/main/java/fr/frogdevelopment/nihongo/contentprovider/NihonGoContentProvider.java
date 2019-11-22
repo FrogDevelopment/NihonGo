@@ -13,8 +13,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
-
 public class NihonGoContentProvider extends ContentProvider {
 
     private DictionaryOpenHelper database;
@@ -113,27 +111,27 @@ public class NihonGoContentProvider extends ContentProvider {
 
             case WORD_ID:
                 queryBuilder.setTables(DicoContract.TABLE_NAME);
-                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
+//                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
                 queryBuilder.appendWhere(DicoContract._ID + "=" + uri.getLastPathSegment());
                 break;
             case WORDS:
                 queryBuilder.setTables(DicoContract.TABLE_NAME);
-                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
+//                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
                 break;
             case WORDS_GROUP_BY_TAG:
                 queryBuilder.setTables(DicoContract.TABLE_NAME);
-                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
+//                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.WORD.code + "'");
                 groupBy = DicoContract.TAGS;
                 break;
 
             case EXPRESSION_ID:
                 queryBuilder.setTables(DicoContract.TABLE_NAME);
-                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
+//                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
                 queryBuilder.appendWhere(DicoContract._ID + "=" + uri.getLastPathSegment());
                 break;
             case EXPRESSIONS:
                 queryBuilder.setTables(DicoContract.TABLE_NAME);
-                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
+//                queryBuilder.appendWhere(DicoContract.TYPE + "='" + Type.EXPRESSION.code + "'");
                 break;
 
             default:

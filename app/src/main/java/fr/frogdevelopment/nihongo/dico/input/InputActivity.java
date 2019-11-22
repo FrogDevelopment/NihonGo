@@ -23,12 +23,9 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
-import static fr.frogdevelopment.nihongo.R.string.drawer_item_expression;
-import static fr.frogdevelopment.nihongo.R.string.drawer_item_word;
 import static fr.frogdevelopment.nihongo.R.string.input_error_all_empty;
 import static fr.frogdevelopment.nihongo.R.string.input_error_empty;
 import static fr.frogdevelopment.nihongo.R.string.input_error_fields;
@@ -47,7 +44,6 @@ import static org.apache.commons.lang3.StringUtils.join;
 
 public class InputActivity extends AppCompatActivity {
 
-    public static final String TYPE = "type";
     public static final String ITEM_ID = "item_id";
 
     private TextInputLayout mKanjiWrapper;
@@ -69,7 +65,6 @@ public class InputActivity extends AppCompatActivity {
     // Initial Data
     private InputViewModel mInputViewModel;
     private Details mDetails;
-    private Type mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +101,7 @@ public class InputActivity extends AppCompatActivity {
         });
         mChipGroup = findViewById(R.id.input_tags_group);
 
-        mType = (Type) getIntent().getSerializableExtra(TYPE);
-        setTitle(mType == Type.WORD ? drawer_item_word : drawer_item_expression);
+//        setTitle(drawer_item_entries);
 
         if (getIntent().hasExtra(ITEM_ID)) {
             mInputViewModel.getById(getIntent().getIntExtra(ITEM_ID, -1)).observe(this, item -> {
@@ -275,7 +269,7 @@ public class InputActivity extends AppCompatActivity {
         if (mDetails.id != null) {
             update();
         } else {
-            mDetails.type = mType.code;
+            mDetails.type = "w";
             insert();
         }
     }

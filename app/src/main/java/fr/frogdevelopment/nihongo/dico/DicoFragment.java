@@ -36,7 +36,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type;
 import fr.frogdevelopment.nihongo.data.model.Row;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
@@ -50,16 +49,16 @@ import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
 import static fr.frogdevelopment.nihongo.R.layout.dialog_help_dico;
 import static fr.frogdevelopment.nihongo.R.layout.fragment_dico;
-import static fr.frogdevelopment.nihongo.R.layout.row_dico_expression;
-import static fr.frogdevelopment.nihongo.R.layout.row_dico_word;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;
+import static fr.frogdevelopment.nihongo.R.string.delete;
+import static fr.frogdevelopment.nihongo.R.string.delete_done;
+import static fr.frogdevelopment.nihongo.R.string.delete_title;
+import static fr.frogdevelopment.nihongo.R.string.drawer_item_entries;
 import static fr.frogdevelopment.nihongo.dico.DicoAdapter.ViewHolder;
 
 public class DicoFragment extends ListFragment {
 
     private boolean isContextActionBar = false;
 
-    private Type mType;
     private DicoAdapter mDicoAdapter;
     private RowViewModel mRowViewModel;
 
@@ -70,25 +69,20 @@ public class DicoFragment extends ListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle arguments = requireArguments();
-        mType = (Type) arguments.getSerializable("type");
-
-        if (mType == null) {
-            throw new IllegalStateException("Type required");
-        }
-
-        mDicoAdapter = new DicoAdapter(requireActivity(), mType == EXPRESSION ? row_dico_expression : row_dico_word);
+        mDicoAdapter = new DicoAdapter(requireActivity());
         setListAdapter(mDicoAdapter);
 
         mRowViewModel = new ViewModelProvider(this).get(RowViewModel.class);
 
-        mIsSearchQuery = arguments.containsKey("query");
+        Bundle arguments = getArguments();
+        mIsSearchQuery = arguments != null && arguments.containsKey("query");
         if (mIsSearchQuery) {
             searchData(arguments.getString("query"));
         } else {
             fetchData(false);
         }
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -165,8 +159,7 @@ public class DicoFragment extends ListFragment {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                int title = mType == EXPRESSION ? R.string.drawer_item_expression : R.string.drawer_item_word;
-                requireActivity().setTitle(title);
+                requireActivity().setTitle(drawer_item_entries);
                 fetchData(false);
                 mIsSearchQuery = false;
                 requireActivity().invalidateOptionsMenu();
@@ -207,11 +200,11 @@ public class DicoFragment extends ListFragment {
     }
 
     private void fetchData(boolean isFilteredByFavorite) {
-        mRowViewModel.getAllByType(mType, isFilteredByFavorite).observe(this, rows -> mDicoAdapter.setRows(rows));
+        mRowViewModel.getAll(isFilteredByFavorite).observe(this, rows -> mDicoAdapter.setRows(rows));
     }
 
     private void searchData(String query) {
-        mRowViewModel.search(mType, query).observe(this, rows -> {
+        mRowViewModel.search(query).observe(this, rows -> {
             hideKeyboard();
             mDicoAdapter.setRows(rows);
         });
@@ -228,7 +221,6 @@ public class DicoFragment extends ListFragment {
         final Row row = mDicoAdapter.getItem(position);
 
         Intent intent = new Intent(getActivity(), InputActivity.class);
-        intent.putExtra(InputActivity.TYPE, mType);
         intent.putExtra(InputActivity.ITEM_ID, row.id);
 
         startActivityFor(intent);
@@ -237,7 +229,6 @@ public class DicoFragment extends ListFragment {
     private void onAddInput() {
         Intent intent;
         intent = new Intent(getActivity(), InputActivity.class);
-        intent.putExtra(InputActivity.TYPE, mType);
 
         startActivityFor(intent);
     }
@@ -246,7 +237,6 @@ public class DicoFragment extends ListFragment {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
         intent.putIntegerArrayListExtra("item_ids", mDicoAdapter.getRows().stream().map(row -> row.id).collect(Collectors.toCollection(ArrayList::new)));
         intent.putExtra("position", i);
-        intent.putExtra("type", mType);
 
         startActivityFor(intent);
     }
@@ -261,9 +251,9 @@ public class DicoFragment extends ListFragment {
         // Ask the user if they want to delete
         new MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_warning)
-                .setTitle(R.string.delete_title)
+                .setTitle(delete_title)
                 .setMessage(getResources().getQuantityString(R.plurals.delete_confirmation, nbSelectedRows, nbSelectedRows))
-                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                .setPositiveButton(delete, (dialog, which) -> {
                     Row row;
                     Integer[] ids = null;
                     for (Integer position : selectedRows) {
@@ -271,7 +261,7 @@ public class DicoFragment extends ListFragment {
                         ids = ArrayUtils.add(ids, row.id);
                     }
                     mRowViewModel.delete(ids);
-                    Snackbar.make(requireActivity().findViewById(R.id.dico_layout), R.string.delete_done, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(requireActivity().findViewById(R.id.dico_layout), delete_done, Snackbar.LENGTH_LONG).show();
                     actionMode.finish();
                 })
                 .setNegativeButton(android.R.string.no, null)
