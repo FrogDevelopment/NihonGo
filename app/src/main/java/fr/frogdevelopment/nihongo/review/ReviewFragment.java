@@ -1,6 +1,5 @@
 package fr.frogdevelopment.nihongo.review;
 
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.apache.commons.lang3.StringUtils;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static fr.frogdevelopment.nihongo.R.id.review_count;
@@ -34,9 +32,11 @@ public class ReviewFragment extends Fragment {
     private ImageView mRate2;
     private TextSwitcher mKanaSwitcher;
     private TextSwitcher mTestSwitcher;
+    private ReviewViewModel mReviewViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mReviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
         return inflater.inflate(R.layout.fragment_review, container, false);
     }
 
@@ -69,7 +69,7 @@ public class ReviewFragment extends Fragment {
         Bundle args = requireArguments();
         String count = args.getString("count");
         countView.setText(count);
-        mRow = args.getParcelable("item");
+        mRow = (Details) args.getSerializable("item");
 
         boolean isJapaneseReviewed = args.getBoolean("isJapaneseReviewed");
 
@@ -187,27 +187,16 @@ public class ReviewFragment extends Fragment {
         mRow.learned = rate;
         handleRate();
 
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.LEARNED, mRow.learned);
-        updateItem(values);
+        mReviewViewModel.update(mRow);
     }
 
     private void bookmarkItem() {
         mRow.switchBookmark();
         handleBookmark();
 
-        final ContentValues values = new ContentValues();
-        values.put(DicoContract.BOOKMARK, mRow.bookmark);
-        updateItem(values);
+        mReviewViewModel.update(mRow);
 
         Toast.makeText(requireActivity(), getString(mRow.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
-    }
-
-    private void updateItem(ContentValues values) {
-        final String where = DicoContract._ID + "=?";
-        final String[] selectionArgs = {String.valueOf(mRow.id)};
-
-        requireActivity().getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
     }
 
 }

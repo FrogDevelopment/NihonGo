@@ -1,32 +1,20 @@
 package fr.frogdevelopment.nihongo.review;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.viewpager.widget.ViewPager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.BOOKMARK;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.COLUMNS;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.LEARNED;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.TAGS;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_IS_JAPANESE;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_ONLY_FAVORITE;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_QUANTITY;
@@ -34,14 +22,15 @@ import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SORT;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_TAGS;
 
-public class ReviewActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int LOADER_ID = 710;
-
-    private ReviewAdapter adapter;
+public class ReviewActivity extends AppCompatActivity {
 
     private int mCurrentPosition;
-    private ViewPager mViewPager;
+
+    private ViewPager2 mViewPager;
+    private ReviewAdapter mAdapter;
+    private ImageView mSwapLeft;
+    private ImageView mSwapRight;
+    private FloatingActionButton mFabAgain;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -66,112 +55,57 @@ public class ReviewActivity extends AppCompatActivity implements LoaderManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ReviewViewModel reviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+
         setContentView(R.layout.activity_review);
 
-        ImageView swapLeft = findViewById(R.id.swap_left);
-        swapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
-        ImageView swapRight = findViewById(R.id.swap_right);
-        swapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
+        mSwapLeft = findViewById(R.id.swap_left);
+        mSwapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
+        mSwapRight = findViewById(R.id.swap_right);
+        mSwapRight.setOnClickListener(v -> mViewPager.setCurrentItem(++mCurrentPosition));
 
-        FloatingActionButton fabAgain = findViewById(R.id.fab_again);
-        fabAgain.setOnClickListener(view -> {
-            fabAgain.hide(true);
+        mFabAgain = findViewById(R.id.fab_again);
+        mFabAgain.setOnClickListener(view -> {
+            mFabAgain.hide(true);
             mViewPager.setCurrentItem(0);
         });
 
-        Bundle extras = getIntent().getExtras();
+        Bundle args = getIntent().getExtras();
 
-        final boolean isJapaneseReviewed = extras.getBoolean(REVIEW_IS_JAPANESE);
+        final boolean isJapaneseReviewed = args.getBoolean(REVIEW_IS_JAPANESE);
+        boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
+        final int selectedSort = args.getInt(REVIEW_SORT);
+        String quantity = args.getString(REVIEW_QUANTITY);
+        int learnedRate = args.getInt(REVIEW_RATE);
+        String[] tags = args.getStringArray(REVIEW_TAGS);
 
         mViewPager = findViewById(R.id.review_viewpager);
-        adapter = new ReviewAdapter(getSupportFragmentManager(), isJapaneseReviewed);
-        mViewPager.setAdapter(adapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
 
             @Override
             public void onPageSelected(int position) {
-                mCurrentPosition = position;
-                swapLeft.setVisibility(position == 0 ? INVISIBLE : VISIBLE);
-                boolean lastPosition = position + 1 == adapter.getCount();
-                swapRight.setVisibility(lastPosition ? INVISIBLE : VISIBLE);
-                if (lastPosition) {
-                    fabAgain.show(true);
-                } else {
-                    fabAgain.hide(true);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                handleSwaps(position);
             }
         });
 
-        LoaderManager.getInstance(this).initLoader(LOADER_ID, extras, this);
+        reviewViewModel
+                .fetch(onlyFavorite, selectedSort, quantity, learnedRate, tags)
+                .subscribe(details -> {
+                    mAdapter = new ReviewAdapter(this, isJapaneseReviewed, details);
+                    mViewPager.setAdapter(mAdapter);
+                });
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    private void handleSwaps(int position) {
+        mCurrentPosition = position;
 
-        String quantity = args.getString(REVIEW_QUANTITY);
-        String limit = " LIMIT " + quantity;
-
-        String selection = "1 = 1";
-        String[] likes = null;
-        String[] tags = args.getStringArray(REVIEW_TAGS);
-        if (tags != null && ArrayUtils.isNotEmpty(tags)) {
-            for (String tag : tags) {
-                likes = ArrayUtils.add(likes, TAGS + " LIKE '%" + tag + "%'");
-            }
-            selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
+        mSwapLeft.setVisibility(position == 0 ? INVISIBLE : VISIBLE);
+        boolean lastPosition = position + 1 == mAdapter.getItemCount();
+        mSwapRight.setVisibility(lastPosition ? INVISIBLE : VISIBLE);
+        if (lastPosition) {
+            mFabAgain.show(true);
+        } else {
+            mFabAgain.hide(true);
         }
-
-        boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
-        if (onlyFavorite) {
-            selection += String.format(" AND %s = '1'", BOOKMARK);
-        }
-
-        int learnedRate = args.getInt(REVIEW_RATE);
-        switch (learnedRate) {
-            case 0:
-            case 1:
-            case 2:
-                selection += String.format(" AND %s = '%s'", LEARNED, learnedRate);
-                break;
-        }
-
-        String sortOrder;
-        final int selectedSort = args.getInt(REVIEW_SORT);
-        switch (selectedSort) {
-            case 0: // new -> old
-                sortOrder = "_id ASC" + limit;
-                break;
-            case 1: // old -> new
-                sortOrder = "_id DESC" + limit;
-                break;
-            case 2: // random
-                sortOrder = "RANDOM()" + limit;
-                break;
-            default:
-                sortOrder = "";
-                break;
-        }
-
-        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, COLUMNS, selection, null, sortOrder);
     }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.setData(data);
-        LoaderManager.getInstance(this).destroyLoader(loader.getId());
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        // TODO Auto-generated method stub
-    }
-
 }

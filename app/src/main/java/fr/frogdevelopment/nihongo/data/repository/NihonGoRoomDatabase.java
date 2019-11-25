@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import fr.frogdevelopment.nihongo.data.dao.DetailsDao;
+import fr.frogdevelopment.nihongo.data.dao.ReviewsDao;
 import fr.frogdevelopment.nihongo.data.dao.RowDao;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
@@ -41,4 +42,6 @@ public abstract class NihonGoRoomDatabase extends RoomDatabase {
     public abstract RowDao rowDao();
 
     public abstract DetailsDao detailsDao();
+
+    public abstract ReviewsDao reviewsDao();
 }
