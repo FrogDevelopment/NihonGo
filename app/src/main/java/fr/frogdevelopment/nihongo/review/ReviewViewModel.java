@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.data.repository.ReviewRepository;
@@ -18,6 +20,16 @@ public class ReviewViewModel extends AndroidViewModel {
     public ReviewViewModel(Application application) {
         super(application);
         mReviewRepository = new ReviewRepository(application);
+    }
+
+    Maybe<List<String>> getTags() {
+        return mReviewRepository
+                .getTags()
+                .subscribeOn(Schedulers.computation())
+                .map(tags -> tags.stream()
+                        .flatMap(tag -> Stream.of(tag.split(",")))
+                        .distinct()
+                        .collect(Collectors.toList()));
     }
 
     Maybe<List<Details>> fetch(boolean onlyFavorite, int selectedSort, String quantity, int learnedRate, String[] tags) {

@@ -2,8 +2,6 @@ package fr.frogdevelopment.nihongo.review;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,10 +17,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -32,23 +27,16 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 import static java.util.Arrays.asList;
 
-public class ReviewParametersFragment extends Fragment implements LoaderCallbacks<Cursor> {
-
-    private static final int LOADER_ID = 700;
+public class ReviewParametersFragment extends Fragment {
 
     static final String REVIEW_IS_JAPANESE = "review_is_japanese";
     static final String REVIEW_ONLY_FAVORITE = "review_only_favorite";
@@ -67,9 +55,17 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
     private int mSort = -1;
     private String mQuantity = null;
     private String[] mSelectedTags = new String[0];
-    private List<CharSequence> mTags;
+    private List<String> mTags;
     private AutoCompleteTextView mTagsDropdown;
     private ChipGroup mChipGroup;
+    private ReviewViewModel mReviewViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mReviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -146,8 +142,6 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         mStartButton.setOnClickListener(view -> onClickButtonStart());
         mSwitchKeepView = rootView.findViewById(R.id.review_switch_keep);
 
-        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
-
         if (savedInstanceState != null) {
             mRate = savedInstanceState.getInt(REVIEW_RATE);
             mSort = savedInstanceState.getInt(REVIEW_SORT);
@@ -182,6 +176,14 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         }
 
         checkStartButtonEnabled();
+
+        mReviewViewModel
+                .getTags()
+                .doOnSuccess(tags -> {
+                    mTags = tags;
+                    mTags.removeAll(asList(mSelectedTags));
+                    updateDropDownTags();
+                });
     }
 
     private void hideKeyboard(View view) {
@@ -239,35 +241,9 @@ public class ReviewParametersFragment extends Fragment implements LoaderCallback
         }
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
-        return new CursorLoader(requireActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        Set<CharSequence> uniqueItems = new HashSet<>();
-        while (data.moveToNext()) {
-            String row = data.getString(0);
-            String[] tags = row.split(",");
-            uniqueItems.addAll(asList(tags));
-        }
-        data.close();
-
-        mTags = new ArrayList<>(uniqueItems);
-        mTags.removeAll(asList(mSelectedTags));
-        updateDropDownTags();
-    }
-
     private void updateDropDownTags() {
         mTags.sort(Comparator.comparing(CharSequence::toString));
         mTagsDropdown.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.dropdown_menu_popup_item, mTags));
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     }
 
     private void checkStartButtonEnabled() {

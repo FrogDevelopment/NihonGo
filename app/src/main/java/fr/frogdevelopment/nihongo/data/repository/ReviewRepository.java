@@ -26,6 +26,10 @@ public class ReviewRepository {
         mDetailsDao = db.reviewsDao();
     }
 
+    public Maybe<List<String>> getTags() {
+        return mDetailsDao.getTags();
+    }
+
     public void update(Details details) {
         databaseWriteExecutor.execute(() -> mDetailsDao.update(details));
     }
