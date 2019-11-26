@@ -60,8 +60,12 @@ public class ReviewRepository {
             selection += " AND (" + orTags + ")";
         }
 
-        if (learnedRate > 0) {
-            selection += format(" AND tags = '%s'", learnedRate);
+        switch (learnedRate) {
+            case 0: // new
+            case 1: // view
+            case 2: // learned
+                selection += " AND learned = " + learnedRate;
+                break;
         }
 
         return selection;
