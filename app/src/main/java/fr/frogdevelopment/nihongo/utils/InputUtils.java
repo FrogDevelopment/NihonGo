@@ -1,8 +1,4 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
-package fr.frogdevelopment.nihongo.dico.input;
+package fr.frogdevelopment.nihongo.utils;
 
 /**
  * @see <a href="http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml">kanji_codes.unicode</a>

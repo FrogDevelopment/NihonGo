@@ -8,7 +8,7 @@ import java.util.List;
 
 import fr.frogdevelopment.nihongo.data.dao.RowDao;
 import fr.frogdevelopment.nihongo.data.model.Row;
-import fr.frogdevelopment.nihongo.dico.input.InputUtils;
+import fr.frogdevelopment.nihongo.utils.InputUtils;
 
 import static fr.frogdevelopment.nihongo.data.repository.NihonGoRoomDatabase.databaseWriteExecutor;
 import static fr.frogdevelopment.nihongo.data.repository.NihonGoRoomDatabase.getDatabase;

@@ -34,10 +34,10 @@
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -54,7 +54,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
         <activity
             android:name=".dico.details.DetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -65,7 +64,7 @@
                 android:value="fr.frogdevelopment.nihongo.MainActivity" />
         </activity>
         <activity
-            android:name=".dico.input.InputActivity"
+            android:name=".dico.update.UpdateActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -109,7 +108,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.frogdevelopment.nihongo.MainActivity" />
         </activity>
-
     </application>
 
 </manifest>

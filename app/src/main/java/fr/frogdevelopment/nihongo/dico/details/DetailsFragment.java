@@ -4,21 +4,29 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.Snackbar.Callback;
 
 import org.apache.commons.lang3.StringUtils;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
+import fr.frogdevelopment.nihongo.dico.DetailsViewModel;
+import fr.frogdevelopment.nihongo.dico.update.UpdateFragment;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -27,7 +35,7 @@ public class DetailsFragment extends Fragment {
 
     private DetailsViewModel mDetailsViewModel;
 
-    private Details mRow;
+    private Details mDetails;
 
     private ImageView mBookmark;
     private ImageView mRate0;
@@ -44,17 +52,28 @@ public class DetailsFragment extends Fragment {
     private TextView mTagsView;
     private TextView mSuccessView;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Integer mId = requireArguments().getInt("item_id");
-        mDetailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
-        mDetailsViewModel.getById(mId).observe(this, this::fillFields);
+    public static DetailsFragment newInstance(Bundle extras) {
+        DetailsFragment detailsFragment = new DetailsFragment();
+        detailsFragment.setArguments(extras);
+        return detailsFragment;
+    }
+
+    public DetailsFragment() {
+        super(R.layout.details_fragment);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_details, container, false);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Integer itemId = requireArguments().getInt("item_id");
+        mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
+        mDetailsViewModel.getById(itemId).observe(getViewLifecycleOwner(), this::fillFields);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -82,6 +101,27 @@ public class DetailsFragment extends Fragment {
         mRate2.setOnClickListener(v -> onRateChanged(2));
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.dico_context, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_update:
+                update();
+                return true;
+
+            case R.id.action_delete:
+                confirmDelete();
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
     private boolean copyToClipboard(String label, CharSequence text, int p) {
         ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard != null) {
@@ -95,40 +135,35 @@ public class DetailsFragment extends Fragment {
     }
 
     private void fillFields(Details details) {
-        if (details == null) {
-            // fixme
-            return;
-        }
+        mDetails = details;
 
-        mRow = details;
+        mInputView.setText(mDetails.input);
 
-        mInputView.setText(mRow.input);
-
-        if (StringUtils.isNotBlank(mRow.kanji)) {
-            mKanjiView.setText(mRow.kanji);
+        if (StringUtils.isNotBlank(mDetails.kanji)) {
+            mKanjiView.setText(mDetails.kanji);
             mKanjiView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mRow.kana)) {
-            mKanaView.setText(mRow.kana);
+        if (StringUtils.isNotBlank(mDetails.kana)) {
+            mKanaView.setText(mDetails.kana);
         }
 
-        mDetailsView.setText(mRow.details);
-        if (StringUtils.isNotBlank(mRow.details)) {
-            mDetailsView.setText(mRow.details);
+        mDetailsView.setText(mDetails.details);
+        if (StringUtils.isNotBlank(mDetails.details)) {
+            mDetailsView.setText(mDetails.details);
             mDetailsView.setVisibility(VISIBLE);
             mDetailsTitleView.setVisibility(VISIBLE);
         }
 
-        mExampleView.setText(mRow.example);
-        if (StringUtils.isNotBlank(mRow.example)) {
-            mExampleView.setText(mRow.example);
+        mExampleView.setText(mDetails.example);
+        if (StringUtils.isNotBlank(mDetails.example)) {
+            mExampleView.setText(mDetails.example);
             mExampleView.setVisibility(VISIBLE);
             mExampleTitleView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mRow.tags)) {
-            mTagsView.setText(mRow.tags);
+        if (StringUtils.isNotBlank(mDetails.tags)) {
+            mTagsView.setText(mDetails.tags);
             mTagsView.setVisibility(VISIBLE);
             mTagsViewTitle.setVisibility(VISIBLE);
         } else {
@@ -137,15 +172,15 @@ public class DetailsFragment extends Fragment {
             mTagsViewTitle.setVisibility(GONE);
         }
 
-        int total = mRow.success + mRow.failed;
-        mSuccessView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mRow.success / total) * 100)));
+        int total = mDetails.success + mDetails.failed;
+        mSuccessView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mDetails.success / total) * 100)));
 
         handleRate();
         handleBookmark();
     }
 
     private void handleRate() {
-        switch (mRow.learned) {
+        switch (mDetails.learned) {
             case 1:
                 mRate0.setImageResource(R.drawable.ic_baseline_star_24);
                 mRate1.setImageResource(R.drawable.ic_baseline_star_24);
@@ -171,22 +206,53 @@ public class DetailsFragment extends Fragment {
     }
 
     private void handleBookmark() {
-        mBookmark.setImageResource(mRow.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
+        mBookmark.setImageResource(mDetails.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
     }
 
     private void onRateChanged(int rate) {
-        mRow.learned = rate;
+        mDetails.learned = rate;
         handleRate();
 
-        mDetailsViewModel.update(mRow);
+        mDetailsViewModel.update(mDetails);
     }
 
     private void onFavoriteChanged() {
-        mRow.switchBookmark();
+        mDetails.switchBookmark();
         handleBookmark();
 
-        mDetailsViewModel.update(mRow);
+        mDetailsViewModel.update(mDetails);
 
-        Toast.makeText(requireContext(), getString(mRow.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), getString(mDetails.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+    }
+
+    private void update() {
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.container, UpdateFragment.newInstance(null))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void confirmDelete() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setMessage(R.string.delete_message)
+                .setPositiveButton(R.string.delete, (dialog, which) -> delete())
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void delete() {
+        Snackbar.make(requireView(), R.string.delete_done, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_cancel, v -> {
+                    // keep empty action to display action ...
+                })
+                .addCallback(new Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        if (event != DISMISS_EVENT_ACTION) {
+                            mDetailsViewModel.delete(mDetails);
+                        }
+                    }
+                })
+                .show();
     }
 }

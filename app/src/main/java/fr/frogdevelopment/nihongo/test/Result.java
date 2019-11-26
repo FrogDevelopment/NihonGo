@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 
-import fr.frogdevelopment.nihongo.dico.input.InputUtils;
+import fr.frogdevelopment.nihongo.utils.InputUtils;
 
 class Result implements Parcelable {
 

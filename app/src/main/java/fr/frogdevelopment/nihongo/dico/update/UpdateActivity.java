@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.details;
+package fr.frogdevelopment.nihongo.dico.update;
 
 import android.os.Bundle;
 
@@ -6,18 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import fr.frogdevelopment.nihongo.R;
 
-public class DetailsActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.details_activity);
+        setContentView(R.layout.update_activity);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, DetailsFragment.newInstance(getIntent().getExtras()))
+                    .replace(R.id.container, UpdateFragment.newInstance(getIntent().getExtras()))
                     .commitNow();
         }
     }

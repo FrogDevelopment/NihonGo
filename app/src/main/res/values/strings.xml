@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) Frog Development 2015.
   -->
 
@@ -72,7 +71,7 @@
 
     <!-- DELETE -->
     <string name="delete_title">Deleting</string>
-    <string name="delete_detail">You\'re going to delete the input</string>
+    <string name="delete_message">You\'re going to delete the item</string>
 
     <plurals name="delete_confirmation">
         <item quantity="one">You\'re going to delete %1$d line</item>

@@ -1,12 +1,13 @@
 package fr.frogdevelopment.nihongo.data.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
 import fr.frogdevelopment.nihongo.data.model.Details;
+import io.reactivex.Maybe;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -14,7 +15,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 public interface DetailsDao {
 
     @Query("SELECT * FROM dico WHERE _id = :id")
-    LiveData<Details> getById(Integer id);
+    Maybe<Details> getById(Integer id);
 
     @Insert(onConflict = REPLACE)
     void insert(Details item);
@@ -22,7 +23,7 @@ public interface DetailsDao {
     @Update(onConflict = REPLACE)
     void update(Details item);
 
-    @Query("DELETE FROM dico WHERE _id = :id")
-    void delete(Integer id);
+    @Delete
+    void delete(Details item);
 
 }

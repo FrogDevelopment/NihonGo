@@ -62,7 +62,7 @@
     <!-- DELETE -->
     <string name="delete_title">Suppression</string>
 
-    <string name="delete_detail">Vous êtes sur le point d\'effacer l\'entrée</string>
+    <string name="delete_message">Vous êtes sur le point d\'effacer la donnée</string>
     <plurals name="delete_confirmation">
         <item quantity="one">Vous êtes sur le point d\'effacer %1$d ligne</item>
         <item quantity="other">Vous êtes sur le point d\'effacer %1$d lignes</item>

@@ -2,10 +2,9 @@ package fr.frogdevelopment.nihongo.data.repository;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import fr.frogdevelopment.nihongo.data.dao.DetailsDao;
 import fr.frogdevelopment.nihongo.data.model.Details;
+import io.reactivex.Maybe;
 
 import static fr.frogdevelopment.nihongo.data.repository.NihonGoRoomDatabase.databaseWriteExecutor;
 import static fr.frogdevelopment.nihongo.data.repository.NihonGoRoomDatabase.getDatabase;
@@ -19,7 +18,7 @@ public class DetailsRepository {
         mDetailsDao = db.detailsDao();
     }
 
-    public LiveData<Details> getById(Integer id) {
+    public Maybe<Details> getById(Integer id) {
         return mDetailsDao.getById(id);
     }
 
@@ -31,7 +30,7 @@ public class DetailsRepository {
         databaseWriteExecutor.execute(() -> mDetailsDao.update(details));
     }
 
-    public void delete(Integer id) {
-        databaseWriteExecutor.execute(() -> mDetailsDao.delete(id));
+    public void delete(Details details) {
+        databaseWriteExecutor.execute(() -> mDetailsDao.delete(details));
     }
 }

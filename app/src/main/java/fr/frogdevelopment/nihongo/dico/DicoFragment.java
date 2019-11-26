@@ -30,21 +30,17 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Row;
 import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
-import fr.frogdevelopment.nihongo.dico.input.InputActivity;
+import fr.frogdevelopment.nihongo.dico.update.UpdateActivity;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
-import static android.R.anim.fade_in;
-import static android.R.anim.fade_out;
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
 import static fr.frogdevelopment.nihongo.R.layout.dialog_help_dico;
@@ -220,30 +216,22 @@ public class DicoFragment extends ListFragment {
     private void onUpdate(final int position) {
         final Row row = mDicoAdapter.getItem(position);
 
-        Intent intent = new Intent(getActivity(), InputActivity.class);
-        intent.putExtra(InputActivity.ITEM_ID, row.id);
+        Intent intent = new Intent(requireContext(), UpdateActivity.class);
+        intent.putExtra("item_id", row.id);
 
-        startActivityFor(intent);
+        startActivity(intent);
     }
 
     private void onAddInput() {
-        Intent intent;
-        intent = new Intent(getActivity(), InputActivity.class);
-
-        startActivityFor(intent);
+        startActivity(new Intent(requireContext(), UpdateActivity.class));
     }
 
-    private void onShowDetails(int i) {
+    private void onShowDetails(int position) {
+        final Row row = mDicoAdapter.getItem(position);
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
-        intent.putIntegerArrayListExtra("item_ids", mDicoAdapter.getRows().stream().map(row -> row.id).collect(Collectors.toCollection(ArrayList::new)));
-        intent.putExtra("position", i);
+        intent.putExtra("item_id", row.id);
 
-        startActivityFor(intent);
-    }
-
-    private void startActivityFor(Intent intent) {
         startActivity(intent);
-        requireActivity().overridePendingTransition(fade_in, fade_out);
     }
 
     private void onDelete(final ActionMode actionMode, final Set<Integer> selectedRows) {
@@ -380,11 +368,9 @@ public class DicoFragment extends ListFragment {
                     return false;
                 }
 
-                final Row row = mDicoAdapter.getItem(position);
 
-                if (row.id != null) {
-                    int i = mDicoAdapter.getRows().indexOf(row);
-                    onShowDetails(i);
+                if (!mDicoAdapter.isHeader(position)) {
+                    onShowDetails(position);
 
                     return false;
                 }
