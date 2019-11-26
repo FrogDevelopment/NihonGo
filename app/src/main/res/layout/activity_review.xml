@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".review.ReviewActivity">
+    tools:context=".review.training.TrainingActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

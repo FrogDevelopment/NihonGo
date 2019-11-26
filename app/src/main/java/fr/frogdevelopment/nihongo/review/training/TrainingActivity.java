@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.review;
+package fr.frogdevelopment.nihongo.review.training;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,19 +19,19 @@ import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_IS_JAPANESE;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_ONLY_FAVORITE;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_QUANTITY;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_RATE;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SORT;
-import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_TAGS;
+import static fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment.REVIEW_IS_JAPANESE;
+import static fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment.REVIEW_ONLY_FAVORITE;
+import static fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment.REVIEW_QUANTITY;
+import static fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment.REVIEW_RATE;
+import static fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment.REVIEW_SORT;
+import static fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment.REVIEW_TAGS;
 
-public class ReviewActivity extends AppCompatActivity implements Observer<List<Details>> {
+public class TrainingActivity extends AppCompatActivity implements Observer<List<Details>> {
 
     private int mCurrentPosition;
 
     private ViewPager2 mViewPager;
-    private ReviewAdapter mAdapter;
+    private TrainingAdapter mAdapter;
     private ImageView mSwapLeft;
     private ImageView mSwapRight;
     private FloatingActionButton mFabAgain;
@@ -59,7 +59,7 @@ public class ReviewActivity extends AppCompatActivity implements Observer<List<D
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ReviewViewModel reviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+        TrainingViewModel trainingViewModel = new ViewModelProvider(this).get(TrainingViewModel.class);
 
         setContentView(R.layout.activity_review);
 
@@ -92,8 +92,8 @@ public class ReviewActivity extends AppCompatActivity implements Observer<List<D
             }
         });
 
-        reviewViewModel.isJapaneseReview(isJapaneseReviewed);
-        reviewViewModel.reviews(onlyFavorite, selectedSort, quantity, learnedRate, tags)
+        trainingViewModel.isJapaneseReview(isJapaneseReviewed);
+        trainingViewModel.reviews(onlyFavorite, selectedSort, quantity, learnedRate, tags)
                 .observe(this, this);
     }
 
@@ -112,7 +112,7 @@ public class ReviewActivity extends AppCompatActivity implements Observer<List<D
 
     @Override
     public void onChanged(List<Details> data) {
-        mAdapter = new ReviewAdapter(this, data.size());
+        mAdapter = new TrainingAdapter(this, data.size());
         mViewPager.setAdapter(mAdapter);
     }
 }

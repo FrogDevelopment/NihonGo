@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.review;
+package fr.frogdevelopment.nihongo.review.parameters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,17 +33,18 @@ import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
+import fr.frogdevelopment.nihongo.review.training.TrainingActivity;
 
 import static java.util.Arrays.asList;
 
 public class ReviewParametersFragment extends Fragment {
 
-    static final String REVIEW_IS_JAPANESE = "review_is_japanese";
-    static final String REVIEW_ONLY_FAVORITE = "review_only_favorite";
-    static final String REVIEW_RATE = "review_selected_rate";
-    static final String REVIEW_SORT = "review_selected_sort";
-    static final String REVIEW_QUANTITY = "review_selected_quantity";
-    static final String REVIEW_TAGS = "review_tags";
+    public static final String REVIEW_IS_JAPANESE = "review_is_japanese";
+    public static final String REVIEW_ONLY_FAVORITE = "review_only_favorite";
+    public static final String REVIEW_RATE = "review_selected_rate";
+    public static final String REVIEW_SORT = "review_selected_sort";
+    public static final String REVIEW_QUANTITY = "review_selected_quantity";
+    public static final String REVIEW_TAGS = "review_tags";
     private static final String REVIEW_KEEP_CONFIG = "review_keepConfig";
 
     private Switch mSwitchLanguageView;
@@ -58,13 +59,13 @@ public class ReviewParametersFragment extends Fragment {
     private List<String> mTags;
     private AutoCompleteTextView mTagsDropdown;
     private ChipGroup mChipGroup;
-    private ReviewViewModel mReviewViewModel;
+    private ReviewParametersViewModel mReviewParametersViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mReviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+        mReviewParametersViewModel = new ViewModelProvider(this).get(ReviewParametersViewModel.class);
     }
 
     @Override
@@ -193,7 +194,7 @@ public class ReviewParametersFragment extends Fragment {
 
         checkStartButtonEnabled();
 
-        mReviewViewModel.tags()
+        mReviewParametersViewModel.tags()
                 .observe(getViewLifecycleOwner(), values -> {
                     mTags = values;
                     mTags.removeAll(asList(mSelectedTags));
@@ -273,7 +274,7 @@ public class ReviewParametersFragment extends Fragment {
         Bundle options = new Bundle();
         populateUiSelection(options);
 
-        Intent intent = new Intent(getActivity(), ReviewActivity.class);
+        Intent intent = new Intent(getActivity(), TrainingActivity.class);
         intent.putExtras(options);
 
         startActivity(intent);

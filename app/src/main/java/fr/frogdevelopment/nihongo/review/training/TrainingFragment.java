@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.review;
+package fr.frogdevelopment.nihongo.review.training;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +21,7 @@ import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static fr.frogdevelopment.nihongo.R.id.review_count;
 
-public class ReviewFragment extends Fragment {
+public class TrainingFragment extends Fragment {
 
     private Details mRow;
     private String test;
@@ -32,11 +32,11 @@ public class ReviewFragment extends Fragment {
     private ImageView mRate2;
     private TextSwitcher mKanaSwitcher;
     private TextSwitcher mTestSwitcher;
-    private ReviewViewModel mReviewViewModel;
+    private TrainingViewModel mTrainingViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mReviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
+        mTrainingViewModel = new ViewModelProvider(requireActivity()).get(TrainingViewModel.class);
         return inflater.inflate(R.layout.fragment_review, container, false);
     }
 
@@ -67,12 +67,11 @@ public class ReviewFragment extends Fragment {
         });
 
         Bundle args = requireArguments();
-        String count = args.getString("count");
-        countView.setText(count);
+        countView.setText(args.getString("count"));
 
-        mRow = mReviewViewModel.get(args.getInt("position"));
+        mRow = mTrainingViewModel.get(args.getInt("position"));
 
-        boolean isJapaneseReviewed = args.getBoolean("isJapaneseReviewed");
+        boolean isJapaneseReviewed = mTrainingViewModel.isJapaneseReview();
 
         boolean kanjiPst = false;
         if (StringUtils.isNoneBlank(mRow.kanji)) {
@@ -188,14 +187,14 @@ public class ReviewFragment extends Fragment {
         mRow.learned = rate;
         handleRate();
 
-        mReviewViewModel.update(mRow);
+        mTrainingViewModel.update(mRow);
     }
 
     private void bookmarkItem() {
         mRow.switchBookmark();
         handleBookmark();
 
-        mReviewViewModel.update(mRow);
+        mTrainingViewModel.update(mRow);
 
         Toast.makeText(requireActivity(), getString(mRow.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
     }

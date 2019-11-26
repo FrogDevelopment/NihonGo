@@ -73,7 +73,7 @@
                 android:value="fr.frogdevelopment.nihongo.MainActivity" />
         </activity>
         <activity
-            android:name=".review.ReviewActivity"
+            android:name=".review.training.TrainingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_review"
             android:parentActivityName=".MainActivity">

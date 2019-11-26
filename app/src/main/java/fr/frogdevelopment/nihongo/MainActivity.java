@@ -32,7 +32,7 @@ import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
 import fr.frogdevelopment.nihongo.options.ParametersFragment;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
-import fr.frogdevelopment.nihongo.review.ReviewParametersFragment;
+import fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
 
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;

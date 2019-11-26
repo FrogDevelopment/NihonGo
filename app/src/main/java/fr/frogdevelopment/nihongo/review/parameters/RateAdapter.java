@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.review;
+package fr.frogdevelopment.nihongo.review.parameters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
