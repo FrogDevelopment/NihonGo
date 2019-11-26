@@ -143,35 +143,53 @@ public class ReviewParametersFragment extends Fragment {
         mSwitchKeepView = rootView.findViewById(R.id.review_switch_keep);
 
         if (savedInstanceState != null) {
-            mRate = savedInstanceState.getInt(REVIEW_RATE);
-            mSort = savedInstanceState.getInt(REVIEW_SORT);
-            mQuantity = savedInstanceState.getString(REVIEW_QUANTITY);
-            mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
 
-            mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE));
-            mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE));
-            sortDropdown.setText(sortDropdown.getAdapter().getItem(mSort).toString(), false);
+            mSwitchLanguageView.setChecked(savedInstanceState.getBoolean(REVIEW_IS_JAPANESE, false));
+            mSwitchFavorite.setChecked(savedInstanceState.getBoolean(REVIEW_ONLY_FAVORITE, false));
+
+            mSort = savedInstanceState.getInt(REVIEW_SORT, -1);
+            if (mSort >= 0) {
+                sortDropdown.setText(sortDropdown.getAdapter().getItem(mSort).toString(), false);
+            }
+
+            mRate = savedInstanceState.getInt(REVIEW_RATE, -1);
+            if (mRate >= 0) {
+                rateDropdown.setText(rateDropdown.getAdapter().getItem(mRate).toString(), false);
+            }
+
+            mQuantity = savedInstanceState.getString(REVIEW_QUANTITY);
             quantityEditText.setText(mQuantity);
-            rateDropdown.setText(rateDropdown.getAdapter().getItem(mRate).toString(), false);
-            Stream.of(mSelectedTags).forEach(this::addChipToGroup);
+
+            mSelectedTags = savedInstanceState.getStringArray(REVIEW_TAGS);
+            if (mSelectedTags != null) {
+                Stream.of(mSelectedTags).forEach(this::addChipToGroup);
+            }
         } else {
             PreferencesHelper preferencesHelper = PreferencesHelper.getInstance(requireActivity());
             if (preferencesHelper.getBoolean(REVIEW_KEEP_CONFIG)) {
-                mRate = preferencesHelper.getInt(REVIEW_RATE);
+                mSwitchKeepView.setChecked(true);
+
+                mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
+                mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
+
                 mSort = preferencesHelper.getInt(REVIEW_SORT);
+                if (mSort >= 0) {
+                    sortDropdown.setText(sortDropdown.getAdapter().getItem(mSort).toString(), false);
+                }
+
+                mRate = preferencesHelper.getInt(REVIEW_RATE);
+                if (mRate >= 0) {
+                    rateDropdown.setText(rateDropdown.getAdapter().getItem(mRate).toString(), false);
+                }
+
                 mQuantity = String.valueOf(preferencesHelper.getInt(REVIEW_QUANTITY));
+                quantityEditText.setText(mQuantity);
+
                 String test_tags = preferencesHelper.getString(REVIEW_TAGS);
                 if (StringUtils.isNotBlank(test_tags)) {
                     mSelectedTags = test_tags.split(", ");
                 }
-
-                mSwitchLanguageView.setChecked(preferencesHelper.getBoolean(REVIEW_IS_JAPANESE));
-                mSwitchFavorite.setChecked(preferencesHelper.getBoolean(REVIEW_ONLY_FAVORITE));
-                sortDropdown.setText(sortDropdown.getAdapter().getItem(mSort).toString(), false);
-                quantityEditText.setText(mQuantity);
-                rateDropdown.setText(rateDropdown.getAdapter().getItem(mRate).toString(), false);
                 Stream.of(mSelectedTags).forEach(this::addChipToGroup);
-                mSwitchKeepView.setChecked(true);
             }
         }
 
@@ -228,8 +246,12 @@ public class ReviewParametersFragment extends Fragment {
             preferencesHelper.saveBoolean(REVIEW_ONLY_FAVORITE, mSwitchFavorite.isChecked());
             preferencesHelper.saveInt(REVIEW_RATE, mRate);
             preferencesHelper.saveInt(REVIEW_SORT, mSort);
-            preferencesHelper.saveInt(REVIEW_QUANTITY, Integer.parseInt(mQuantity));
-            preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
+            if (mQuantity != null) {
+                preferencesHelper.saveInt(REVIEW_QUANTITY, Integer.parseInt(mQuantity));
+            }
+            if (ArrayUtils.isNotEmpty(mSelectedTags)) {
+                preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
+            }
         } else {
             preferencesHelper.saveBoolean(REVIEW_KEEP_CONFIG, false);
             preferencesHelper.remove(REVIEW_IS_JAPANESE);
