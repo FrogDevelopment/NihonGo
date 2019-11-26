@@ -69,7 +69,8 @@ public class ReviewFragment extends Fragment {
         Bundle args = requireArguments();
         String count = args.getString("count");
         countView.setText(count);
-        mRow = (Details) args.getSerializable("item");
+
+        mRow = mReviewViewModel.get(args.getInt("position"));
 
         boolean isJapaneseReviewed = args.getBoolean("isJapaneseReviewed");
 

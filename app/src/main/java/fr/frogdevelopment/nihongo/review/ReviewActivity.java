@@ -6,12 +6,16 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import java.util.List;
+
 import fr.frogdevelopment.nihongo.R;
+import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -22,7 +26,7 @@ import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_SORT;
 import static fr.frogdevelopment.nihongo.review.ReviewParametersFragment.REVIEW_TAGS;
 
-public class ReviewActivity extends AppCompatActivity {
+public class ReviewActivity extends AppCompatActivity implements Observer<List<Details>> {
 
     private int mCurrentPosition;
 
@@ -72,7 +76,7 @@ public class ReviewActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
 
-        final boolean isJapaneseReviewed = args.getBoolean(REVIEW_IS_JAPANESE);
+        boolean isJapaneseReviewed = args.getBoolean(REVIEW_IS_JAPANESE);
         boolean onlyFavorite = args.getBoolean(REVIEW_ONLY_FAVORITE);
         final int selectedSort = args.getInt(REVIEW_SORT);
         String quantity = args.getString(REVIEW_QUANTITY);
@@ -88,12 +92,9 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
-        reviewViewModel
-                .fetch(onlyFavorite, selectedSort, quantity, learnedRate, tags)
-                .subscribe(details -> {
-                    mAdapter = new ReviewAdapter(this, isJapaneseReviewed, details);
-                    mViewPager.setAdapter(mAdapter);
-                });
+        reviewViewModel.isJapaneseReview(isJapaneseReviewed);
+        reviewViewModel.reviews(onlyFavorite, selectedSort, quantity, learnedRate, tags)
+                .observe(this, this);
     }
 
     private void handleSwaps(int position) {
@@ -107,5 +108,11 @@ public class ReviewActivity extends AppCompatActivity {
         } else {
             mFabAgain.hide(true);
         }
+    }
+
+    @Override
+    public void onChanged(List<Details> data) {
+        mAdapter = new ReviewAdapter(this, data.size());
+        mViewPager.setAdapter(mAdapter);
     }
 }

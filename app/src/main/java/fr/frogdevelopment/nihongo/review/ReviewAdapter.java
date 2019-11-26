@@ -5,34 +5,27 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
-import java.util.List;
-
-import fr.frogdevelopment.nihongo.data.model.Details;
 
 class ReviewAdapter extends FragmentStateAdapter {
 
     private final int mCount;
-    private final List<Details> mData;
-    private final boolean mIsJapaneseReviewed;
+    private final ReviewViewModel mReviewViewModel;
 
-    ReviewAdapter(FragmentActivity fragmentActivity, boolean isJapaneseType, List<Details> details) {
+    ReviewAdapter(FragmentActivity fragmentActivity, int count) {
         super(fragmentActivity);
-        mData = details;
-        mCount = details.size();
-        mIsJapaneseReviewed = isJapaneseType;
+        mReviewViewModel = new ViewModelProvider(fragmentActivity).get(ReviewViewModel.class);
+        mCount = count;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         ReviewFragment fragment = new ReviewFragment();
-        Details row = mData.get(position);
 
         Bundle args = new Bundle();
-        args.putSerializable("item", row);
-        args.putBoolean("isJapaneseReviewed", mIsJapaneseReviewed);
+        args.putInt("position", position);
         args.putString("count", (position + 1) + "/" + mCount);
 
         fragment.setArguments(args);
