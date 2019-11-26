@@ -195,10 +195,9 @@ public class ReviewParametersFragment extends Fragment {
 
         checkStartButtonEnabled();
 
-        mReviewViewModel
-                .getTags()
-                .doOnSuccess(tags -> {
-                    mTags = tags;
+        mReviewViewModel.tags()
+                .observe(getViewLifecycleOwner(), values -> {
+                    mTags = values;
                     mTags.removeAll(asList(mSelectedTags));
                     updateDropDownTags();
                 });
