@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class PreferencesHelper {
 
     private static final String NAME = "NihonGoPref";
@@ -21,6 +25,14 @@ public class PreferencesHelper {
 
     public String getString(Preferences key) {
         return getString(key.code);
+    }
+
+    public String[] getArrayString(Preferences key, String regex) {
+        return getString(key.code).split(regex);
+    }
+
+    public Set<String> getStrings(Preferences key, String regex) {
+        return Stream.of(getArrayString(key, regex)).collect(Collectors.toSet());
     }
 
     public String getString(String key) {

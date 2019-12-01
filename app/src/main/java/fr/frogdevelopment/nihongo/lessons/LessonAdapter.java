@@ -1,7 +1,3 @@
-/*
- * Copyright (c) Frog Development 2015.
- */
-
 package fr.frogdevelopment.nihongo.lessons;
 
 import android.app.Activity;
@@ -18,11 +14,11 @@ import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
 
-public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
+public class LessonAdapter extends ArrayAdapter<Lesson> {
 
     private final LayoutInflater mInflater;
 
-    LessonAdapter(Activity context, List<LessonsFragment.Lesson> objects) {
+    LessonAdapter(Activity context, List<Lesson> objects) {
         super(context, 0, objects);
 
         mInflater = context.getLayoutInflater();
@@ -57,7 +53,7 @@ public class LessonAdapter extends ArrayAdapter<LessonsFragment.Lesson> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        LessonsFragment.Lesson item = getItem(position);
+        Lesson item = getItem(position);
         holder.text.setText(item.title);
         if (item.isPresent) {
             holder.text.setTypeface(holder.text.getTypeface(), Typeface.ITALIC);

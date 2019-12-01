@@ -108,6 +108,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.frogdevelopment.nihongo.MainActivity" />
         </activity>
+
+        <receiver android:name=".lessons.LessonsFragment$WifiReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
