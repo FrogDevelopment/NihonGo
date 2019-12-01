@@ -166,6 +166,7 @@ public class LessonsFragment extends ListFragment {
                             .collect(toList());
                     setLessons(lessons, true);
                 } else {
+                    getOffLineLessons();
                     Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                     Log.e(LOG_TAG, "fetchAvailableLessons returned status message: " + response.message());
                 }
@@ -173,6 +174,7 @@ public class LessonsFragment extends ListFragment {
 
             @Override
             public void onFailure(Call<List<Lesson>> call, Throwable t) {
+                getOffLineLessons();
                 Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
             }
@@ -252,6 +254,7 @@ public class LessonsFragment extends ListFragment {
                                     .collect(Collectors.joining(";"))
                             );
                 } else {
+                    getOffLineLessons();
                     Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                     Log.e(LOG_TAG, "fetchLessons returned status message: " + response.message());
                 }
@@ -259,6 +262,7 @@ public class LessonsFragment extends ListFragment {
 
             @Override
             public void onFailure(Call<List<Details>> call, Throwable t) {
+                getOffLineLessons();
                 Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
             }
