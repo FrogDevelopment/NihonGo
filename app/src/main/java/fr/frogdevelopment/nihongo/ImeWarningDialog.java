@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dialog;
+package fr.frogdevelopment.nihongo;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -9,13 +9,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 public class ImeWarningDialog extends DialogFragment {
 
-    public static void show(FragmentManager manager) {
+    static void show(FragmentManager manager) {
         new ImeWarningDialog().show(manager, "imeWarningDialog");
     }
 

@@ -25,7 +25,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Locale;
 
 import fr.frogdevelopment.nihongo.about.AboutFragment;
-import fr.frogdevelopment.nihongo.dialog.ImeWarningDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
 import fr.frogdevelopment.nihongo.kana.KanaViewPage;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
