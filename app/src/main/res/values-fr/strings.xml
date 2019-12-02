@@ -257,7 +257,6 @@
     <!--   HELP  -->
     <!-- ******* -->
     <string name="help_title">Aide</string>
-    <string name="help_dico_intro">Voici quelques aides pour le dictionnaire</string>
     <string name="help_dico_one_press_description">1 pression</string>
     <string name="help_dico_one_press">Presser 1 fois pour permutter entre Kanji et Kana</string>
     <string name="help_dico_two_press_description">2 pressions</string>

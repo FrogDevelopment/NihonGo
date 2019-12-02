@@ -35,15 +35,11 @@ import java.util.Set;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Row;
-import fr.frogdevelopment.nihongo.dialog.HelpDialog;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
 import fr.frogdevelopment.nihongo.dico.update.UpdateActivity;
-import fr.frogdevelopment.nihongo.preferences.Preferences;
-import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
-import static fr.frogdevelopment.nihongo.R.layout.dialog_help_dico;
 import static fr.frogdevelopment.nihongo.R.layout.dico_fragment;
 import static fr.frogdevelopment.nihongo.R.string.delete;
 import static fr.frogdevelopment.nihongo.R.string.delete_done;
@@ -90,15 +86,6 @@ public class DicoFragment extends ListFragment {
         mFabAdd.setOnClickListener(view -> onAddInput());
 
         return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        boolean doNotShow = PreferencesHelper.getInstance(requireContext()).getBoolean(Preferences.HELP_DICO);
-        if (!doNotShow) {
-            HelpDialog.show(getParentFragmentManager(), dialog_help_dico, true);
-        }
     }
 
     @Override
@@ -185,7 +172,7 @@ public class DicoFragment extends ListFragment {
                 break;
 
             case R.id.dico_help:
-                HelpDialog.show(getParentFragmentManager(), dialog_help_dico);
+                DicoHelpDialog.show(getParentFragmentManager());
                 break;
 
             default:

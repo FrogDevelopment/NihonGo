@@ -5,14 +5,6 @@
     android:orientation="vertical"
     android:padding="6dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="8dp"
-        android:padding="2dp"
-        android:text="@string/help_dico_intro"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,12 +116,5 @@
             android:text="@string/help_dico_add"/>
 
     </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/cb_remember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="@string/cb_remember"/>
 
 </LinearLayout>

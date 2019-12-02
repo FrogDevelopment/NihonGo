@@ -282,7 +282,6 @@
     <!--   HELP  -->
     <!-- ******* -->
     <string name="help_title">Help</string>
-    <string name="help_dico_intro">Here is some help for the dico view</string>
     <string name="help_dico_one_press_description">1 press</string>
     <string name="help_dico_one_press">Press 1 time to switch between Kanji and Kana</string>
     <string name="help_dico_two_press_description">2 presses</string>
