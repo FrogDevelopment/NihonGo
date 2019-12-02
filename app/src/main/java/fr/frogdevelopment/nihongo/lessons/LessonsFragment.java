@@ -42,6 +42,7 @@ import retrofit2.Response;
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static android.widget.RelativeLayout.LayoutParams.MATCH_PARENT;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -52,48 +53,56 @@ public class LessonsFragment extends ListFragment {
     private static final String[] LANGUAGES = {"fr_FR", "en_US"};
     private static final String DEFAULT_LANGUAGE = "en_US";
 
-    private LessonAdapter adapter;
+    private LessonAdapter mLessonAdapter;
 
-    private String myLocale = Locale.getDefault().toString();
+    private String mLocale = Locale.getDefault().toString();
 
-    private Set<String> lessonsDownloaded;
+    private Set<String> mLessonsDownloaded;
 
     private WifiReceiver mWiFiReceiver;
-    private TestConnectionTask testConnectionTask;
-    private LessonsService lessonsService;
+    private TestConnectionTask mTestConnectionTask;
+    private LessonsService mLessonsService;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lessonsService = new RestServiceFactory().getLessonsService();
-    }
+        mLessonsService = new RestServiceFactory().getLessonsService();
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
-
-        RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.lessons_fragment, container, false);
-
-        myLocale = Locale.getDefault().toString();
-        if (!ArrayUtils.contains(LANGUAGES, myLocale)) {
-            myLocale = DEFAULT_LANGUAGE;
+        mLocale = Locale.getDefault().toString();
+        if (!ArrayUtils.contains(LANGUAGES, mLocale)) {
+            mLocale = DEFAULT_LANGUAGE;
         }
-        // Downloaded Lessons
-        lessonsDownloaded = PreferencesHelper.getInstance(requireContext()).getStrings(Preferences.LESSONS, ";");
+
+        mLessonsDownloaded = PreferencesHelper.getInstance(requireContext()).getStrings(Preferences.LESSONS, ";");
 
         // Listener for WiFi state
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(CONNECTIVITY_ACTION);
         mWiFiReceiver = new WifiReceiver();
         requireActivity().registerReceiver(mWiFiReceiver, intentFilter);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.lessons_fragment, container, false);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        params.addRule(RelativeLayout.BELOW, R.id.lesson_no_connection_test);
+        rootView.addView(super.onCreateView(inflater, rootView, savedInstanceState), params);
 
         return rootView;
     }
 
     @Override
-    public void onDestroyView() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setListShown(false);
+    }
+
+    @Override
+    public void onDestroy() {
         requireActivity().unregisterReceiver(mWiFiReceiver);
-        super.onDestroyView();
+        super.onDestroy();
     }
 
     private class WifiReceiver extends BroadcastReceiver {
@@ -122,15 +131,15 @@ public class LessonsFragment extends ListFragment {
         }
 
         private void testConnection() {
-            if (testConnectionTask == null) {
-                testConnectionTask = new TestConnectionTask(LessonsFragment.this::onConnectionResult);
-                testConnectionTask.execute();
+            if (mTestConnectionTask == null) {
+                mTestConnectionTask = new TestConnectionTask(LessonsFragment.this::onConnectionResult);
+                mTestConnectionTask.execute();
             }
         }
     }
 
     private void onConnectionResult(boolean result) {
-        testConnectionTask = null;
+        mTestConnectionTask = null;
 
         if (result) {
             getAvailableLessons();
@@ -144,17 +153,19 @@ public class LessonsFragment extends ListFragment {
     private void getOffLineLessons() {
         String tag = getString(R.string.lesson_tag);
 
-        List<Lesson> lessons = lessonsDownloaded.stream()
+        List<Lesson> lessons = mLessonsDownloaded.stream()
                 .sorted()
                 .filter(StringUtils::isNotBlank)
                 .map(code -> new Lesson(code, tag + " " + code, true))
                 .collect(toList());
 
+        requireView().findViewById(R.id.lesson_no_connection_test).setVisibility(VISIBLE);
         setLessons(lessons, false);
     }
 
     private void getAvailableLessons() {
-        lessonsService.fetchAvailableLessons(myLocale).enqueue(new Callback<List<Lesson>>() {
+        setListShown(false);
+        mLessonsService.fetchAvailableLessons(mLocale).enqueue(new Callback<List<Lesson>>() {
             @Override
             public void onResponse(Call<List<Lesson>> call, Response<List<Lesson>> response) {
                 if (response.isSuccessful()) {
@@ -168,7 +179,7 @@ public class LessonsFragment extends ListFragment {
                 } else {
                     getOffLineLessons();
                     Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-                    Log.e(LOG_TAG, "fetchAvailableLessons returned status message: " + response.message());
+                    Log.e(LOG_TAG, "fetchAvailableLessons returned status code: " + response.code());
                 }
             }
 
@@ -182,13 +193,14 @@ public class LessonsFragment extends ListFragment {
     }
 
     private void isLessonAlreadyPresent(Lesson lesson) {
-        lesson.isPresent = lessonsDownloaded.contains(lesson.code);
+        lesson.isPresent = mLessonsDownloaded.contains(lesson.code);
     }
 
     private void setLessons(List<Lesson> lessons, boolean hasInternet) {
-        adapter = new LessonAdapter(requireActivity(), lessons);
-        adapter.setEnabled(hasInternet);
-        setListAdapter(adapter);
+        mLessonAdapter = new LessonAdapter(requireActivity(), lessons);
+        mLessonAdapter.setEnabled(hasInternet);
+        setListAdapter(mLessonAdapter);
+        setListShown(true);
     }
 
     @Override
@@ -197,13 +209,13 @@ public class LessonsFragment extends ListFragment {
     }
 
     private void checkBeforeDownloadLessons(int position) {
-        Lesson lesson = adapter.getItem(position);
+        Lesson lesson = mLessonAdapter.getItem(position);
         if (lesson == null) {
             // fixme
             return;
         }
 
-        boolean isAlreadyPresent = lesson.isPresent || lessonsDownloaded.contains(lesson.code);
+        boolean isAlreadyPresent = lesson.isPresent || mLessonsDownloaded.contains(lesson.code);
         if (isAlreadyPresent) {
             new MaterialAlertDialogBuilder(requireContext())
                     .setIcon(R.drawable.ic_warning)
@@ -218,7 +230,7 @@ public class LessonsFragment extends ListFragment {
     }
 
     private void downloadLesson(Lesson lesson) {
-        lessonsService.fetchLessons(myLocale, lesson.code).enqueue(new Callback<List<Details>>() {
+        mLessonsService.fetchLessons(mLocale, lesson.code).enqueue(new Callback<List<Details>>() {
             @Override
             public void onResponse(Call<List<Details>> call, Response<List<Details>> response) {
                 if (response.isSuccessful()) {
@@ -243,12 +255,12 @@ public class LessonsFragment extends ListFragment {
 
 
                     lesson.isPresent = true;
-                    adapter.notifyDataSetChanged();
+                    mLessonAdapter.notifyDataSetChanged();
 
 //                    lessonsDownloaded.add(lesson.code);
 
                     PreferencesHelper.getInstance(requireContext())
-                            .saveString(Preferences.LESSONS, lessonsDownloaded
+                            .saveString(Preferences.LESSONS, mLessonsDownloaded
                                     .stream()
                                     .filter(StringUtils::isNotBlank)
                                     .collect(Collectors.joining(";"))
@@ -256,7 +268,7 @@ public class LessonsFragment extends ListFragment {
                 } else {
                     getOffLineLessons();
                     Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
-                    Log.e(LOG_TAG, "fetchLessons returned status message: " + response.message());
+                    Log.e(LOG_TAG, "fetchLessons returned status code: " + response.code());
                 }
             }
 

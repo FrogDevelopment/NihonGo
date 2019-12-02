@@ -83,6 +83,4 @@ dependencies {
     // 3th lib
     implementation "org.apache.commons:commons-lang3:$commons_lang_version"
 
-    // TO DELETE
-
 }
