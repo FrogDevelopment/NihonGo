@@ -29,7 +29,7 @@
 
     </RelativeLayout>
 
-    <com.github.clans.fab.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         style="@style/NormalFabStyle"
         android:layout_width="wrap_content"

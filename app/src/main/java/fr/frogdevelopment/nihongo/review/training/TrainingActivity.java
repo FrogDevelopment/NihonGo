@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.github.clans.fab.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class TrainingActivity extends AppCompatActivity implements Observer<List
 
         TrainingViewModel trainingViewModel = new ViewModelProvider(this).get(TrainingViewModel.class);
 
-        setContentView(R.layout.activity_review);
+        setContentView(R.layout.review_activity);
 
         mSwapLeft = findViewById(R.id.swap_left);
         mSwapLeft.setOnClickListener(v -> mViewPager.setCurrentItem(--mCurrentPosition));
@@ -70,7 +70,7 @@ public class TrainingActivity extends AppCompatActivity implements Observer<List
 
         mFabAgain = findViewById(R.id.fab_again);
         mFabAgain.setOnClickListener(view -> {
-            mFabAgain.hide(true);
+            mFabAgain.hide();
             mViewPager.setCurrentItem(0);
         });
 
@@ -104,9 +104,9 @@ public class TrainingActivity extends AppCompatActivity implements Observer<List
         boolean lastPosition = position + 1 == mAdapter.getItemCount();
         mSwapRight.setVisibility(lastPosition ? INVISIBLE : VISIBLE);
         if (lastPosition) {
-            mFabAgain.show(true);
+            mFabAgain.show();
         } else {
-            mFabAgain.hide(true);
+            mFabAgain.hide();
         }
     }
 

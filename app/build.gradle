@@ -72,10 +72,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.viewpager2:viewpager2:$viewpager2_version"
-    // https://github.com/Clans/FloatingActionButton
-    implementation "com.github.clans:fab:$fab_version"
 
-    //
+    // REST Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
 //    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"

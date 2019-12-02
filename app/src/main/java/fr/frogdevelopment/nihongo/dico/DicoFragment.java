@@ -24,8 +24,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,7 +44,7 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
 import static fr.frogdevelopment.nihongo.R.layout.dialog_help_dico;
-import static fr.frogdevelopment.nihongo.R.layout.fragment_dico;
+import static fr.frogdevelopment.nihongo.R.layout.dico_fragment;
 import static fr.frogdevelopment.nihongo.R.string.delete;
 import static fr.frogdevelopment.nihongo.R.string.delete_done;
 import static fr.frogdevelopment.nihongo.R.string.delete_title;
@@ -84,7 +84,7 @@ public class DicoFragment extends ListFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(fragment_dico, container, false);
+        View rootView = inflater.inflate(dico_fragment, container, false);
 
         mFabAdd = rootView.findViewById(R.id.fab_add);
         mFabAdd.setOnClickListener(view -> onAddInput());
@@ -121,10 +121,10 @@ public class DicoFragment extends ListFragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 switch (scrollState) {
                     case SCROLL_STATE_IDLE:
-                        mFabAdd.show(true);
+                        mFabAdd.show();
                         break;
                     case SCROLL_STATE_TOUCH_SCROLL:
-                        mFabAdd.hide(true);
+                        mFabAdd.hide();
                         break;
                 }
             }
@@ -149,7 +149,7 @@ public class DicoFragment extends ListFragment {
 
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                mFabAdd.hide(true);
+                mFabAdd.hide();
                 return true;
             }
 
@@ -159,7 +159,7 @@ public class DicoFragment extends ListFragment {
                 fetchData(false);
                 mIsSearchQuery = false;
                 requireActivity().invalidateOptionsMenu();
-                mFabAdd.show(true);
+                mFabAdd.show();
                 return true;
             }
         });
