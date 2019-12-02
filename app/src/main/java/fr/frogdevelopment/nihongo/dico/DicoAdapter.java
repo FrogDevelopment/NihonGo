@@ -26,7 +26,7 @@ import fr.frogdevelopment.nihongo.data.model.Row;
 import static fr.frogdevelopment.nihongo.R.layout.row_entry;
 import static fr.frogdevelopment.nihongo.R.layout.row_header;
 import static org.apache.commons.lang3.StringUtils.isAlpha;
-import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class DicoAdapter extends BaseAdapter implements SectionIndexer {
 
@@ -121,7 +121,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         Row row = getItem(position);
         holder.mInputView.setText(row.input);
         holder.switcher.setDisplayedChild(0);
-        if (isNoneBlank(row.kanji)) {
+        if (isNotBlank(row.kanji)) {
             holder.switchable = true;
             holder.switcherKanji.setText(row.kanji);
             holder.switcherKana.setText(row.kana);
