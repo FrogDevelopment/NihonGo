@@ -26,9 +26,6 @@ allprojects {
             url 'https://maven.google.com'
         }
         maven {
-            url 'https://jitpack.io'
-        }
-        maven {
             url = "$repoUrl/libs-public"
         }
     }
