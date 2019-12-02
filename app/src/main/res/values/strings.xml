@@ -225,6 +225,7 @@
     <!-- HELP -->
     <!-- ****** -->
     <string name="help_chart_description">Hiragana and Katakana</string>
+    <string name="global_kana" translatable="false">Tables Kana</string>
     <string name="global_hiragana" translatable="false">Hiragana</string>
     <string name="global_katakana" translatable="false">Katakana</string>
 

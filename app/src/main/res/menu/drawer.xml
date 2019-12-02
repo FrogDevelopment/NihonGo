@@ -8,6 +8,10 @@
             android:checked="true"
             android:icon="@drawable/ic_baseline_translate_24"
             android:title="@string/drawer_item_entries" />
+        <item
+            android:id="@+id/navigation_kana"
+            android:icon="@drawable/ic_baseline_view_comfy_24"
+            android:title="@string/global_kana" />
     </group>
     <group
         android:id="@+id/group_todo"
@@ -22,20 +26,6 @@
             android:icon="@drawable/ic_baseline_school_24"
             android:title="@string/drawer_item_test" />
     </group>
-
-    <group
-        android:id="@+id/group_kana"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/navigation_hiragana"
-            android:icon="@drawable/ic_hiragana_white"
-            android:title="@string/global_hiragana" />
-        <item
-            android:id="@+id/navigation_katakana"
-            android:icon="@drawable/ic_katakana_white"
-            android:title="@string/global_katakana" />
-    </group>
-
     <group
         android:id="@+id/group_config"
         android:checkableBehavior="single">

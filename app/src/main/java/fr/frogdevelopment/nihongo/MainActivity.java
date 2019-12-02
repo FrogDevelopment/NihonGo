@@ -131,20 +131,9 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new TestParametersFragment();
                 break;
 
-            case R.id.navigation_hiragana:
-                mFragmentTitle = R.string.global_hiragana;
+            case R.id.navigation_kana:
+                mFragmentTitle = R.string.global_kana;
                 fragment = new KanaViewPage();
-                args = new Bundle();
-                args.putInt("imageSource", R.drawable.table_hiragana);
-                fragment.setArguments(args);
-                break;
-
-            case R.id.navigation_katakana:
-                mFragmentTitle = R.string.global_katakana;
-                fragment = new KanaViewPage();
-                args = new Bundle();
-                args.putInt("imageSource", R.drawable.table_katakana);
-                fragment.setArguments(args);
                 break;
 
             case R.id.navigation_parameters:
