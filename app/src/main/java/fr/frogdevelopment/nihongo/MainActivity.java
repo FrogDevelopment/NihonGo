@@ -25,7 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Locale;
 
 import fr.frogdevelopment.nihongo.about.AboutFragment;
-import fr.frogdevelopment.nihongo.dialog.WarningIMEDialog;
+import fr.frogdevelopment.nihongo.dialog.ImeWarningDialog;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
 import fr.frogdevelopment.nihongo.kana.KanaViewPage;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         LocaleList locales = Resources.getSystem().getConfiguration().getLocales();
         boolean isNoJapanIME = locales.indexOf(Locale.JAPAN) < 0;
         if (isNoJapanIME) {
-            boolean rememberWarning = PreferencesHelper.getInstance(this).getBoolean(Preferences.REMEMBER_WARNING_IME);
-            if (!rememberWarning) {
-                WarningIMEDialog.show(getSupportFragmentManager());
+            boolean skipImeWarning = PreferencesHelper.getInstance(this).getBoolean(Preferences.SKIP_WARNING_IME);
+            if (!skipImeWarning) {
+                ImeWarningDialog.show(getSupportFragmentManager());
             }
         }
     }
