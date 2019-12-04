@@ -20,7 +20,7 @@
             <Switch
                 android:id="@+id/review_switch_language"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:checked="true"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -32,7 +32,7 @@
             <Switch
                 android:id="@+id/review_switch_favorite"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:checked="false"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -116,7 +116,7 @@
     <Switch
         android:id="@+id/review_switch_keep"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:checked="false"
         android:text="@string/param_keep_config"
         android:textOff="@string/no"

@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -12,25 +9,19 @@
     <TextView
         android:id="@+id/about_version"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="@string/about_version"
-        android:padding="2dp"/>
+        android:layout_height="50dp"
+        android:text="@string/about_version" />
 
     <TextView
         android:id="@+id/about_hiragana_link"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:padding="2dp"
+        android:layout_height="50dp"
         android:text="@string/about_hiragana_link"/>
 
     <TextView
         android:id="@+id/about_katakana_link"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:padding="2dp"
+        android:layout_height="50dp"
         android:text="@string/about_katakana_link"/>
 
 
