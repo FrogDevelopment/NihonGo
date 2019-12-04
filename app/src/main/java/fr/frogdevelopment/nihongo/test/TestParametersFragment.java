@@ -68,7 +68,7 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_test_parameters, container, false);
+        return inflater.inflate(R.layout.test_parameters_fragment, container, false);
     }
 
     @Override

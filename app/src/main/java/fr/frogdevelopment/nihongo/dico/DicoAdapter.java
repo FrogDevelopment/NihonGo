@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Row;
 
-import static fr.frogdevelopment.nihongo.R.layout.row_entry;
-import static fr.frogdevelopment.nihongo.R.layout.row_header;
+import static fr.frogdevelopment.nihongo.R.layout.dico_row_entry;
+import static fr.frogdevelopment.nihongo.R.layout.dico_row_header;
 import static org.apache.commons.lang3.StringUtils.isAlpha;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -86,7 +86,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
     private View getHeaderView(int position, View convertView, ViewGroup parent, View view) {
         LetterViewHolder holder;
         if (view == null) {
-            view = mInflater.inflate(row_header, parent, false);
+            view = mInflater.inflate(dico_row_header, parent, false);
             holder = new LetterViewHolder(view);
             view.setTag(holder);
         } else {
@@ -110,7 +110,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         View view;
         ViewHolder holder;
         if (convertView == null) {
-            view = mInflater.inflate(row_entry, parent, false);
+            view = mInflater.inflate(dico_row_entry, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {

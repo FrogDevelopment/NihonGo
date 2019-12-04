@@ -45,7 +45,7 @@ public class TestResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_test_result);
+        setContentView(R.layout.test_result_activity);
 
         Switch quantitySwitch = findViewById(R.id.test_result_quantity_switch);
         quantitySwitch.setOnCheckedChangeListener((compoundButton, b) -> adapter.getFilter().filter(Boolean.toString(b)));
@@ -87,7 +87,7 @@ public class TestResultActivity extends AppCompatActivity {
         private final LayoutInflater mInflater;
 
         ResultAdapter(Activity context, List<Result> objects) {
-            super(context, R.layout.row_test_result);
+            super(context, R.layout.test_result_row);
             mObjects = objects;
             mInflater = context.getLayoutInflater();
         }
@@ -98,7 +98,7 @@ public class TestResultActivity extends AppCompatActivity {
             ResultHolder holder;
 
             if (view == null) {
-                view = mInflater.inflate(R.layout.row_test_result, parent, false);
+                view = mInflater.inflate(R.layout.test_result_row, parent, false);
                 holder = new ResultHolder(view);
 
                 view.setTag(holder);

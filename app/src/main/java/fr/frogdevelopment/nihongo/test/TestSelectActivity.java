@@ -33,7 +33,7 @@ public class TestSelectActivity extends TestAbstractActivity {
     private List<Details> itemsQCM = new ArrayList<>();
 
     public TestSelectActivity() {
-        super(R.layout.activity_test_select);
+        super(R.layout.test_select_activity);
     }
 
     @Override

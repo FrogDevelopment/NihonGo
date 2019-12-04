@@ -46,7 +46,7 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.row_lesson, parent, false);
+            convertView = mInflater.inflate(R.layout.lesson_row, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

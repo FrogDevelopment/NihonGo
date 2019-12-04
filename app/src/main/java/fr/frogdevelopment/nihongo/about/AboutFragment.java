@@ -18,7 +18,7 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        View rootView = inflater.inflate(R.layout.about_fragment, container, false);
 
         TextView version = rootView.findViewById(R.id.about_version);
         version.setText(getString(R.string.about_version, BuildConfig.VERSION_NAME));

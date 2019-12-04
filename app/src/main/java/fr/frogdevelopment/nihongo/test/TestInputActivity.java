@@ -24,7 +24,7 @@ public class TestInputActivity extends TestAbstractActivity {
     private EditText answerView;
 
     public TestInputActivity() {
-        super(R.layout.activity_test_input);
+        super(R.layout.test_input_activity);
     }
 
     @Override

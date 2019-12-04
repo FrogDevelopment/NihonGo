@@ -46,7 +46,7 @@ public class TrainingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTrainingViewModel = new ViewModelProvider(requireActivity()).get(TrainingViewModel.class);
-        return inflater.inflate(R.layout.fragment_review, container, false);
+        return inflater.inflate(R.layout.review_fragment, container, false);
     }
 
     @Override
