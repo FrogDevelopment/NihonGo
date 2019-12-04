@@ -21,7 +21,9 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.ListFragment;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -38,6 +40,7 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Row;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
 import fr.frogdevelopment.nihongo.dico.update.UpdateActivity;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static android.widget.AbsListView.CHOICE_MODE_MULTIPLE_MODAL;
@@ -129,6 +132,8 @@ public class DicoFragment extends ListFragment {
         } else {
             fetchData(false);
         }
+
+        showAddPrompt();
     }
 
     @Override
@@ -368,5 +373,47 @@ public class DicoFragment extends ListFragment {
             return false;
         }
     };
+
+    private void showAddPrompt() {
+        new MaterialTapTargetPrompt.Builder(requireActivity())
+                .setTarget(R.id.fab_add)
+                .setPrimaryText("Add a new entry")
+                .setSecondaryText("Tap the + to start writing your first word")
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_DISMISSED) {
+                        showSearchPrompt();
+                    }
+                })
+                .show();
+    }
+
+    private void showSearchPrompt() {
+        new MaterialTapTargetPrompt.Builder(requireActivity())
+                .setTarget(R.id.dico_menu_search)
+                .setPrimaryText("Search a word")
+                .setSecondaryText("Tap the icon to quickly filter your data")
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_DISMISSED) {
+                        showDrawerPrompt();
+                    }
+                })
+                .setIcon(R.drawable.ic_baseline_search_24)
+                .show();
+    }
+
+    private void showDrawerPrompt() {
+        Toolbar toolbar = requireActivity().findViewById(androidx.appcompat.R.id.action_bar);
+        if (toolbar != null) {
+            new MaterialTapTargetPrompt.Builder(requireActivity())
+                    .setTarget(toolbar.getChildAt(1))
+                    .setPrimaryText("Open the drawer")
+                    .setSecondaryText("And select Lessons to download some")
+                    .setPromptStateChangeListener((prompt, state) -> {
+                    })
+                    .setAnimationInterpolator(new FastOutSlowInInterpolator())
+                    .setIcon(R.drawable.ic_baseline_menu_24)
+                    .show();
+        }
+    }
 
 }

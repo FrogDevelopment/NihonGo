@@ -33,6 +33,7 @@ import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.WORD;
@@ -96,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 // Close the soft-keyboard
                 mInputMethodManager.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
+
+                new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                        .setTarget(R.id.navigation_lessons)
+                        .setPrimaryText("Download ready lessons")
+                        .setSecondaryText("Blabla bla")
+                        .show();
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
