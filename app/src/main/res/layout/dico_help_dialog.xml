@@ -106,7 +106,8 @@
             android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add" />
+            android:src="@drawable/fab_add"
+            android:contentDescription="@string/help_dico_add" />
 
         <TextView
             android:layout_width="wrap_content"

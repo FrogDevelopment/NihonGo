@@ -191,6 +191,7 @@
     <string name="review_switch_kanji">Tap to show Kanji</string>
     <string name="review_switch_kana">Tap to show Kana</string>
     <string name="review_switch_input">Tap to show English</string>
+    <string name="review_again">Do again</string>
 
     <!-- ******* -->
     <!-- TEST -->
