@@ -51,7 +51,6 @@ public class TrainingFragment extends Fragment {
         TextView exampleView = rootView.findViewById(R.id.review_example);
         TextView tagsViewTitle = rootView.findViewById(R.id.review_tags_title);
         TextView tagsView = rootView.findViewById(R.id.review_tags);
-        TextView successView = rootView.findViewById(R.id.review_success);
 
         mKanaSwitcher = rootView.findViewById(R.id.review_textSwitcher_kana);
         mKanaSwitcher.setOnClickListener(view -> {
@@ -136,9 +135,6 @@ public class TrainingFragment extends Fragment {
             tagsView.setVisibility(View.GONE);
             tagsViewTitle.setVisibility(View.GONE);
         }
-
-        int total = mRow.success + mRow.failed;
-        successView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mRow.success / total) * 100)));
 
         mBookmark = rootView.findViewById(R.id.bookmark);
         mBookmark.setOnClickListener(v -> bookmarkItem());

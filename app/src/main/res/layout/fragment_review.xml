@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="22dp"
-    android:paddingTop="10dp"
     android:paddingEnd="22dp">
 
     <TextView
@@ -29,7 +28,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/review_success"
+        android:layout_above="@id/review_rating"
         android:layout_below="@id/bookmark"
         android:fadeScrollbars="false"
         android:scrollbarStyle="outsideOverlay">
@@ -151,17 +150,8 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@id/review_success"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/review_rating"
-        android:layout_marginTop="10dp"
-        android:text="@string/details_ratio"
-        android:textSize="12sp" />
-
     <LinearLayout
-        android:id="@id/review_rating"
+        android:id="@+id/review_rating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
