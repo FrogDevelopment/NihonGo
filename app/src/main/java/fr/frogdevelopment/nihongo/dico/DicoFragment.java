@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import fr.frogdevelopment.nihongo.R;
@@ -66,21 +67,15 @@ public class DicoFragment extends ListFragment {
 
         mRowViewModel = new ViewModelProvider(this).get(RowViewModel.class);
 
-        Bundle arguments = getArguments();
-        mIsSearchQuery = arguments != null && arguments.containsKey("query");
-        if (mIsSearchQuery) {
-            searchData(arguments.getString("query"));
-        } else {
-            fetchData(false);
-        }
         setHasOptionsMenu(true);
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(dico_fragment, container, false);
+
+        FrameLayout contentView = rootView.findViewById(R.id.dico_content);
+        contentView.addView(super.onCreateView(inflater, contentView, savedInstanceState));
 
         mFabAdd = rootView.findViewById(R.id.fab_add);
         mFabAdd.setOnClickListener(view -> onAddInput());
@@ -90,6 +85,11 @@ public class DicoFragment extends ListFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setEmptyText(getString(R.string.dico_no_data));
+        setListShown(false);
+
         GestureDetector gestureDetector = new GestureDetector(requireActivity(), gestureListener);
         ListView listView = getListView();
         listView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
@@ -97,11 +97,11 @@ public class DicoFragment extends ListFragment {
         listView.setMultiChoiceModeListener(multiChoiceListener);
         listView.setOnItemLongClickListener((parent, view1, position, id) -> {
             if (mDicoAdapter.isHeader(position)) {
-                return true;
+                return false;
             }
 
-            ((ListView) parent).setItemChecked(position, ((ListView) parent).isItemChecked(position));
-            return false;
+            listView.setItemChecked(position, listView.isItemChecked(position));
+            return true;
         });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -122,7 +122,13 @@ public class DicoFragment extends ListFragment {
             }
         });
 
-        super.onViewCreated(view, savedInstanceState);
+        Bundle arguments = getArguments();
+        mIsSearchQuery = arguments != null && arguments.containsKey("query");
+        if (mIsSearchQuery) {
+            searchData(arguments.getString("query"));
+        } else {
+            fetchData(false);
+        }
     }
 
     @Override
@@ -158,7 +164,7 @@ public class DicoFragment extends ListFragment {
         if (searchManager != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
         }
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setIconifiedByDefault(false);
         searchView.setImeOptions(IME_ACTION_SEARCH);
     }
 
@@ -183,21 +189,16 @@ public class DicoFragment extends ListFragment {
     }
 
     private void fetchData(boolean isFilteredByFavorite) {
-        mRowViewModel.getAll(isFilteredByFavorite).observe(this, rows -> mDicoAdapter.setRows(rows));
+        mRowViewModel.getAll(isFilteredByFavorite).observe(getViewLifecycleOwner(), this::setData);
     }
 
     private void searchData(String query) {
-        mRowViewModel.search(query).observe(this, rows -> {
-            hideKeyboard();
-            mDicoAdapter.setRows(rows);
-        });
+        mRowViewModel.search(query).observe(getViewLifecycleOwner(), this::setData);
     }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
-        }
+    private void setData(List<Row> rows) {
+        mDicoAdapter.setRows(rows);
+        setListShown(true);
     }
 
     private void onUpdate(final int position) {
