@@ -54,6 +54,7 @@
     <string name="rate_1">See</string>
     <string name="rate_2">Learned</string>
 
+    <string name="bookmark_description">Add or Remove bookmark</string>
     <string name="bookmark_add">Add to bookmarks</string>
     <string name="bookmark_remove">Remove from bookmarks</string>
 

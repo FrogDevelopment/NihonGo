@@ -44,6 +44,7 @@
     <string name="rate_1">Vu</string>
     <string name="rate_2">Connu</string>
 
+    <string name="bookmark_description">Ajouter ou Supprimer favori</string>
     <string name="bookmark_add">Ajouté aux favoris</string>
     <string name="bookmark_remove">Supprimé des favoris</string>
 
