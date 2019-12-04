@@ -128,25 +128,11 @@
                 android:textSize="20sp"
                 android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/review_tags_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="start"
-                android:text="@string/details_tags"
-                android:textSize="12sp"
-                android:visibility="gone" />
-
-            <TextView
+            <com.google.android.material.chip.ChipGroup
                 android:id="@+id/review_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="20sp"
-                android:textStyle="italic"
-                android:visibility="gone" />
+                android:layout_marginTop="20dp" />
         </LinearLayout>
     </ScrollView>
 

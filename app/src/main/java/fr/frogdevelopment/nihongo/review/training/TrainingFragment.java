@@ -14,11 +14,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static fr.frogdevelopment.nihongo.R.id.review_count;
 
 public class TrainingFragment extends Fragment {
@@ -33,6 +41,7 @@ public class TrainingFragment extends Fragment {
     private TextSwitcher mKanaSwitcher;
     private TextSwitcher mTestSwitcher;
     private TrainingViewModel mTrainingViewModel;
+    private ChipGroup mTagsChipGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,8 +58,7 @@ public class TrainingFragment extends Fragment {
         TextView infoView = rootView.findViewById(R.id.review_info);
         TextView exampleTitleView = rootView.findViewById(R.id.review_example_title);
         TextView exampleView = rootView.findViewById(R.id.review_example);
-        TextView tagsViewTitle = rootView.findViewById(R.id.review_tags_title);
-        TextView tagsView = rootView.findViewById(R.id.review_tags);
+        mTagsChipGroup = rootView.findViewById(R.id.review_tags);
 
         mKanaSwitcher = rootView.findViewById(R.id.review_textSwitcher_kana);
         mKanaSwitcher.setOnClickListener(view -> {
@@ -91,12 +99,12 @@ public class TrainingFragment extends Fragment {
                     test = mRow.kana;
                     mTestSwitcher.setText(getString(R.string.review_switch_kana));
                 }
-                mKanaSwitcher.setVisibility(View.GONE);
+                mKanaSwitcher.setVisibility(INVISIBLE);
             } else {
                 mKanaSwitcher.setText(getString(R.string.review_switch_kana));
             }
         } else {
-            mKanaSwitcher.setVisibility(View.GONE);
+            mKanaSwitcher.setVisibility(INVISIBLE);
         }
 
         if (isJapaneseReviewed) {
@@ -108,32 +116,26 @@ public class TrainingFragment extends Fragment {
 
         if (StringUtils.isNotBlank(mRow.details)) {
             infoView.setText(mRow.details);
-            infoView.setVisibility(View.VISIBLE);
-            infoTitleView.setVisibility(View.VISIBLE);
+            infoView.setVisibility(VISIBLE);
+            infoTitleView.setVisibility(VISIBLE);
         } else {
             infoView.setText(null);
-            infoView.setVisibility(View.GONE);
-            infoTitleView.setVisibility(View.GONE);
+            infoView.setVisibility(GONE);
+            infoTitleView.setVisibility(GONE);
         }
 
         if (StringUtils.isNotBlank(mRow.example)) {
             exampleView.setText(mRow.example);
-            exampleView.setVisibility(View.VISIBLE);
-            exampleTitleView.setVisibility(View.VISIBLE);
+            exampleView.setVisibility(VISIBLE);
+            exampleTitleView.setVisibility(VISIBLE);
         } else {
             exampleView.setText(null);
-            exampleView.setVisibility(View.GONE);
-            exampleTitleView.setVisibility(View.GONE);
+            exampleView.setVisibility(GONE);
+            exampleTitleView.setVisibility(GONE);
         }
 
         if (StringUtils.isNotBlank(mRow.tags)) {
-            tagsView.setText(mRow.tags);
-            tagsView.setVisibility(View.VISIBLE);
-            tagsViewTitle.setVisibility(View.VISIBLE);
-        } else {
-            tagsView.setText(null);
-            tagsView.setVisibility(View.GONE);
-            tagsViewTitle.setVisibility(View.GONE);
+            Stream.of(mRow.tags.split(", ")).forEach(this::addChipToGroup);
         }
 
         mBookmark = rootView.findViewById(R.id.bookmark);
@@ -147,6 +149,16 @@ public class TrainingFragment extends Fragment {
         mRate2 = rootView.findViewById(R.id.rate_2);
         mRate2.setOnClickListener(v -> setRate(2));
         handleRate();
+    }
+
+    private void addChipToGroup(String tag) {
+        Chip chip = new Chip(requireContext());
+        chip.setText(tag);
+        chip.setClickable(false);
+        chip.setChipBackgroundColorResource(R.color.accent);
+        chip.setTextColor(getResources().getColor(R.color.white, requireActivity().getTheme()));
+
+        mTagsChipGroup.addView(chip);
     }
 
     private void handleRate() {
