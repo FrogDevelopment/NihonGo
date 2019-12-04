@@ -31,7 +31,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_lessons"
-            android:icon="@drawable/ic_baseline_archive_24"
+            android:icon="@drawable/ic_baseline_cloud_download_24"
             android:title="@string/drawer_item_lessons" />
         <item
             android:id="@+id/navigation_parameters"
