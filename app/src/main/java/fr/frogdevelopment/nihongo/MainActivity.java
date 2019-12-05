@@ -36,6 +36,8 @@ import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;
 import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.WORD;
@@ -105,13 +107,13 @@ public class MainActivity extends AppCompatActivity {
                         .map(v -> (NavigationMenuItemView) v)
                         .filter(v -> v.getItemData().getItemId() == R.id.navigation_lessons)
                         .findFirst()
-                        .ifPresent(view -> {
-                            new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                    .setTarget(view)
-                                    .setPrimaryText("Download ready lessons")
-                                    .setSecondaryText("Blabla bla")
-                                    .show();
-                        });
+                        .ifPresent(view -> new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                .setTarget(view)
+                                .setPrimaryText("Download ready lessons")
+                                .setSecondaryText("Blabla bla")
+                                .setPromptBackground(new RectanglePromptBackground())
+                                .setPromptFocal(new RectanglePromptFocal())
+                                .show());
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
@@ -127,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Create a new fragment and specify the view to show based on index
-        Bundle args;
         Fragment fragment;
         int mFragmentTitle;
         switch (id) {
