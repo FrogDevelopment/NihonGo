@@ -20,8 +20,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import fr.frogdevelopment.nihongo.about.AboutFragment;
@@ -98,11 +100,18 @@ public class MainActivity extends AppCompatActivity {
                 // Close the soft-keyboard
                 mInputMethodManager.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
 
-                new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                        .setTarget(R.id.navigation_lessons)
-                        .setPrimaryText("Download ready lessons")
-                        .setSecondaryText("Blabla bla")
-                        .show();
+                ArrayList<View> touchables = navigationView.getTouchables();
+                touchables.stream()
+                        .map(v -> (NavigationMenuItemView) v)
+                        .filter(v -> v.getItemData().getItemId() == R.id.navigation_lessons)
+                        .findFirst()
+                        .ifPresent(view -> {
+                            new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                    .setTarget(view)
+                                    .setPrimaryText("Download ready lessons")
+                                    .setSecondaryText("Blabla bla")
+                                    .show();
+                        });
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
