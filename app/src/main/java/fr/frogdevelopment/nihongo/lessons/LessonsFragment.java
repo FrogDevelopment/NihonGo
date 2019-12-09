@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import retrofit2.Call;
@@ -204,9 +203,9 @@ public class LessonsFragment extends ListFragment {
     }
 
     private void downloadLesson(Lesson lesson) {
-        mLessonsService.fetchLessons(mLocale, uncapitalize(lesson.title)).enqueue(new Callback<List<Details>>() {
+        mLessonsService.fetchLessons(mLocale, uncapitalize(lesson.title)).enqueue(new Callback<List<Data>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Details>> call, @NonNull Response<List<Details>> response) {
+            public void onResponse(@NonNull Call<List<Data>> call, @NonNull Response<List<Data>> response) {
                 if (response.isSuccessful()) {
 
                     // fixme insert lesson
@@ -230,7 +229,7 @@ public class LessonsFragment extends ListFragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Details>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Data>> call, @NonNull Throwable t) {
                 getOffLineLessons();
                 Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
