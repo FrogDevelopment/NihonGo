@@ -17,7 +17,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 class RestServiceFactory {
 
     private static final JacksonConverterFactory CONVERTER_FACTORY = JacksonConverterFactory.create();
-    private static final String BASE_URL = "https://www.frog-development.com/nihongo/lessons/";
+    private static final String BASE_URL = "https://gateway.frog-development.com/api/nihongo/lessons/";
 
     private Retrofit retrofit;
 

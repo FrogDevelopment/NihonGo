@@ -5,13 +5,13 @@ import java.util.List;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface LessonsService {
 
-    @GET("lessons/{language}/available")
-    Call<List<Lesson>> fetchAvailableLessons(@Path("language") String language);
+    @GET("last_ready")
+    Call<Integer> fetchAvailableLessons(@Query("locale") String language);
 
-    @GET("lessons/{language}/download/{lesson}")
-    Call<List<Details>> fetchLessons(@Path("language") String language, @Path("lesson") String lesson);
+    @GET("import")
+    Call<List<Details>> fetchLessons(@Query("locale") String language, @Query("lesson") String lesson);
 }

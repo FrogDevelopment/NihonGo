@@ -4,18 +4,14 @@ import androidx.annotation.NonNull;
 
 public class Lesson implements Comparable<Lesson> {
 
-    public String code;
-    public String title;
-    public boolean isPresent;
+    String code;
+    String title;
+    boolean isPresent;
 
-    public Lesson(String code, String title, boolean isPresent) {
+    Lesson(String code, String suffix, boolean isPresent) {
         this.code = code;
-        this.title = title;
+        this.title = suffix + " " + code;
         this.isPresent = isPresent;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     @NonNull

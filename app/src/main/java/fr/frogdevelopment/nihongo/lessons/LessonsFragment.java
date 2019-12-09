@@ -24,12 +24,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
@@ -40,10 +39,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
-import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static android.widget.RelativeLayout.LayoutParams.MATCH_PARENT;
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class LessonsFragment extends ListFragment {
@@ -56,11 +53,11 @@ public class LessonsFragment extends ListFragment {
     private LessonAdapter mLessonAdapter;
 
     private String mLocale = Locale.getDefault().toString();
+    private String mSuffixTag;
 
     private Set<String> mLessonsDownloaded;
 
     private WifiReceiver mWiFiReceiver;
-    private TestConnectionTask mTestConnectionTask;
     private LessonsService mLessonsService;
 
     @Override
@@ -72,6 +69,8 @@ public class LessonsFragment extends ListFragment {
         if (!ArrayUtils.contains(LANGUAGES, mLocale)) {
             mLocale = DEFAULT_LANGUAGE;
         }
+
+        mSuffixTag = getString(R.string.lesson_tag);
 
         mLessonsDownloaded = PreferencesHelper.getInstance(requireContext()).getStrings(Preferences.LESSONS, ";");
 
@@ -113,7 +112,7 @@ public class LessonsFragment extends ListFragment {
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 boolean isConnectedOrConnecting = isConnectedOrConnecting(connectivityManager);
                 if (isConnectedOrConnecting) {
-                    testConnection();
+                    getAvailableLessons();
                 } else {
                     Toast.makeText(context, "Internet connection is need to download lessons", Toast.LENGTH_LONG).show();
                     getOffLineLessons();
@@ -129,34 +128,13 @@ public class LessonsFragment extends ListFragment {
             }
             return isConnectedOrConnecting;
         }
-
-        private void testConnection() {
-            if (mTestConnectionTask == null) {
-                mTestConnectionTask = new TestConnectionTask(LessonsFragment.this::onConnectionResult);
-                mTestConnectionTask.execute();
-            }
-        }
-    }
-
-    private void onConnectionResult(boolean result) {
-        mTestConnectionTask = null;
-
-        if (result) {
-            getAvailableLessons();
-        } else {
-            getOffLineLessons();
-        }
-
-        requireView().findViewById(R.id.lesson_no_connection_test).setVisibility(result ? GONE : VISIBLE);
     }
 
     private void getOffLineLessons() {
-        String tag = getString(R.string.lesson_tag);
-
         List<Lesson> lessons = mLessonsDownloaded.stream()
                 .sorted()
                 .filter(StringUtils::isNotBlank)
-                .map(code -> new Lesson(code, tag + " " + code, true))
+                .map(code -> new Lesson(code, mSuffixTag, true))
                 .collect(toList());
 
         requireView().findViewById(R.id.lesson_no_connection_test).setVisibility(VISIBLE);
@@ -165,35 +143,30 @@ public class LessonsFragment extends ListFragment {
 
     private void getAvailableLessons() {
         setListShown(false);
-        mLessonsService.fetchAvailableLessons(mLocale).enqueue(new Callback<List<Lesson>>() {
+        mLessonsService.fetchAvailableLessons(mLocale).enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<List<Lesson>> call, Response<List<Lesson>> response) {
+            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
                 if (response.isSuccessful()) {
-                    List<Lesson> lessons = Optional.ofNullable(response.body())
-                            .orElse(emptyList())
-                            .stream()
-                            .sorted(Comparator.comparing(Lesson::getCode))
-                            .peek(l -> isLessonAlreadyPresent(l))
+                    Integer lastLesson = Optional.ofNullable(response.body()).orElse(0);
+                    List<Lesson> lessons = IntStream.rangeClosed(1, lastLesson)
+                            .mapToObj(String::valueOf)
+                            .map(n -> new Lesson(n, mSuffixTag, mLessonsDownloaded.contains(n)))
                             .collect(toList());
                     setLessons(lessons, true);
                 } else {
                     getOffLineLessons();
-                    Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), "Lessons service not reachable", Toast.LENGTH_LONG).show();
                     Log.e(LOG_TAG, "fetchAvailableLessons returned status code: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Lesson>> call, Throwable t) {
+            public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                 getOffLineLessons();
                 Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
             }
         });
-    }
-
-    private void isLessonAlreadyPresent(Lesson lesson) {
-        lesson.isPresent = mLessonsDownloaded.contains(lesson.code);
     }
 
     private void setLessons(List<Lesson> lessons, boolean hasInternet) {
@@ -232,39 +205,22 @@ public class LessonsFragment extends ListFragment {
     private void downloadLesson(Lesson lesson) {
         mLessonsService.fetchLessons(mLocale, lesson.code).enqueue(new Callback<List<Details>>() {
             @Override
-            public void onResponse(Call<List<Details>> call, Response<List<Details>> response) {
+            public void onResponse(@NonNull Call<List<Details>> call, @NonNull Response<List<Details>> response) {
                 if (response.isSuccessful()) {
 
                     // fixme insert lesson
 
-                    // Normalizer.normalize(source, Normalizer.Form.NFD) renvoi une chaine unicode décomposé.
-                    // C'est à dire que les caractères accentués seront décomposé en deux caractères (par exemple "à" se transformera en "a`").
-                    // Le replaceAll("[\u0300-\u036F]", "") supprimera tous les caractères unicode allant de u0300 à u036F,
-                    // c'est à dire la plage de code des diacritiques (les accents qu'on a décomposé ci-dessus donc).
-//                    String sortLetter = Normalizer.normalize(input.substring(0, 1), Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
-//
-//                    builder = ContentProviderOperation.newInsert(NihonGoContentProvider.URI_WORD)
-//                            .withValue(DicoContract.SORT_LETTER, sortLetter)
-//                            .withValue(DicoContract.INPUT, input)
-//                            .withValue(DicoContract.KANJI, record.get("kanji"))
-//                            .withValue(DicoContract.KANA, record.get("kana"))
-//                            .withValue(DicoContract.DETAILS, record.get(col_details))
-//                            .withValue(DicoContract.EXAMPLE, record.get(col_example))
-//                            .withValue(DicoContract.TYPE, record.get("type"))
-//                            .withValue(DicoContract.TAGS, tag + " " + numberFormat.format(Integer.valueOf(code)));
 
+//                    lesson.isPresent = true;
+//                    mLessonAdapter.notifyDataSetChanged();
 
-                    lesson.isPresent = true;
-                    mLessonAdapter.notifyDataSetChanged();
-
-//                    lessonsDownloaded.add(lesson.code);
-
-                    PreferencesHelper.getInstance(requireContext())
-                            .saveString(Preferences.LESSONS, mLessonsDownloaded
-                                    .stream()
-                                    .filter(StringUtils::isNotBlank)
-                                    .collect(Collectors.joining(";"))
-                            );
+//                    mLessonsDownloaded.add(lesson.code);
+//                    PreferencesHelper.getInstance(requireContext())
+//                            .saveString(Preferences.LESSONS, mLessonsDownloaded
+//                                    .stream()
+//                                    .filter(StringUtils::isNotBlank)
+//                                    .collect(Collectors.joining(";"))
+//                            );
                 } else {
                     getOffLineLessons();
                     Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
@@ -273,7 +229,7 @@ public class LessonsFragment extends ListFragment {
             }
 
             @Override
-            public void onFailure(Call<List<Details>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Details>> call, @NonNull Throwable t) {
                 getOffLineLessons();
                 Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
