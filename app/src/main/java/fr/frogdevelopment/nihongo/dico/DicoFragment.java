@@ -60,7 +60,6 @@ public class DicoFragment extends ListFragment {
 
     private FloatingActionButton mFabAdd;
     private boolean mIsSearchQuery;
-    private boolean mIsOnBoarding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,16 +126,16 @@ public class DicoFragment extends ListFragment {
         });
 
         Bundle arguments = getArguments();
-        mIsOnBoarding = arguments != null && arguments.getBoolean("isOnBoarding");
+        boolean isOnBoarding = arguments != null && arguments.getBoolean("isOnBoarding");
+        if (isOnBoarding) {
+            showAddPrompt();
+        }
+
         mIsSearchQuery = arguments != null && arguments.containsKey("query");
         if (mIsSearchQuery) {
             searchData(arguments.getString("query"));
         } else {
             fetchData(false);
-        }
-
-        if (mIsOnBoarding) {
-            showAddPrompt();
         }
     }
 

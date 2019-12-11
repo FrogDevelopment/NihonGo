@@ -56,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerLayout();
 
         if (savedInstanceState == null) {
-            selectItemAtIndex(R.id.navigation_entries);
-
             mIsOnBoardingDone = PreferencesHelper.getInstance(this).getBoolean(ON_BOARDING_DONE);
+            selectItemAtIndex(R.id.navigation_entries);
         }
 
         handleIntent(getIntent());
