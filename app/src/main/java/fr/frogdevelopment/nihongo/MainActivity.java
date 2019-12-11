@@ -23,7 +23,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import fr.frogdevelopment.nihongo.about.AboutFragment;
@@ -39,11 +38,14 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
+import static fr.frogdevelopment.nihongo.preferences.Preferences.ON_BOARDING_DONE;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private InputMethodManager mInputMethodManager;
+    private boolean mIsOnBoardingDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             selectItemAtIndex(R.id.navigation_entries);
+
+            mIsOnBoardingDone = PreferencesHelper.getInstance(this).getBoolean(ON_BOARDING_DONE);
         }
 
         handleIntent(getIntent());
@@ -99,18 +103,23 @@ public class MainActivity extends AppCompatActivity {
                 // Close the soft-keyboard
                 mInputMethodManager.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
 
-                ArrayList<View> touchables = navigationView.getTouchables();
-                touchables.stream()
-                        .map(v -> (NavigationMenuItemView) v)
-                        .filter(v -> v.getItemData().getItemId() == R.id.navigation_lessons)
-                        .findFirst()
-                        .ifPresent(view -> new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                .setTarget(view)
-                                .setPrimaryText("Download ready lessons")
-                                .setSecondaryText("Blabla bla")
-                                .setPromptBackground(new RectanglePromptBackground())
-                                .setPromptFocal(new RectanglePromptFocal())
-                                .show());
+                if (!mIsOnBoardingDone) {
+                    navigationView.getTouchables().stream()
+                            .map(v -> (NavigationMenuItemView) v)
+                            .filter(v -> v.getItemData().getItemId() == R.id.navigation_lessons)
+                            .findFirst()
+                            .ifPresent(view -> new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                    .setTarget(view)
+                                    .setPrimaryText("Download ready lessons")
+                                    .setSecondaryText("Blabla bla")
+                                    .setPromptBackground(new RectanglePromptBackground())
+                                    .setPromptFocal(new RectanglePromptFocal())
+                                    .setPromptStateChangeListener((prompt, state) -> {
+                                        mIsOnBoardingDone = true;
+                                        PreferencesHelper.getInstance(MainActivity.this).saveBoolean(ON_BOARDING_DONE, mIsOnBoardingDone);
+                                    })
+                                    .show());
+                }
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
@@ -133,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.navigation_entries:
                 mFragmentTitle = R.string.drawer_item_entries;
                 fragment = new DicoFragment();
+                Bundle args = new Bundle();
+                args.putBoolean("isOnBoarding", !mIsOnBoardingDone);
+                fragment.setArguments(args);
                 break;
 
             case R.id.navigation_review:
