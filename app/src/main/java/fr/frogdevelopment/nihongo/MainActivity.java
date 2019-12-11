@@ -39,9 +39,6 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.EXPRESSION;
-import static fr.frogdevelopment.nihongo.contentprovider.DicoContract.Type.WORD;
-
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
@@ -247,14 +244,11 @@ public class MainActivity extends AppCompatActivity {
             final String query = intent.getStringExtra(SearchManager.QUERY);
             Bundle args = new Bundle();
             args.putString("query", query);
-            args.putSerializable("type", CURRENT_VIEW == R.id.navigation_entries ? WORD : EXPRESSION);
 
             final DicoFragment fragment = new DicoFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-            setTitle(getString(R.string.search_current, query));
 
             onSearch = true;
         }
