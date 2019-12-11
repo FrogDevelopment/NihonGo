@@ -72,6 +72,7 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.viewpager2:viewpager2:$viewpager2_version"
     implementation 'uk.co.samuelwall:material-tap-target-prompt:3.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
 
     // REST Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

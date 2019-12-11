@@ -15,7 +15,7 @@
     <string name="drawer_item_entries">Dico</string>
     <string name="drawer_item_training">Révisions</string>
     <string name="drawer_item_test">Test</string>
-    <string name="drawer_item_parameters">Paramètres</string>
+    <string name="drawer_item_settings">Configuration</string>
     <string name="drawer_item_lessons">Leçons</string>
     <string name="drawer_item_about">À propos</string>
 
@@ -223,29 +223,19 @@
     </plurals>
 
     <!-- ******* -->
-    <!-- OPTIONS -->
+    <!-- SETTINGS -->
     <!-- ******* -->
-    <string name="options_export">Exporter</string>
-    <string name="options_export_success">Fichier \'%s\' créé dans répertoire Download.</string>
-    <string name="options_export_error">Export échoué</string>
-    <string name="options_import">Importer les données</string>
-    <string name="options_import_success">Import réussi</string>
-    <string name="options_import_failed">Import échoué</string>
-    <string name="options_file_chooser_get_file_manager">Veuillez installer un gestionnaire de fichier.</string>
-    <string name="options_file_chooser_prompt">Choississez un fichier</string>
-    <string name="options_error_fetch_data">Une erreur est survenue pendant la récupération des données.</string>
-
-    <string name="options_data">Données</string>
-    <string name="options_erase_data_btn">Supprimer les données</string>
-    <string name="options_erase_data_confirmation">Vous êtes sur le point de supprimer toutes vos données, continuer ?</string>
-    <string name="options_erase_data_success">Suppression réussie</string>
-    <string name="options_reset_favorite_btn">Réinitaliser les Favoris</string>
-    <string name="options_reset_favorite_confirmation">Vous êtes sur le point de réinitialiser vos Favoris, continuer ?</string>
-    <string name="options_reset_favorite_success">Réinitalisation réussie</string>
-    <string name="options_reset_learned_btn">Réinitaliser les Appris</string>
-    <string name="options_reset_learned_erase_confirmation">Vous êtes sur le point de réinitialiser vos Appris, continuer ?</string>
-    <string name="options_reset_learned_erase_success">Réinitalisation réussie</string>
-
+    <string name="settings_erase">Supprimer</string>
+    <string name="settings">Réinitaliser</string>
+    <string name="settings_erase_data_title">Supprimer les données</string>
+    <string name="settings_erase_data_confirmation">Toutes vos données seront supprimées.</string>
+    <string name="settings_erase_data_success">Suppression réussie</string>
+    <string name="settings_reset_favorite_title">Réinitaliser les Favoris</string>
+    <string name="settings_reset_favorite_confirmation">Tous vos Favoris seront réinitialisés.</string>
+    <string name="settings_reset_favorite_success">Réinitalisation réussie</string>
+    <string name="settings_reset_learned_title">Réinitaliser les Appris</string>
+    <string name="settings_reset_learned_erase_confirmation">Toutes vos évaluations seront réinitialisées.</string>
+    <string name="settings_reset_learned_erase_success">Réinitalisation réussie</string>
 
     <string name="closing_activity_title">Sortie</string>
     <string name="closing_activity_message">Êtes-vous sûr de vouloir quitter ?</string>

@@ -23,7 +23,7 @@
     <string name="drawer_item_training">Training</string>
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_lessons">Lessons</string>
-    <string name="drawer_item_parameters">Parameters</string>
+    <string name="drawer_item_settings">Settings</string>
     <string name="drawer_item_about">About</string>
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -251,26 +251,17 @@
     <!-- ******* -->
     <!-- OPTIONS -->
     <!-- ******* -->
-    <string name="options_export">Export </string>
-    <string name="options_export_success">File \'%s\' saved on folder Download.</string>
-    <string name="options_export_error">Export failed</string>
-    <string name="options_import">Import data</string>
-    <string name="options_import_success">Import success</string>
-    <string name="options_import_failed">Import failed</string>
-    <string name="options_file_chooser_get_file_manager">Please install a File Manager.</string>
-    <string name="options_file_chooser_prompt">Select a File to Upload</string>
-    <string name="options_error_fetch_data">An error occurred while fetching data.</string>
-
-    <string name="options_data">Data</string>
-    <string name="options_erase_data_btn">Erase data</string>
-    <string name="options_erase_data_confirmation">You\'re going to erase all your data, continue ?</string>
-    <string name="options_erase_data_success">Erase success</string>
-    <string name="options_reset_favorite_btn">Reset Favorite</string>
-    <string name="options_reset_favorite_confirmation">You\'re going to reset your Favorites, continue ?</string>
-    <string name="options_reset_favorite_success">Reset success</string>
-    <string name="options_reset_learned_btn">Reset Learned</string>
-    <string name="options_reset_learned_erase_confirmation">You\'re going to reset your Learned, continue ?</string>
-    <string name="options_reset_learned_erase_success">Reset success</string>
+    <string name="settings_erase">Erase</string>
+    <string name="settings">Reset</string>
+    <string name="settings_erase_data_title">Erase data</string>
+    <string name="settings_erase_data_confirmation">All your data will be erased.</string>
+    <string name="settings_erase_data_success">Erase success</string>
+    <string name="settings_reset_favorite_title">Reset Favorite</string>
+    <string name="settings_reset_favorite_confirmation">All your Favorites will be reset.</string>
+    <string name="settings_reset_favorite_success">Reset success</string>
+    <string name="settings_reset_learned_title">Reset Learned</string>
+    <string name="settings_reset_learned_erase_confirmation">All your rating will be reset.</string>
+    <string name="settings_reset_learned_erase_success">Reset success</string>
 
     <string name="closing_activity_title">Exit</string>
     <string name="closing_activity_message">Are you sure you want to exit ?</string>

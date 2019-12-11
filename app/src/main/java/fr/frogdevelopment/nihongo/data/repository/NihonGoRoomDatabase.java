@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import fr.frogdevelopment.nihongo.data.dao.DetailsDao;
 import fr.frogdevelopment.nihongo.data.dao.ReviewsDao;
 import fr.frogdevelopment.nihongo.data.dao.RowDao;
+import fr.frogdevelopment.nihongo.data.dao.SettingsDao;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
 @Database(
@@ -54,6 +55,8 @@ public abstract class NihonGoRoomDatabase extends RoomDatabase {
     public abstract DetailsDao detailsDao();
 
     public abstract ReviewsDao reviewsDao();
+
+    public abstract SettingsDao settingsDao();
 
     private static Migration MIGRATION_10_11 = new Migration(10, 11) {
         @Override

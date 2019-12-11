@@ -34,10 +34,9 @@
             android:icon="@drawable/ic_baseline_cloud_download_24"
             android:title="@string/drawer_item_lessons" />
         <item
-            android:id="@+id/navigation_parameters"
-            android:enabled="false"
+            android:id="@+id/navigation_settings"
             android:icon="@drawable/ic_baseline_settings_applications_24"
-            android:title="@string/drawer_item_parameters" />
+            android:title="@string/drawer_item_settings" />
         <item
             android:id="@+id/navigation_about"
             android:icon="@drawable/ic_baseline_info_24"
