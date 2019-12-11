@@ -2,7 +2,6 @@ package fr.frogdevelopment.nihongo.test;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -32,8 +30,6 @@ import java.util.List;
 import java.util.Set;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.dialog.TagsDialog;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 
@@ -227,8 +223,9 @@ public class TestParametersFragment extends Fragment implements LoaderManager.Lo
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
-        return new CursorLoader(requireActivity(), uri, new String[]{DicoContract.TAGS}, null, null, null);
+//        Uri uri = Uri.parse(NihonGoContentProvider.URI_WORD + "/TAGS");
+//        return new CursorLoader(requireActivity(), uri, new String[]{"TAGS"}, null, null, null);
+        return null;
     }
 
 

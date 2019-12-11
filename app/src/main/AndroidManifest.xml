@@ -21,11 +21,6 @@
             android:name="android.app.default_searchable"
             android:value="fr.frogdevelopment.nihongo.MainActivity" />
 
-        <provider
-            android:name=".contentprovider.NihonGoContentProvider"
-            android:authorities=".NihonGoContentProvider"
-            android:exported="false" />
-
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"

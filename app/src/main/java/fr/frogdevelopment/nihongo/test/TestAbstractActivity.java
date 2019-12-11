@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -26,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
 public abstract class TestAbstractActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
@@ -123,14 +120,15 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         String[] likes = null;
         if (ArrayUtils.isNotEmpty(tags)) {
             for (String tag : tags) {
-                likes = ArrayUtils.add(likes, DicoContract.TAGS + " LIKE '%" + tag + "%'");
+                likes = ArrayUtils.add(likes, "TAGS" + " LIKE '%" + tag + "%'");
             }
             selection += " AND (" + StringUtils.join(likes, " OR ") + ")";
         }
 
         String sortOrder = "RANDOM() LIMIT " + quantityMax;
 
-        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
+//        return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, null, sortOrder);
+        return null;
     }
 
     @Override
@@ -174,20 +172,20 @@ public abstract class TestAbstractActivity extends AppCompatActivity implements 
         final ContentValues values = new ContentValues();
         if (result.setAnswerGiven(testAnswer)) {
             successCounter++;
-            values.put(DicoContract.LEARNED, true);
-            values.put(DicoContract.SUCCESS, ++row.success);
+            values.put("LEARNED", true);
+            values.put("SUCCESS", ++row.success);
         } else {
-            values.put(DicoContract.LEARNED, false);
-            values.put(DicoContract.FAILED, ++row.failed);
+            values.put("LEARNED", false);
+            values.put("FAILED", ++row.failed);
         }
 
         result.nbSuccess = row.success;
         result.nbFailed = row.failed;
 
-        final String where = DicoContract._ID + "=?";
+        final String where = "_ID" + "=?";
         final String[] selectionArgs = {String.valueOf(row.id)};
 
-        getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
+//        getContentResolver().update(NihonGoContentProvider.URI_WORD, values, where, selectionArgs);
 
         currentItemIndex++;
 

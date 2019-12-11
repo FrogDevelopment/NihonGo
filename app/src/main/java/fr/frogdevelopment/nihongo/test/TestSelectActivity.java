@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Random;
 
 import fr.frogdevelopment.nihongo.R;
-import fr.frogdevelopment.nihongo.contentprovider.DicoContract;
-import fr.frogdevelopment.nihongo.contentprovider.NihonGoContentProvider;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.data.model.Row;
 
@@ -99,7 +96,8 @@ public class TestSelectActivity extends TestAbstractActivity {
 
             String sortOrder = "RANDOM() LIMIT " + quantityMax * nbAnswer;
 
-            return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, selectionArgs, sortOrder);
+//            return new CursorLoader(this, NihonGoContentProvider.URI_WORD, DicoContract.COLUMNS, selection, selectionArgs, sortOrder);
+            return null;
         }
     }
 
