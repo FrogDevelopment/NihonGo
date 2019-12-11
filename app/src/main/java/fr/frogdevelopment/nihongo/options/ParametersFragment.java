@@ -61,7 +61,7 @@ public class ParametersFragment extends Fragment {
                 .setMessage(R.string.options_reset_favorite_confirmation)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     final ContentValues values = new ContentValues();
-                    values.put(DicoContract.BOOKMARK, "0");
+                    values.put(DicoContract.FAVORITE, "0");
                     requireActivity().getContentResolver().update(NihonGoContentProvider.URI_RESET_FAVORITE, values, null, null);
 
                     Snackbar.make(requireActivity().findViewById(R.id.parameters_layout), R.string.options_reset_favorite_success, Snackbar.LENGTH_LONG).show();

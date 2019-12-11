@@ -254,7 +254,7 @@ public class UpdateFragment extends Fragment {
 
     private void saveOrUpdate() {
         mDetails.input = capitalize(mInputText.getText().toString());
-        mDetails.sort_letter = mDetails.input.substring(0, 1);
+        mDetails.sortLetter = mDetails.input.substring(0, 1);
         mDetails.kanji = mKanjiText.getText().toString();
         mDetails.kana = mKanaText.getText().toString();
         mDetails.tags = mTags.isEmpty() ? null : join(mTags, ",");
@@ -265,7 +265,6 @@ public class UpdateFragment extends Fragment {
         if (mDetails.id != null) {
             update();
         } else {
-            mDetails.type = "w";
             insert();
         }
     }

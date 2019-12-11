@@ -2,6 +2,8 @@ package fr.frogdevelopment.nihongo.data.repository;
 
 import android.app.Application;
 
+import java.util.List;
+
 import fr.frogdevelopment.nihongo.data.dao.DetailsDao;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import io.reactivex.Maybe;
@@ -23,6 +25,10 @@ public class DetailsRepository {
     }
 
     public void insert(Details details) {
+        databaseWriteExecutor.execute(() -> mDetailsDao.insert(details));
+    }
+
+    public void insert(List<Details> details) {
         databaseWriteExecutor.execute(() -> mDetailsDao.insert(details));
     }
 

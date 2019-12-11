@@ -6,6 +6,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
 import fr.frogdevelopment.nihongo.data.model.Details;
 import io.reactivex.Maybe;
 
@@ -19,6 +21,9 @@ public interface DetailsDao {
 
     @Insert(onConflict = REPLACE)
     void insert(Details item);
+
+    @Insert(onConflict = REPLACE)
+    void insert(List<Details> items);
 
     @Update(onConflict = REPLACE)
     void update(Details item);

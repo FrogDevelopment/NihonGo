@@ -188,7 +188,7 @@ public class DicoAdapter extends BaseAdapter implements SectionIndexer {
         int position = 0;
         int section = -1;
         for (Row row : rows) {
-            sort_letter = row.sort_letter;
+            sort_letter = row.sortLetter;
 
             // Group numbers together in the scroller
             if (NumberUtils.isParsable(sort_letter)) {

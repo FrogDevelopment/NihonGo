@@ -15,42 +15,38 @@ public class Details implements Serializable {
     public Integer id;
 
     @NonNull
-    @ColumnInfo(name = "INPUT")
+    @ColumnInfo(name = "input")
     public String input;
 
     @NonNull
-    @ColumnInfo(name = "SORT_LETTER")
-    public String sort_letter;
+    @ColumnInfo(name = "sort_letter")
+    public String sortLetter;
 
-    @ColumnInfo(name = "KANJI")
+    @ColumnInfo(name = "kanji")
     public String kanji;
 
-    @ColumnInfo(name = "KANA")
+    @ColumnInfo(name = "kana")
     public String kana;
 
-    @NonNull
-    @ColumnInfo(name = "TYPE")
-    public String type;
-
-    @ColumnInfo(name = "TAGS")
+    @ColumnInfo(name = "tags")
     public String tags;
 
-    @ColumnInfo(name = "DETAILS")
+    @ColumnInfo(name = "details")
     public String details;
 
-    @ColumnInfo(name = "EXAMPLE")
+    @ColumnInfo(name = "example")
     public String example;
 
-    @ColumnInfo(name = "FAVORITE", defaultValue = "0")
+    @ColumnInfo(name = "favorite", defaultValue = "0")
     public boolean bookmark;
 
-    @ColumnInfo(name = "LEARNED", defaultValue = "0")
+    @ColumnInfo(name = "learned", defaultValue = "0")
     public int learned;
 
-    @ColumnInfo(name = "SUCCESS", defaultValue = "0")
+    @ColumnInfo(name = "success", defaultValue = "0")
     public int success;
 
-    @ColumnInfo(name = "FAILED", defaultValue = "0")
+    @ColumnInfo(name = "failed", defaultValue = "0")
     public int failed;
 
     public void switchBookmark() {

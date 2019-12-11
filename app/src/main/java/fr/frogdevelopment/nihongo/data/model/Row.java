@@ -11,20 +11,20 @@ public class Row implements Serializable {
     public Integer id;
 
     @NonNull
-    @ColumnInfo(name = "INPUT")
+    @ColumnInfo(name = "input")
     public String input;
 
     @NonNull
-    @ColumnInfo(name = "SORT_LETTER")
-    public String sort_letter;
+    @ColumnInfo(name = "sort_letter")
+    public String sortLetter;
 
-    @ColumnInfo(name = "KANJI")
+    @ColumnInfo(name = "kanji")
     public String kanji;
 
-    @ColumnInfo(name = "KANA")
+    @ColumnInfo(name = "kana")
     public String kana;
 
-    @ColumnInfo(name = "TAGS")
+    @ColumnInfo(name = "tags")
     public String tags;
 
 }

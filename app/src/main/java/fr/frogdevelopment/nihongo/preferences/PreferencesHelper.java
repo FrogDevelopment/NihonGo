@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +34,9 @@ public class PreferencesHelper {
     }
 
     public Set<String> getStrings(Preferences key, String regex) {
-        return Stream.of(getArrayString(key, regex)).collect(Collectors.toSet());
+        return Stream.of(getArrayString(key, regex))
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.toSet());
     }
 
     public String getString(String key) {
