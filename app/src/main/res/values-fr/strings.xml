@@ -216,11 +216,7 @@
     <string name="lesson_continue">Continuer ?</string>
     <string name="lesson_download">Télécharger</string>
     <string name="lesson_download_success">Téléchargement réussi</string>
-
-    <plurals name="action_lesson">
-        <item quantity="one">%1$d leçon sélectionnée.</item>
-        <item quantity="other">%1$d leçons sélectionnées.</item>
-    </plurals>
+    <string name="lessons_error_fetch_data">Error while fetching data</string>
 
     <!-- ******* -->
     <!-- SETTINGS -->

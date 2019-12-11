@@ -168,7 +168,7 @@ public class LessonsFragment extends ListFragment {
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                 getOffLineLessons();
-                Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), R.string.lessons_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
             }
         });
@@ -226,14 +226,14 @@ public class LessonsFragment extends ListFragment {
                                     .collect(joining(";"))
                             );
                 } else {
-                    Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), R.string.lessons_error_fetch_data, Toast.LENGTH_LONG).show();
                     Log.e(LOG_TAG, "fetchLessons returned status code: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Details>> call, @NonNull Throwable t) {
-                Toast.makeText(requireContext(), R.string.options_error_fetch_data, Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), R.string.lessons_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data", t);
             }
         });
