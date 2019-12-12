@@ -96,7 +96,7 @@
     <string name="input_textView_kana" translatable="false">Kana</string>
     <string name="input_textView_info">Information</string>
     <string name="input_textView_example">Example</string>
-    <string name="input_textView_tags">Tags (comma separated)</string>
+    <string name="input_textView_tags">Tags (optional)</string>
     <string name="input_button_validate">Validate</string>
     <string name="input_button_cancel">Cancel</string>
     <string name="input_error_empty">Input required !</string>

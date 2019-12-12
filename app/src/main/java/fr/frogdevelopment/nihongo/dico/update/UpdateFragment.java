@@ -63,7 +63,6 @@ public class UpdateFragment extends Fragment {
     private TextInputEditText mDetailsText;
     private TextInputLayout mExampleWrapper;
     private TextInputEditText mExampleText;
-    private TextInputLayout mTagsWrapper;
     private ChipGroup mChipGroup;
 
     public static UpdateFragment newInstance(Bundle arguments) {
@@ -95,7 +94,6 @@ public class UpdateFragment extends Fragment {
         mDetailsText = rootView.findViewById(R.id.input_details);
         mExampleWrapper = rootView.findViewById(R.id.wrapper_example);
         mExampleText = rootView.findViewById(R.id.input_example);
-        mTagsWrapper = rootView.findViewById(R.id.wrapper_tags);
         mChipGroup = rootView.findViewById(R.id.input_tags_group);
 
         TextInputEditText tagsEditText = rootView.findViewById(R.id.input_tags);
@@ -144,11 +142,6 @@ public class UpdateFragment extends Fragment {
                 initData();
                 return true;
 
-//            case android.R.id.home:
-//                onBackPressed();
-////                back();
-//                return true;
-
             default:
                 return false;
         }
@@ -158,9 +151,9 @@ public class UpdateFragment extends Fragment {
         // when new data
         if (mDetails == null) {
             mDetails = new Details();
+            mKanjiText.requestFocus();
         }
 
-        mKanjiText.requestFocus();
         mKanjiText.setText(mDetails.kanji);
         mKanjiWrapper.setError(null);
 
@@ -176,8 +169,8 @@ public class UpdateFragment extends Fragment {
         mExampleText.setText(mDetails.example);
         mExampleWrapper.setError(null);
 
+        mChipGroup.removeAllViews();
         if (mDetails.tags != null) {
-            mTagsWrapper.setError(null);
             Stream.of(mDetails.tags.split(",")).forEach(this::addChipToGroup);
         }
     }
@@ -277,11 +270,6 @@ public class UpdateFragment extends Fragment {
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
-//                        finish();
-//                        getParentFragmentManager()
-//                                .beginTransaction()
-//                                .remove(this)
-//                                .commit();
                     }
                 })
                 .show();

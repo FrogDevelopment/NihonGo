@@ -79,6 +79,7 @@
     <string name="input_textView_input">Texte</string>
     <string name="input_textView_info">Informations </string>
     <string name="input_textView_example">Exemple</string>
+    <string name="input_textView_tags">Tags (optionel)</string>
     <string name="input_button_validate">Valider</string>
     <string name="input_button_cancel">Annuler</string>
     <string name="input_error_empty">Saisie obligatoire !</string>
@@ -239,7 +240,6 @@
 
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="input_textView_tags">Tags (séparés par des virgules)</string>
 
     <!-- ******* -->
     <!--   HELP  -->
