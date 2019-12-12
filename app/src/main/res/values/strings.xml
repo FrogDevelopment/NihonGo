@@ -1,47 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <plurals name="action_selection">
+        <item quantity="one">%1$d line selected.</item>
+        <item quantity="other">%1$d lines selected.</item>
+    </plurals>
+
+    <plurals name="delete_confirmation">
+        <item quantity="one">You\'re going to delete %1$d line</item>
+        <item quantity="other">You\'re going to delete %1$d lines</item>
+    </plurals>
+
+    <plurals name="search_results">
+        <item quantity="one">%1$d result</item>
+        <item quantity="other">%1$d results</item>
+    </plurals>
+
     <string name="frog_development" translatable="false">FROG DEVELOPMENT</string>
 
+    <!-- WARNING IME -->
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9262384952442366/1210248138</string>
-
     <string name="app_name" translatable="false">Nihon Go !</string>
-
     <string name="no_connection">No connection</string>
 
-    <!-- WARNING IME -->
+    <!-- DRAWER -->
     <string name="warning_ime_title" translatable="false">ATTENTION</string>
     <string name="warning_ime_text">Japanese Keyboard required for this application.</string>
     <string name="cb_remember">Don\'t display anymore</string>
-
-    <!-- DRAWER -->
     <string name="drawer_item_entries">Entries</string>
     <string name="drawer_item_kana" translatable="false">Kana</string>
     <string name="drawer_item_training">Training</string>
+
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_lessons">Lessons</string>
+
     <string name="drawer_item_settings">Settings</string>
-
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-
-    <string name="dialog_tags_title" translatable="false">Tags</string>
 
     <!-- ***** -->
     <!-- SEARCH -->
     <!-- ***** -->
 
-    <string name="search_word">Search for word or tag</string>
-    <string name="search_current">Searching for \"%1$s\"</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
     <!-- ***** -->
     <!-- DICO -->
     <!-- ***** -->
 
+    <string name="dialog_tags_title" translatable="false">Tags</string>
+    <string name="search_word">Search for word or tag</string>
+
+    <string name="search_current">Searching for \"%1$s\"</string>
     <string name="dico_no_data">No data</string>
     <string name="title_activity_details">Details</string>
-
     <string name="details_info">Information :</string>
+
     <string name="details_example">Example :</string>
     <string name="details_tags">Tags :</string>
     <string name="details_ratio">Success : %1$d%%</string>
@@ -50,43 +63,34 @@
     <string name="rate_1">See</string>
     <string name="rate_2">Learned</string>
 
+    <!-- CONTEXT MENU -->
     <string name="bookmark_description">Add or Remove bookmark</string>
     <string name="bookmark_add">Add to bookmarks</string>
     <string name="bookmark_remove">Remove from bookmarks</string>
-
-    <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favorite</string>
     <string name="action_dico_update">Update</string>
+
     <string name="action_dico_delete">Delete</string>
+
+    <!-- DELETE -->
     <string name="action_dico_favorite_only">Favorites only</string>
     <string name="action_dico_gesture">Draw</string>
 
-    <plurals name="action_selection">
-        <item quantity="one">%1$d line selected.</item>
-        <item quantity="other">%1$d lines selected.</item>
-    </plurals>
-
-    <!-- DELETE -->
     <string name="delete_title">Deleting</string>
+
     <string name="delete_message">You\'re going to delete the item</string>
-
-    <plurals name="delete_confirmation">
-        <item quantity="one">You\'re going to delete %1$d line</item>
-        <item quantity="other">You\'re going to delete %1$d lines</item>
-    </plurals>
-
     <string name="positive_button_continue">Continue ?</string>
     <string name="delete">Delete</string>
-    <string name="delete_done">Delete done</string>
 
     <!-- UPDATE -->
+    <string name="delete_done">Delete done</string>
     <string name="update_title">Updating</string>
     <string name="update_confirmation">Update this input ?</string>
-    <string name="update_alert">Input \'%s\' already present, do you want to update it ?</string>
 
     <!-- ***** -->
     <!-- INPUT -->
     <!-- ***** -->
+    <string name="update_alert">Input \'%s\' already present, do you want to update it ?</string>
     <string name="input_textView_input">Entry</string>
     <string name="input_textView_kanji" translatable="false">Kanji</string>
     <string name="input_textView_kana" translatable="false">Kana</string>
@@ -107,14 +111,14 @@
     <string name="input_duplicated_OK">Data duplicated</string>
     <string name="input_update_OK">Data updated</string>
     <string name="action_validate">Validate</string>
-    <string name="action_cancel">Cancel</string>
 
     <!-- EXPRESSION -->
-    <string name="expression_input">Expression</string>
+    <string name="action_cancel">Cancel</string>
 
     <!-- ******* -->
     <!-- PARAM -->
     <!-- ******* -->
+    <string name="expression_input">Expression</string>
     <string name="param_test">Test\'s parameters</string>
     <string name="param_review">Review\'s parameters</string>
     <string name="param_reviewed">Reviews on japanese ?</string>
@@ -138,117 +142,78 @@
     <string name="param_tag_selection">Select one or more tags (Optional)</string>
     <string name="param_tags_dialog_title">Select one or more tags</string>
     <string name="param_button_start">Start</string>
+
     <string name="param_keep_config">Keep config ?</string>
 
-    <string-array name="param_types">
-        <item>Kanji -> Hiragana</item>
-        <item>Hiragana -> Kanji</item>
-        <item>Japanese -> English</item>
-        <item>English -> Japanese</item>
-    </string-array>
-
-    <string-array name="param_methods">
-        <item>MCQ</item>
-        <item>Write</item>
-    </string-array>
-
-    <string-array name="param_learned">
-        <item>@string/rate_0</item>
-        <item>@string/rate_1</item>
-        <item>@string/rate_2</item>
-        <item>All</item>
-    </string-array>
-
-    <string-array name="param_sorts">
-        <item>new -> old</item>
-        <item>old -> new</item>
-        <item>random</item>
-    </string-array>
-
-    <string-array name="param_quantities_answers" translatable="false">
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-    </string-array>
-
-    <string-array name="param_quantities">
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>40</item>
-        <item>50</item>
-    </string-array>
-
-    <!-- ******* -->
-    <!-- REVIEW -->
-    <!-- ******* -->
     <string name="title_activity_review">Review</string>
+
     <string name="review_switch_kanji">Tap to show Kanji</string>
+
     <string name="review_switch_kana">Tap to show Kana</string>
+
     <string name="review_switch_input">Tap to show English</string>
+
     <string name="review_again">Do again</string>
 
     <!-- ******* -->
-    <!-- TEST -->
+    <!-- REVIEW -->
     <!-- ******* -->
     <string name="title_activity_test" translatable="false">Tests</string>
     <string name="test_tab_selection">SELECTION</string>
     <string name="test_tab_input">INPUT</string>
     <string name="test_back_title" translatable="false">ATTENTION</string>
     <string name="test_back_message">Warning ! You\'re going to leave the test.</string>
+
+    <!-- ******* -->
+    <!-- TEST -->
+    <!-- ******* -->
     <string name="test_next">Next</string>
     <string name="test_info">Information</string>
-
     <string name="test_input_empty">No response given, continue ?</string>
-
     <string name="test_results_title">Results</string>
     <string name="test_results_details">Test : %1$s\nAnswer expected : %2$s\nAnswer given : %3$s</string>
+    <string name="menu_search">search</string>
+    <string name="search_label">Search</string>
+
+    <string name="search_hint">Search a word</string>
+
+    <string name="no_results">No results</string>
+    <string name="help_chart_description">Hiragana and Katakana</string>
 
     <!-- ****** -->
     <!-- SEARCH -->
     <!-- ****** -->
-    <string name="menu_search">search</string>
-    <string name="search_label">Search</string>
-    <string name="search_hint">Search a word</string>
-    <string name="no_results">No results</string>
+    <string name="global_kana" translatable="false">Tables Kana</string>
+    <string name="global_hiragana" translatable="false">Hiragana</string>
+    <string name="global_katakana" translatable="false">Katakana</string>
+    <string name="lesson_description">Free downloadable vocabulary available, based on Minna No Nihongo lessons.</string>
 
-    <plurals name="search_results">
-        <item quantity="one">%1$d result</item>
-        <item quantity="other">%1$d results</item>
-    </plurals>
+    <string name="lesson_no_connection_test">No connection available, only downloaded lessons are displayed.</string>
 
     <!-- ****** -->
     <!-- HELP -->
     <!-- ****** -->
-    <string name="help_chart_description">Hiragana and Katakana</string>
-    <string name="global_kana" translatable="false">Tables Kana</string>
-    <string name="global_hiragana" translatable="false">Hiragana</string>
-    <string name="global_katakana" translatable="false">Katakana</string>
-
-    <!-- ******* -->
-    <!-- LESSONS -->
-    <!-- ******* -->
-    <string name="lesson_description">Free downloadable vocabulary available, based on Minna No Nihongo lessons.</string>
-    <string name="lesson_no_connection_test">No connection available, only downloaded lessons are displayed.</string>
     <string name="lesson_tag">Lesson </string>
     <string name="fetching_data">Fetching data</string>
     <string name="lesson_already_present">Lesson already fetched</string>
     <string name="lesson_continue">Continue ?</string>
+
+    <!-- ******* -->
+    <!-- LESSONS -->
+    <!-- ******* -->
     <string name="lesson_download">Download</string>
     <string name="lesson_download_success">Download successful</string>
     <string name="lessons_error_fetch_data">Error while fetching data</string>
-
-    <!-- ******* -->
-    <!-- OPTIONS -->
-    <!-- ******* -->
     <string name="settings_erase">Erase</string>
     <string name="settings">Reset</string>
     <string name="settings_erase_data_title">Erase data</string>
     <string name="settings_erase_data_summary">All your data will be erased.</string>
     <string name="settings_erase_data_success">Erase success</string>
     <string name="settings_reset_favorites_title">Reset Favorite</string>
+
+    <!-- ******* -->
+    <!-- OPTIONS -->
+    <!-- ******* -->
     <string name="settings_reset_favorites_summary">All your Favorites will be reset.</string>
     <string name="settings_reset_favorite_success">Reset success</string>
     <string name="settings_reset_rate_title">Reset Learned</string>
@@ -259,32 +224,67 @@
     <string name="settings_about_version">Version %1$s, Build %2$d</string>
     <string name="settings_about_hiragana">Hiragana</string>
     <string name="settings_about_katakana">Katakana</string>
-
-
     <string name="closing_activity_title">Exit</string>
     <string name="closing_activity_message">Are you sure you want to exit ?</string>
-
     <string name="yes">Yes</string>
     <string name="no">No</string>
-
     <string name="kanji" translatable="false">Kanji</string>
     <string name="kana" translatable="false">Kana</string>
+
+
+    <string name="help_title">Help</string>
+    <string name="help_dico_one_press_description">1 press</string>
+
+    <string name="help_dico_one_press">Press 1 time to switch between Kanji and Kana</string>
+    <string name="help_dico_two_press_description">2 presses</string>
+
+    <string name="help_dico_two_press">Press 2 times to enter detail\'s view</string>
+    <string name="help_dico_press_and_hold_description">Press and hold</string>
 
     <!-- ******* -->
     <!--   HELP  -->
     <!-- ******* -->
-    <string name="help_title">Help</string>
-    <string name="help_dico_one_press_description">1 press</string>
-    <string name="help_dico_one_press">Press 1 time to switch between Kanji and Kana</string>
-    <string name="help_dico_two_press_description">2 presses</string>
-    <string name="help_dico_two_press">Press 2 times to enter detail\'s view</string>
-    <string name="help_dico_press_and_hold_description">Press and hold</string>
     <string name="help_dico_press_and_hold">Press and hold to select the line</string>
     <string name="help_dico_add">Add new input</string>
     <string name="help_dico_start">Welcome to Nihon Go !\n\nLooks like you didn\'t have yet vocabulary.\n\nWould you like to get some ?</string>
-
-
     <string name="copy_kanji">Kanji copied to clipboard</string>
     <string name="copy_kana">Kana copied to clipboard</string>
+    <string-array name="param_types">
+        <item>Kanji -> Hiragana</item>
+        <item>Hiragana -> Kanji</item>
+        <item>Japanese -> English</item>
+        <item>English -> Japanese</item>
+    </string-array>
+    <string-array name="param_methods">
+        <item>MCQ</item>
+        <item>Write</item>
+    </string-array>
+    <string-array name="param_learned">
+        <item>@string/rate_0</item>
+        <item>@string/rate_1</item>
+        <item>@string/rate_2</item>
+        <item>All</item>
+    </string-array>
+    <string-array name="param_sorts">
+        <item>new -> old</item>
+        <item>old -> new</item>
+        <item>random</item>
+    </string-array>
+
+
+    <string-array name="param_quantities_answers" translatable="false">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+    <string-array name="param_quantities">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>40</item>
+        <item>50</item>
+    </string-array>
 
 </resources>

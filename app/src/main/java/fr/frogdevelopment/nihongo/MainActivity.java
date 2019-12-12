@@ -31,7 +31,7 @@ import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
 import fr.frogdevelopment.nihongo.preferences.Preferences;
 import fr.frogdevelopment.nihongo.preferences.PreferencesHelper;
 import fr.frogdevelopment.nihongo.review.parameters.ReviewParametersFragment;
-import fr.frogdevelopment.nihongo.settings.SettingsFragment;
+import fr.frogdevelopment.nihongo.settings.SettingsActivity;
 import fr.frogdevelopment.nihongo.test.TestParametersFragment;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
@@ -161,9 +161,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.navigation_settings:
-                mFragmentTitle = R.string.drawer_item_settings;
-                fragment = new SettingsFragment();
-                break;
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+
+                return;
 
             case R.id.navigation_lessons:
                 mFragmentTitle = R.string.drawer_item_lessons;
