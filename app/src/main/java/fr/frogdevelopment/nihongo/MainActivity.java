@@ -25,7 +25,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.Locale;
 
-import fr.frogdevelopment.nihongo.about.AboutFragment;
 import fr.frogdevelopment.nihongo.dico.DicoFragment;
 import fr.frogdevelopment.nihongo.kana.KanaViewPage;
 import fr.frogdevelopment.nihongo.lessons.LessonsFragment;
@@ -169,11 +168,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.navigation_lessons:
                 mFragmentTitle = R.string.drawer_item_lessons;
                 fragment = new LessonsFragment();
-                break;
-
-            case R.id.navigation_about:
-                mFragmentTitle = R.string.drawer_item_about;
-                fragment = new AboutFragment();
                 break;
 
             default:

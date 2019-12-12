@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) Frog Development 2015.
-  -->
-
 <resources>
 
     <string name="no_connection">Pas de connexion</string>
@@ -17,7 +13,6 @@
     <string name="drawer_item_test">Test</string>
     <string name="drawer_item_settings">Configuration</string>
     <string name="drawer_item_lessons">Leçons</string>
-    <string name="drawer_item_about">À propos</string>
 
     <string name="drawer_open">Ouvrir le navigateur</string>
     <string name="drawer_close">Fermer le navigateur</string>
@@ -224,14 +219,20 @@
     <string name="settings_erase">Supprimer</string>
     <string name="settings">Réinitaliser</string>
     <string name="settings_erase_data_title">Supprimer les données</string>
-    <string name="settings_erase_data_confirmation">Toutes vos données seront supprimées.</string>
+    <string name="settings_erase_data_summary">Toutes vos données seront supprimées.</string>
     <string name="settings_erase_data_success">Suppression réussie</string>
-    <string name="settings_reset_favorite_title">Réinitaliser les Favoris</string>
-    <string name="settings_reset_favorite_confirmation">Tous vos Favoris seront réinitialisés.</string>
+    <string name="settings_reset_favorites_title">Réinitaliser les Favoris</string>
+    <string name="settings_reset_favorites_summary">Tous vos Favoris seront réinitialisés.</string>
     <string name="settings_reset_favorite_success">Réinitalisation réussie</string>
-    <string name="settings_reset_learned_title">Réinitaliser les Appris</string>
-    <string name="settings_reset_learned_erase_confirmation">Toutes vos évaluations seront réinitialisées.</string>
+    <string name="settings_reset_rate_title">Réinitaliser les Appris</string>
+    <string name="settings_reset_rates_summary">Toutes vos évaluations seront réinitialisées.</string>
     <string name="settings_reset_learned_erase_success">Réinitalisation réussie</string>
+    <string name="settings_about">À propos</string>
+    <string name="settings_about_application">Application</string>
+    <string name="settings_about_version">Version %1$s, Build %2$d</string>
+    <string name="settings_about_hiragana">Hiragana</string>
+    <string name="settings_about_katakana">Katakana</string>
+
 
     <string name="closing_activity_title">Sortie</string>
     <string name="closing_activity_message">Êtes-vous sûr de vouloir quitter ?</string>
@@ -252,11 +253,6 @@
     <string name="help_dico_press_and_hold">Presser et maintenir pour sélectionner la ligne</string>
     <string name="help_dico_add">Ajouter une nouvelle entrée</string>
     <string name="help_dico_start">Bienvenue dans Nihon Go !\n\nIl semblerait que vous n\'avez pas encore de vocabulaire.\n\nVoulez-vous en télécharger ?</string>
-
-    <!-- ******* -->
-    <!--  ABOUT  -->
-    <!-- ******* -->
-    <string name="about_version">Version : %1$s</string>
 
     <string name="copy_kanji">Kanji copié dans le presse-papier</string>
     <string name="copy_kana">Kana copié dans le presse-papier</string>

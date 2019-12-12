@@ -27,20 +27,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey);
+        setPreferencesFromResource(R.xml.settings_root, rootKey);
     }
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-        CharSequence title = preference.getTitle();
-        if (title.equals(getString(R.string.settings_erase_data_title))) {
-            onClickErase();
-        } else if (title.equals(getString(R.string.settings_reset_favorite_title))) {
-            onClickResetFavorite();
-        } else if (title.equals(getString(R.string.settings_reset_learned_title))) {
-            onClickResetLearned();
-        } else {
-            return super.onPreferenceTreeClick(preference);
+        switch (preference.getKey()) {
+            case "erase_data":
+                onClickErase();
+                break;
+            case "reset_favorites":
+                onClickResetFavorite();
+                break;
+            case "reset_rates":
+                onClickResetLearned();
+                break;
+            default:
+                return super.onPreferenceTreeClick(preference);
         }
 
         return true;
@@ -49,7 +52,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void onClickErase() {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.settings_erase_data_title)
-                .setMessage(R.string.settings_erase_data_confirmation)
+                .setMessage(R.string.settings_erase_data_summary)
                 .setPositiveButton(R.string.settings_erase, (dialog, id) -> {
                     mSettingsViewModel.erase();
 
@@ -64,8 +67,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void onClickResetFavorite() {
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.settings_reset_favorite_title)
-                .setMessage(R.string.settings_reset_favorite_confirmation)
+                .setTitle(R.string.settings_reset_favorites_title)
+                .setMessage(R.string.settings_reset_favorites_summary)
                 .setPositiveButton(R.string.settings, (dialog, id) -> {
                     mSettingsViewModel.resetFavorites();
 
@@ -78,8 +81,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void onClickResetLearned() {
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.settings_reset_learned_title)
-                .setMessage(R.string.settings_reset_learned_erase_confirmation)
+                .setTitle(R.string.settings_reset_rate_title)
+                .setMessage(R.string.settings_reset_rates_summary)
                 .setPositiveButton(R.string.settings, (dialog, id) -> {
                     mSettingsViewModel.resetLearned();
 

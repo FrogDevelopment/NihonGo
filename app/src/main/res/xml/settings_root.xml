@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:key="reset_category">
+
+        <Preference
+            android:icon="@drawable/ic_baseline_delete_forever_24"
+            app:key="erase_data"
+            app:summary="@string/settings_erase_data_summary"
+            app:title="@string/settings_erase_data_title" />
+        <Preference
+            android:icon="@drawable/ic_baseline_delete_outline_24"
+            app:key="reset_favorites"
+            app:summary="@string/settings_reset_favorites_summary"
+            app:title="@string/settings_reset_favorites_title" />
+        <Preference
+            android:icon="@drawable/ic_baseline_delete_outline_24"
+            app:key="reset_rates"
+            app:summary="@string/settings_reset_rates_summary"
+            app:title="@string/settings_reset_rate_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:key="other_category">
+        <Preference
+            android:icon="@drawable/ic_baseline_info_24"
+            app:fragment="fr.frogdevelopment.nihongo.settings.AboutSettingsFragment"
+            app:key="about"
+            app:summary="display about view"
+            app:title="@string/settings_about" />
+
+        <Preference
+            android:icon="@drawable/ic_baseline_open_in_browser_24"
+            app:key="webpage"
+            app:title="View web site">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.frog-development.com" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

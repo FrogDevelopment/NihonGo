@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:icon="@drawable/ic_baseline_info_24"
+        app:key="version"
+        app:title="@string/settings_about_application" />
+    <Preference
+        android:icon="@drawable/ic_baseline_open_in_browser_24"
+        app:key="hiragana"
+        app:summary="Creative Commons Attribution-Share Alike 2.0 Generic"
+        app:title="@string/settings_about_hiragana">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://commons.wikimedia.org/wiki/File:Table_hiragana.jpg" />
+    </Preference>
+    <Preference
+        android:icon="@drawable/ic_baseline_open_in_browser_24"
+        app:key="katakana"
+        app:summary="Creative Commons Attribution-Share Alike 2.0 Generic"
+        app:title="@string/settings_about_hiragana">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://commons.wikimedia.org/wiki/File:Table_katakana.jpg" />
+    </Preference>
+
+</PreferenceScreen>
