@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,10 +39,22 @@ public class ReviewParametersViewModel extends AndroidViewModel {
         disposables.add(mReviewRepository
                 .getTags()
                 .subscribeOn(computation())
-                .subscribe(values -> tags.postValue(values.stream()
-                        .flatMap(tag -> Stream.of(tag.split(",")))
-                        .distinct()
-                        .collect(Collectors.toList()))));
+                .subscribe(this::setTags
+                )
+        );
+    }
+
+    private void setTags(List<String> values) {
+        if (values != null) {
+            tags.postValue(
+                    values.stream()
+                            .filter(Objects::nonNull)
+                            .flatMap(tag -> Stream.of(tag.split(",")))
+                            .map(String::trim)
+                            .distinct()
+                            .collect(Collectors.toList())
+            );
+        }
     }
 
     @Override
