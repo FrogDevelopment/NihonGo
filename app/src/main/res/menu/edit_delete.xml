@@ -3,10 +3,10 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_update"
+        android:id="@+id/action_edit"
         android:icon="@drawable/ic_baseline_edit_24"
         app:showAsAction="ifRoom"
-        android:title="@string/action_dico_update"/>
+        android:title="@string/action_dico_edit" />
 
     <item
         android:id="@+id/action_delete"

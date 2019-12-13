@@ -68,7 +68,7 @@
     <string name="bookmark_add">Add to bookmarks</string>
     <string name="bookmark_remove">Remove from bookmarks</string>
     <string name="action_dico_favorite">Favorite</string>
-    <string name="action_dico_update">Update</string>
+    <string name="action_dico_edit">Update</string>
 
     <string name="action_dico_delete">Delete</string>
 

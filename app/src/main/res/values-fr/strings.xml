@@ -45,7 +45,7 @@
 
     <!-- CONTEXT MENU -->
     <string name="action_dico_favorite">Favori</string>
-    <string name="action_dico_update">Mettre à jour</string>
+    <string name="action_dico_edit">Mettre à jour</string>
     <string name="action_dico_delete">Supprimer</string>
     <string name="action_dico_favorite_only">Favoris uniquement</string>
     <string name="action_dico_gesture">Draw</string>

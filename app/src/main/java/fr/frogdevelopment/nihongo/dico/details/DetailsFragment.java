@@ -103,13 +103,13 @@ public class DetailsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.dico_context, menu);
+        inflater.inflate(R.menu.edit_delete, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_update:
+            case R.id.action_edit:
                 update();
                 return true;
 

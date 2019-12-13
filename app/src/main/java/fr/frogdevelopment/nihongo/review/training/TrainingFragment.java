@@ -1,7 +1,11 @@
 package fr.frogdevelopment.nihongo.review.training;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,21 +21,22 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
+import fr.frogdevelopment.nihongo.dico.update.UpdateActivity;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static fr.frogdevelopment.nihongo.R.id.review_count;
+import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class TrainingFragment extends Fragment {
 
-    private Details mRow;
+    private Details mItem;
     private String test;
 
     private ImageView mBookmark;
@@ -44,6 +49,12 @@ public class TrainingFragment extends Fragment {
     private ChipGroup mTagsChipGroup;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTrainingViewModel = new ViewModelProvider(requireActivity()).get(TrainingViewModel.class);
         return inflater.inflate(R.layout.review_fragment, container, false);
@@ -51,7 +62,6 @@ public class TrainingFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(rootView, savedInstanceState);
         TextView countView = rootView.findViewById(review_count);
         TextView reviewedView = rootView.findViewById(R.id.review_reviewed);
         TextView infoTitleView = rootView.findViewById(R.id.review_info_title);
@@ -62,7 +72,7 @@ public class TrainingFragment extends Fragment {
 
         mKanaSwitcher = rootView.findViewById(R.id.review_textSwitcher_kana);
         mKanaSwitcher.setOnClickListener(view -> {
-            mKanaSwitcher.setText(mRow.kana);
+            mKanaSwitcher.setText(mItem.kana);
             mKanaSwitcher.setClickable(false);
 
         });
@@ -76,27 +86,27 @@ public class TrainingFragment extends Fragment {
         Bundle args = requireArguments();
         countView.setText(args.getString("count"));
 
-        mRow = mTrainingViewModel.get(args.getInt("position"));
+        mItem = mTrainingViewModel.get(args.getInt("position"));
 
         boolean isJapaneseReviewed = mTrainingViewModel.isJapaneseReview();
 
         boolean kanjiPst = false;
-        if (StringUtils.isNoneBlank(mRow.kanji)) {
+        if (isNoneBlank(mItem.kanji)) {
             kanjiPst = true;
             if (isJapaneseReviewed) {
-                reviewedView.setText(mRow.kanji);
+                reviewedView.setText(mItem.kanji);
             } else {
-                test = mRow.kanji;
+                test = mItem.kanji;
                 mTestSwitcher.setText(getString(R.string.review_switch_kanji));
             }
         }
 
-        if (StringUtils.isNoneBlank(mRow.kana)) {
+        if (isNoneBlank(mItem.kana)) {
             if (!kanjiPst) {
                 if (isJapaneseReviewed) {
-                    reviewedView.setText(mRow.kana);
+                    reviewedView.setText(mItem.kana);
                 } else {
-                    test = mRow.kana;
+                    test = mItem.kana;
                     mTestSwitcher.setText(getString(R.string.review_switch_kana));
                 }
                 mKanaSwitcher.setVisibility(INVISIBLE);
@@ -108,14 +118,14 @@ public class TrainingFragment extends Fragment {
         }
 
         if (isJapaneseReviewed) {
-            test = mRow.input;
+            test = mItem.input;
             mTestSwitcher.setText(getString(R.string.review_switch_input));
         } else {
-            reviewedView.setText(mRow.input);
+            reviewedView.setText(mItem.input);
         }
 
-        if (StringUtils.isNotBlank(mRow.details)) {
-            infoView.setText(mRow.details);
+        if (isNotBlank(mItem.details)) {
+            infoView.setText(mItem.details);
             infoView.setVisibility(VISIBLE);
             infoTitleView.setVisibility(VISIBLE);
         } else {
@@ -124,8 +134,8 @@ public class TrainingFragment extends Fragment {
             infoTitleView.setVisibility(GONE);
         }
 
-        if (StringUtils.isNotBlank(mRow.example)) {
-            exampleView.setText(mRow.example);
+        if (isNotBlank(mItem.example)) {
+            exampleView.setText(mItem.example);
             exampleView.setVisibility(VISIBLE);
             exampleTitleView.setVisibility(VISIBLE);
         } else {
@@ -134,8 +144,8 @@ public class TrainingFragment extends Fragment {
             exampleTitleView.setVisibility(GONE);
         }
 
-        if (StringUtils.isNotBlank(mRow.tags)) {
-            Stream.of(mRow.tags.split(", ")).forEach(this::addChipToGroup);
+        if (isNotBlank(mItem.tags)) {
+            Stream.of(mItem.tags.split(", ")).forEach(this::addChipToGroup);
         }
 
         mBookmark = rootView.findViewById(R.id.bookmark);
@@ -162,7 +172,7 @@ public class TrainingFragment extends Fragment {
     }
 
     private void handleRate() {
-        switch (mRow.learned) {
+        switch (mItem.learned) {
             case 1:
                 mRate0.setImageResource(R.drawable.ic_baseline_star_24);
                 mRate1.setImageResource(R.drawable.ic_baseline_star_24);
@@ -188,23 +198,42 @@ public class TrainingFragment extends Fragment {
     }
 
     private void handleBookmark() {
-        mBookmark.setImageResource(mRow.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
+        mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
     }
 
     private void setRate(int rate) {
-        mRow.learned = rate;
+        mItem.learned = rate;
         handleRate();
 
-        mTrainingViewModel.update(mRow);
+        mTrainingViewModel.update(mItem);
     }
 
     private void bookmarkItem() {
-        mRow.switchBookmark();
+        mItem.switchBookmark();
         handleBookmark();
 
-        mTrainingViewModel.update(mRow);
+        mTrainingViewModel.update(mItem);
 
-        Toast.makeText(requireActivity(), getString(mRow.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), getString(mItem.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.edit_delete, menu);
+
+        menu.findItem(R.id.action_delete).setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_edit) {
+            Intent intent = new Intent(requireContext(), UpdateActivity.class);
+            intent.putExtra("item_id", mItem.id);
+
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
 }

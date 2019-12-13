@@ -259,14 +259,14 @@ public class DicoFragment extends ListFragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            requireActivity().getMenuInflater().inflate(R.menu.dico_context, menu);
+            requireActivity().getMenuInflater().inflate(R.menu.edit_delete, menu);
             isContextActionBar = true;
             return true;
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            menu.findItem(R.id.action_update).setVisible(rowSelectedNumber == 1);
+            menu.findItem(R.id.action_edit).setVisible(rowSelectedNumber == 1);
             return true;
         }
 
@@ -277,7 +277,7 @@ public class DicoFragment extends ListFragment {
                     onDelete(actionMode, selectedRows);
                     break;
 
-                case R.id.action_update:
+                case R.id.action_edit:
                     onUpdate(selectedRows.iterator().next());
                     actionMode.finish();
                     break;
