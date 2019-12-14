@@ -18,18 +18,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.snackbar.Snackbar.Callback;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.edit.EditActivity;
 
-import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class DetailsFragment extends Fragment {
 
@@ -49,7 +51,7 @@ public class DetailsFragment extends Fragment {
     private TextView mExampleTitleView;
     private TextView mExampleView;
     private TextView mTagsViewTitle;
-    private TextView mTagsView;
+    private ChipGroup mTagsChipGroup;
     private TextView mSuccessView;
 
     static DetailsFragment newInstance(Bundle extras) {
@@ -85,8 +87,7 @@ public class DetailsFragment extends Fragment {
         mDetailsView = rootView.findViewById(R.id.details_word_info);
         mExampleTitleView = rootView.findViewById(R.id.details_word_example_title);
         mExampleView = rootView.findViewById(R.id.details_word_example);
-        mTagsViewTitle = rootView.findViewById(R.id.details_word_tags_title);
-        mTagsView = rootView.findViewById(R.id.details_word_tags);
+        mTagsChipGroup = rootView.findViewById(R.id.details_word_tags);
         mSuccessView = rootView.findViewById(R.id.details_word_success);
         mBookmark = rootView.findViewById(R.id.bookmark);
         mRate0 = rootView.findViewById(R.id.rate_0);
@@ -139,37 +140,31 @@ public class DetailsFragment extends Fragment {
 
         mInputView.setText(mItem.input);
 
-        if (StringUtils.isNotBlank(mItem.kanji)) {
+        if (isNotBlank(mItem.kanji)) {
             mKanjiView.setText(mItem.kanji);
             mKanjiView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mItem.kana)) {
+        if (isNotBlank(mItem.kana)) {
             mKanaView.setText(mItem.kana);
         }
 
         mDetailsView.setText(mItem.details);
-        if (StringUtils.isNotBlank(mItem.details)) {
+        if (isNotBlank(mItem.details)) {
             mDetailsView.setText(mItem.details);
             mDetailsView.setVisibility(VISIBLE);
             mDetailsTitleView.setVisibility(VISIBLE);
         }
 
         mExampleView.setText(mItem.example);
-        if (StringUtils.isNotBlank(mItem.example)) {
+        if (isNotBlank(mItem.example)) {
             mExampleView.setText(mItem.example);
             mExampleView.setVisibility(VISIBLE);
             mExampleTitleView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mItem.tags)) {
-            mTagsView.setText(mItem.tags);
-            mTagsView.setVisibility(VISIBLE);
-            mTagsViewTitle.setVisibility(VISIBLE);
-        } else {
-            mTagsView.setText(null);
-            mTagsView.setVisibility(GONE);
-            mTagsViewTitle.setVisibility(GONE);
+        if (isNotBlank(mItem.tags)) {
+            Stream.of(mItem.tags.split(", ")).forEach(this::addChipToGroup);
         }
 
         int total = mItem.success + mItem.failed;
@@ -177,6 +172,16 @@ public class DetailsFragment extends Fragment {
 
         handleRate();
         handleBookmark();
+    }
+
+    private void addChipToGroup(String tag) {
+        Chip chip = new Chip(requireContext());
+        chip.setText(tag);
+        chip.setClickable(false);
+        chip.setChipBackgroundColorResource(R.color.accent);
+        chip.setTextColor(getResources().getColor(R.color.white, requireActivity().getTheme()));
+
+        mTagsChipGroup.addView(chip);
     }
 
     private void handleRate() {
