@@ -44,7 +44,6 @@ import static android.view.View.VISIBLE;
 import static android.widget.RelativeLayout.LayoutParams.MATCH_PARENT;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 public class LessonsFragment extends ListFragment {
 
@@ -208,7 +207,7 @@ public class LessonsFragment extends ListFragment {
     }
 
     private void downloadLesson(Lesson lesson) {
-        mLessonsService.fetchLessons(mLocale, uncapitalize(lesson.title)).enqueue(new Callback<List<Details>>() {
+        mLessonsService.fetchLessons(mLocale, lesson.code).enqueue(new Callback<List<Details>>() {
             @Override
             public void onResponse(@NonNull Call<List<Details>> call, @NonNull Response<List<Details>> response) {
                 if (response.isSuccessful()) {
