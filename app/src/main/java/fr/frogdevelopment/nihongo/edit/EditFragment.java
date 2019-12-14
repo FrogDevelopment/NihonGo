@@ -1,4 +1,4 @@
-package fr.frogdevelopment.nihongo.dico.update;
+package fr.frogdevelopment.nihongo.edit;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
-import fr.frogdevelopment.nihongo.dico.DetailsViewModel;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
 import static fr.frogdevelopment.nihongo.R.string.input_error_all_empty;
@@ -47,10 +46,10 @@ import static fr.frogdevelopment.nihongo.utils.InputUtils.isOnlyKana;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.join;
 
-public class UpdateFragment extends Fragment {
+public class EditFragment extends Fragment {
 
-    private DetailsViewModel mDetailsViewModel;
-    private Details mDetails;
+    private EditViewModel mEditViewModel;
+    private Details mItem;
     private Set<String> mTags = new HashSet<>();
 
     private TextInputLayout mKanjiWrapper;
@@ -65,21 +64,21 @@ public class UpdateFragment extends Fragment {
     private TextInputEditText mExampleText;
     private ChipGroup mChipGroup;
 
-    public static UpdateFragment newInstance(Bundle arguments) {
-        UpdateFragment updateFragment = new UpdateFragment();
-        updateFragment.setArguments(arguments);
-        return updateFragment;
+    static EditFragment newInstance(Bundle arguments) {
+        EditFragment editFragment = new EditFragment();
+        editFragment.setArguments(arguments);
+        return editFragment;
     }
 
-    public UpdateFragment() {
-        super(R.layout.update_fragment);
+    public EditFragment() {
+        super(R.layout.edit_fragment);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
+        mEditViewModel = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
     }
 
     @Override
@@ -111,17 +110,16 @@ public class UpdateFragment extends Fragment {
             return false;
         });
 
-        // update from dico
+        // update
         if (getArguments() != null && getArguments().containsKey("item_id")) {
             int itemId = getArguments().getInt("item_id");
-            mDetailsViewModel.getById(itemId)
+            mEditViewModel.getById(itemId)
                     .observe(getViewLifecycleOwner(), value -> {
-                        mDetails = value;
+                        mItem = value;
                         initData();
                     });
-        } else {
-            // update from details
-            mDetails = mDetailsViewModel.details();
+        } else { // create
+            mItem = null;
             initData();
         }
     }
@@ -149,34 +147,35 @@ public class UpdateFragment extends Fragment {
 
     private void initData() {
         // when new data
-        if (mDetails == null) {
-            mDetails = new Details();
+        if (mItem == null) {
+            mItem = new Details();
             mKanjiText.requestFocus();
         }
 
-        mKanjiText.setText(mDetails.kanji);
+        mKanjiText.setText(mItem.kanji);
         mKanjiWrapper.setError(null);
 
-        mKanaText.setText(mDetails.kana);
+        mKanaText.setText(mItem.kana);
         mKanaWrapper.setError(null);
 
-        mInputText.setText(mDetails.input);
+        mInputText.setText(mItem.input);
         mInputWrapper.setError(null);
 
-        mDetailsText.setText(mDetails.details);
+        mDetailsText.setText(mItem.details);
         mDetailsWrapper.setError(null);
 
-        mExampleText.setText(mDetails.example);
+        mExampleText.setText(mItem.example);
         mExampleWrapper.setError(null);
 
         mChipGroup.removeAllViews();
-        if (mDetails.tags != null) {
-            Stream.of(mDetails.tags.split(",")).forEach(this::addChipToGroup);
+        if (mItem.tags != null) {
+            Stream.of(mItem.tags.split(","))
+                    .forEach(this::addChipToGroup);
         }
     }
 
     private void addChipToGroup(String tag) {
-        mTags.add(capitalize(tag));
+        mTags.add(tag);
 
         Chip chip = new Chip(requireContext());
         chip.setText(tag);
@@ -246,16 +245,16 @@ public class UpdateFragment extends Fragment {
     }
 
     private void saveOrUpdate() {
-        mDetails.input = capitalize(mInputText.getText().toString());
-        mDetails.sortLetter = mDetails.input.substring(0, 1);
-        mDetails.kanji = mKanjiText.getText().toString();
-        mDetails.kana = mKanaText.getText().toString();
-        mDetails.tags = mTags.isEmpty() ? null : join(mTags, ",");
-        mDetails.details = mDetailsText.getText().toString();
-        mDetails.example = mExampleText.getText().toString();
+        mItem.input = capitalize(mInputText.getText().toString());
+        mItem.sortLetter = mItem.input.substring(0, 1);
+        mItem.kanji = mKanjiText.getText().toString();
+        mItem.kana = mKanaText.getText().toString();
+        mItem.tags = mTags.isEmpty() ? null : join(mTags, ",");
+        mItem.details = mDetailsText.getText().toString();
+        mItem.example = mExampleText.getText().toString();
 
         hideKeyboard();
-        if (mDetails.id != null) {
+        if (mItem.id != null) {
             update();
         } else {
             insert();
@@ -263,7 +262,7 @@ public class UpdateFragment extends Fragment {
     }
 
     private void update() {
-        mDetailsViewModel.update(mDetails);
+        mEditViewModel.update(mItem);
 
         // TOAST
         Snackbar.make(requireView(), input_update_OK, Snackbar.LENGTH_SHORT)
@@ -276,14 +275,14 @@ public class UpdateFragment extends Fragment {
     }
 
     private void insert() {
-        mDetailsViewModel.insert(mDetails);
+        mEditViewModel.insert(mItem);
 
         // TOAST
         Snackbar.make(requireView(), input_save_OK, Snackbar.LENGTH_SHORT)
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
-                        mDetails = new Details();
+                        mItem = null;
                         initData();
                     }
                 })

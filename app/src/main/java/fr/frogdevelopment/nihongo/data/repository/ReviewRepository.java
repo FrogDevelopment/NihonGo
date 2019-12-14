@@ -7,7 +7,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 import java.util.List;
 import java.util.stream.Stream;
 
-import fr.frogdevelopment.nihongo.data.dao.ReviewsDao;
+import fr.frogdevelopment.nihongo.data.dao.TrainingDao;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import io.reactivex.Maybe;
 
@@ -19,11 +19,11 @@ import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
 
 public class ReviewRepository {
 
-    private ReviewsDao mDetailsDao;
+    private TrainingDao mDetailsDao;
 
     public ReviewRepository(Application application) {
         NihonGoRoomDatabase db = getDatabase(application);
-        mDetailsDao = db.reviewsDao();
+        mDetailsDao = db.trainingDao();
     }
 
     public Maybe<List<String>> getTags() {

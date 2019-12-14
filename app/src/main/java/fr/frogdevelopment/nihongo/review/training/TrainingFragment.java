@@ -1,11 +1,7 @@
 package fr.frogdevelopment.nihongo.review.training;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,7 +21,6 @@ import java.util.stream.Stream;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
-import fr.frogdevelopment.nihongo.dico.update.UpdateActivity;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -47,12 +42,6 @@ public class TrainingFragment extends Fragment {
     private TextSwitcher mTestSwitcher;
     private TrainingViewModel mTrainingViewModel;
     private ChipGroup mTagsChipGroup;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -216,24 +205,4 @@ public class TrainingFragment extends Fragment {
 
         Toast.makeText(requireActivity(), getString(mItem.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.edit_delete, menu);
-
-        menu.findItem(R.id.action_delete).setVisible(false);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_edit) {
-            Intent intent = new Intent(requireContext(), UpdateActivity.class);
-            intent.putExtra("item_id", mItem.id);
-
-            startActivity(intent);
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -58,7 +58,7 @@
                 android:value="fr.frogdevelopment.nihongo.MainActivity" />
         </activity>
         <activity
-            android:name=".dico.update.UpdateActivity"
+            android:name=".edit.EditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity">
             <meta-data

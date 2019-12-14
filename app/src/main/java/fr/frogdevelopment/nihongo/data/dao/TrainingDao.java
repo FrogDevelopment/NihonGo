@@ -14,7 +14,7 @@ import io.reactivex.Maybe;
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface ReviewsDao {
+public interface TrainingDao {
 
     @Query("SELECT DISTINCT tags FROM dico")
     Maybe<List<String>> getTags();

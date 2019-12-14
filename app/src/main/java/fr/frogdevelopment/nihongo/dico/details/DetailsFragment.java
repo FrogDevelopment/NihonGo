@@ -3,6 +3,7 @@ package fr.frogdevelopment.nihongo.dico.details;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
-import fr.frogdevelopment.nihongo.dico.DetailsViewModel;
-import fr.frogdevelopment.nihongo.dico.update.UpdateFragment;
+import fr.frogdevelopment.nihongo.edit.EditActivity;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -35,7 +35,7 @@ public class DetailsFragment extends Fragment {
 
     private DetailsViewModel mDetailsViewModel;
 
-    private Details mDetails;
+    private Details mItem;
 
     private ImageView mBookmark;
     private ImageView mRate0;
@@ -52,7 +52,7 @@ public class DetailsFragment extends Fragment {
     private TextView mTagsView;
     private TextView mSuccessView;
 
-    public static DetailsFragment newInstance(Bundle extras) {
+    static DetailsFragment newInstance(Bundle extras) {
         DetailsFragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(extras);
         return detailsFragment;
@@ -135,35 +135,35 @@ public class DetailsFragment extends Fragment {
     }
 
     private void fillFields(Details details) {
-        mDetails = details;
+        mItem = details;
 
-        mInputView.setText(mDetails.input);
+        mInputView.setText(mItem.input);
 
-        if (StringUtils.isNotBlank(mDetails.kanji)) {
-            mKanjiView.setText(mDetails.kanji);
+        if (StringUtils.isNotBlank(mItem.kanji)) {
+            mKanjiView.setText(mItem.kanji);
             mKanjiView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mDetails.kana)) {
-            mKanaView.setText(mDetails.kana);
+        if (StringUtils.isNotBlank(mItem.kana)) {
+            mKanaView.setText(mItem.kana);
         }
 
-        mDetailsView.setText(mDetails.details);
-        if (StringUtils.isNotBlank(mDetails.details)) {
-            mDetailsView.setText(mDetails.details);
+        mDetailsView.setText(mItem.details);
+        if (StringUtils.isNotBlank(mItem.details)) {
+            mDetailsView.setText(mItem.details);
             mDetailsView.setVisibility(VISIBLE);
             mDetailsTitleView.setVisibility(VISIBLE);
         }
 
-        mExampleView.setText(mDetails.example);
-        if (StringUtils.isNotBlank(mDetails.example)) {
-            mExampleView.setText(mDetails.example);
+        mExampleView.setText(mItem.example);
+        if (StringUtils.isNotBlank(mItem.example)) {
+            mExampleView.setText(mItem.example);
             mExampleView.setVisibility(VISIBLE);
             mExampleTitleView.setVisibility(VISIBLE);
         }
 
-        if (StringUtils.isNotBlank(mDetails.tags)) {
-            mTagsView.setText(mDetails.tags);
+        if (StringUtils.isNotBlank(mItem.tags)) {
+            mTagsView.setText(mItem.tags);
             mTagsView.setVisibility(VISIBLE);
             mTagsViewTitle.setVisibility(VISIBLE);
         } else {
@@ -172,15 +172,15 @@ public class DetailsFragment extends Fragment {
             mTagsViewTitle.setVisibility(GONE);
         }
 
-        int total = mDetails.success + mDetails.failed;
-        mSuccessView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mDetails.success / total) * 100)));
+        int total = mItem.success + mItem.failed;
+        mSuccessView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
         handleRate();
         handleBookmark();
     }
 
     private void handleRate() {
-        switch (mDetails.learned) {
+        switch (mItem.learned) {
             case 1:
                 mRate0.setImageResource(R.drawable.ic_baseline_star_24);
                 mRate1.setImageResource(R.drawable.ic_baseline_star_24);
@@ -206,30 +206,30 @@ public class DetailsFragment extends Fragment {
     }
 
     private void handleBookmark() {
-        mBookmark.setImageResource(mDetails.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
+        mBookmark.setImageResource(mItem.bookmark ? R.drawable.ic_baseline_bookmark_24 : R.drawable.ic_baseline_bookmark_border_24);
     }
 
     private void onRateChanged(int rate) {
-        mDetails.learned = rate;
+        mItem.learned = rate;
         handleRate();
 
-        mDetailsViewModel.update(mDetails);
+        mDetailsViewModel.update(mItem);
     }
 
     private void onFavoriteChanged() {
-        mDetails.switchBookmark();
+        mItem.switchBookmark();
         handleBookmark();
 
-        mDetailsViewModel.update(mDetails);
+        mDetailsViewModel.update(mItem);
 
-        Toast.makeText(requireContext(), getString(mDetails.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), getString(mItem.bookmark ? R.string.bookmark_add : R.string.bookmark_remove), Toast.LENGTH_SHORT).show();
     }
 
     private void update() {
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.container, UpdateFragment.newInstance(null))
-                .addToBackStack(null)
-                .commit();
+        Intent intent = new Intent(requireContext(), EditActivity.class);
+        intent.putExtra("item_id", mItem.id);
+
+        startActivity(intent);
     }
 
     private void confirmDelete() {
@@ -249,7 +249,7 @@ public class DetailsFragment extends Fragment {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
                         if (event != DISMISS_EVENT_ACTION) {
-                            mDetailsViewModel.delete(mDetails);
+                            mDetailsViewModel.delete(mItem);
                         }
                     }
                 })

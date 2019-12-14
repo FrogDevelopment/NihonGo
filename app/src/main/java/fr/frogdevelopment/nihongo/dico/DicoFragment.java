@@ -39,7 +39,7 @@ import java.util.Set;
 import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Row;
 import fr.frogdevelopment.nihongo.dico.details.DetailsActivity;
-import fr.frogdevelopment.nihongo.dico.update.UpdateActivity;
+import fr.frogdevelopment.nihongo.edit.EditActivity;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
@@ -212,14 +212,14 @@ public class DicoFragment extends ListFragment {
     private void onUpdate(final int position) {
         final Row row = mDicoAdapter.getItem(position);
 
-        Intent intent = new Intent(requireContext(), UpdateActivity.class);
+        Intent intent = new Intent(requireContext(), EditActivity.class);
         intent.putExtra("item_id", row.id);
 
         startActivity(intent);
     }
 
     private void onAddInput() {
-        startActivity(new Intent(requireContext(), UpdateActivity.class));
+        startActivity(new Intent(requireContext(), EditActivity.class));
     }
 
     private void onShowDetails(int position) {
