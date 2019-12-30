@@ -247,7 +247,7 @@ public class ReviewParametersFragment extends Fragment {
             if (mQuantity != null) {
                 preferencesHelper.saveInt(REVIEW_QUANTITY, Integer.parseInt(mQuantity));
             }
-            if (ArrayUtils.isNotEmpty(mSelectedTags)) {
+            if (mSelectedTags != null) {
                 preferencesHelper.saveString(REVIEW_TAGS, StringUtils.join(mSelectedTags, ", "));
             }
         } else {
