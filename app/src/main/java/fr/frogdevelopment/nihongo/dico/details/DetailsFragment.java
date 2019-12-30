@@ -30,7 +30,7 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
 import fr.frogdevelopment.nihongo.edit.EditActivity;
 
-import static android.view.View.VISIBLE;
+import static android.view.View.GONE;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class DetailsFragment extends Fragment {
@@ -50,9 +50,8 @@ public class DetailsFragment extends Fragment {
     private TextView mDetailsView;
     private TextView mExampleTitleView;
     private TextView mExampleView;
-    private TextView mTagsViewTitle;
     private ChipGroup mTagsChipGroup;
-    private TextView mSuccessView;
+//    private TextView mSuccessView;
 
     static DetailsFragment newInstance(Bundle extras) {
         DetailsFragment detailsFragment = new DetailsFragment();
@@ -88,7 +87,7 @@ public class DetailsFragment extends Fragment {
         mExampleTitleView = rootView.findViewById(R.id.details_word_example_title);
         mExampleView = rootView.findViewById(R.id.details_word_example);
         mTagsChipGroup = rootView.findViewById(R.id.details_word_tags);
-        mSuccessView = rootView.findViewById(R.id.details_word_success);
+//        mSuccessView = rootView.findViewById(R.id.details_word_success);
         mBookmark = rootView.findViewById(R.id.bookmark);
         mRate0 = rootView.findViewById(R.id.rate_0);
         mRate1 = rootView.findViewById(R.id.rate_1);
@@ -142,7 +141,8 @@ public class DetailsFragment extends Fragment {
 
         if (isNotBlank(mItem.kanji)) {
             mKanjiView.setText(mItem.kanji);
-            mKanjiView.setVisibility(VISIBLE);
+        } else {
+            mKanjiView.setVisibility(GONE);
         }
 
         if (isNotBlank(mItem.kana)) {
@@ -152,23 +152,25 @@ public class DetailsFragment extends Fragment {
         mDetailsView.setText(mItem.details);
         if (isNotBlank(mItem.details)) {
             mDetailsView.setText(mItem.details);
-            mDetailsView.setVisibility(VISIBLE);
-            mDetailsTitleView.setVisibility(VISIBLE);
+        } else {
+            mDetailsView.setVisibility(GONE);
+            mDetailsTitleView.setVisibility(GONE);
         }
 
         mExampleView.setText(mItem.example);
         if (isNotBlank(mItem.example)) {
             mExampleView.setText(mItem.example);
-            mExampleView.setVisibility(VISIBLE);
-            mExampleTitleView.setVisibility(VISIBLE);
+        } else {
+            mExampleView.setVisibility(GONE);
+            mExampleTitleView.setVisibility(GONE);
         }
 
         if (isNotBlank(mItem.tags)) {
             Stream.of(mItem.tags.split(", ")).forEach(this::addChipToGroup);
         }
 
-        int total = mItem.success + mItem.failed;
-        mSuccessView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
+//        int total = mItem.success + mItem.failed;
+//        mSuccessView.setText(getString(R.string.details_ratio, (total == 0) ? 0 : ((mItem.success / total) * 100)));
 
         handleRate();
         handleBookmark();

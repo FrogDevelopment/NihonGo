@@ -91,9 +91,9 @@
 
             <TextView
                 android:id="@+id/review_line_0"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:hyphenationFrequency="none"
                 android:textSize="70sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +102,7 @@
 
             <TextView
                 android:id="@+id/review_line_1"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingTop="20dp"
@@ -114,7 +114,7 @@
 
             <TextView
                 android:id="@+id/review_line_2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingTop="20dp"
@@ -126,7 +126,7 @@
 
             <TextView
                 android:id="@+id/review_info_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="start"
@@ -139,7 +139,7 @@
 
             <TextView
                 android:id="@+id/review_info"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
@@ -152,7 +152,7 @@
 
             <TextView
                 android:id="@+id/review_example_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="start"
@@ -165,7 +165,7 @@
 
             <TextView
                 android:id="@+id/review_example"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
@@ -178,7 +178,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/review_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/review_show"
                 android:textSize="40sp"
@@ -189,7 +189,7 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/review_tags"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
