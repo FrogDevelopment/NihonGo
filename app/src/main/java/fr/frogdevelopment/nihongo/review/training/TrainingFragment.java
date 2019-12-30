@@ -70,17 +70,6 @@ public class TrainingFragment extends Fragment {
         TextView exampleView = rootView.findViewById(review_example);
         mTagsChipGroup = rootView.findViewById(review_tags);
 
-        button.setOnClickListener(v -> {
-            button.setVisibility(GONE);
-            line0View.setVisibility(VISIBLE);
-            lineKanaView.setVisibility(VISIBLE);
-            line2View.setVisibility(VISIBLE);
-            infoTitleView.setVisibility(VISIBLE);
-            infoView.setVisibility(VISIBLE);
-            exampleTitleView.setVisibility(VISIBLE);
-            exampleView.setVisibility(VISIBLE);
-        });
-
         Bundle args = requireArguments();
         countView.setText(args.getString("count"));
 
@@ -104,7 +93,6 @@ public class TrainingFragment extends Fragment {
         }
         line0View.setText(line0);
         lineKanaView.setText(lineKana);
-        lineKanaView.setVisibility(line1Visibility);
         line2View.setText(line2);
 
         if (isNotBlank(mItem.details)) {
@@ -130,6 +118,16 @@ public class TrainingFragment extends Fragment {
         mRate2 = rootView.findViewById(rate_2);
         mRate2.setOnClickListener(v -> setRate(2));
         handleRate();
+
+        button.setOnClickListener(v -> {
+            button.setVisibility(GONE);
+            lineKanaView.setVisibility(line1Visibility);
+            line2View.setVisibility(VISIBLE);
+            infoTitleView.setVisibility(VISIBLE);
+            infoView.setVisibility(VISIBLE);
+            exampleTitleView.setVisibility(VISIBLE);
+            exampleView.setVisibility(VISIBLE);
+        });
     }
 
     private void addChipToGroup(String tag) {
