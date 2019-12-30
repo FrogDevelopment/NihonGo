@@ -164,16 +164,11 @@
     <!-- REVIEW  -->
     <!-- ******* -->
     <string name="title_activity_review">Révision</string>
-    <string name="review_switch_kanji">Taper pour afficher les Kanji</string>
-    <string name="review_switch_kana">Taper pour afficher les Kana</string>
-    <string name="review_switch_input">Taper pour afficher en français</string>
     <string name="review_again">Recommencer</string>
 
     <!-- ******* -->
     <!-- TEST    -->
     <!-- ******* -->
-    <string name="test_tab_selection">SELECTION</string>
-    <string name="test_tab_input">SAISIE</string>
     <string name="test_back_message">Attention ! Vous êtes sur le point de quitter le test.</string>
     <string name="test_next">Suivant</string>
     <string name="test_info">Informations</string>
