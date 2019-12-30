@@ -3,8 +3,8 @@
     android:id="@+id/review_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="22dp"
-    android:paddingEnd="22dp">
+    android:paddingStart="35dp"
+    android:paddingEnd="35dp">
 
     <TextView
         android:id="@+id/review_count"
