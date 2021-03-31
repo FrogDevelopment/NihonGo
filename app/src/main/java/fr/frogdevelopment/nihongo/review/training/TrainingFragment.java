@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -23,25 +23,45 @@ import fr.frogdevelopment.nihongo.R;
 import fr.frogdevelopment.nihongo.data.model.Details;
 
 import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static fr.frogdevelopment.nihongo.R.id.bookmark;
+import static fr.frogdevelopment.nihongo.R.id.rate_0;
+import static fr.frogdevelopment.nihongo.R.id.rate_1;
+import static fr.frogdevelopment.nihongo.R.id.rate_2;
+import static fr.frogdevelopment.nihongo.R.id.review_button;
 import static fr.frogdevelopment.nihongo.R.id.review_count;
-import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+import static fr.frogdevelopment.nihongo.R.id.review_example;
+import static fr.frogdevelopment.nihongo.R.id.review_example_title;
+import static fr.frogdevelopment.nihongo.R.id.review_info;
+import static fr.frogdevelopment.nihongo.R.id.review_info_title;
+import static fr.frogdevelopment.nihongo.R.id.review_line_0;
+import static fr.frogdevelopment.nihongo.R.id.review_line_1;
+import static fr.frogdevelopment.nihongo.R.id.review_line_2;
+import static fr.frogdevelopment.nihongo.R.id.review_tags;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class TrainingFragment extends Fragment {
 
     private Details mItem;
-    private String test;
+    private TrainingViewModel mTrainingViewModel;
 
     private ImageView mBookmark;
+    private TextView mLine0View;
+    private TextView mLine1View;
+    private TextView mLine2View;
+    private TextView mInfoTitleView;
+    private TextView mInfoView;
+    private TextView mExampleTitleView;
+    private TextView mExampleView;
+    private ChipGroup mTagsChipGroup;
     private ImageView mRate0;
     private ImageView mRate1;
     private ImageView mRate2;
-    private TextSwitcher mKanaSwitcher;
-    private TextSwitcher mTestSwitcher;
-    private TrainingViewModel mTrainingViewModel;
-    private ChipGroup mTagsChipGroup;
+
+    private int mLine1Visibility = VISIBLE;
+    private int mLine2Visibility = VISIBLE;
+    private int mInfoVisibility = VISIBLE;
+    private int mExampleVisibility = VISIBLE;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,102 +72,76 @@ public class TrainingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
         TextView countView = rootView.findViewById(review_count);
-        TextView reviewedView = rootView.findViewById(R.id.review_reviewed);
-        TextView infoTitleView = rootView.findViewById(R.id.review_info_title);
-        TextView infoView = rootView.findViewById(R.id.review_info);
-        TextView exampleTitleView = rootView.findViewById(R.id.review_example_title);
-        TextView exampleView = rootView.findViewById(R.id.review_example);
-        mTagsChipGroup = rootView.findViewById(R.id.review_tags);
-
-        mKanaSwitcher = rootView.findViewById(R.id.review_textSwitcher_kana);
-        mKanaSwitcher.setOnClickListener(view -> {
-            mKanaSwitcher.setText(mItem.kana);
-            mKanaSwitcher.setClickable(false);
-
-        });
-        mTestSwitcher = rootView.findViewById(R.id.review_textSwitcher_test);
-        mTestSwitcher.setOnClickListener(view -> {
-            mTestSwitcher.setText(test);
-            mTestSwitcher.setClickable(false);
-
-        });
+        mBookmark = rootView.findViewById(bookmark);
+        MaterialButton showButton = rootView.findViewById(review_button);
+        mLine0View = rootView.findViewById(review_line_0);
+        mLine1View = rootView.findViewById(review_line_1);
+        mLine2View = rootView.findViewById(review_line_2);
+        mInfoTitleView = rootView.findViewById(review_info_title);
+        mInfoView = rootView.findViewById(review_info);
+        mExampleTitleView = rootView.findViewById(review_example_title);
+        mExampleView = rootView.findViewById(review_example);
+        mTagsChipGroup = rootView.findViewById(review_tags);
+        mRate0 = rootView.findViewById(rate_0);
+        mRate1 = rootView.findViewById(rate_1);
+        mRate2 = rootView.findViewById(rate_2);
 
         Bundle args = requireArguments();
         countView.setText(args.getString("count"));
 
         mItem = mTrainingViewModel.get(args.getInt("position"));
 
+        boolean kanjiPst = isNotBlank(mItem.kanji);
         boolean isJapaneseReviewed = mTrainingViewModel.isJapaneseReview();
 
-        boolean kanjiPst = false;
-        if (isNoneBlank(mItem.kanji)) {
-            kanjiPst = true;
-            if (isJapaneseReviewed) {
-                reviewedView.setText(mItem.kanji);
-            } else {
-                test = mItem.kanji;
-                mTestSwitcher.setText(getString(R.string.review_switch_kanji));
-            }
-        }
-
-        if (isNoneBlank(mItem.kana)) {
-            if (!kanjiPst) {
-                if (isJapaneseReviewed) {
-                    reviewedView.setText(mItem.kana);
-                } else {
-                    test = mItem.kana;
-                    mTestSwitcher.setText(getString(R.string.review_switch_kana));
-                }
-                mKanaSwitcher.setVisibility(INVISIBLE);
-            } else {
-                mKanaSwitcher.setText(getString(R.string.review_switch_kana));
-            }
-        } else {
-            mKanaSwitcher.setVisibility(INVISIBLE);
-        }
-
         if (isJapaneseReviewed) {
-            test = mItem.input;
-            mTestSwitcher.setText(getString(R.string.review_switch_input));
+            mLine0View.setText(kanjiPst ? mItem.kanji : mItem.kana);
+            mLine1View.setText(kanjiPst ? mItem.kana : null);
+            mLine1Visibility = kanjiPst ? VISIBLE : GONE;
+            mLine2View.setText(mItem.input);
         } else {
-            reviewedView.setText(mItem.input);
+            mLine0View.setText(mItem.input);
+            mLine1View.setText(kanjiPst ? mItem.kanji : mItem.kana);
+            mLine2View.setText(kanjiPst ? mItem.kana : null);
+            mLine2Visibility = kanjiPst ? VISIBLE : GONE;
         }
 
         if (isNotBlank(mItem.details)) {
-            infoView.setText(mItem.details);
-            infoView.setVisibility(VISIBLE);
-            infoTitleView.setVisibility(VISIBLE);
+            mInfoView.setText(mItem.details);
         } else {
-            infoView.setText(null);
-            infoView.setVisibility(GONE);
-            infoTitleView.setVisibility(GONE);
+            mInfoVisibility = GONE;
         }
 
         if (isNotBlank(mItem.example)) {
-            exampleView.setText(mItem.example);
-            exampleView.setVisibility(VISIBLE);
-            exampleTitleView.setVisibility(VISIBLE);
+            mExampleView.setText(mItem.example);
         } else {
-            exampleView.setText(null);
-            exampleView.setVisibility(GONE);
-            exampleTitleView.setVisibility(GONE);
+            mExampleVisibility = GONE;
         }
 
         if (isNotBlank(mItem.tags)) {
             Stream.of(mItem.tags.split(", ")).forEach(this::addChipToGroup);
         }
 
-        mBookmark = rootView.findViewById(R.id.bookmark);
         mBookmark.setOnClickListener(v -> bookmarkItem());
         handleBookmark();
 
-        mRate0 = rootView.findViewById(R.id.rate_0);
         mRate0.setOnClickListener(v -> setRate(0));
-        mRate1 = rootView.findViewById(R.id.rate_1);
         mRate1.setOnClickListener(v -> setRate(1));
-        mRate2 = rootView.findViewById(R.id.rate_2);
         mRate2.setOnClickListener(v -> setRate(2));
         handleRate();
+
+        showButton.setOnClickListener(this::onShowClicked);
+    }
+
+    private void onShowClicked(View button) {
+        button.setVisibility(GONE);
+        mLine1View.setVisibility(mLine1Visibility);
+        mLine2View.setVisibility(mLine2Visibility);
+        mInfoTitleView.setVisibility(mInfoVisibility);
+        mInfoView.setVisibility(mInfoVisibility);
+        mExampleTitleView.setVisibility(mExampleVisibility);
+        mExampleView.setVisibility(mExampleVisibility);
+        mTagsChipGroup.setVisibility(VISIBLE);
     }
 
     private void addChipToGroup(String tag) {

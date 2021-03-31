@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/review_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="35dp"
-    android:paddingEnd="35dp">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/rate_0"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="24dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/rate_0"
+        android:src="@drawable/ic_baseline_star_24"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/rate_1"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="24dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/rate_1"
+        android:src="@drawable/ic_baseline_star_24"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rate_2"
+        app:layout_constraintStart_toEndOf="@+id/rate_0" />
+
+    <ImageView
+        android:id="@+id/rate_2"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="24dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/rate_2"
+        android:src="@drawable/ic_baseline_star_24"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/review_count"
@@ -12,175 +53,151 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
         android:layout_toStartOf="@+id/bookmark"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@id/bookmark"
+        android:id="@+id/bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_baseline_bookmark_24"
         android:contentDescription="@string/bookmark_description"
-        android:tint="@android:color/darker_gray" />
+        android:src="@drawable/ic_baseline_bookmark_24"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@+id/review_count"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/review_rating"
-        android:layout_below="@id/bookmark"
-        android:fadeScrollbars="false"
-        android:scrollbarStyle="outsideOverlay">
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/rate_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookmark">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:paddingStart="35dp"
+            android:paddingEnd="35dp">
 
             <TextView
-                android:id="@+id/review_reviewed"
-                android:layout_width="match_parent"
+                android:id="@+id/review_line_0"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="50dp"
+                android:gravity="center_horizontal"
+                android:hyphenationFrequency="none"
+                android:textSize="70sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/review_line_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="60sp" />
+                android:paddingTop="20dp"
+                android:textSize="50sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_line_0" />
 
-            <TextSwitcher
-                android:id="@+id/review_textSwitcher_kana"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/review_line_2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textSize="60sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="30sp"
-                    android:textStyle="italic" />
-            </TextSwitcher>
-
-            <TextSwitcher
-                android:id="@+id/review_textSwitcher_test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textSize="60sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="30sp"
-                    android:textStyle="italic" />
-            </TextSwitcher>
+                android:gravity="center"
+                android:paddingTop="20dp"
+                android:textSize="50sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_line_1" />
 
             <TextView
                 android:id="@+id/review_info_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="start"
                 android:text="@string/details_info"
                 android:textSize="12sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/review_line_2" />
 
             <TextView
                 android:id="@+id/review_info"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/review_info_title" />
 
             <TextView
                 android:id="@+id/review_example_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="start"
                 android:text="@string/details_example"
                 android:textSize="12sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/review_info" />
 
             <TextView
                 android:id="@+id/review_example"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/review_example_title" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/review_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/review_show"
+                android:textSize="40sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_line_0" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/review_tags"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" />
-        </LinearLayout>
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_example"
+                app:layout_constraintVertical_bias="0.95" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/review_rating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/rate_0"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:adjustViewBounds="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/rate_0"
-            android:src="@drawable/ic_baseline_star_24"
-            android:tint="@android:color/darker_gray" />
-
-        <ImageView
-            android:id="@+id/rate_1"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:adjustViewBounds="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/rate_1"
-            android:src="@drawable/ic_baseline_star_24"
-            android:tint="@android:color/darker_gray" />
-
-        <ImageView
-            android:id="@+id/rate_2"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:adjustViewBounds="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/rate_2"
-            android:src="@drawable/ic_baseline_star_24"
-            android:tint="@android:color/darker_gray" />
-    </LinearLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
