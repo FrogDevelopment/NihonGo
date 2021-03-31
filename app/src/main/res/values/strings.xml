@@ -145,28 +145,19 @@
 
     <string name="param_keep_config">Keep config ?</string>
 
-    <string name="title_activity_review">Review</string>
-
-    <string name="review_switch_kanji">Tap to show Kanji</string>
-
-    <string name="review_switch_kana">Tap to show Kana</string>
-
-    <string name="review_switch_input">Tap to show English</string>
-
-    <string name="review_again">Do again</string>
-
     <!-- ******* -->
     <!-- REVIEW -->
     <!-- ******* -->
-    <string name="title_activity_test" translatable="false">Tests</string>
-    <string name="test_tab_selection">SELECTION</string>
-    <string name="test_tab_input">INPUT</string>
-    <string name="test_back_title" translatable="false">ATTENTION</string>
-    <string name="test_back_message">Warning ! You\'re going to leave the test.</string>
+    <string name="title_activity_review">Training</string>
+    <string name="review_again">Do again</string>
+    <string name="review_show">Show</string>
 
     <!-- ******* -->
     <!-- TEST -->
     <!-- ******* -->
+    <string name="title_activity_test" translatable="false">Tests</string>
+    <string name="test_back_title" translatable="false">ATTENTION</string>
+    <string name="test_back_message">Warning ! You\'re going to leave the test.</string>
     <string name="test_next">Next</string>
     <string name="test_info">Information</string>
     <string name="test_input_empty">No response given, continue ?</string>
