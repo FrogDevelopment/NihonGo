@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion '31.0.0'
 
     defaultConfig {
         applicationId "fr.frogdevelopment.nihongo"
 
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 32
 
         versionCode 59
         versionName "2.0.0"
