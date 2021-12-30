@@ -47,8 +47,8 @@ public class LessonsFragment extends ListFragment {
 
     private static final String LOG_TAG = "NIHON_GO";
 
-    private static final String[] LANGUAGES = {"fr_FR", "en_US"};
-    private static final String DEFAULT_LANGUAGE = "en_US";
+    private static final String[] LANGUAGES        = {"fr_FR", "en_US"};
+    private static final String   DEFAULT_LANGUAGE = "en_US";
 
     private LessonAdapter mLessonAdapter;
 
@@ -57,7 +57,7 @@ public class LessonsFragment extends ListFragment {
 
     private Set<String> mLessonsDownloaded;
 
-    private WifiReceiver mWiFiReceiver;
+    private WifiReceiver     mWiFiReceiver;
     private LessonsViewModel mLessonsViewModel;
 
     @Override
@@ -104,7 +104,7 @@ public class LessonsFragment extends ListFragment {
         super.onDestroy();
     }
 
-    private class WifiReceiver extends BroadcastReceiver {
+    public class WifiReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -132,10 +132,10 @@ public class LessonsFragment extends ListFragment {
 
     private void getOffLineLessons() {
         List<Lesson> lessons = mLessonsDownloaded.stream()
-                .sorted()
-                .filter(StringUtils::isNotBlank)
-                .map(code -> new Lesson(code, mSuffixTag, true))
-                .collect(toList());
+                                                 .sorted()
+                                                 .filter(StringUtils::isNotBlank)
+                                                 .map(code -> new Lesson(code, mSuffixTag, true))
+                                                 .collect(toList());
 
         requireView().findViewById(R.id.lesson_no_connection_test).setVisibility(VISIBLE);
         setLessons(lessons, false);
@@ -147,9 +147,9 @@ public class LessonsFragment extends ListFragment {
         if (true) {
             int lastLesson = 21;
             List<Lesson> lessons = IntStream.rangeClosed(1, lastLesson)
-                    .mapToObj(v -> String.format("%02d", v))
-                    .map(n -> new Lesson(n, mSuffixTag, mLessonsDownloaded.contains(n)))
-                    .collect(toList());
+                                            .mapToObj(v -> String.format("%02d", v))
+                                            .map(n -> new Lesson(n, mSuffixTag, mLessonsDownloaded.contains(n)))
+                                            .collect(toList());
             setLessons(lessons, true);
 
         } else {
@@ -192,7 +192,7 @@ public class LessonsFragment extends ListFragment {
     }
 
     private void downloadLesson(Lesson lesson) {
-        new DownLoadTask(new DownLoadTask.DownloadListener() {
+        new DownLoadTask(mSuffixTag, new DownLoadTask.DownloadListener() {
             @Override
             public void onSuccess(List<Details> details) {
                 mLessonsViewModel.insert(details);
@@ -202,11 +202,11 @@ public class LessonsFragment extends ListFragment {
 
                 mLessonsDownloaded.add(lesson.code);
                 PreferencesHelper.getInstance(requireContext())
-                        .saveString(Preferences.LESSONS, mLessonsDownloaded
-                                .stream()
-                                .filter(StringUtils::isNotBlank)
-                                .collect(joining(";"))
-                        );
+                                 .saveString(Preferences.LESSONS, mLessonsDownloaded
+                                                     .stream()
+                                                     .filter(StringUtils::isNotBlank)
+                                                     .collect(joining(";"))
+                                            );
             }
 
             @Override
@@ -214,6 +214,6 @@ public class LessonsFragment extends ListFragment {
                 Toast.makeText(requireContext(), R.string.lessons_error_fetch_data, Toast.LENGTH_LONG).show();
                 Log.e(LOG_TAG, "An error occurred while fetching data");
             }
-        }).execute(mLocale + "-" + lesson.code);
+        }).execute(mLocale, lesson.code);
     }
 }

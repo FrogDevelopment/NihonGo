@@ -31,20 +31,24 @@ class DownLoadTask extends AsyncTask<String, Integer, List<Details>> {
         void onFailure();
     }
 
-    private static final String BASE_URL = "http://legall.benoit.free.fr/nihongo/lessons/";
-    private final DownloadListener mListener;
+    private static final String           BASE_URL = "http://frog-development.com/nihongo/lessons/";
+    private final        String           mSuffixTag;
+    private final        DownloadListener mListener;
 
-    public DownLoadTask(DownloadListener listener) {
+    public DownLoadTask(String mSuffixTag, DownloadListener listener) {
+        this.mSuffixTag = mSuffixTag;
         this.mListener = listener;
     }
 
     @Override
-    protected List<Details> doInBackground(String... lessons) {
+    protected List<Details> doInBackground(String... params) {
         HttpURLConnection connection = null;
-        String lesson = lessons[0];
-        Log.d("NIHONGO", "Downloading lesson " + lesson);
+        String local = params[0];
+        String lesson = params[1];
+        String fileName = local + "-" + lesson + ".tar";
+        Log.d("NIHONGO", "Downloading lesson " + fileName);
         try {
-            URL url = new URL(BASE_URL + lesson + ".tar");
+            URL url = new URL(BASE_URL + fileName);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
 
@@ -53,7 +57,7 @@ class DownLoadTask extends AsyncTask<String, Integer, List<Details>> {
                 return Collections.emptyList();
             }
 
-            return read(connection);
+            return read(connection, lesson);
         } catch (IOException e) {
             Log.e("NGD", "Can not fetch data", e);
             // fixme display message error
@@ -65,7 +69,13 @@ class DownLoadTask extends AsyncTask<String, Integer, List<Details>> {
         }
     }
 
-    private List<Details> read(HttpURLConnection connection) throws IOException {
+    private List<Details> read(HttpURLConnection connection, String lesson) throws IOException {
+        final CSVFormat csvFormat = CSVFormat.DEFAULT
+                .builder()
+                .setHeader()
+                .setSkipHeaderRecord(true)
+                .build();
+
         final List<Details> entities = new ArrayList<>();
         try (final BufferedInputStream is = new BufferedInputStream(connection.getInputStream());
              final GzipCompressorInputStream inputStream = new GzipCompressorInputStream(is);
@@ -77,14 +87,10 @@ class DownLoadTask extends AsyncTask<String, Integer, List<Details>> {
                 }
 
                 // parse lines
-                final InputStreamReader reader = new InputStreamReader(tarIn, UTF_8);
-                final CSVParser parse = CSVFormat.DEFAULT
-                        .withHeader()
-                        .withSkipHeaderRecord()
-                        .parse(reader);
+                final CSVParser parse = csvFormat.parse(new InputStreamReader(tarIn, UTF_8));
 
                 for (CSVRecord record : parse.getRecords()) {
-                    entities.add(toEntity(record));
+                    entities.add(toEntity(record, lesson));
                 }
             }
         }
@@ -92,7 +98,7 @@ class DownLoadTask extends AsyncTask<String, Integer, List<Details>> {
         return entities;
     }
 
-    private Details toEntity(final CSVRecord record) {
+    private Details toEntity(final CSVRecord record, String lesson) {
         Details details = new Details();
         details.kanji = record.get("kanji");
         details.kana = record.get("kana");
@@ -100,7 +106,7 @@ class DownLoadTask extends AsyncTask<String, Integer, List<Details>> {
         details.input = record.get("input");
         details.details = record.get("details");
         details.example = record.get("example");
-        details.tags = record.get("tags");
+        details.tags = mSuffixTag + " " + lesson;
 
         return details;
     }
